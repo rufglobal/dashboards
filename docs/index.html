@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RUF Dashboards</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --blue: #1e40af;
+    --light-blue: #3b82f6;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--gray-900) 100%);
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+
+  .logo .icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--light-blue), var(--blue));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+
+  .main {
+    flex: 1;
+    padding: 4rem 0;
+  }
+
+  .hero {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, white, #e2e8f0);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero p {
+    font-size: 1.25rem;
+    color: #cbd5e1;
+    font-weight: 300;
+  }
+
+  .dashboards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .dashboard-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .dashboard-card:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(59, 130, 246, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .dashboard-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, var(--light-blue), var(--blue));
+  }
+
+  .dashboard-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+
+  .dashboard-card p {
+    color: #cbd5e1;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .dashboard-stats {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: #94a3b8;
+  }
+
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .footer {
+    background: rgba(255, 255, 255, 0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.5rem 0;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.875rem;
+  }
+
+  @media (max-width: 768px) {
+    .hero h1 {
+      font-size: 2rem;
+    }
+    
+    .dashboards-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+</style>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <div class="icon">🏢</div>
+        RUF Dashboards
+      </div>
+      <div style="font-size: 0.875rem; color: #cbd5e1;">
+        Romanian United Fund
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="container">
+      <div class="hero">
+        <h1>Team Dashboards</h1>
+        <p>Access all RUF operational dashboards from one central location</p>
+      </div>
+
+      <div class="dashboards-grid">
+        <a href="zoom.html" class="dashboard-card">
+          <div class="dashboard-icon">📹</div>
+          <h3>Zoom Scheduling</h3>
+          <p>Manage and book RUF Zoom rooms. View team availability, schedule meetings, and coordinate resources across all 4 Zoom rooms with real-time calendar integration.</p>
+          <div class="dashboard-stats">
+            <div class="stat">📊 4 Rooms</div>
+            <div class="stat">📅 Live Calendar</div>
+            <div class="stat">🔐 Secure Booking</div>
+          </div>
+        </a>
+
+        <!-- Future dashboards will be added here -->
+        <div class="dashboard-card" style="opacity: 0.6; cursor: default; border-style: dashed;">
+          <div class="dashboard-icon" style="background: #374151;">➕</div>
+          <h3>Coming Soon</h3>
+          <p>Additional dashboards for team operations, analytics, and resource management will be added here as they become available.</p>
+          <div class="dashboard-stats">
+            <div class="stat">🚧 In Development</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      © 2026 Romanian United Fund • Operational Dashboards • Ana v1.0
+    </div>
+  </footer>
+</body>
+</html>
