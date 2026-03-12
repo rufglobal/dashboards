@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Claude Usage — 2026-03-10</title>
+<style>
+:root { --bg:#0f1117;--card:#1a1d27;--border:#2a2d3a;--text:#e4e4e7;--muted:#8b8b9e;--accent:#6366f1;--green:#22c55e;--red:#ef4444;--opus:#f59e0b; }
+* { margin:0;padding:0;box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);padding:20px; }
+.container { max-width:1100px;margin:0 auto; }
+h1 { font-size:22px;margin-bottom:4px; }
+.subtitle { color:var(--muted);font-size:13px;margin-bottom:16px; }
+.nav-bar { display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap; }
+.nav-btn { background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 16px;color:var(--text);text-decoration:none;font-size:13px;cursor:pointer;transition:background 0.2s; }
+.nav-btn:hover { background:#252836; }
+.nav-btn.disabled { opacity:0.4;pointer-events:none; }
+.nav-btn.today-btn { background:var(--accent);border-color:var(--accent);font-weight:600; }
+.nav-date { font-size:15px;font-weight:600;flex:1;text-align:center; }
+.grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:20px; }
+.stat-card { background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px; }
+.stat-card .label { color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:0.5px; }
+.stat-card .value { font-size:26px;font-weight:700;margin-top:4px; }
+.stat-card .sub { color:var(--muted);font-size:11px;margin-top:4px; }
+.alert-triggered .value { color:var(--red); }
+.alert-ok .value { color:var(--green); }
+.card { background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px; }
+.card h2 { font-size:15px;margin-bottom:14px; }
+table { width:100%;border-collapse:collapse;font-size:12px; }
+th { text-align:left;color:var(--muted);font-weight:500;padding:6px 10px;border-bottom:1px solid var(--border);font-size:10px;text-transform:uppercase; }
+td { padding:8px 10px;border-bottom:1px solid var(--border); }
+.cost { text-align:right;font-family:'SF Mono','Fira Code',monospace; }
+.total { font-weight:700;color:var(--accent); }
+.bar-container { display:flex;align-items:center;gap:8px; }
+.bar { height:8px;background:var(--accent);border-radius:4px;min-width:2px; }
+.bar-container span { font-size:12px;color:var(--muted);min-width:45px; }
+.spike-analysis { background:#1e1215;border:1px solid #3b1a1a;border-radius:12px;padding:14px;margin-bottom:20px; }
+.spike-analysis h3 { color:var(--red);margin-bottom:10px;font-size:13px; }
+.spike-agent { color:var(--muted);font-size:13px;margin-bottom:10px;padding:10px 12px;background:rgba(0,0,0,0.2);border-radius:8px; }
+.spike-header { display:flex;justify-content:space-between;align-items:center;margin-bottom:4px; }
+.spike-header strong { color:var(--text);font-size:14px; }
+.spike-pct { color:var(--red);font-size:11px;font-weight:600; }
+.spike-summary { color:var(--muted);font-size:12px;line-height:1.5; }
+.footer { text-align:center;color:var(--muted);font-size:10px;margin-top:24px;padding-top:12px;border-top:1px solid var(--border); }
+.legend { display:flex;gap:16px;margin-bottom:10px;font-size:12px; }
+.legend-item { display:flex;align-items:center;gap:6px; }
+.legend-dot { width:10px;height:10px;border-radius:50%; }
+.chart-wrap { position:relative; height:280px; width:100%; overflow:hidden; }
+</style></head><body>
+<div class="container">
+  <h1>🔐 Claude Usage Dashboard</h1>
+  <p class="subtitle">Romanian United Foundation — Generated March 11, 2026 at 10:56 PM CST</p>
+
+  <div class="nav-bar">
+      <a href="2026-03-09.html" class="nav-btn">← 2026-03-09</a>
+      <span class="nav-date">📅 2026-03-10</span>
+      <a href="2026-03-11.html" class="nav-btn">2026-03-11 →</a>
+      <a href="2026-03-11.html" class="nav-btn today-btn">⟳ Today</a>
+    </div>
+
+  <div class="grid">
+    <div class="stat-card alert-triggered">
+      <div class="label">🔴 2026-03-10's Spend</div>
+      <div class="value">$241.72</div>
+      <div class="sub">OVER $100 daily limit</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">7-Day Total</div>
+      <div class="value">$584.66</div>
+      <div class="sub">Avg $83.52/day</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Daily Limit</div>
+      <div class="value">$100</div>
+      <div class="sub">Alert threshold</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Projected Monthly</div>
+      <div class="value">$2506</div>
+      <div class="sub">Based on 7-day avg</div>
+    </div>
+  </div>
+
+  <div class="spike-analysis"><h3>🔍 Spike Analysis — Top 3 Spenders</h3><div class="spike-agent"><div class="spike-header"><strong>Alice</strong><span class="spike-pct">38% of daily spend</span></div><div class="spike-summary">GlobalRomania Irresistibility Strategy Session (8:24 PM CST); GlobalRomania Strategy 2026-2028 Document Analysis (10:05 PM CST)</div></div><div class="spike-agent"><div class="spike-header"><strong>Kondo</strong><span class="spike-pct">36% of daily spend</span></div><div class="spike-summary">Daily Initialization; Cleanup Activities; Security Notes; 05:47 PM CST - NBID Data Retrieval; 05:55 PM CST - NBID Data Export; 06:16 PM CST - Spam Analysis - Recent Signups (+12 more)</div></div><div class="spike-agent"><div class="spike-header"><strong>Ana</strong><span class="spike-pct">10% of daily spend</span></div><div class="spike-summary">4:31 PM CST - Automated RUF Dashboard Update</div></div></div>
+
+  <div class="card">
+    <h2>📊 7-Day Usage Trend</h2>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> Sonnet 4</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--opus)"></div> Opus 4.6</div>
+      <div class="legend-item" style="color:var(--red)">--- $100 limit</div>
+    </div>
+    <div class="chart-wrap"><canvas id="usageChart"></canvas></div>
+  </div>
+
+  <div class="card">
+    <h2>📋 2026-03-10's Model Breakdown</h2>
+    <table><thead><tr><th>Model</th><th>Tokens In</th><th>Tokens Out</th><th>Input</th><th>Cache Write</th><th>Cache Read</th><th>Output</th><th>Total</th></tr></thead>
+    <tbody><tr><td><strong>Opus 4.6</strong></td><td>1,786,113</td><td>9,703</td>
+        <td class="cost">$0.00</td><td class="cost">$10.32</td>
+        <td class="cost">$1.85</td><td class="cost">$0.73</td>
+        <td class="cost total">$12.90</td></tr><tr><td><strong>Sonnet 4</strong></td><td>227,602,202</td><td>968,072</td>
+        <td class="cost">$0.09</td><td class="cost">$158.63</td>
+        <td class="cost">$55.58</td><td class="cost">$14.52</td>
+        <td class="cost total">$228.82</td></tr></tbody></table>
+  </div>
+
+  <div class="card">
+    <h2>🤖 Estimated Agent Breakdown (2026-03-10)</h2>
+    <table><thead><tr><th>Agent</th><th>Sessions</th><th>Activity Share</th><th>Est. Cost</th></tr></thead>
+    <tbody><tr><td><strong>Alice</strong></td><td>1</td>
+        <td><div class="bar-container"><div class="bar" style="width:37.9364787692086%"></div><span>37.9%</span></div></td>
+        <td class="cost">$91.70</td></tr><tr><td><strong>Kondo</strong></td><td>2</td>
+        <td><div class="bar-container"><div class="bar" style="width:35.66924282548776%"></div><span>35.7%</span></div></td>
+        <td class="cost">$86.22</td></tr><tr><td><strong>Ana</strong></td><td>2</td>
+        <td><div class="bar-container"><div class="bar" style="width:9.592894845880847%"></div><span>9.6%</span></div></td>
+        <td class="cost">$23.19</td></tr><tr><td><strong>Knox</strong></td><td>1</td>
+        <td><div class="bar-container"><div class="bar" style="width:8.073213352789638%"></div><span>8.1%</span></div></td>
+        <td class="cost">$19.51</td></tr><tr><td><strong>Mia</strong></td><td>1</td>
+        <td><div class="bar-container"><div class="bar" style="width:6.4349925237348895%"></div><span>6.4%</span></div></td>
+        <td class="cost">$15.55</td></tr><tr><td><strong>Emma</strong></td><td>3</td>
+        <td><div class="bar-container"><div class="bar" style="width:2.293177682898269%"></div><span>2.3%</span></div></td>
+        <td class="cost">$5.54</td></tr></tbody></table>
+    <p style="color:var(--muted);font-size:10px;margin-top:10px;">* Estimates based on session transcript sizes. Actual per-agent costs not available from API.</p>
+  </div>
+
+  <div class="footer">Knox Security · Claude Usage Dashboard v1.0 · Data from Anthropic Admin API</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0/dist/chartjs-plugin-annotation.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const labels = ["03-05", "03-06", "03-07", "03-08", "03-09", "03-10", "03-11"];
+  const sonnetData = [97.45, 73.24, 10.31, 22.75, 17.06, 228.82, 64.24];
+  const opusData = [0, 0, 0, 0, 16.23, 12.9, 41.66];
+  new Chart(document.getElementById('usageChart'), {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [
+        { label:'Sonnet 4', data:sonnetData, backgroundColor:'#6366f1', borderRadius:4 },
+        { label:'Opus 4.6', data:opusData, backgroundColor:'#f59e0b', borderRadius:4 }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { stacked:true, grid:{display:false}, ticks:{color:'#8b8b9e',font:{size:13}} },
+        y: { stacked:true, beginAtZero:true, grid:{color:'#2a2d3a'}, ticks:{color:'#8b8b9e',callback:v=>'$'+v} }
+      },
+      plugins: {
+        legend:{display:false},
+        annotation: {
+          annotations: {
+            limit: {
+              type:'line',yMin:100,yMax:100,
+              borderColor:'#ef4444',borderWidth:2,borderDash:[6,3],
+              label:{display:true,content:'$100 limit',position:'end',backgroundColor:'#ef4444',font:{size:11}}
+            }
+          }
+        }
+      }
+    }
+  });
+});
+</script>
+</body></html>
