@@ -33,11 +33,21 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
 .bar-container span { font-size:12px;color:var(--muted);min-width:45px; }
 .spike-analysis { background:#1e1215;border:1px solid #3b1a1a;border-radius:12px;padding:14px;margin-bottom:20px; }
 .spike-analysis h3 { color:var(--red);margin-bottom:10px;font-size:13px; }
-.spike-agent { color:var(--muted);font-size:13px;margin-bottom:10px;padding:10px 12px;background:rgba(0,0,0,0.2);border-radius:8px; }
-.spike-header { display:flex;justify-content:space-between;align-items:center;margin-bottom:4px; }
-.spike-header strong { color:var(--text);font-size:14px; }
-.spike-pct { color:var(--red);font-size:11px;font-weight:600; }
-.spike-summary { color:var(--muted);font-size:12px;line-height:1.5; }
+.spike-agent { color:var(--muted);font-size:13px;margin-bottom:14px;padding:14px 16px;background:rgba(0,0,0,0.25);border-radius:10px;border-left:3px solid var(--red); }
+.spike-header { display:flex;justify-content:space-between;align-items:center;margin-bottom:8px; }
+.spike-header strong { color:var(--text);font-size:15px; }
+.spike-meta { color:var(--red);font-size:12px;font-weight:600; }
+.spike-activities { color:var(--muted);font-size:12px;line-height:1.6;margin-bottom:6px; }
+.spike-activities strong { color:var(--text);font-size:11px;text-transform:uppercase;letter-spacing:0.3px; }
+.spike-why { color:#d4a574;font-size:12px;line-height:1.6;margin-bottom:8px;padding:8px 10px;background:rgba(245,158,11,0.08);border-radius:6px; }
+.spike-why strong { color:var(--opus); }
+.spike-expand { display:flex;align-items:center;gap:6px;cursor:pointer;padding:6px 0;color:var(--accent);font-size:12px;font-weight:500;transition:color 0.2s;user-select:none; }
+.spike-expand:hover { color:#818cf8; }
+.expand-icon { font-size:14px; }
+.expand-arrow { margin-left:auto;transition:transform 0.2s; }
+.spike-recommendations { display:none;padding:10px 12px;margin-top:6px;background:rgba(99,102,241,0.08);border-radius:6px;font-size:12px;line-height:1.7;color:var(--muted);border:1px solid rgba(99,102,241,0.15); }
+.spike-recommendations.show { display:block; }
+.spike-recommendations strong { color:var(--accent); }
 .footer { text-align:center;color:var(--muted);font-size:10px;margin-top:24px;padding-top:12px;border-top:1px solid var(--border); }
 .legend { display:flex;gap:16px;margin-bottom:10px;font-size:12px; }
 .legend-item { display:flex;align-items:center;gap:6px; }
@@ -46,7 +56,7 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
 </style></head><body>
 <div class="container">
   <h1>🔐 Claude Usage Dashboard</h1>
-  <p class="subtitle">Romanian United Foundation — Generated March 11, 2026 at 10:56 PM CST</p>
+  <p class="subtitle">Romanian United Foundation — Generated March 11, 2026 at 11:07 PM CST</p>
 
   <div class="nav-bar">
       <a href="2026-03-09.html" class="nav-btn">← 2026-03-09</a>
@@ -78,7 +88,7 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
     </div>
   </div>
 
-  <div class="spike-analysis"><h3>🔍 Spike Analysis — Top 3 Spenders</h3><div class="spike-agent"><div class="spike-header"><strong>Alice</strong><span class="spike-pct">38% of daily spend</span></div><div class="spike-summary">GlobalRomania Irresistibility Strategy Session (8:24 PM CST); GlobalRomania Strategy 2026-2028 Document Analysis (10:05 PM CST)</div></div><div class="spike-agent"><div class="spike-header"><strong>Kondo</strong><span class="spike-pct">36% of daily spend</span></div><div class="spike-summary">Daily Initialization; Cleanup Activities; Security Notes; 05:47 PM CST - NBID Data Retrieval; 05:55 PM CST - NBID Data Export; 06:16 PM CST - Spam Analysis - Recent Signups (+12 more)</div></div><div class="spike-agent"><div class="spike-header"><strong>Ana</strong><span class="spike-pct">10% of daily spend</span></div><div class="spike-summary">4:31 PM CST - Automated RUF Dashboard Update</div></div></div>
+  <div class="spike-analysis"><h3>🔍 Spike Analysis — Top 3 Spenders</h3><div class="spike-agent"><div class="spike-header"><strong>Alice</strong><span class="spike-meta">$91.70 · 38% of daily spend</span></div><div class="spike-activities"><strong>What happened:</strong> GlobalRomania Irresistibility Strategy Session (8:24 PM CST); GlobalRomania Strategy 2026-2028 Document Analysis (10:05 PM CST)</div><div class="spike-why"><strong>💰 Why it cost $91.70:</strong> Standard operational activity across 1 sessions. Cost is proportional to session count and context window sizes loaded per session.</div><div class="spike-expand" onclick="document.getElementById('recs-0').classList.toggle('show')"><span class="expand-icon">💡</span> <span class="expand-text">Read more — How to reduce this cost</span><span class="expand-arrow">▸</span></div><div id="recs-0" class="spike-recommendations"><strong>🛠️ Recommendations:</strong><br>Monitor session frequency and context sizes. Consider whether all sessions are necessary or can be consolidated.</div></div><div class="spike-agent"><div class="spike-header"><strong>Kondo</strong><span class="spike-meta">$86.22 · 36% of daily spend</span></div><div class="spike-activities"><strong>What happened:</strong> Daily Initialization; Cleanup Activities; Security Notes; 05:47 PM CST - NBID Data Retrieval; 05:55 PM CST - NBID Data Export; 06:16 PM CST - Spam Analysis - Recent Signups; 06:18 PM CST - Spam Analysis - Previous 5 Signups; 06:18 PM CST - Spam Analysis - Previous 5 Signups (Before NBID 55342) (+10 more)</div><div class="spike-why"><strong>💰 Why it cost $86.22:</strong> Standard operational activity across 2 sessions. Cost is proportional to session count and context window sizes loaded per session.</div><div class="spike-expand" onclick="document.getElementById('recs-1').classList.toggle('show')"><span class="expand-icon">💡</span> <span class="expand-text">Read more — How to reduce this cost</span><span class="expand-arrow">▸</span></div><div id="recs-1" class="spike-recommendations"><strong>🛠️ Recommendations:</strong><br>Monitor session frequency and context sizes. Consider whether all sessions are necessary or can be consolidated.</div></div><div class="spike-agent"><div class="spike-header"><strong>Ana</strong><span class="spike-meta">$23.19 · 10% of daily spend</span></div><div class="spike-activities"><strong>What happened:</strong> 4:31 PM CST - Automated RUF Dashboard Update</div><div class="spike-why"><strong>💰 Why it cost $23.19:</strong> Standard operational activity across 2 sessions. Cost is proportional to session count and context window sizes loaded per session.</div><div class="spike-expand" onclick="document.getElementById('recs-2').classList.toggle('show')"><span class="expand-icon">💡</span> <span class="expand-text">Read more — How to reduce this cost</span><span class="expand-arrow">▸</span></div><div id="recs-2" class="spike-recommendations"><strong>🛠️ Recommendations:</strong><br>Monitor session frequency and context sizes. Consider whether all sessions are necessary or can be consolidated.</div></div></div>
 
   <div class="card">
     <h2>📊 7-Day Usage Trend</h2>
