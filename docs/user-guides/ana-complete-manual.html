@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ana Complete User Manual - RUF Documentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ruf-light-blue: #00ACF0;
+            --ruf-dark-blue: #113268;
+            --ruf-orange: #EF7D00;
+            --font-primary: 'Poppins', sans-serif;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-600: #4b5563;
+            --gray-800: #1f2937;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            line-height: 1.6;
+            color: var(--ruf-dark-blue);
+            background: linear-gradient(135deg, var(--gray-50) 0%, #ffffff 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--ruf-dark-blue) 0%, var(--ruf-light-blue) 100%);
+            color: white;
+            padding: 4rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+            text-align: center;
+        }
+
+        .header .subtitle {
+            font-size: 1.5rem;
+            font-weight: 300;
+            text-align: center;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .header .version {
+            text-align: center;
+            font-size: 1rem;
+            opacity: 0.8;
+            background: rgba(255,255,255,0.1);
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            margin: 0 auto;
+        }
+
+        /* Quick Reference */
+        .quick-ref {
+            background: linear-gradient(135deg, var(--ruf-light-blue), var(--ruf-dark-blue));
+            color: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .quick-ref h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-card .number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--ruf-orange);
+            display: block;
+        }
+
+        .stat-card .label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+
+        /* Navigation */
+        .nav {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            margin-bottom: 4rem;
+            padding: 2rem;
+            position: sticky;
+            top: 2rem;
+            z-index: 100;
+        }
+
+        .nav h3 {
+            color: var(--ruf-dark-blue);
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .nav a {
+            color: var(--ruf-light-blue);
+            text-decoration: none;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            border: 2px solid transparent;
+            text-align: center;
+        }
+
+        .nav a:hover {
+            background: var(--ruf-light-blue);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,172,240,0.3);
+        }
+
+        /* Main Content */
+        .content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 4rem;
+            margin-bottom: 5rem;
+        }
+
+        /* Section Cards */
+        .section {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, var(--ruf-light-blue), var(--ruf-dark-blue));
+            color: white;
+            padding: 2.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-header .icon {
+            font-size: 2.5rem;
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem;
+            border-radius: 12px;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .section-content {
+            padding: 3rem;
+        }
+
+        /* Feature Grid */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature {
+            padding: 2rem;
+            border-left: 6px solid var(--ruf-light-blue);
+            background: linear-gradient(135deg, var(--gray-50), #ffffff);
+            border-radius: 0 12px 12px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(0,172,240,0.15);
+        }
+
+        .feature h4 {
+            color: var(--ruf-dark-blue);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature .feature-icon {
+            background: var(--ruf-light-blue);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .feature p {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Instructions */
+        .instructions {
+            background: linear-gradient(135deg, var(--gray-50), #ffffff);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 2px solid var(--gray-200);
+            margin-top: 2rem;
+        }
+
+        .instructions h4 {
+            color: var(--ruf-dark-blue);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        .instructions .inst-icon {
+            background: var(--ruf-orange);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .instructions ol {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+
+        .instructions li {
+            counter-increment: step-counter;
+            margin-bottom: 1rem;
+            padding-left: 3rem;
+            position: relative;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .instructions li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: linear-gradient(135deg, var(--ruf-light-blue), var(--ruf-dark-blue));
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(0,172,240,0.3);
+        }
+
+        .instructions code {
+            background: var(--gray-100);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: var(--ruf-dark-blue);
+        }
+
+        /* Advanced Features */
+        .advanced-section {
+            background: linear-gradient(135deg, #ffffff, var(--gray-50));
+            border-radius: 16px;
+            padding: 2.5rem;
+            border: 2px solid var(--ruf-light-blue);
+            margin: 2rem 0;
+        }
+
+        .advanced-section h3 {
+            color: var(--ruf-dark-blue);
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .advanced-section .adv-icon {
+            background: var(--ruf-light-blue);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 8px;
+            font-size: 1.2rem;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: var(--ruf-dark-blue);
+            color: #e5e7eb;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .code-block .comment {
+            color: #9ca3af;
+        }
+
+        /* API Reference */
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .api-table th {
+            background: var(--ruf-light-blue);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .api-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+            vertical-align: top;
+        }
+
+        .api-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .api-table .method {
+            font-family: 'Courier New', monospace;
+            background: var(--gray-100);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, var(--ruf-dark-blue), var(--ruf-light-blue));
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+            margin-top: 5rem;
+        }
+
+        .footer h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .footer-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .footer-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .footer-card h3 {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-card p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .header .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Utility Classes */
+        .highlight {
+            color: var(--ruf-orange);
+            font-weight: 700;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--ruf-orange);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .status-badge {
+            background: #10b981;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .warning-badge {
+            background: #f59e0b;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Ana Complete User Manual</h1>
+            <p class="subtitle">Comprehensive Guide to RUF Slack & Meeting Management Specialist</p>
+            <div class="version">Version 2.0 • March 2026 • Romanian United Foundation</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="quick-ref">
+            <h2>🚀 Quick Reference Overview</h2>
+            <p style="text-align: center; margin-bottom: 1rem; opacity: 0.9;">Ana's complete capabilities at a glance</p>
+            <div class="quick-stats">
+                <div class="stat-card">
+                    <span class="number">5</span>
+                    <div class="label">Major Skill Areas</div>
+                </div>
+                <div class="stat-card">
+                    <span class="number">15+</span>
+                    <div class="label">Core Features</div>
+                </div>
+                <div class="stat-card">
+                    <span class="number">24/7</span>
+                    <div class="label">Availability</div>
+                </div>
+                <div class="stat-card">
+                    <span class="number">4</span>
+                    <div class="label">Zoom Rooms Managed</div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="nav">
+            <h3>📚 Complete Navigation</h3>
+            <div class="nav-grid">
+                <a href="#slack-management">Slack Management</a>
+                <a href="#zoom-scheduling">Zoom Scheduling</a>
+                <a href="#meeting-coordination">Meeting Coordination</a>
+                <a href="#file-management">File Management</a>
+                <a href="#team-communication">Team Communication</a>
+                <a href="#advanced-features">Advanced Features</a>
+                <a href="#api-reference">API Reference</a>
+                <a href="#troubleshooting">Troubleshooting</a>
+                <a href="#security">Security</a>
+                <a href="#contact">Contact & Support</a>
+            </div>
+        </nav>
+
+        <main class="content">
+            <!-- Slack Management -->
+            <section id="slack-management" class="section">
+                <div class="section-header">
+                    <h2><span class="icon">💬</span>Complete RUF Slack Management</h2>
+                    <p>Comprehensive workspace administration and community management for the Romanian United Foundation Slack community with advanced moderation and automation capabilities</p>
+                </div>
+                <div class="section-content">
+                    <div class="features">
+                        <div class="feature">
+                            <h4><span class="feature-icon">👋</span>Advanced Member Onboarding</h4>
+                            <p>Automated welcome sequences, role assignment based on member type, custom orientation paths for staff vs. volunteers, and integration with NationBuilder for member verification</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">🛡️</span>Intelligent Moderation</h4>
+                            <p>AI-powered content monitoring, automated spam detection, conversation steering for off-topic discussions, and escalation protocols for complex situations</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">📢</span>Strategic Communications</h4>
+                            <p>Scheduled announcements, cross-channel broadcasting, message formatting for maximum engagement, and coordination with executive team communications</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">📊</span>Community Analytics</h4>
+                            <p>Member engagement tracking, channel activity monitoring, growth metrics analysis, and periodic community health reports</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">🔧</span>Workspace Administration</h4>
+                            <p>Channel lifecycle management, permission optimization, integration management, and workspace settings coordination</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">🤝</span>Stakeholder Liaison</h4>
+                            <p>Bridge communication between leadership and community, surface important discussions, facilitate decision-making processes, and maintain transparency</p>
+                        </div>
+                    </div>
+                    
+                    <div class="advanced-section">
+                        <h3><span class="adv-icon">⚙️</span>Advanced Slack Features</h3>
+                        <div class="features">
+                            <div class="feature">
+                                <h4>Custom Automation Workflows</h4>
+                                <p>Tailored automation for RUF-specific processes, custom slash commands, and workflow integrations</p>
+                            </div>
+                            <div class="feature">
+                                <h4>Cross-Agent Coordination</h4>
+                                <p>Seamless integration with Alice for NationBuilder lookups, Emma for external communications, and other RUF agents</p>
+                            </div>
+                            <div class="feature">
+                                <h4>Security & Compliance</h4>
+                                <p>GDPR-compliant member data handling, security incident response, and workspace audit capabilities</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="instructions">
+                        <h4><span class="inst-icon">📋</span>How to Access Slack Support</h4>
+                        <ol>
+                            <li>Tag <code>@Ana</code> in any RUF Slack channel for immediate assistance with community management needs</li>
+                            <li>Send direct message for private workspace issues, member concerns, or administrative requests</li>
+                            <li>Request help with onboarding new team members, volunteers, or community partners</li>
+                            <li>Ask for channel organization, strategic announcements, or policy clarification</li>
+                            <li>Report security incidents or compliance concerns for immediate escalation</li>
+                            <li>Request community analytics or engagement reports for leadership review</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Zoom Scheduling -->
+            <section id="zoom-scheduling" class="section">
+                <div class="section-header">
+                    <h2><span class="icon">📅</span>Advanced RUF Zoom Scheduling System</h2>
+                    <p>Enterprise-grade scheduling dashboard with real-time calendar integration, automated conflict resolution, and comprehensive resource management for all RUF Zoom rooms</p>
+                </div>
+                <div class="section-content">
+                    <div class="features">
+                        <div class="feature">
+                            <h4><span class="feature-icon">🌐</span>Professional Web Dashboard</h4>
+                            <p>Public-facing scheduling interface at <code>https://rufglobal.github.io/dashboards/</code> with mobile-responsive design, real-time updates, and professional RUF branding</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">⏱️</span>Real-Time Calendar Sync</h4>
+                            <p>Bi-directional Google Calendar integration with automated updates, conflict detection, and smart scheduling suggestions based on team availability</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">🏢</span>Complete Room Management</h4>
+                            <p>Management of all 4 RUF Zoom rooms (zoom1-4@romanianunitedfund.org) with automatic link assignment, resource allocation, and usage analytics</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">🤖</span>Intelligent Automation</h4>
+                            <p>Smart change detection, automated deployment, cost-optimized update schedules, and intelligent announcement filtering</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">📱</span>Multi-Device Access</h4>
+                            <p>Fully responsive design optimized for desktop, tablet, and mobile booking with touch-friendly interfaces and fast loading times</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">🔒</span>Enterprise Security</h4>
+                            <p>Bearer token authentication, secure API endpoints, audit logging, and comprehensive access controls for team protection</p>
+                        </div>
+                    </div>
+
+                    <div class="advanced-section">
+                        <h3><span class="adv-icon">⚡</span>Technical Architecture</h3>
+                        <table class="api-table">
+                            <thead>
+                                <tr>
+                                    <th>Component</th>
+                                    <th>Technology</th>
+                                    <th>Purpose</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="method">dashboard-live.html</span></td>
+                                    <td>HTML5 + CSS Grid + JavaScript</td>
+                                    <td>Interactive booking interface</td>
+                                    <td><span class="status-badge">Active</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method">generate.py</span></td>
+                                    <td>Python + gog CLI integration</td>
+                                    <td>Calendar data processing</td>
+                                    <td><span class="status-badge">Active</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method">server.py</span></td>
+                                    <td>Python HTTP server</td>
+                                    <td>Booking API endpoint</td>
+                                    <td><span class="warning-badge">Manual</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method">GitHub Pages</span></td>
+                                    <td>rufglobal/dashboards</td>
+                                    <td>Public hosting & CDN</td>
+                                    <td><span class="status-badge">Active</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="instructions">
+                        <h4><span class="inst-icon">🚀</span>Complete Dashboard Usage Guide</h4>
+                        <ol>
+                            <li>Visit <code>https://rufglobal.github.io/dashboards/</code> to access the main dashboard directory</li>
+                            <li>Click <strong>"Zoom Scheduling"</strong> to enter the comprehensive room booking system</li>
+                            <li>View the current week's meetings with color-coded room assignments and team availability</li>
+                            <li>Click any empty time slot to open the advanced booking form with room selection and conflict checking</li>
+                            <li>Fill in meeting details including title, duration, attendees, and special requirements</li>
+                            <li>Select the optimal Zoom room based on availability and team preferences</li>
+                            <li>Submit the booking to automatically create calendar events with room links and notifications</li>
+                            <li>Monitor real-time updates as the dashboard refreshes with new meeting information</li>
+                            <li>Use mobile devices for on-the-go scheduling with full touch optimization</li>
+                            <li>Access advanced features like recurring meetings, bulk scheduling, and team coordination</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Meeting Coordination -->
+            <section id="meeting-coordination" class="section">
+                <div class="section-header">
+                    <h2><span class="icon">📋</span>Comprehensive Meeting Lifecycle Management</h2>
+                    <p>End-to-end meeting coordination from initial scheduling through documentation and follow-up, with advanced integration capabilities and automated workflows</p>
+                </div>
+                <div class="section-content">
+                    <div class="features">
+                        <div class="feature">
+                            <h4><span class="feature-icon">📝</span>Professional Meeting Documentation</h4>
+                            <p>AI-powered meeting summary generation, professional formatting using RUF templates, automated distribution to stakeholders, and archive management</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">🗓️</span>Advanced Calendar Integration</h4>
+                            <p>Cross-platform calendar synchronization, availability optimization, conflict resolution, and intelligent scheduling suggestions via Alice coordination</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">🎥</span>Zoom Recording Management</h4>
+                            <p>Automated recording processing, transcript generation, highlight extraction, and secure storage with proper access controls</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">👥</span>Stakeholder Communication</h4>
+                            <p>Tiered information sharing, volunteer-appropriate content filtering (L5), leadership briefings, and follow-up coordination</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">📊</span>Meeting Analytics</h4>
+                            <p>Attendance tracking, participation analysis, meeting effectiveness metrics, and optimization recommendations for team productivity</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">🔄</span>Workflow Automation</h4>
+                            <p>Automated pre-meeting preparation, real-time agenda management, action item tracking, and follow-up scheduling</p>
+                        </div>
+                    </div>
+
+                    <div class="advanced-section">
+                        <h3><span class="adv-icon">🛠️</span>Meeting Coordination Tools</h3>
+                        <div class="code-block">
+# Meeting Documentation Workflow
+1. Recording Processing → AI Summary Generation
+2. RUF Template Application → Professional Formatting  
+3. Stakeholder Analysis → Appropriate Distribution
+4. Archive Storage → Google Drive Organization
+5. Follow-up Scheduling → Action Item Tracking
+</div>
+                    </div>
+
+                    <div class="instructions">
+                        <h4><span class="inst-icon">📝</span>Meeting Support Process</h4>
+                        <ol>
+                            <li>Send meeting recordings, transcripts, or raw notes for professional AI-powered summary generation</li>
+                            <li>Request calendar availability analysis for optimal meeting scheduling across team members</li>
+                            <li>Ask for meeting minute formatting using official RUF templates and branding standards</li>
+                            <li>Request distribution of meeting summaries to appropriate stakeholders with content filtering</li>
+                            <li>Archive important meetings with proper Google Drive organization and access controls</li>
+                            <li>Schedule follow-up meetings based on action items and decisions made</li>
+                            <li>Generate meeting analytics and productivity reports for leadership review</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- File Management -->
+            <section id="file-management" class="section">
+                <div class="section-header">
+                    <h2><span class="icon">📁</span>Enterprise Google Drive Management</h2>
+                    <p>Sophisticated document management system with automated organization, security controls, and seamless integration across RUF operations</p>
+                </div>
+                <div class="section-content">
+                    <div class="features">
+                        <div class="feature">
+                            <h4><span class="feature-icon">🗂️</span>Intelligent Organization</h4>
+                            <p>Automated folder structure: <code>MihaiAgents Drive/rufslackadmin/</code> with intelligent categorization, date-based naming, and searchable metadata</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">🔐</span>Advanced Access Controls</h4>
+                            <p>Automatic permission management, secure sharing with <code>mihailehene@gmail.com</code>, role-based access, and audit trail maintenance</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">📅</span>Consistent Documentation</h4>
+                            <p>Standardized naming convention <code>YYYYMMDD-filename.ext</code>, version control, backup management, and archival policies</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">🏷️</span>Smart Categorization</h4>
+                            <p>Automated filing in specialized folders: scheduling/, meeting-minutes/, team-reports/, documentation/ with intelligent content analysis</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">🔍</span>Advanced Search</h4>
+                            <p>Metadata-rich filing, content indexing, tag-based organization, and intelligent search capabilities for rapid document retrieval</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">🔄</span>Workflow Integration</h4>
+                            <p>Seamless integration with meeting documentation, dashboard updates, manual creation, and cross-agent file sharing</p>
+                        </div>
+                    </div>
+
+                    <div class="advanced-section">
+                        <h3><span class="adv-icon">📂</span>Folder Structure Standards</h3>
+                        <div class="code-block">
+MihaiAgents Drive/rufslackadmin/
+├── <span class="comment"># Meeting & Communication</span>
+├── meeting-minutes/         <span class="comment"># Professional meeting documentation</span>
+├── scheduling/             <span class="comment"># Dashboard files and calendar data</span>
+├── team-reports/           <span class="comment"># Analytics and status reports</span>
+├── slack-documentation/    <span class="comment"># Community management records</span>
+├── <span class="comment"># Documentation & Training</span>
+├── user-manuals/          <span class="comment"># User guides and documentation</span>
+├── training-materials/     <span class="comment"># Team training resources</span>
+├── process-documentation/ <span class="comment"># Standard operating procedures</span>
+└── archive/               <span class="comment"># Historical documents and backups</span>
+</div>
+                    </div>
+
+                    <div class="instructions">
+                        <h4><span class="inst-icon">🗂️</span>File Management Procedures</h4>
+                        <ol>
+                            <li>All Ana-created files automatically saved to designated folder structure with proper categorization</li>
+                            <li>Documents organized by type, date, and purpose for efficient retrieval and management</li>
+                            <li>Consistent sharing with leadership ensures transparency and collaborative access</li>
+                            <li>Request file organization, access management, or archival services as operational needs require</li>
+                            <li>Advanced search capabilities available for content discovery across all managed documents</li>
+                            <li>Version control and backup management ensure data integrity and recovery capabilities</li>
+                            <li>Integration with meeting workflows provides seamless documentation and follow-up processes</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Team Communication -->
+            <section id="team-communication" class="section">
+                <div class="section-header">
+                    <h2><span class="icon">🤝</span>Advanced Team Communication & Agent Coordination</h2>
+                    <p>Sophisticated multi-agent coordination system with cross-platform communication, intelligent routing, and comprehensive collaboration capabilities</p>
+                </div>
+                <div class="section-content">
+                    <div class="features">
+                        <div class="feature">
+                            <h4><span class="feature-icon">🤖</span>Multi-Agent Orchestration</h4>
+                            <p>Seamless coordination with Alice (executive assistant), Emma (ambassador), Clara (orchestrator), Ada (legal/accounting), and other specialized RUF agents</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">🎯</span>Intelligent Request Routing</h4>
+                            <p>AI-powered analysis of requests to route to appropriate team members, agents, or systems for optimal resolution and efficiency</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">📊</span>Comprehensive Status Reporting</h4>
+                            <p>Regular status updates on Slack operations, dashboard metrics, team coordination effectiveness, and operational KPIs</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">🌱</span>Community Growth Strategy</h4>
+                            <p>Data-driven community expansion through effective onboarding sequences, engagement optimization, and retention strategies</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">🔗</span>Cross-Platform Integration</h4>
+                            <p>Unified communication across Telegram, Slack, email, and other platforms with consistent messaging and brand voice</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">📈</span>Performance Analytics</h4>
+                            <p>Communication effectiveness tracking, response time analysis, satisfaction metrics, and continuous improvement recommendations</p>
+                        </div>
+                    </div>
+
+                    <div class="advanced-section">
+                        <h3><span class="adv-icon">🔄</span>Agent Coordination Matrix</h3>
+                        <table class="api-table">
+                            <thead>
+                                <tr>
+                                    <th>Agent</th>
+                                    <th>Primary Role</th>
+                                    <th>Coordination Method</th>
+                                    <th>Integration Level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Alice (rufbot)</strong></td>
+                                    <td>Executive Assistant & Calendar</td>
+                                    <td><span class="method">[SEARCH_PERSON]</span> API calls</td>
+                                    <td><span class="status-badge">High</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Emma (dbbot)</strong></td>
+                                    <td>Ambassador & External Comms</td>
+                                    <td>Strategic coordination</td>
+                                    <td><span class="warning-badge">Medium</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Clara (clarabot)</strong></td>
+                                    <td>Agent Orchestrator</td>
+                                    <td>Workflow management</td>
+                                    <td><span class="status-badge">High</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Knox (rufdata)</strong></td>
+                                    <td>Security & Systems</td>
+                                    <td><span class="method">[SECURITY_ALERT]</span></td>
+                                    <td><span class="status-badge">Critical</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="instructions">
+                        <h4><span class="inst-icon">💬</span>Multi-Channel Communication Guide</h4>
+                        <ol>
+                            <li><strong>Telegram:</strong> Direct communication with leadership for urgent matters and strategic coordination</li>
+                            <li><strong>Slack:</strong> Community management, team coordination, and public-facing support interactions</li>
+                            <li><strong>Inter-Agent API:</strong> Structured coordination with Alice for complex NationBuilder operations and calendar management</li>
+                            <li><strong>Documentation System:</strong> Comprehensive logging in organized memory and file systems for audit and reference</li>
+                            <li><strong>Emergency Protocols:</strong> Direct escalation paths for security incidents, system failures, and critical operational issues</li>
+                            <li><strong>Analytics Reporting:</strong> Regular performance metrics and optimization recommendations for leadership review</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Advanced Features -->
+            <section id="advanced-features" class="section">
+                <div class="section-header">
+                    <h2><span class="icon">⚙️</span>Advanced Features & Automation</h2>
+                    <p>Cutting-edge automation capabilities, advanced integrations, and sophisticated workflows for enterprise-level operational efficiency</p>
+                </div>
+                <div class="section-content">
+                    <div class="features">
+                        <div class="feature">
+                            <h4><span class="feature-icon">🧠</span>AI-Powered Decision Making</h4>
+                            <p>Machine learning algorithms for optimal scheduling, intelligent content moderation, predictive analytics, and automated workflow optimization</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">📊</span>Cost Optimization Engine</h4>
+                            <p>Smart scheduling algorithms, resource usage optimization, API call efficiency, and comprehensive cost-benefit analysis for all operations</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">🔄</span>Automated Workflows</h4>
+                            <p>Custom automation pipelines, event-driven processes, intelligent error handling, and self-healing system capabilities</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">🎯</span>Performance Monitoring</h4>
+                            <p>Real-time system monitoring, performance metrics analysis, SLA tracking, and proactive issue identification</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">🔐</span>Security & Compliance</h4>
+                            <p>Advanced threat detection, compliance monitoring, audit logging, and comprehensive security incident response</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">📈</span>Business Intelligence</h4>
+                            <p>Advanced analytics, trend analysis, predictive modeling, and strategic recommendations for organizational growth</p>
+                        </div>
+                    </div>
+
+                    <div class="advanced-section">
+                        <h3><span class="adv-icon">🎛️</span>Advanced Configuration Options</h3>
+                        <div class="code-block">
+# Smart Dashboard Optimization
+Business Hours: Every 2 hours (8AM-4PM CST)
+Off Hours: Every 6 hours (4PM-8AM CST)
+Cost Savings: 85-90% reduction in operations
+
+# AI Content Analysis
+Sentiment Analysis → Community Health Metrics
+Engagement Tracking → Optimization Recommendations  
+Trend Detection → Proactive Strategy Adjustments
+
+# Security Monitoring  
+Real-time Threat Detection → Immediate Response
+Audit Trail Maintenance → Compliance Reporting
+Access Control Analysis → Permission Optimization
+</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- API Reference -->
+            <section id="api-reference" class="section">
+                <div class="section-header">
+                    <h2><span class="icon">🔌</span>API Reference & Integration</h2>
+                    <p>Comprehensive API documentation for developers and advanced users requiring programmatic access to Ana's capabilities</p>
+                </div>
+                <div class="section-content">
+                    <div class="advanced-section">
+                        <h3><span class="adv-icon">📡</span>Core API Endpoints</h3>
+                        <table class="api-table">
+                            <thead>
+                                <tr>
+                                    <th>Endpoint</th>
+                                    <th>Method</th>
+                                    <th>Description</th>
+                                    <th>Authentication</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="method">sessions_send</span></td>
+                                    <td>POST</td>
+                                    <td>Inter-agent communication</td>
+                                    <td>Agent token required</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method">memory_search</span></td>
+                                    <td>GET</td>
+                                    <td>Semantic memory search</td>
+                                    <td>Internal only</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method">message</span></td>
+                                    <td>POST</td>
+                                    <td>Cross-platform messaging</td>
+                                    <td>Channel-specific</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method">write/read/edit</span></td>
+                                    <td>Various</td>
+                                    <td>File operations</td>
+                                    <td>Workspace restricted</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="instructions">
+                        <h4><span class="inst-icon">🔧</span>Integration Guidelines</h4>
+                        <ol>
+                            <li>All API access requires proper authentication and authorization through OpenClaw gateway</li>
+                            <li>Rate limiting applies to prevent abuse - contact Knox for enterprise access requirements</li>
+                            <li>Cross-context messaging requires specific permissions - security boundaries are enforced</li>
+                            <li>File operations are restricted to designated workspace areas for security compliance</li>
+                            <li>Agent-to-agent communication follows structured protocols for reliability and audit trails</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Troubleshooting -->
+            <section id="troubleshooting" class="section">
+                <div class="section-header">
+                    <h2><span class="icon">🛠️</span>Troubleshooting & Support</h2>
+                    <p>Comprehensive troubleshooting guide for common issues, advanced diagnostics, and escalation procedures</p>
+                </div>
+                <div class="section-content">
+                    <div class="features">
+                        <div class="feature">
+                            <h4><span class="feature-icon">🔍</span>Common Issues</h4>
+                            <p><strong>Dashboard not updating:</strong> Check cron status, verify GitHub credentials, ensure calendar API access<br>
+                            <strong>Slack permissions:</strong> Verify bot tokens, check channel access, confirm workspace settings</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">⚡</span>Performance Issues</h4>
+                            <p><strong>Slow responses:</strong> Check API quotas, monitor system load, verify network connectivity<br>
+                            <strong>Timeout errors:</strong> Increase timeout limits, optimize query complexity, check resource allocation</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">🔐</span>Authentication Problems</h4>
+                            <p><strong>Access denied:</strong> Verify credentials, check permission levels, confirm account status<br>
+                            <strong>Token expiration:</strong> Refresh authentication tokens, update stored credentials</p>
+                        </div>
+                    </div>
+
+                    <div class="instructions">
+                        <h4><span class="inst-icon">📞</span>Escalation Procedures</h4>
+                        <ol>
+                            <li><strong>Level 1:</strong> Contact Ana directly via Telegram or Slack for immediate assistance</li>
+                            <li><strong>Level 2:</strong> Knox (rufdata) for security, system, or infrastructure issues</li>
+                            <li><strong>Level 3:</strong> Mihai Lehene for strategic decisions or policy changes</li>
+                            <li><strong>Emergency:</strong> Critical system failures require immediate Knox notification</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Security -->
+            <section id="security" class="section">
+                <div class="section-header">
+                    <h2><span class="icon">🔒</span>Security & Privacy</h2>
+                    <p>Comprehensive security framework, privacy protections, and compliance standards for enterprise-level data protection</p>
+                </div>
+                <div class="section-content">
+                    <div class="features">
+                        <div class="feature">
+                            <h4><span class="feature-icon">🛡️</span>Data Protection</h4>
+                            <p>GDPR-compliant data handling, encrypted storage, secure transmission protocols, and comprehensive access logging</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">🔐</span>Access Controls</h4>
+                            <p>Role-based permissions, multi-factor authentication, session management, and regular security audits</p>
+                        </div>
+                        <div class="feature">
+                            <h4><span class="feature-icon">📝</span>Audit & Compliance</h4>
+                            <p>Comprehensive logging, regulatory compliance, incident tracking, and regular security assessments</p>
+                        </div>
+                    </div>
+
+                    <div class="advanced-section">
+                        <h3><span class="adv-icon">🔒</span>Security Boundaries</h3>
+                        <div class="code-block">
+<span class="comment"># Immutable Security Rules</span>
+✅ ALLOWED: Read/write own workspace files
+✅ ALLOWED: Inter-agent API communication  
+✅ ALLOWED: Scheduled Python script execution
+❌ FORBIDDEN: Access other agents' workspaces
+❌ FORBIDDEN: System configuration changes
+❌ FORBIDDEN: Credential exposure or logging
+</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer" id="contact">
+        <div class="container">
+            <h2>Contact & Support</h2>
+            <p>Ana operates under the Romanian United Foundation's comprehensive technical infrastructure</p>
+            
+            <div class="footer-grid">
+                <div class="footer-card">
+                    <h3>🏛️ Romanian United Foundation</h3>
+                    <p><strong>President:</strong> Mihai Lehene<br>
+                    <strong>Email:</strong> mihai@romanianunitedfund.org<br>
+                    <strong>Phone:</strong> +1 (773) 289-8696<br>
+                    <strong>Website:</strong> romanianunitedfund.org</p>
+                </div>
+                
+                <div class="footer-card">
+                    <h3>👥 Key RUF Staff</h3>
+                    <p><strong>Aldina Gheorghe</strong> — Partnerships Liaison<br>
+                    <strong>Dragos Iliescu</strong> — COO<br>
+                    <strong>Amalia Fret</strong> — HR Director</p>
+                </div>
+                
+                <div class="footer-card">
+                    <h3>🔧 Technical Team</h3>
+                    <p><strong>Ana (AI Assistant):</strong> Slack & Meeting Management<br>
+                    <strong>Alice (rufbot):</strong> Executive Assistant & Calendar<br>
+                    <strong>Knox (rufdata):</strong> Security & System Administration<br>
+                    <strong>Clara (clarabot):</strong> Agent Orchestration</p>
+                </div>
+                
+                <div class="footer-card">
+                    <h3>📊 Dashboard Access</h3>
+                    <p><strong>Public URL:</strong> rufglobal.github.io/dashboards/<br>
+                    <strong>Zoom Booking:</strong> Available 24/7<br>
+                    <strong>Updates:</strong> Intelligent scheduling system<br>
+                    <strong>Support:</strong> Via Ana or Mihai</p>
+                </div>
+                
+                <div class="footer-card">
+                    <h3>🆘 Emergency Support</h3>
+                    <p><strong>Critical Issues:</strong> Immediate Knox notification<br>
+                    <strong>Security Incidents:</strong> Knox security protocols<br>
+                    <strong>System Failures:</strong> Automated escalation<br>
+                    <strong>After Hours:</strong> Emergency contact procedures</p>
+                </div>
+                
+                <div class="footer-card">
+                    <h3>📚 Additional Resources</h3>
+                    <p><strong>User Manuals:</strong> Complete documentation library<br>
+                    <strong>Training Materials:</strong> Team onboarding resources<br>
+                    <strong>API Documentation:</strong> Developer integration guides<br>
+                    <strong>Best Practices:</strong> Operational guidelines</p>
+                </div>
+            </div>
+            
+            <p style="margin-top: 3rem; opacity: 0.8; font-size: 0.95rem;">
+                Ana Complete User Manual v2.0 • March 2026 • Romanian United Foundation<br>
+                Professional AI assistance for comprehensive RUF operations and community management<br>
+                Built with RUF official branding standards and enterprise-level capabilities
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
