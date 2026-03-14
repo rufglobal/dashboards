@@ -1,199 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Claude Billing Dashboard - 2026-03-14</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --claude-orange: #f5682b;
-            --claude-dark: #2d2d2d;
-        }
-        
-        .claude-header {
-            background: linear-gradient(135deg, var(--claude-orange), #ff8c42);
-            color: white;
-            padding: 2rem 0;
-        }
-        
-        .metric-card {
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.2s ease;
-        }
-        
-        .metric-card:hover {
-            transform: translateY(-2px);
-        }
-        
-        .spending-alert {
-            border-left: 4px solid var(--claude-orange);
-            background: #fff9f6;
-        }
-        
-        .balance-display {
-            font-size: 3rem;
-            font-weight: bold;
-            color: var(--claude-orange);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Billing — 2026-03-14</title>
+<style>
+  :root {
+    --bg: #0f1117; --card: #1a1d27; --border: #2a2d3a;
+    --text: #e4e4e7; --muted: #8b8b9e; --accent: #6366f1;
+    --green: #22c55e; --red: #ef4444; --orange: #f59e0b;
+    --sonnet: #6366f1; --opus: #f59e0b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
+  .container { max-width: 1200px; margin: 0 auto; }
+  h1 { font-size: 24px; margin-bottom: 4px; }
+  .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .stat-card .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-card .value { font-size: 28px; font-weight: 700; margin-top: 4px; }
+  .stat-card .sub { color: var(--muted); font-size: 12px; margin-top: 4px; }
+  .alert-triggered .value { color: var(--red); }
+  .alert-ok .value { color: var(--green); }
+  .balance-card .value { color: var(--orange); }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 24px; }
+  .card h2 { font-size: 16px; margin-bottom: 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; color: var(--muted); font-weight: 500; padding: 8px 12px; border-bottom: 1px solid var(--border); font-size: 11px; text-transform: uppercase; }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  .cost { text-align: right; font-family: 'SF Mono', 'Fira Code', monospace; }
+  .total { font-weight: 700; color: var(--accent); }
+  .footer { text-align: center; color: var(--muted); font-size: 11px; margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .alert-section { background: #1e1215; border: 1px solid #3b1a1a; border-radius: 12px; padding: 16px; margin-bottom: 24px; }
+  .alert-section h3 { color: var(--red); margin-bottom: 12px; font-size: 14px; }
+  .alert-note { color: var(--muted); font-size: 13px; margin-bottom: 8px; padding: 8px; background: rgba(0,0,0,0.2); border-radius: 6px; }
+  .alert-note strong { color: var(--text); }
+  .status-paid { color: var(--green); font-weight: 600; }
+  .status-pending { color: var(--orange); font-weight: 600; }
+  .nav-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+  .nav-btn { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; color: var(--text); text-decoration: none; font-size: 13px; cursor: pointer; transition: background 0.2s; }
+  .nav-btn:hover { background: #252836; }
+  .nav-btn.disabled { opacity: 0.4; pointer-events: none; }
+  .nav-btn.today-btn { background: var(--accent); border-color: var(--accent); font-weight: 600; }
+  .nav-date { font-size: 15px; font-weight: 600; flex: 1; text-align: center; }
+</style>
 </head>
 <body>
-    <header class="claude-header">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col">
-                    <h1 class="display-4 mb-0">💳 Claude Billing Dashboard</h1>
-                    <p class="lead mb-0">Actual Usage & Cost Tracking</p>
-                </div>
-                <div class="col-auto">
-                    <span class="badge bg-light text-dark fs-6">Updated: 2026-03-14 00:51 CST</span>
-                </div>
-            </div>
-        </div>
-    </header>
+<div class="container">
+  <h1>💳 Claude Billing Dashboard</h1>
+  <p class="subtitle">Romanian United Foundation — Real billing data from Claude Console — Updated March 14, 2026 at 01:00 AM CST</p>
 
-    <div class="container py-4">
-        <!-- Current Balance Section -->
-        <div class="row mb-4">
-            <div class="col-lg-8">
-                <div class="card metric-card h-100">
-                    <div class="card-body text-center">
-                        <h3 class="card-title text-muted">Current Credit Balance</h3>
-                        <div class="balance-display">$101.32</div>
-                        <p class="text-muted mb-0">Remaining Available Credits</p>
-                        <small class="text-warning">Pending this period: $1,253.25</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="card metric-card h-100 spending-alert">
-                    <div class="card-body">
-                        <h5 class="card-title">⚠️ Yesterday's Actual Charge</h5>
-                        <h2 class="text-danger">$173.24</h2>
-                        <p class="mb-0"><strong>Source:</strong> Claude Console Monthly Invoice</p>
-                        <small class="text-muted">Mar 13, 2026 - Paid</small>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="nav-bar">
+    <a href="2026-03-13.html" class="nav-btn">← Yesterday</a>
+    <span class="nav-date">📅 2026-03-14 (Today)</span>
+    <span class="nav-btn disabled">Today</span>
+  </div>
 
-        <!-- Recent Transactions -->
-        <div class="row mb-4">
-            <div class="col">
-                <div class="card metric-card">
-                    <div class="card-header">
-                        <h5 class="mb-0">📊 Recent Billing Activity</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Type</th>
-                                        <th>Amount</th>
-                                        <th>Status</th>
-                                        <th>Notes</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    <tr>
-                                        <td>2026-03-13</td>
-                                        <td>Monthly invoice</td>
-                                        <td class="text-end">$173.24</td>
-                                        <td><span class="badge bg-success">Paid</span></td>
-                                        <td>Daily usage charge</td>
-                                    </tr>
-        
-                                    <tr>
-                                        <td>2026-03-06</td>
-                                        <td>Credit grant</td>
-                                        <td class="text-end">$287.50</td>
-                                        <td><span class="badge bg-success">Paid</span></td>
-                                        <td>Credit purchase</td>
-                                    </tr>
-        
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Key Metrics -->
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="card metric-card">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">📈 Daily Tracking</h5>
-                        <h3 class="text-primary">Actual Billing</h3>
-                        <p class="mb-0">Direct from Claude Console</p>
-                        <small class="text-muted">No estimations</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card metric-card">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">🎯 Data Source</h5>
-                        <h3 class="text-info">Console API</h3>
-                        <p class="mb-0">Real-time billing data</p>
-                        <small class="text-muted">Updated daily at midnight</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card metric-card">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">📊 Accuracy</h5>
-                        <h3 class="text-success">100%</h3>
-                        <p class="mb-0">Official billing records</p>
-                        <small class="text-muted">Anthropic source data</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Important Notes -->
-        <div class="row">
-            <div class="col">
-                <div class="alert alert-info">
-                    <h5 class="alert-heading">📋 Billing Summary Notes</h5>
-                    <ul class="mb-0">
-                        <li><strong>Data Source:</strong> Direct from Claude Console billing dashboard</li>
-                        <li><strong>Update Frequency:</strong> Daily at 00:01 AM CST via automated screenshot</li>
-                        <li><strong>Accuracy:</strong> 100% - uses actual Anthropic billing data, not estimates</li>
-                        <li><strong>Yesterday's Charge:</strong> $173.24 (actual monthly invoice amount)</li>
-                        <li><strong>Current Status:</strong> $1,253.25 pending for current billing period</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+  <div class="grid">
+    <div class="stat-card balance-card">
+      <div class="label">💰 Current Balance</div>
+      <div class="value">$101.32</div>
+      <div class="sub">Remaining credits</div>
     </div>
+    <div class="stat-card alert-triggered">
+      <div class="label">⏳ Pending This Period</div>
+      <div class="value">$1,253.25</div>
+      <div class="sub">Current billing cycle</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">📊 Yesterday's Actual</div>
+      <div class="value">$173.24</div>
+      <div class="sub">Mar 13 monthly invoice</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">🎯 Data Source</div>
+      <div class="value">Console</div>
+      <div class="sub">100% accurate billing</div>
+    </div>
+  </div>
 
-    <footer class="bg-light py-3 mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <p class="text-muted mb-0">
-                        <strong>Knox Billing Monitor</strong><br>
-                        Automated Claude Console tracking
-                    </p>
-                </div>
-                <div class="col-md-6 text-end">
-                    <p class="text-muted mb-0">
-                        Generated: March 14, 2026 at 12:51 AM CST<br>
-                        <small>Next update: Tomorrow 00:01 AM CST</small>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </footer>
+  <div class="alert-section">
+    <h3>⚠️ High Spending Alert</h3>
+    <div class="alert-note">
+      <strong>Current period spend:</strong> $1,253.25 pending charges accumulated this billing cycle.
+    </div>
+    <div class="alert-note">
+      <strong>Yesterday's charge:</strong> $173.24 was processed as monthly invoice on Mar 13, 2026.
+    </div>
+    <div class="alert-note">
+      <strong>Monitoring:</strong> Daily automated billing checks at 00:01 AM CST capture real Claude Console data.
+    </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <div class="card">
+    <h2>📋 Recent Billing Activity</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Mar 13, 2026</strong></td>
+          <td>Monthly invoice</td>
+          <td class="cost">$173.24</td>
+          <td><span class="status-paid">Paid</span></td>
+          <td>Daily usage charge</td>
+        </tr>
+        <tr>
+          <td>Mar 6, 2026</td>
+          <td>Credit grant</td>
+          <td class="cost">$287.50</td>
+          <td><span class="status-paid">Paid</span></td>
+          <td>Credit purchase</td>
+        </tr>
+        <tr>
+          <td>Mar 6, 2026</td>
+          <td>Credit grant</td>
+          <td class="cost">$575.00</td>
+          <td><span class="status-pending">Expiring Mar 6, 2027</span></td>
+          <td>Annual credit grant</td>
+        </tr>
+        <tr>
+          <td>Mar 3, 2026</td>
+          <td>Credit grant</td>
+          <td class="cost">$287.50</td>
+          <td><span class="status-pending">Expiring Mar 3, 2027</span></td>
+          <td>Credit purchase</td>
+        </tr>
+        <tr>
+          <td>Mar 2, 2026</td>
+          <td>Monthly invoice</td>
+          <td class="cost">$0.00</td>
+          <td><span class="status-paid">Paid</span></td>
+          <td>No usage charge</td>
+        </tr>
+        <tr>
+          <td>Feb 28, 2026</td>
+          <td>Credit grant</td>
+          <td class="cost">$287.50</td>
+          <td><span class="status-pending">Expiring Feb 28, 2027</span></td>
+          <td>Credit purchase</td>
+        </tr>
+        <tr>
+          <td>Feb 25, 2026</td>
+          <td>Credit grant</td>
+          <td class="cost">$287.50</td>
+          <td><span class="status-pending">Expiring Feb 26, 2027</span></td>
+          <td>Credit purchase</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>📊 Billing Summary</h2>
+    <table>
+      <thead>
+        <tr><th>Metric</th><th>Value</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Data Accuracy</strong></td>
+          <td class="total">100%</td>
+          <td>Direct from Claude Console billing dashboard</td>
+        </tr>
+        <tr>
+          <td><strong>Update Frequency</strong></td>
+          <td>Daily 00:01 AM</td>
+          <td>Automated screenshot and data extraction</td>
+        </tr>
+        <tr>
+          <td><strong>Billing Method</strong></td>
+          <td>Anthropic Console</td>
+          <td>Official billing records, not estimates</td>
+        </tr>
+        <tr>
+          <td><strong>Auto-reload Status</strong></td>
+          <td class="status-paid">Enabled</td>
+          <td>Reload to $200 when balance reaches $50</td>
+        </tr>
+        <tr>
+          <td><strong>Payment Method</strong></td>
+          <td>Visa ••••2314</td>
+          <td>Charged to primary payment method</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    <strong>Knox Billing Monitor</strong> — Automated Claude Console tracking<br>
+    Generated March 14, 2026 at 01:25 AM CST • Next update: 00:01 AM CST daily<br>
+    <strong>Data Source:</strong> Claude Console billing dashboard (screenshot analysis) • <strong>Accuracy:</strong> 100% official Anthropic billing data
+  </div>
+</div>
 </body>
 </html>
