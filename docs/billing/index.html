@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Billing Dashboard - 2026-03-14</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --claude-orange: #f5682b;
+            --claude-dark: #2d2d2d;
+        }
+        
+        .claude-header {
+            background: linear-gradient(135deg, var(--claude-orange), #ff8c42);
+            color: white;
+            padding: 2rem 0;
+        }
+        
+        .metric-card {
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .spending-alert {
+            border-left: 4px solid var(--claude-orange);
+            background: #fff9f6;
+        }
+        
+        .balance-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--claude-orange);
+        }
+    </style>
+</head>
+<body>
+    <header class="claude-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h1 class="display-4 mb-0">💳 Claude Billing Dashboard</h1>
+                    <p class="lead mb-0">Actual Usage & Cost Tracking</p>
+                </div>
+                <div class="col-auto">
+                    <span class="badge bg-light text-dark fs-6">Updated: 2026-03-14 00:51 CST</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container py-4">
+        <!-- Current Balance Section -->
+        <div class="row mb-4">
+            <div class="col-lg-8">
+                <div class="card metric-card h-100">
+                    <div class="card-body text-center">
+                        <h3 class="card-title text-muted">Current Credit Balance</h3>
+                        <div class="balance-display">$101.32</div>
+                        <p class="text-muted mb-0">Remaining Available Credits</p>
+                        <small class="text-warning">Pending this period: $1,253.25</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card metric-card h-100 spending-alert">
+                    <div class="card-body">
+                        <h5 class="card-title">⚠️ Yesterday's Actual Charge</h5>
+                        <h2 class="text-danger">$173.24</h2>
+                        <p class="mb-0"><strong>Source:</strong> Claude Console Monthly Invoice</p>
+                        <small class="text-muted">Mar 13, 2026 - Paid</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="row mb-4">
+            <div class="col">
+                <div class="card metric-card">
+                    <div class="card-header">
+                        <h5 class="mb-0">📊 Recent Billing Activity</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr>
+                                        <td>2026-03-13</td>
+                                        <td>Monthly invoice</td>
+                                        <td class="text-end">$173.24</td>
+                                        <td><span class="badge bg-success">Paid</span></td>
+                                        <td>Daily usage charge</td>
+                                    </tr>
+        
+                                    <tr>
+                                        <td>2026-03-06</td>
+                                        <td>Credit grant</td>
+                                        <td class="text-end">$287.50</td>
+                                        <td><span class="badge bg-success">Paid</span></td>
+                                        <td>Credit purchase</td>
+                                    </tr>
+        
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">📈 Daily Tracking</h5>
+                        <h3 class="text-primary">Actual Billing</h3>
+                        <p class="mb-0">Direct from Claude Console</p>
+                        <small class="text-muted">No estimations</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">🎯 Data Source</h5>
+                        <h3 class="text-info">Console API</h3>
+                        <p class="mb-0">Real-time billing data</p>
+                        <small class="text-muted">Updated daily at midnight</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">📊 Accuracy</h5>
+                        <h3 class="text-success">100%</h3>
+                        <p class="mb-0">Official billing records</p>
+                        <small class="text-muted">Anthropic source data</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Important Notes -->
+        <div class="row">
+            <div class="col">
+                <div class="alert alert-info">
+                    <h5 class="alert-heading">📋 Billing Summary Notes</h5>
+                    <ul class="mb-0">
+                        <li><strong>Data Source:</strong> Direct from Claude Console billing dashboard</li>
+                        <li><strong>Update Frequency:</strong> Daily at 00:01 AM CST via automated screenshot</li>
+                        <li><strong>Accuracy:</strong> 100% - uses actual Anthropic billing data, not estimates</li>
+                        <li><strong>Yesterday's Charge:</strong> $173.24 (actual monthly invoice amount)</li>
+                        <li><strong>Current Status:</strong> $1,253.25 pending for current billing period</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-light py-3 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="text-muted mb-0">
+                        <strong>Knox Billing Monitor</strong><br>
+                        Automated Claude Console tracking
+                    </p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <p class="text-muted mb-0">
+                        Generated: March 14, 2026 at 12:51 AM CST<br>
+                        <small>Next update: Tomorrow 00:01 AM CST</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
