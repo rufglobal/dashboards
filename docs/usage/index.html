@@ -56,7 +56,7 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
 </style></head><body>
 <div class="container">
   <h1>🔐 Claude Usage Dashboard</h1>
-  <p class="subtitle">Romanian United Foundation — Generated March 13, 2026 at 02:32 PM CST</p>
+  <p class="subtitle">Romanian United Foundation — Generated March 13, 2026 at 08:00 PM CST</p>
 
   <div class="nav-bar">
       <a href="2026-03-12.html" class="nav-btn">← 2026-03-12</a>
@@ -66,15 +66,15 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
     </div>
 
   <div class="grid">
-    <div class="stat-card alert-ok">
-      <div class="label">🟢 Today's Spend</div>
-      <div class="value">$36.04</div>
-      <div class="sub">Under $100 daily limit</div>
+    <div class="stat-card alert-triggered">
+      <div class="label">🔴 Today's Spend</div>
+      <div class="value">$242.22</div>
+      <div class="sub">OVER $100 daily limit</div>
     </div>
     <div class="stat-card">
       <div class="label">7-Day Total</div>
-      <div class="value">$705.74</div>
-      <div class="sub">Avg $100.82/day</div>
+      <div class="value">$912.62</div>
+      <div class="sub">Avg $114.08/day</div>
     </div>
     <div class="stat-card">
       <div class="label">Daily Limit</div>
@@ -83,12 +83,12 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
     </div>
     <div class="stat-card">
       <div class="label">Projected Monthly</div>
-      <div class="value">$3025</div>
+      <div class="value">$3422</div>
       <div class="sub">Based on 7-day avg</div>
     </div>
   </div>
 
-  
+  <div class="spike-analysis"><h3>🔍 Spike Analysis — Top 3 Spenders</h3><div class="spike-agent"><div class="spike-header"><strong>Alice</strong><span class="spike-meta">$112.06 · 46% of daily spend</span></div><div class="spike-activities"><strong>What happened:</strong> New RUF Strategy Skill Creation (3:09 PM CST); Official Slogans Confirmed (5:19 PM CST); Comprehensive RUF Strategy Document Created (5:30 PM CST)</div><div class="spike-why"><strong>💰 Why it cost $112.06:</strong> Standard operational activity across 18 sessions. Cost is proportional to session count and context window sizes loaded per session.</div><div class="spike-expand" onclick="document.getElementById('recs-0').classList.toggle('show')"><span class="expand-icon">💡</span> <span class="expand-text">Read more — How to reduce this cost</span><span class="expand-arrow">▸</span></div><div id="recs-0" class="spike-recommendations"><strong>🛠️ Recommendations:</strong><br>Reduce costs: Check if you're running too many sessions.</div></div><div class="spike-agent"><div class="spike-header"><strong>Knox</strong><span class="spike-meta">$60.44 · 25% of daily spend</span></div><div class="spike-activities"><strong>What happened:</strong> 6:46 PM CST - CRITICAL SECURITY ISSUES DETECTED</div><div class="spike-why"><strong>💰 Why it cost $60.44:</strong> Agent creation/configuration — involves reading multiple config files, creating workspace files, and system restarts</div><div class="spike-expand" onclick="document.getElementById('recs-1').classList.toggle('show')"><span class="expand-icon">💡</span> <span class="expand-text">Read more — How to reduce this cost</span><span class="expand-arrow">▸</span></div><div id="recs-1" class="spike-recommendations"><strong>🛠️ Recommendations:</strong><br>Reduce costs: Create multiple agents at once instead of one by one.</div></div><div class="spike-agent"><div class="spike-header"><strong>Ana</strong><span class="spike-meta">$43.35 · 18% of daily spend</span></div><div class="spike-activities"><strong>What happened:</strong> 4:42 PM CDT - EMERGENCY CRON STOP EXECUTED; 5:26 PM CDT - COMPREHENSIVE USER MANUAL DEPLOYED ✅; 17:16 PM CST - Ana User Manual Access Query 📋; 17:20 PM CST - NEW CREATE-MANUAL SKILL & DETAILED DOCUMENTATION ✅</div><div class="spike-why"><strong>💰 Why it cost $43.35:</strong> Agent creation/configuration — involves reading multiple config files, creating workspace files, and system restarts</div><div class="spike-expand" onclick="document.getElementById('recs-2').classList.toggle('show')"><span class="expand-icon">💡</span> <span class="expand-text">Read more — How to reduce this cost</span><span class="expand-arrow">▸</span></div><div id="recs-2" class="spike-recommendations"><strong>🛠️ Recommendations:</strong><br>Reduce costs: Create multiple agents at once instead of one by one.</div></div></div>
 
   <div class="card">
     <h2>📊 7-Day Usage Trend</h2>
@@ -103,27 +103,29 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
   <div class="card">
     <h2>📋 Today's Model Breakdown</h2>
     <table><thead><tr><th>Model</th><th>Tokens In</th><th>Tokens Out</th><th>Input</th><th>Cache Write</th><th>Cache Read</th><th>Output</th><th>Total</th></tr></thead>
-    <tbody><tr><td><strong>Sonnet 4</strong></td><td>86,961,414</td><td>590,565</td>
-        <td class="cost">$0.04</td><td class="cost">$0.00</td>
-        <td class="cost">$26.08</td><td class="cost">$8.86</td>
-        <td class="cost total">$34.99</td></tr><tr><td><strong>Opus 4.6</strong></td><td>527,299</td><td>3,478</td>
-        <td class="cost">$0.00</td><td class="cost">$0.00</td>
-        <td class="cost">$0.79</td><td class="cost">$0.26</td>
-        <td class="cost total">$1.05</td></tr></tbody></table>
+    <tbody><tr><td><strong>Opus 4.6</strong></td><td>4,984,172</td><td>13,565</td>
+        <td class="cost">$0.00</td><td class="cost">$32.78</td>
+        <td class="cost">$4.85</td><td class="cost">$1.02</td>
+        <td class="cost total">$38.65</td></tr><tr><td><strong>Sonnet 4</strong></td><td>168,837,310</td><td>832,582</td>
+        <td class="cost">$0.07</td><td class="cost">$152.57</td>
+        <td class="cost">$38.44</td><td class="cost">$12.49</td>
+        <td class="cost total">$203.57</td></tr></tbody></table>
   </div>
 
   <div class="card">
     <h2>🤖 Estimated Agent Breakdown (Today)</h2>
     <table><thead><tr><th>Agent</th><th>Sessions</th><th>Activity Share</th><th>Est. Cost</th></tr></thead>
-    <tbody><tr><td><strong>Alice</strong></td><td>15</td>
-        <td><div class="bar-container"><div class="bar" style="width:53.16703984486659%"></div><span>53.2%</span></div></td>
-        <td class="cost">$19.16</td></tr><tr><td><strong>Knox</strong></td><td>17</td>
-        <td><div class="bar-container"><div class="bar" style="width:32.82812061321152%"></div><span>32.8%</span></div></td>
-        <td class="cost">$11.83</td></tr><tr><td><strong>Ana</strong></td><td>1</td>
-        <td><div class="bar-container"><div class="bar" style="width:9.613025981348827%"></div><span>9.6%</span></div></td>
-        <td class="cost">$3.46</td></tr><tr><td><strong>Emma</strong></td><td>31</td>
-        <td><div class="bar-container"><div class="bar" style="width:4.3918135605730635%"></div><span>4.4%</span></div></td>
-        <td class="cost">$1.58</td></tr></tbody></table>
+    <tbody><tr><td><strong>Alice</strong></td><td>18</td>
+        <td><div class="bar-container"><div class="bar" style="width:46.26413314403438%"></div><span>46.3%</span></div></td>
+        <td class="cost">$112.06</td></tr><tr><td><strong>Knox</strong></td><td>27</td>
+        <td><div class="bar-container"><div class="bar" style="width:24.952458092278878%"></div><span>25.0%</span></div></td>
+        <td class="cost">$60.44</td></tr><tr><td><strong>Ana</strong></td><td>3</td>
+        <td><div class="bar-container"><div class="bar" style="width:17.897956895314813%"></div><span>17.9%</span></div></td>
+        <td class="cost">$43.35</td></tr><tr><td><strong>Emma</strong></td><td>43</td>
+        <td><div class="bar-container"><div class="bar" style="width:10.810748742985536%"></div><span>10.8%</span></div></td>
+        <td class="cost">$26.19</td></tr><tr><td><strong>Clara</strong></td><td>1</td>
+        <td><div class="bar-container"><div class="bar" style="width:0.07470312538639189%"></div><span>0.1%</span></div></td>
+        <td class="cost">$0.18</td></tr></tbody></table>
     <p style="color:var(--muted);font-size:10px;margin-top:10px;">* Estimates based on session transcript sizes. Actual per-agent costs not available from API.</p>
   </div>
 
@@ -134,9 +136,9 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0/dist/chartjs-plugin-annotation.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const labels = ["03-07", "03-08", "03-09", "03-10", "03-11", "03-12", "03-13"];
-  const sonnetData = [10.31, 22.75, 17.06, 228.82, 64.24, 66.96, 34.99];
-  const opusData = [0, 0, 16.23, 12.9, 41.66, 188.77, 1.05];
+  const labels = ["03-07", "03-08", "03-09", "03-10", "03-11", "03-12", "03-13", "03-14"];
+  const sonnetData = [10.31, 22.75, 17.06, 228.82, 64.24, 66.96, 203.57, 0.7];
+  const opusData = [0, 0, 16.23, 12.9, 41.66, 188.77, 38.65, 0];
   new Chart(document.getElementById('usageChart'), {
     type: 'bar',
     data: {
