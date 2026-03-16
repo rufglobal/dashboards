@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUF Strategic Roadmap 2020-2050</title>
+    
+    <!-- Font loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* GlobalRomania Brand Colors */
+            --gr-midnight-blue: #0A0E27;
+            --gr-electric-blue: #007CFF;
+            --gr-magenta: #B823FF;
+            --gr-amber: #FF6F3C;
+            --gr-cyan: #00E3C2;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--gr-midnight-blue) 0%, #1E1E2B 100%);
+            color: var(--white);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--gr-electric-blue), var(--gr-magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .header .subtitle {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--gr-cyan);
+            margin-bottom: 10px;
+        }
+
+        .header .mission {
+            font-size: 1.1rem;
+            color: #B8BCC8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .roadmap {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+        }
+
+        .stage {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid transparent;
+            border-radius: 20px;
+            padding: 40px 30px;
+            position: relative;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .stage::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            padding: 2px;
+            background: linear-gradient(135deg, var(--gr-electric-blue), var(--gr-magenta));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stage:hover::before {
+            opacity: 1;
+        }
+
+        .stage.completed {
+            border-color: var(--gr-cyan);
+        }
+
+        .stage.current {
+            border-color: var(--gr-amber);
+            transform: scale(1.05);
+        }
+
+        .stage.future {
+            border-color: var(--gr-electric-blue);
+        }
+
+        .stage-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .stage-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .stage.completed .stage-icon {
+            background: linear-gradient(135deg, var(--gr-cyan), #00B8A3);
+        }
+
+        .stage.current .stage-icon {
+            background: linear-gradient(135deg, var(--gr-amber), #FF8A50);
+        }
+
+        .stage.future .stage-icon {
+            background: linear-gradient(135deg, var(--gr-electric-blue), var(--gr-magenta));
+        }
+
+        .stage-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .stage-years {
+            font-size: 1rem;
+            font-weight: 500;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+
+        .stage-status {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .completed .stage-status {
+            background: rgba(0, 227, 194, 0.2);
+            color: var(--gr-cyan);
+        }
+
+        .current .stage-status {
+            background: rgba(255, 111, 60, 0.2);
+            color: var(--gr-amber);
+        }
+
+        .future .stage-status {
+            background: rgba(0, 124, 255, 0.2);
+            color: var(--gr-electric-blue);
+        }
+
+        .stage-content {
+            text-align: left;
+        }
+
+        .stage-description {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .stage-goals {
+            list-style: none;
+        }
+
+        .stage-goals li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+
+        .stage-goals li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            color: var(--gr-electric-blue);
+        }
+
+        .timeline-connector {
+            position: absolute;
+            top: 50%;
+            right: -15px;
+            width: 30px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gr-electric-blue), var(--gr-magenta));
+            border-radius: 2px;
+            transform: translateY(-50%);
+            z-index: -1;
+        }
+
+        .stage:last-child .timeline-connector {
+            display: none;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer .tagline {
+            font-size: 1.3rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--gr-electric-blue), var(--gr-magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .footer .poweredby {
+            font-size: 1rem;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .roadmap {
+                flex-direction: column;
+            }
+            
+            .stage {
+                min-width: unset;
+            }
+
+            .stage.current {
+                transform: none;
+            }
+            
+            .timeline-connector {
+                display: none;
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>RUF Strategic Roadmap</h1>
+            <div class="subtitle">2020 - 2050</div>
+            <div class="mission">
+                Finance. Build. Execute. — The only diaspora network focused on systemic change, 
+                rewriting diaspora engagement for the 21st century to liberate Romania's full potential.
+            </div>
+        </div>
+
+        <div class="roadmap">
+            <div class="stage completed">
+                <div class="timeline-connector"></div>
+                <div class="stage-header">
+                    <div class="stage-icon">✓</div>
+                    <div class="stage-title">Fundraising Platform</div>
+                    <div class="stage-years">2020 - 2025</div>
+                    <div class="stage-status">COMPLETED</div>
+                </div>
+                <div class="stage-content">
+                    <div class="stage-description">
+                        Built fundraising infrastructure and established RUF as credible diaspora organization.
+                    </div>
+                    <ul class="stage-goals">
+                        <li>Donor network development</li>
+                        <li>Fundraising systems established</li>
+                        <li>Community trust and credibility</li>
+                        <li>Operational foundation built</li>
+                        <li>Strategic partnerships formed</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="stage current">
+                <div class="timeline-connector"></div>
+                <div class="stage-header">
+                    <div class="stage-icon">🔄</div>
+                    <div class="stage-title">Build Network</div>
+                    <div class="stage-years">2026 - 2030</div>
+                    <div class="stage-status">CURRENT PHASE</div>
+                </div>
+                <div class="stage-content">
+                    <div class="stage-description">
+                        GlobalRomania platform launch targeting 50,000 elite Romanians + friends worldwide.
+                    </div>
+                    <ul class="stage-goals">
+                        <li>Q2 2026: Platform launch with Social Capital & GRX</li>
+                        <li>CTO hire and technical foundation</li>
+                        <li>Think Tank establishment (Washington DC)</li>
+                        <li>Media organization development</li>
+                        <li>2028: Mihai sabbatical test (independence)</li>
+                        <li>Quality curation system implementation</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="stage future">
+                <div class="stage-header">
+                    <div class="stage-icon">🎯</div>
+                    <div class="stage-title">Massive Impact</div>
+                    <div class="stage-years">2030 - 2050</div>
+                    <div class="stage-status">FUTURE VISION</div>
+                </div>
+                <div class="stage-content">
+                    <div class="stage-description">
+                        Transform Romania into a Top #25 global nation through coordinated diaspora influence.
+                    </div>
+                    <ul class="stage-goals">
+                        <li>50,000 elite network fully operational</li>
+                        <li>$10M endowment sustainability achieved</li>
+                        <li>Think Tank recognized policy influence</li>
+                        <li>Media organization global authority</li>
+                        <li>Romania economic/soft power transformation</li>
+                        <li>Diaspora engagement model replicated globally</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="tagline">The Place Where Romanians Connect</div>
+            <div class="poweredby">#PoweredByRUF | GlobalRomania.net</div>
+        </div>
+    </div>
+</body>
+</html>
