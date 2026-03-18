@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Claude Usage — 2026-03-17</title>
+<style>
+:root { --bg:#0f1117;--card:#1a1d27;--border:#2a2d3a;--text:#e4e4e7;--muted:#8b8b9e;--accent:#6366f1;--green:#22c55e;--red:#ef4444;--opus:#f59e0b; }
+* { margin:0;padding:0;box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);padding:20px; }
+.container { max-width:1100px;margin:0 auto; }
+h1 { font-size:22px;margin-bottom:4px; }
+.subtitle { color:var(--muted);font-size:13px;margin-bottom:16px; }
+.nav-bar { display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap; }
+.nav-btn { background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 16px;color:var(--text);text-decoration:none;font-size:13px;cursor:pointer;transition:background 0.2s; }
+.nav-btn:hover { background:#252836; }
+.nav-btn.disabled { opacity:0.4;pointer-events:none; }
+.nav-btn.today-btn { background:var(--accent);border-color:var(--accent);font-weight:600; }
+.nav-date { font-size:15px;font-weight:600;flex:1;text-align:center; }
+.grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:20px; }
+.stat-card { background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px; }
+.stat-card .label { color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:0.5px; }
+.stat-card .value { font-size:26px;font-weight:700;margin-top:4px; }
+.stat-card .sub { color:var(--muted);font-size:11px;margin-top:4px; }
+.alert-triggered .value { color:var(--red); }
+.alert-ok .value { color:var(--green); }
+.card { background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px; }
+.card h2 { font-size:15px;margin-bottom:14px; }
+table { width:100%;border-collapse:collapse;font-size:12px; }
+th { text-align:left;color:var(--muted);font-weight:500;padding:6px 10px;border-bottom:1px solid var(--border);font-size:10px;text-transform:uppercase; }
+td { padding:8px 10px;border-bottom:1px solid var(--border); }
+.cost { text-align:right;font-family:'SF Mono','Fira Code',monospace; }
+.total { font-weight:700;color:var(--accent); }
+.bar-container { display:flex;align-items:center;gap:8px; }
+.bar { height:8px;background:var(--accent);border-radius:4px;min-width:2px; }
+.bar-container span { font-size:12px;color:var(--muted);min-width:45px; }
+.spike-analysis { background:#1e1215;border:1px solid #3b1a1a;border-radius:12px;padding:14px;margin-bottom:20px; }
+.spike-analysis h3 { color:var(--red);margin-bottom:10px;font-size:13px; }
+.spike-agent { color:var(--muted);font-size:13px;margin-bottom:14px;padding:14px 16px;background:rgba(0,0,0,0.25);border-radius:10px;border-left:3px solid var(--red); }
+.spike-header { display:flex;justify-content:space-between;align-items:center;margin-bottom:8px; }
+.spike-header strong { color:var(--text);font-size:15px; }
+.spike-meta { color:var(--red);font-size:12px;font-weight:600; }
+.spike-activities { color:var(--muted);font-size:12px;line-height:1.6;margin-bottom:6px; }
+.spike-activities strong { color:var(--text);font-size:11px;text-transform:uppercase;letter-spacing:0.3px; }
+.spike-why { color:#d4a574;font-size:12px;line-height:1.6;margin-bottom:8px;padding:8px 10px;background:rgba(245,158,11,0.08);border-radius:6px; }
+.spike-why strong { color:var(--opus); }
+.spike-expand { display:flex;align-items:center;gap:6px;cursor:pointer;padding:6px 0;color:var(--accent);font-size:12px;font-weight:500;transition:color 0.2s;user-select:none; }
+.spike-expand:hover { color:#818cf8; }
+.expand-icon { font-size:14px; }
+.expand-arrow { margin-left:auto;transition:transform 0.2s; }
+.spike-recommendations { display:none;padding:10px 12px;margin-top:6px;background:rgba(99,102,241,0.08);border-radius:6px;font-size:12px;line-height:1.7;color:var(--muted);border:1px solid rgba(99,102,241,0.15); }
+.spike-recommendations.show { display:block; }
+.spike-recommendations strong { color:var(--accent); }
+.footer { text-align:center;color:var(--muted);font-size:10px;margin-top:24px;padding-top:12px;border-top:1px solid var(--border); }
+.legend { display:flex;gap:16px;margin-bottom:10px;font-size:12px; }
+.legend-item { display:flex;align-items:center;gap:6px; }
+.legend-dot { width:10px;height:10px;border-radius:50%; }
+.chart-wrap { position:relative; height:280px; width:100%; overflow:hidden; }
+</style></head><body>
+<div class="container">
+  <h1>🔐 Claude Usage Dashboard</h1>
+  <p class="subtitle">Romanian United Foundation — Generated March 18, 2026 at 12:01 AM CST</p>
+
+  <div class="nav-bar">
+      <a href="2026-03-16.html" class="nav-btn">← 2026-03-16</a>
+      <span class="nav-date">📅 2026-03-17</span>
+      <a href="2026-03-18.html" class="nav-btn">2026-03-18 →</a>
+      <a href="2026-03-18.html" class="nav-btn today-btn">⟳ Today</a>
+    </div>
+
+  <div class="grid">
+    <div class="stat-card" style="--value-color: var(--opus);">
+      <div class="label">💰 Current Balance</div>
+      <div class="value" style="color: var(--opus);">$101.32</div>
+      <div class="sub">Available credits</div>
+    </div>
+    <div class="stat-card alert-ok">
+      <div class="label">🟢 2026-03-17's Spend</div>
+      <div class="value">$58.00</div>
+      <div class="sub">Under $100 daily limit</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">7-Day Total</div>
+      <div class="value">$958.80</div>
+      <div class="sub">Avg $119.85/day</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Daily Limit</div>
+      <div class="value">$100</div>
+      <div class="sub">Alert threshold</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Projected Monthly</div>
+      <div class="value">$3595</div>
+      <div class="sub">Based on 7-day avg</div>
+    </div>
+  </div>
+
+  
+
+  <div class="card">
+    <h2>📊 7-Day Usage Trend</h2>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> Sonnet 4</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--opus)"></div> Opus 4.6</div>
+      <div class="legend-item" style="color:var(--red)">--- $100 limit</div>
+    </div>
+    <div class="chart-wrap"><canvas id="usageChart"></canvas></div>
+  </div>
+
+  <div class="card">
+    <h2>📋 2026-03-17's Model Breakdown</h2>
+    <table><thead><tr><th>Model</th><th>Tokens In</th><th>Tokens Out</th><th>Input</th><th>Cache Write</th><th>Cache Read</th><th>Output</th><th>Total</th></tr></thead>
+    <tbody><tr><td><strong>Opus 4.6</strong></td><td>8,977,345</td><td>30,483</td>
+        <td class="cost">$0.00</td><td class="cost">$10.24</td>
+        <td class="cost">$12.65</td><td class="cost">$2.29</td>
+        <td class="cost total">$25.18</td></tr><tr><td><strong>Sonnet 4</strong></td><td>33,390,931</td><td>157,857</td>
+        <td class="cost">$0.01</td><td class="cost">$22.20</td>
+        <td class="cost">$8.24</td><td class="cost">$2.37</td>
+        <td class="cost total">$32.82</td></tr></tbody></table>
+  </div>
+
+  <div class="card">
+    <h2>🤖 Estimated Agent Breakdown (2026-03-17)</h2>
+    <table><thead><tr><th>Agent</th><th>Sessions</th><th>Activity Share</th><th>Est. Cost</th></tr></thead>
+    <tbody><tr><td><strong>Knox</strong></td><td>29</td>
+        <td><div class="bar-container"><div class="bar" style="width:54.19757717025647%"></div><span>54.2%</span></div></td>
+        <td class="cost">$31.43</td></tr><tr><td><strong>Emma</strong></td><td>52</td>
+        <td><div class="bar-container"><div class="bar" style="width:26.244382302745233%"></div><span>26.2%</span></div></td>
+        <td class="cost">$15.22</td></tr><tr><td><strong>Alice</strong></td><td>12</td>
+        <td><div class="bar-container"><div class="bar" style="width:13.248954471424948%"></div><span>13.2%</span></div></td>
+        <td class="cost">$7.68</td></tr><tr><td><strong>Eva</strong></td><td>2</td>
+        <td><div class="bar-container"><div class="bar" style="width:6.309086055573346%"></div><span>6.3%</span></div></td>
+        <td class="cost">$3.66</td></tr></tbody></table>
+    <p style="color:var(--muted);font-size:10px;margin-top:10px;">* Estimates based on session transcript sizes. Actual per-agent costs not available from API.</p>
+  </div>
+
+  <div class="footer">Knox Security · Claude Usage Dashboard v1.0 · Data from Anthropic Admin API</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0/dist/chartjs-plugin-annotation.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const labels = ["03-11", "03-12", "03-13", "03-14", "03-15", "03-16", "03-17", "03-18"];
+  const sonnetData = [64.24, 66.96, 203.57, 97.1, 31.05, 46.77, 32.82, 1.74];
+  const opusData = [41.66, 188.77, 38.65, 57.66, 28.31, 21.28, 25.18, 13.04];
+  new Chart(document.getElementById('usageChart'), {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [
+        { label:'Sonnet 4', data:sonnetData, backgroundColor:'#6366f1', borderRadius:4 },
+        { label:'Opus 4.6', data:opusData, backgroundColor:'#f59e0b', borderRadius:4 }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { stacked:true, grid:{display:false}, ticks:{color:'#8b8b9e',font:{size:13}} },
+        y: { stacked:true, beginAtZero:true, grid:{color:'#2a2d3a'}, ticks:{color:'#8b8b9e',callback:v=>'$'+v} }
+      },
+      plugins: {
+        legend:{display:false},
+        annotation: {
+          annotations: {
+            limit: {
+              type:'line',yMin:100,yMax:100,
+              borderColor:'#ef4444',borderWidth:2,borderDash:[6,3],
+              label:{display:true,content:'$100 limit',position:'end',backgroundColor:'#ef4444',font:{size:11}}
+            }
+          }
+        }
+      }
+    }
+  });
+});
+</script>
+</body></html>
