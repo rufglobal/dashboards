@@ -56,13 +56,13 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
 </style></head><body>
 <div class="container">
   <h1>🔐 Claude Usage Dashboard</h1>
-  <p class="subtitle">Romanian United Foundation — Generated March 26, 2026 at 07:27 AM CST</p>
+  <p class="subtitle">Romanian United Foundation — Generated March 27, 2026 at 03:01 PM CST</p>
 
   <div class="nav-bar">
       <a href="2026-03-25.html" class="nav-btn">← 2026-03-25</a>
-      <span class="nav-date">📅 2026-03-26 (Today)</span>
-      <span class="nav-btn disabled">Today</span>
-      
+      <span class="nav-date">📅 2026-03-26</span>
+      <a href="2026-03-27.html" class="nav-btn">2026-03-27 →</a>
+      <a href="2026-03-27.html" class="nav-btn today-btn">⟳ Today</a>
     </div>
 
   <div class="grid">
@@ -72,14 +72,14 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
       <div class="sub">Available credits</div>
     </div>
     <div class="stat-card alert-ok">
-      <div class="label">🟢 Today's Spend</div>
-      <div class="value">$2.50</div>
+      <div class="label">🟢 2026-03-26's Spend</div>
+      <div class="value">$9.86</div>
       <div class="sub">Under $100 daily limit</div>
     </div>
     <div class="stat-card">
       <div class="label">7-Day Total</div>
-      <div class="value">$528.44</div>
-      <div class="sub">Avg $75.49/day</div>
+      <div class="value">$537.83</div>
+      <div class="sub">Avg $67.23/day</div>
     </div>
     <div class="stat-card">
       <div class="label">Daily Limit</div>
@@ -88,7 +88,7 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
     </div>
     <div class="stat-card">
       <div class="label">Projected Monthly</div>
-      <div class="value">$2265</div>
+      <div class="value">$2017</div>
       <div class="sub">Based on 7-day avg</div>
     </div>
   </div>
@@ -106,22 +106,22 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
   </div>
 
   <div class="card">
-    <h2>📋 Today's Model Breakdown</h2>
+    <h2>📋 2026-03-26's Model Breakdown</h2>
     <table><thead><tr><th>Model</th><th>Tokens In</th><th>Tokens Out</th><th>Input</th><th>Cache Write</th><th>Cache Read</th><th>Output</th><th>Total</th></tr></thead>
-    <tbody><tr><td><strong>claude-sonnet-4-6</strong></td><td>6,304,380</td><td>40,414</td>
-        <td class="cost">$0.00</td><td class="cost">$0.00</td>
-        <td class="cost">$1.89</td><td class="cost">$0.61</td>
-        <td class="cost total">$2.50</td></tr></tbody></table>
+    <tbody><tr><td><strong>claude-sonnet-4-6</strong></td><td>16,742,463</td><td>79,450</td>
+        <td class="cost">$0.00</td><td class="cost">$3.97</td>
+        <td class="cost">$4.71</td><td class="cost">$1.19</td>
+        <td class="cost total">$9.86</td></tr></tbody></table>
   </div>
 
   <div class="card">
-    <h2>🤖 Estimated Agent Breakdown (Today)</h2>
+    <h2>🤖 Estimated Agent Breakdown (2026-03-26)</h2>
     <table><thead><tr><th>Agent</th><th>Sessions</th><th>Activity Share</th><th>Est. Cost</th></tr></thead>
-    <tbody><tr><td><strong>Knox</strong></td><td>1</td>
-        <td><div class="bar-container"><div class="bar" style="width:90.36026535317129%"></div><span>90.4%</span></div></td>
-        <td class="cost">$2.26</td></tr><tr><td><strong>Alice</strong></td><td>1</td>
-        <td><div class="bar-container"><div class="bar" style="width:9.639734646828707%"></div><span>9.6%</span></div></td>
-        <td class="cost">$0.24</td></tr></tbody></table>
+    <tbody><tr><td><strong>Alice</strong></td><td>3</td>
+        <td><div class="bar-container"><div class="bar" style="width:99.12461281738068%"></div><span>99.1%</span></div></td>
+        <td class="cost">$9.78</td></tr><tr><td><strong>Emma</strong></td><td>1</td>
+        <td><div class="bar-container"><div class="bar" style="width:0.8753871826193176%"></div><span>0.9%</span></div></td>
+        <td class="cost">$0.09</td></tr></tbody></table>
     <p style="color:var(--muted);font-size:10px;margin-top:10px;">* Estimates based on session transcript sizes. Actual per-agent costs not available from API.</p>
   </div>
 
@@ -132,9 +132,9 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0/dist/chartjs-plugin-annotation.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const labels = ["03-20", "03-21", "03-22", "03-23", "03-24", "03-25", "03-26"];
-  const sonnetData = [33.48, 63.8, 31.77, 11.86, 13.52, 2.1, 2.5];
-  const opusData = [12.93, 30.93, 132.85, 35.59, 82.46, 74.64, 0];
+  const labels = ["03-20", "03-21", "03-22", "03-23", "03-24", "03-25", "03-26", "03-27"];
+  const sonnetData = [33.48, 63.8, 31.77, 11.86, 13.52, 2.1, 9.86, 2.02];
+  const opusData = [12.93, 30.93, 132.85, 35.59, 82.46, 74.64, 0, 0];
   new Chart(document.getElementById('usageChart'), {
     type: 'bar',
     data: {
