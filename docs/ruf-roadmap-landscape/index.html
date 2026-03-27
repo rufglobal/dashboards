@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RUF Vision 2050 – Roadmap Landscape</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #113268;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ── BACKGROUND GLOW ── */
+  .bg-glow {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .bg-glow-1 {
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(0,172,240,0.08) 0%, transparent 70%);
+    top: -200px; left: -100px;
+  }
+  .bg-glow-2 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(239,125,0,0.07) 0%, transparent 70%);
+    bottom: -200px; right: 200px;
+  }
+
+  /* ── LAYOUT ── */
+  .slide {
+    width: 1920px;
+    height: 1080px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* ── TOP BAR ── */
+  .top-bar {
+    height: 72px;
+    background: #0d2455;
+    border-bottom: 3px solid #00ACF0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 64px;
+    flex-shrink: 0;
+  }
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .logo-circle {
+    width: 44px; height: 44px;
+    background: #00ACF0;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 14px; color: #113268;
+    flex-shrink: 0;
+  }
+
+  .org-name { color: white; font-size: 15px; font-weight: 700; }
+  .org-sub  { color: #7aaed4; font-size: 11px; font-weight: 400; }
+
+  .year-badge {
+    background: #EF7D00;
+    color: white;
+    padding: 6px 20px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 13px;
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+    padding: 0;
+  }
+
+  /* ── LEFT TITLE PANEL ── */
+  .title-panel {
+    width: 300px;
+    background: #0d2455;
+    border-right: 1px solid rgba(0,172,240,0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 36px;
+    flex-shrink: 0;
+  }
+
+  .title-label {
+    display: inline-block;
+    border: 1.5px solid #00ACF0;
+    color: #00ACF0;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+    width: fit-content;
+  }
+
+  .title-panel h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: white;
+    line-height: 1.2;
+    margin-bottom: 14px;
+  }
+
+  .title-panel h1 span { color: #00ACF0; }
+
+  .title-panel p {
+    font-size: 11px;
+    color: #7aaed4;
+    font-weight: 300;
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+
+  .legend {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    color: #8fb5d4;
+    font-weight: 500;
+  }
+
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── PHASES AREA ── */
+  .phases-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 28px 40px 24px 36px;
+    gap: 20px;
+  }
+
+  /* ── PHASE ROW ── */
+  .phase-row {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .phase-label-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .phase-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 16px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .ph-1 { background: rgba(0,172,240,0.15); color: #00ACF0; border: 1px solid rgba(0,172,240,0.3); }
+  .ph-2 { background: rgba(239,125,0,0.15); color: #EF7D00; border: 1px solid rgba(239,125,0,0.3); }
+  .ph-3 { background: rgba(100,232,160,0.12); color: #64e8a0; border: 1px solid rgba(100,232,160,0.25); }
+
+  .phase-line {
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.07);
+  }
+
+  /* ── CARDS ROW ── */
+  .cards-row {
+    display: flex;
+    gap: 14px;
+    flex: 1;
+    align-items: stretch;
+  }
+
+  /* ── PILLAR CARD ── */
+  .card {
+    flex: 1;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    padding: 18px 20px;
+    border: 1px solid rgba(255,255,255,0.08);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.2s;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .ph-1 .card::before { background: #00ACF0; }
+  .ph-2 .card::before { background: #EF7D00; }
+  .ph-3 .card::before { background: #64e8a0; }
+
+  .card-num {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .ph-1 .card-num { color: #00ACF0; }
+  .ph-2 .card-num { color: #EF7D00; }
+  .ph-3 .card-num { color: #64e8a0; }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .card-desc {
+    font-size: 10.5px;
+    color: #7aaed4;
+    line-height: 1.6;
+    font-weight: 300;
+    flex: 1;
+  }
+
+  /* Number badge bottom-right */
+  .card-badge {
+    position: absolute;
+    bottom: 14px;
+    right: 16px;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 12px;
+  }
+
+  .ph-1 .card-badge { background: rgba(0,172,240,0.15); color: #00ACF0; }
+  .ph-2 .card-badge { background: rgba(239,125,0,0.15); color: #EF7D00; }
+  .ph-3 .card-badge { background: rgba(100,232,160,0.12); color: #64e8a0; }
+
+  /* ── BOTTOM BAR ── */
+  .bottom-bar {
+    height: 44px;
+    background: #0d2455;
+    border-top: 1px solid rgba(0,172,240,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    flex-shrink: 0;
+  }
+
+  .bottom-bar span {
+    font-size: 11px;
+    color: #7aaed4;
+    font-weight: 400;
+  }
+
+  .bottom-bar strong { color: white; }
+
+  .bottom-divider {
+    width: 1px; height: 18px;
+    background: rgba(0,172,240,0.2);
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<div class="slide">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="logo-area">
+      <div class="logo-circle">RUF</div>
+      <div>
+        <div class="org-name">Romanian United Foundation</div>
+        <div class="org-sub">Strategic Development Roadmap</div>
+      </div>
+    </div>
+    <div class="year-badge">Vision 2050</div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- LEFT TITLE PANEL -->
+    <div class="title-panel">
+      <div class="title-label">Strategic Roadmap</div>
+      <h1>Building the <span>Romanian Nation</span> of the Future</h1>
+      <p>8 pillars across 3 phases — from building the foundation to creating lasting global impact for the Romanian diaspora.</p>
+
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#00ACF0"></div> Phase 1 · Foundation</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#EF7D00"></div> Phase 2 · Growth</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#64e8a0"></div> Phase 3 · Impact</div>
+      </div>
+    </div>
+
+    <!-- PHASES AREA -->
+    <div class="phases-area">
+
+      <!-- PHASE 1 -->
+      <div class="phase-row ph-1">
+        <div class="phase-label-row">
+          <span class="phase-pill ph-1">⚙️ Phase 1 — Foundation</span>
+          <div class="phase-line"></div>
+        </div>
+        <div class="cards-row">
+          <div class="card">
+            <div class="card-num">Pillar 01</div>
+            <div class="card-title">Fundraising Platform</div>
+            <div class="card-desc">Sustainable financial infrastructure to power every initiative. The engine that keeps the mission alive.</div>
+            <div class="card-badge">1</div>
+          </div>
+          <div class="card">
+            <div class="card-num">Pillar 02</div>
+            <div class="card-title">Youth Programs</div>
+            <div class="card-desc">Scholarships, mentorship, and leadership development for the next generation of Romanian leaders.</div>
+            <div class="card-badge">2</div>
+          </div>
+          <div class="card">
+            <div class="card-num">Pillar 03</div>
+            <div class="card-title">Chapters & Ambassadors Network</div>
+            <div class="card-desc">RUF's physical presence worldwide. Local chapters led by ambassadors in every city.</div>
+            <div class="card-badge">3</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 2 -->
+      <div class="phase-row ph-2">
+        <div class="phase-label-row">
+          <span class="phase-pill ph-2">🚀 Phase 2 — Growth</span>
+          <div class="phase-line"></div>
+        </div>
+        <div class="cards-row">
+          <div class="card">
+            <div class="card-num">Pillar 04</div>
+            <div class="card-title">GlobalRomania Platform</div>
+            <div class="card-desc">The digital home of the diaspora. A living community connecting Romanians across the world.</div>
+            <div class="card-badge">4</div>
+          </div>
+          <div class="card">
+            <div class="card-num">Pillar 05</div>
+            <div class="card-title">Business Network</div>
+            <div class="card-desc">Connecting entrepreneurs, investors, and professionals. Creating deals and wealth for the diaspora.</div>
+            <div class="card-badge">5</div>
+          </div>
+          <div class="card">
+            <div class="card-num">Pillar 06</div>
+            <div class="card-title">Media Agency</div>
+            <div class="card-desc">Controlling the narrative. Shaping how Romania and its diaspora are perceived globally.</div>
+            <div class="card-badge">6</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 3 -->
+      <div class="phase-row ph-3">
+        <div class="phase-label-row">
+          <span class="phase-pill ph-3">🌍 Phase 3 — Impact</span>
+          <div class="phase-line"></div>
+        </div>
+        <div class="cards-row">
+          <div class="card">
+            <div class="card-num">Pillar 07</div>
+            <div class="card-title">Think Tank</div>
+            <div class="card-desc">Policy, research, and ideas. Serious thinking on reverse brain drain, investment, and governance.</div>
+            <div class="card-badge">7</div>
+          </div>
+          <div class="card">
+            <div class="card-num">Pillar 08</div>
+            <div class="card-title">Investment Fund</div>
+            <div class="card-desc">Channeling diaspora capital back into Romania — businesses, real estate, and ventures that rebuild.</div>
+            <div class="card-badge">8</div>
+          </div>
+          <!-- Spacer card for symmetry -->
+          <div class="card" style="background:rgba(255,255,255,0.015); border-style: dashed; border-color: rgba(100,232,160,0.12); display:flex; align-items:center; justify-content:center;">
+            <div style="text-align:center;">
+              <div style="font-size:28px; margin-bottom:8px;">🇷🇴</div>
+              <div style="font-size:11px; color:#64e8a0; font-weight:600;">Vision 2050</div>
+              <div style="font-size:10px; color:#7aaed4; margin-top:4px;">One Nation, United</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="bottom-bar">
+    <span>🇷🇴 &nbsp;<strong>Romanian United Foundation</strong></span>
+    <div class="bottom-divider"></div>
+    <span>romanianunitedfund.org</span>
+    <div class="bottom-divider"></div>
+    <span>8 Pillars · 3 Phases · <strong>One Nation</strong></span>
+  </div>
+
+</div>
+</body>
+</html>
