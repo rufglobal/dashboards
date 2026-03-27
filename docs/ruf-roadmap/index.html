@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RUF Vision 2050 – Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #113268;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* ── TOP HEADER BAR ── */
+  .top-bar {
+    background: #0d2455;
+    padding: 18px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid #00ACF0;
+  }
+
+  .top-bar .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .logo-circle {
+    width: 46px;
+    height: 46px;
+    background: #00ACF0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 15px;
+    color: #113268;
+    letter-spacing: -0.5px;
+    flex-shrink: 0;
+  }
+
+  .top-bar .org-name {
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .top-bar .org-sub {
+    color: #7aaed4;
+    font-size: 11px;
+    font-weight: 400;
+  }
+
+  .top-bar .year-badge {
+    background: #EF7D00;
+    color: white;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── HERO SECTION ── */
+  .hero {
+    background: linear-gradient(135deg, #0d2455 0%, #113268 50%, #0a1f44 100%);
+    padding: 56px 60px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(0,172,240,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero .label {
+    display: inline-block;
+    border: 1.5px solid #00ACF0;
+    color: #00ACF0;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 5px 18px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-size: 40px;
+    font-weight: 800;
+    color: white;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+
+  .hero h1 span {
+    color: #00ACF0;
+  }
+
+  .hero .subtitle {
+    font-size: 15px;
+    color: #7aaed4;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── PHASE LEGEND ── */
+  .phase-legend {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    margin-top: 32px;
+  }
+
+  .phase-tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #7aaed4;
+    font-weight: 500;
+  }
+
+  .phase-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  /* ── ROADMAP BODY ── */
+  .roadmap-body {
+    padding: 50px 60px 60px;
+    position: relative;
+  }
+
+  .roadmap {
+    position: relative;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+
+  /* Central line */
+  .roadmap::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, #00ACF0, rgba(0,172,240,0.2));
+    transform: translateX(-50%);
+  }
+
+  .step {
+    display: flex;
+    align-items: center;
+    margin-bottom: 36px;
+    position: relative;
+  }
+
+  .step.left  { flex-direction: row-reverse; }
+  .step.right { flex-direction: row; }
+
+  /* Cards */
+  .card {
+    width: calc(50% - 56px);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(0,172,240,0.2);
+    border-radius: 14px;
+    padding: 22px 26px;
+    backdrop-filter: blur(6px);
+    position: relative;
+  }
+
+  .step.left  .card { margin-right: 56px; }
+  .step.right .card { margin-left: 56px; }
+
+  /* Phase accent bar */
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    border-radius: 14px 0 0 14px;
+  }
+
+  .phase-1 .card::before { background: #00ACF0; }
+  .phase-2 .card::before { background: #EF7D00; }
+  .phase-3 .card::before { background: #64e8a0; }
+
+  .step.left .card::before {
+    left: auto; right: 0;
+    border-radius: 0 14px 14px 0;
+  }
+
+  .card-number {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+
+  .phase-1 .card-number { color: #00ACF0; }
+  .phase-2 .card-number { color: #EF7D00; }
+  .phase-3 .card-number { color: #64e8a0; }
+
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.3;
+    margin-bottom: 7px;
+  }
+
+  .card-desc {
+    font-size: 12px;
+    color: #8fb5d4;
+    line-height: 1.65;
+    font-weight: 300;
+  }
+
+  /* Connector */
+  .step.left  .card::after {
+    content: '';
+    position: absolute;
+    right: -30px; top: 50%;
+    width: 30px; height: 1px;
+    background: rgba(0,172,240,0.3);
+    transform: translateY(-50%);
+  }
+  .step.right .card::after {
+    content: '';
+    position: absolute;
+    left: -30px; top: 50%;
+    width: 30px; height: 1px;
+    background: rgba(0,172,240,0.3);
+    transform: translateY(-50%);
+  }
+
+  /* Center dot */
+  .dot {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    z-index: 2;
+    flex-shrink: 0;
+  }
+
+  .phase-1 .dot { background: #00ACF0; color: #113268; box-shadow: 0 0 0 4px rgba(0,172,240,0.2); }
+  .phase-2 .dot { background: #EF7D00; color: white;   box-shadow: 0 0 0 4px rgba(239,125,0,0.2); }
+  .phase-3 .dot { background: #64e8a0; color: #113268; box-shadow: 0 0 0 4px rgba(100,232,160,0.2); }
+
+  /* ── PHASE HEADERS ── */
+  .phase-header {
+    text-align: center;
+    margin: 10px 0 28px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .phase-header-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 24px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .ph-1 { background: rgba(0,172,240,0.15); color: #00ACF0; border: 1px solid rgba(0,172,240,0.3); }
+  .ph-2 { background: rgba(239,125,0,0.15); color: #EF7D00; border: 1px solid rgba(239,125,0,0.3); margin-top: 10px; }
+  .ph-3 { background: rgba(100,232,160,0.12); color: #64e8a0; border: 1px solid rgba(100,232,160,0.25); margin-top: 10px; }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: #0d2455;
+    padding: 28px 60px;
+    text-align: center;
+    border-top: 1px solid rgba(0,172,240,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .footer-flag {
+    font-size: 28px;
+  }
+
+  .footer-text {
+    color: #7aaed4;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  .footer-text strong {
+    color: white;
+    font-weight: 600;
+  }
+
+  .footer-divider {
+    width: 1px;
+    height: 36px;
+    background: rgba(0,172,240,0.25);
+  }
+
+  .footer-vision {
+    color: #00ACF0;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .footer-vision span {
+    color: #EF7D00;
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="logo-area">
+    <div class="logo-circle">RUF</div>
+    <div>
+      <div class="org-name">Romanian United Foundation</div>
+      <div class="org-sub">Strategic Development Roadmap</div>
+    </div>
+  </div>
+  <div class="year-badge">Vision 2050</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="label">8 Pillars · 3 Phases · One Nation</div>
+  <h1>Building the <span>Romanian Nation</span><br>of the Future</h1>
+  <p class="subtitle">From foundation to global impact — a strategic roadmap for the diaspora</p>
+
+  <div class="phase-legend">
+    <div class="phase-tag"><div class="phase-dot" style="background:#00ACF0"></div> Phase 1 · Foundation</div>
+    <div class="phase-tag"><div class="phase-dot" style="background:#EF7D00"></div> Phase 2 · Growth</div>
+    <div class="phase-tag"><div class="phase-dot" style="background:#64e8a0"></div> Phase 3 · Impact</div>
+  </div>
+</div>
+
+<!-- ROADMAP BODY -->
+<div class="roadmap-body">
+  <div class="roadmap">
+
+    <!-- PHASE 1 -->
+    <div class="phase-header">
+      <span class="phase-header-pill ph-1">⚙️ &nbsp; Phase 1 — Foundation</span>
+    </div>
+
+    <div class="step left phase-1">
+      <div class="card">
+        <div class="card-number">Pillar 01</div>
+        <div class="card-title">Fundraising Platform</div>
+        <div class="card-desc">Sustainable financial infrastructure to power every initiative. The engine that keeps the mission alive and growing.</div>
+      </div>
+      <div class="dot">1</div>
+    </div>
+
+    <div class="step right phase-1">
+      <div class="dot">2</div>
+      <div class="card">
+        <div class="card-number">Pillar 02</div>
+        <div class="card-title">Youth Programs</div>
+        <div class="card-desc">Investing in the next generation of Romanian leaders through scholarships, mentorship, and leadership development.</div>
+      </div>
+    </div>
+
+    <div class="step left phase-1">
+      <div class="card">
+        <div class="card-number">Pillar 03</div>
+        <div class="card-title">Chapters & Ambassadors Network</div>
+        <div class="card-desc">RUF's physical presence worldwide. Local chapters led by ambassadors who represent the community in every city.</div>
+      </div>
+      <div class="dot">3</div>
+    </div>
+
+    <!-- PHASE 2 -->
+    <div class="phase-header">
+      <span class="phase-header-pill ph-2">🚀 &nbsp; Phase 2 — Growth</span>
+    </div>
+
+    <div class="step right phase-2">
+      <div class="dot">4</div>
+      <div class="card">
+        <div class="card-number">Pillar 04</div>
+        <div class="card-title">GlobalRomania Platform</div>
+        <div class="card-desc">The digital home of the Romanian diaspora. A living community platform connecting Romanians across the world.</div>
+      </div>
+    </div>
+
+    <div class="step left phase-2">
+      <div class="card">
+        <div class="card-number">Pillar 05</div>
+        <div class="card-title">Business Network</div>
+        <div class="card-desc">Connecting Romanian entrepreneurs, investors, and professionals. Creating deals, partnerships, and wealth for the diaspora.</div>
+      </div>
+      <div class="dot">5</div>
+    </div>
+
+    <div class="step right phase-2">
+      <div class="dot">6</div>
+      <div class="card">
+        <div class="card-number">Pillar 06</div>
+        <div class="card-title">Media Agency</div>
+        <div class="card-desc">Controlling the narrative. A media arm that shapes how Romania and its diaspora are perceived — and how they see themselves.</div>
+      </div>
+    </div>
+
+    <!-- PHASE 3 -->
+    <div class="phase-header">
+      <span class="phase-header-pill ph-3">🌍 &nbsp; Phase 3 — Impact</span>
+    </div>
+
+    <div class="step left phase-3">
+      <div class="card">
+        <div class="card-number">Pillar 07</div>
+        <div class="card-title">Think Tank</div>
+        <div class="card-desc">Policy, research, and ideas. A center for serious thinking on reverse brain drain, foreign investment, and governance reform.</div>
+      </div>
+      <div class="dot">7</div>
+    </div>
+
+    <div class="step right phase-3">
+      <div class="dot">8</div>
+      <div class="card">
+        <div class="card-number">Pillar 08</div>
+        <div class="card-title">Investment Fund</div>
+        <div class="card-desc">Capital flowing back into Romania. Channeling diaspora wealth into businesses, real estate, and ventures that rebuild the country.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-flag">🇷🇴</div>
+  <div class="footer-divider"></div>
+  <div class="footer-text">
+    <strong>Romanian United Foundation</strong><br>
+    romanianunitedfund.org
+  </div>
+  <div class="footer-divider"></div>
+  <div class="footer-vision">Vision <span>2050</span></div>
+</div>
+
+</body>
+</html>
