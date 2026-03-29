@@ -56,13 +56,13 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
 </style></head><body>
 <div class="container">
   <h1>🔐 Claude Usage Dashboard</h1>
-  <p class="subtitle">Romanian United Foundation — Generated March 27, 2026 at 03:01 PM CST</p>
+  <p class="subtitle">Romanian United Foundation — Generated March 28, 2026 at 07:49 PM CST</p>
 
   <div class="nav-bar">
       <a href="2026-03-25.html" class="nav-btn">← 2026-03-25</a>
       <span class="nav-date">📅 2026-03-26</span>
       <a href="2026-03-27.html" class="nav-btn">2026-03-27 →</a>
-      <a href="2026-03-27.html" class="nav-btn today-btn">⟳ Today</a>
+      <a href="2026-03-28.html" class="nav-btn today-btn">⟳ Today</a>
     </div>
 
   <div class="grid">
@@ -78,8 +78,8 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
     </div>
     <div class="stat-card">
       <div class="label">7-Day Total</div>
-      <div class="value">$537.83</div>
-      <div class="sub">Avg $67.23/day</div>
+      <div class="value">$535.81</div>
+      <div class="sub">Avg $76.54/day</div>
     </div>
     <div class="stat-card">
       <div class="label">Daily Limit</div>
@@ -88,7 +88,7 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
     </div>
     <div class="stat-card">
       <div class="label">Projected Monthly</div>
-      <div class="value">$2017</div>
+      <div class="value">$2296</div>
       <div class="sub">Based on 7-day avg</div>
     </div>
   </div>
@@ -117,11 +117,11 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
   <div class="card">
     <h2>🤖 Estimated Agent Breakdown (2026-03-26)</h2>
     <table><thead><tr><th>Agent</th><th>Sessions</th><th>Activity Share</th><th>Est. Cost</th></tr></thead>
-    <tbody><tr><td><strong>Alice</strong></td><td>3</td>
-        <td><div class="bar-container"><div class="bar" style="width:99.12461281738068%"></div><span>99.1%</span></div></td>
-        <td class="cost">$9.78</td></tr><tr><td><strong>Emma</strong></td><td>1</td>
-        <td><div class="bar-container"><div class="bar" style="width:0.8753871826193176%"></div><span>0.9%</span></div></td>
-        <td class="cost">$0.09</td></tr></tbody></table>
+    <tbody><tr><td><strong>Alice</strong></td><td>2</td>
+        <td><div class="bar-container"><div class="bar" style="width:98.18509180535456%"></div><span>98.2%</span></div></td>
+        <td class="cost">$9.69</td></tr><tr><td><strong>Emma</strong></td><td>1</td>
+        <td><div class="bar-container"><div class="bar" style="width:1.8149081946454413%"></div><span>1.8%</span></div></td>
+        <td class="cost">$0.18</td></tr></tbody></table>
     <p style="color:var(--muted);font-size:10px;margin-top:10px;">* Estimates based on session transcript sizes. Actual per-agent costs not available from API.</p>
   </div>
 
@@ -132,9 +132,9 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0/dist/chartjs-plugin-annotation.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const labels = ["03-20", "03-21", "03-22", "03-23", "03-24", "03-25", "03-26", "03-27"];
-  const sonnetData = [33.48, 63.8, 31.77, 11.86, 13.52, 2.1, 9.86, 2.02];
-  const opusData = [12.93, 30.93, 132.85, 35.59, 82.46, 74.64, 0, 0];
+  const labels = ["03-20", "03-21", "03-22", "03-23", "03-24", "03-25", "03-26"];
+  const sonnetData = [33.48, 63.8, 31.77, 11.86, 13.52, 2.1, 9.86];
+  const opusData = [12.93, 30.93, 132.85, 35.59, 82.46, 74.64, 0];
   new Chart(document.getElementById('usageChart'), {
     type: 'bar',
     data: {
