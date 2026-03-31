@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GlobalRomania — Welcome Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Open Sans', sans-serif; background: #f0f4f8; color: #333; }
+
+    .hero {
+      background: linear-gradient(135deg, #003366 0%, #1a5fa8 60%, #764ba2 100%);
+      color: white;
+      padding: 48px 32px 36px;
+      text-align: center;
+    }
+    .hero .logo-line { font-size: 0.9rem; letter-spacing: 3px; text-transform: uppercase; opacity: 0.75; margin-bottom: 10px; }
+    .hero h1 { font-family: 'Roboto', sans-serif; font-size: 2.4rem; font-weight: 700; margin-bottom: 8px; }
+    .hero p { opacity: 0.85; font-size: 1rem; }
+    .hero .timestamp { margin-top: 12px; font-size: 0.8rem; opacity: 0.6; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 32px 20px; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 36px; }
+    @media (max-width: 900px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 500px) { .stats-grid { grid-template-columns: 1fr; } }
+
+    .stat-card {
+      background: white;
+      border-radius: 14px;
+      padding: 28px 20px;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      transition: transform 0.2s;
+    }
+    .stat-card:hover { transform: translateY(-3px); }
+    .stat-number { font-family: 'Roboto', sans-serif; font-size: 2.8rem; font-weight: 700; }
+    .stat-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-top: 6px; }
+    .stat-sub { font-size: 0.85rem; color: #aaa; margin-top: 4px; }
+
+    .c-welcomed { color: #003366; }
+    .c-photo { color: #28a745; }
+    .c-nudged { color: #FF9800; }
+    .c-rate { color: #9C27B0; }
+
+    .section-card {
+      background: white;
+      border-radius: 14px;
+      padding: 28px;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+    }
+    .section-card h2 {
+      font-family: 'Roboto', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #003366;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #f0f4f8;
+    }
+
+    .progress-block { margin-bottom: 18px; }
+    .progress-label { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.9rem; color: #555; }
+    .progress-bar-bg { background: #f0f4f8; border-radius: 8px; height: 10px; overflow: hidden; }
+    .progress-bar { height: 100%; border-radius: 8px; transition: width 1s ease; }
+    .pb-blue { background: linear-gradient(90deg, #003366, #1a5fa8); }
+    .pb-green { background: linear-gradient(90deg, #28a745, #8BC34A); }
+    .pb-orange { background: linear-gradient(90deg, #FF9800, #FFC107); }
+
+    .member-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid #f0f4f8;
+      gap: 12px;
+    }
+    .member-item:last-child { border-bottom: none; }
+    .member-info { display: flex; align-items: center; gap: 14px; }
+    .member-avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #003366, #764ba2);
+      color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.85rem; flex-shrink: 0;
+    }
+    .member-details h4 { font-size: 0.95rem; font-weight: 600; color: #333; }
+    .member-details p { font-size: 0.8rem; color: #888; margin-top: 2px; }
+    .status-badges { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-primary { background: #e8eef8; color: #003366; }
+    .badge-success { background: #e8f5e9; color: #28a745; }
+    .badge-warning { background: #fff3e0; color: #e65100; }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+
+    footer {
+      text-align: center;
+      padding: 28px;
+      font-size: 0.8rem;
+      color: #aaa;
+      border-top: 1px solid #e8eef8;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="logo-line">Romanian United Foundation</div>
+  <h1>🌍 GlobalRomania Welcome Dashboard</h1>
+  <p>New member welcome status tracker — March 2026</p>
+  <div class="timestamp">Last updated: March 31, 2026 at 03:54 PM CST</div>
+</div>
+
+<div class="container">
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-number c-welcomed">20</div>
+      <div class="stat-label">Welcomed</div>
+      <div class="stat-sub">since Mar 8</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number c-photo">11</div>
+      <div class="stat-label">Have Photo</div>
+      <div class="stat-sub">55% of members</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number c-nudged">9</div>
+      <div class="stat-label">Photo Nudged</div>
+      <div class="stat-sub">awaiting upload</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number c-rate">0</div>
+      <div class="stat-label">Replied</div>
+      <div class="stat-sub">stage 2 pending</div>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="section-card">
+    <h2>📊 Progress Overview</h2>
+    <div class="progress-block">
+      <div class="progress-label"><span>Welcome Messages Sent</span><span>20/20 (100%)</span></div>
+      <div class="progress-bar-bg"><div class="progress-bar pb-blue" style="width:100%"></div></div>
+    </div>
+    <div class="progress-block">
+      <div class="progress-label"><span>Members with Profile Photo</span><span>11/20 (55%)</span></div>
+      <div class="progress-bar-bg"><div class="progress-bar pb-green" style="width:55%"></div></div>
+    </div>
+    <div class="progress-block">
+      <div class="progress-label"><span>Photo Nudges Sent</span><span>9/20 (45%)</span></div>
+      <div class="progress-bar-bg"><div class="progress-bar pb-orange" style="width:45%"></div></div>
+    </div>
+    <div class="progress-block">
+      <div class="progress-label"><span>Stage 2 Replies Received</span><span>0/20 (0%)</span></div>
+      <div class="progress-bar-bg"><div class="progress-bar pb-blue" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- Member Lists -->
+  <div class="two-col">
+    <div class="section-card">
+      <h2>✅ Members with Photos (11)</h2>
+      
+        <div class="member-item">
+          <div class="member-info">
+            <div class="member-avatar">AF</div>
+            <div class="member-details">
+              <h4>Alexandru Floristean</h4>
+              <p>Joined Mar 28 • Welcomed Mar 31</p>
+            </div>
+          </div>
+          <div class="status-badges">
+            <span class="badge badge-primary">✉️ Welcomed</span>
+            <span class="badge badge-success">✅ Has Photo</span>
+          </div>
+        </div>
+
+        <div class="member-item">
+          <div class="member-info">
+            <div class="member-avatar">DT</div>
+            <div class="member-details">
+              <h4>Daniel Toda</h4>
+              <p>Joined Mar 26 • Welcomed Mar 31</p>
+            </div>
+          </div>
+          <div class="status-badges">
+            <span class="badge badge-primary">✉️ Welcomed</span>
+            <span class="badge badge-success">✅ Has Photo</span>
+          </div>
+        </div>
+
+        <div class="member-item">
+          <div class="member-info">
+            <div class="member-avatar">MD</div>
+            <div class="member-details">
+              <h4>Maria Dimulescu</h4>
+              <p>Joined Mar 24 • Welcomed Mar 31</p>
+            </div>
+          </div>
+          <div class="status-badges">
+            <span class="badge badge-primary">✉️ Welcomed</span>
+            <span class="badge badge-success">✅ Has Photo</span>
+          </div>
+        </div>
+
+        <div class="member-item">
+          <div class="member-info">
+            <div class="member-avatar">VB</div>
+            <div class="member-details">
+              <h4>Vlad Bina</h4>
+              <p>Joined Mar 21 • Welcomed Mar 31</p>
+            </div>
+          </div>
+          <div class="status-badges">
+            <span class="badge badge-primary">✉️ Welcomed</span>
+            <span class="badge badge-success">✅ Has Photo</span>
+          </div>
+        </div>
+
+        <div class="member-item">
+          <div class="member-info">
+            <div class="member-avatar">MM</div>
+            <div class="member-details">
+              <h4>Mariana Mesu</h4>
+              <p>Joined Mar 18 • Welcomed Mar 31</p>
+            </div>
+          </div>
+          <div class="status-badges">
+            <span class="badge badge-primary">✉️ Welcomed</span>
+            <span class="badge badge-success">✅ Has Photo</span>
+          </div>
+        </div>
+
+        <div class="member-item">
+          <div class="member-info">
+            <div class="member-avatar">AD</div>
+            <div class="member-details">
+              <h4>Adrian Dumitrescu</h4>
+              <p>Joined Mar 17 • Welcomed Mar 31</p>
+            </div>
+          </div>
+          <div class="status-badges">
+            <span class="badge badge-primary">✉️ Welcomed</span>
+            <span class="badge badge-success">✅ Has Photo</span>
+          </div>
+        </div>
+
+        <div class="member-item">
+          <div class="member-info">
+            <div class="member-avatar">AD</div>
+            <div class="member-details">
+              <h4>Adrian Dragoiescu</h4>
+              <p>Joined Mar 16 • Welcomed Mar 31</p>
+            </div>
+          </div>
+          <div class="status-badges">
+            <span class="badge badge-primary">✉️ Welcomed</span>
+            <span class="badge badge-success">✅ Has Photo</span>
+          </div>
+        </div>
+
+        <div class="member-item">
+          <div class="member-info">
+            <div class="member-avatar">OV</div>
+            <div class="member-details">
+              <h4>Ovidiu Valea</h4>
+              <p>Joined Mar 13 • Welcomed Mar 31</p>
+            </div>
+          </div>
+          <div class="status-badges">
+            <span class="badge badge-primary">✉️ Welcomed</span>
+            <span class="badge badge-success">✅ Has Photo</span>
+          </div>
+        </div>
+
+        <div class="member-item">
+          <div class="member-info">
+            <div class="member-avatar">SB</div>
+            <div class="member-details">
+              <h4>Stefan Bota</h4>
+              <p>Joined Mar 9 • Welcomed Mar 31</p>
+            </div>
+          </div>
+          <div class="status-badges">
+            <span class="badge badge-primary">✉️ Welcomed</span>
+            <span class="badge badge-success">✅ Has Photo</span>
+          </div>
+        </div>
+
+        <div class="member-item">
+          <div class="member-info">
+            <div class="member-avatar">RD</div>
+            <div class="member-details">
+              <h4>Robert Dumitrescu</h4>
+              <p>Joined Mar 9 • Welcomed Mar 31</p>
+            </div>
+          </div>
+          <div class="status-badges">
+            <span class="badge badge-primary">✉️ Welcomed</span>
+            <span class="badge badge-success">✅ Has Photo</span>
+          </div>
+        </div>
+
+        <div class="member-item">
+          <div class="member-info">
+            <div class="member-avatar">MV</div>
+            <div class="member-details">
+              <h4>Maria Alecsandra Volintiru</h4>
+              <p>Joined Mar 8 • Welcomed Mar 31</p>
+            </div>
+          </div>
+          <div class="status-badges">
+            <span class="badge badge-primary">✉️ Welcomed</span>
+            <span class="badge badge-success">✅ Has Photo</span>
+          </div>
+        </div>
+    </div>
+    <div class="section-card">
+      <h2>📷 Photo Nudged — Awaiting (9)</h2>
+      
+        <div class="member-item">
+          <div class="member-info">
+            <div class="member-avatar">AR</div>
+            <div class="member-details">
+              <h4>Asim Raza</h4>
+              <p>Joined Mar 29 • Welcomed Mar 31</p>
+            </div>
+          </div>
+          <div class="status-badges">
+            <span class="badge badge-primary">✉️ Welcomed</span>
+            <span class="badge badge-warning">📷 Nudged</span>
+          </div>
+        </div>
+
+        <div class="member-item">
+          <div class="member-info">
+            <div class="member-avatar">CP</div>
+            <div class="member-details">
+              <h4>Candin Pop</h4>
+              <p>Joined Mar 26 • Welcomed Mar 31</p>
+            </div>
+          </div>
+          <div class="status-badges">
+            <span class="badge badge-primary">✉️ Welcomed</span>
+            <span class="badge badge-warning">📷 Nudged</span>
+          </div>
+        </div>
+
+        <div class="member-item">
+          <div class="member-info">
+            <div class="member-avatar">MB</div>
+            <div class="member-details">
+              <h4>Madalina Bouros</h4>
+              <p>Joined Mar 19 • Welcomed Mar 31</p>
+            </div>
+          </div>
+          <div class="status-badges">
+            <span class="badge badge-primary">✉️ Welcomed</span>
+            <span class="badge badge-warning">📷 Nudged</span>
+          </div>
+        </div>
+
+        <div class="member-item">
+          <div class="member-info">
+            <div class="member-avatar">DB</div>
+            <div class="member-details">
+              <h4>David Balan</h4>
+              <p>Joined Mar 17 • Welcomed Mar 31</p>
+            </div>
+          </div>
+          <div class="status-badges">
+            <span class="badge badge-primary">✉️ Welcomed</span>
+            <span class="badge badge-warning">📷 Nudged</span>
+          </div>
+        </div>
+
+        <div class="member-item">
+          <div class="member-info">
+            <div class="member-avatar">RL</div>
+            <div class="member-details">
+              <h4>Radu Lovin</h4>
+              <p>Joined Mar 16 • Welcomed Mar 31</p>
+            </div>
+          </div>
+          <div class="status-badges">
+            <span class="badge badge-primary">✉️ Welcomed</span>
+            <span class="badge badge-warning">📷 Nudged</span>
+          </div>
+        </div>
+
+        <div class="member-item">
+          <div class="member-info">
+            <div class="member-avatar">MP</div>
+            <div class="member-details">
+              <h4>Mihaela Pasalega</h4>
+              <p>Joined Mar 16 • Welcomed Mar 31</p>
+            </div>
+          </div>
+          <div class="status-badges">
+            <span class="badge badge-primary">✉️ Welcomed</span>
+            <span class="badge badge-warning">📷 Nudged</span>
+          </div>
+        </div>
+
+        <div class="member-item">
+          <div class="member-info">
+            <div class="member-avatar">AL</div>
+            <div class="member-details">
+              <h4>Adrian Luput</h4>
+              <p>Joined Mar 13 • Welcomed Mar 31</p>
+            </div>
+          </div>
+          <div class="status-badges">
+            <span class="badge badge-primary">✉️ Welcomed</span>
+            <span class="badge badge-warning">📷 Nudged</span>
+          </div>
+        </div>
+
+        <div class="member-item">
+          <div class="member-info">
+            <div class="member-avatar">FB</div>
+            <div class="member-details">
+              <h4>Florin Blideran</h4>
+              <p>Joined Mar 9 • Welcomed Mar 31</p>
+            </div>
+          </div>
+          <div class="status-badges">
+            <span class="badge badge-primary">✉️ Welcomed</span>
+            <span class="badge badge-warning">📷 Nudged</span>
+          </div>
+        </div>
+
+        <div class="member-item">
+          <div class="member-info">
+            <div class="member-avatar">NB</div>
+            <div class="member-details">
+              <h4>Naomi Bucur</h4>
+              <p>Joined Mar 9 • Welcomed Mar 31</p>
+            </div>
+          </div>
+          <div class="status-badges">
+            <span class="badge badge-primary">✉️ Welcomed</span>
+            <span class="badge badge-warning">📷 Nudged</span>
+          </div>
+        </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Romanian United Foundation — GlobalRomania Community · Emma (dbbot) · March 31, 2026
+</footer>
+
+</body>
+</html>
