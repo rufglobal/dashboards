@@ -7,199 +7,52 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Open Sans', sans-serif; background: #f4f6f9; color: #333; }
-
-  /* Header */
-  .header {
-    background: linear-gradient(135deg, #003366 0%, #004a99 100%);
-    color: white;
-    padding: 28px 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  }
-  .header-left h1 { font-family: 'Roboto', sans-serif; font-size: 1.8rem; font-weight: 700; }
-  .header-left p { font-size: 0.9rem; opacity: 0.8; margin-top: 4px; }
-  .header-badge {
-    background: #FFD700;
-    color: #003366;
-    font-weight: 700;
-    font-size: 0.8rem;
-    padding: 6px 14px;
-    border-radius: 20px;
-    letter-spacing: 0.5px;
-  }
-
-  /* Stats row */
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 16px;
-    padding: 24px 40px 0;
-  }
-  .stat-card {
-    background: white;
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    border-top: 4px solid #003366;
-  }
-  .stat-card.green { border-top-color: #28a745; }
-  .stat-card.orange { border-top-color: #ffc107; }
-  .stat-card.red { border-top-color: #dc3545; }
-  .stat-card.blue { border-top-color: #003366; }
-  .stat-card.purple { border-top-color: #6f42c1; }
-  .stat-number { font-family: 'Roboto', sans-serif; font-size: 2.4rem; font-weight: 700; color: #003366; }
-  .stat-card.green .stat-number { color: #28a745; }
-  .stat-card.orange .stat-number { color: #e6a800; }
-  .stat-card.red .stat-number { color: #dc3545; }
-  .stat-card.purple .stat-number { color: #6f42c1; }
-  .stat-label { font-size: 0.8rem; color: #666; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-
-  /* Charts grid */
-  .charts-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 20px;
-    padding: 24px 40px;
-  }
-  @media (max-width: 900px) { .charts-grid { grid-template-columns: 1fr; } }
-
-  .chart-card {
-    background: white;
-    border-radius: 10px;
-    padding: 24px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  }
-  .chart-card h3 {
-    font-family: 'Roboto', sans-serif;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #003366;
-    margin-bottom: 16px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #FFD700;
-  }
-  .chart-container { position: relative; height: 220px; }
-
-  /* Timeline */
-  .timeline-section { padding: 0 40px 24px; }
-  .timeline-card {
-    background: white;
-    border-radius: 10px;
-    padding: 24px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  }
-  .timeline-card h3 {
-    font-family: 'Roboto', sans-serif;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #003366;
-    margin-bottom: 16px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #FFD700;
-  }
-  .timeline { display: flex; flex-direction: column; gap: 0; }
-  .timeline-date-group { margin-bottom: 20px; }
-  .timeline-date-label {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 700;
-    font-size: 0.85rem;
-    color: #003366;
-    background: #eef2f8;
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 12px;
-    margin-bottom: 10px;
-  }
-  .timeline-items { display: flex; flex-wrap: wrap; gap: 8px; }
-  .timeline-item {
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.78rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .timeline-item.live { background: #d4edda; color: #155724; }
-  .timeline-item.pending { background: #fff3cd; color: #856404; }
-  .timeline-item.removed { background: #f8d7da; color: #721c24; }
-  .timeline-item .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .timeline-item.live .dot { background: #28a745; }
-  .timeline-item.pending .dot { background: #ffc107; }
-  .timeline-item.removed .dot { background: #dc3545; }
-
-  /* Table */
-  .table-section { padding: 0 40px 40px; }
-  .table-card {
-    background: white;
-    border-radius: 10px;
-    padding: 24px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    overflow-x: auto;
-  }
-  .table-card h3 {
-    font-family: 'Roboto', sans-serif;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #003366;
-    margin-bottom: 16px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #FFD700;
-  }
-  table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
-  thead tr { background: #003366; color: white; }
-  thead th { padding: 10px 12px; text-align: left; font-weight: 600; white-space: nowrap; }
-  tbody tr { border-bottom: 1px solid #eee; }
-  tbody tr:hover { background: #f8f9ff; }
-  tbody td { padding: 10px 12px; vertical-align: top; }
-  .badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 12px;
-    font-size: 0.74rem;
-    font-weight: 700;
-    white-space: nowrap;
-  }
-  .badge-live { background: #d4edda; color: #155724; }
-  .badge-pending { background: #fff3cd; color: #856404; }
-  .badge-removed { background: #f8d7da; color: #721c24; }
-  .badge-cat-mi { background: #cce5ff; color: #004085; }
-  .badge-cat-sg { background: #e2d9f3; color: #4a1a8a; }
-  .badge-cat-vr { background: #d1ecf1; color: #0c5460; }
-  .badge-cat-fm { background: #ffeeba; color: #856404; }
-  .members { font-weight: 600; color: #003366; }
-  .snippet { color: #555; max-width: 260px; }
-  a.group-link { color: #003366; text-decoration: none; font-weight: 600; }
-  a.group-link:hover { text-decoration: underline; }
-
-  /* Reach bar */
-  .reach-bar-outer { background: #eee; border-radius: 4px; height: 6px; margin-top: 4px; }
-  .reach-bar-inner { background: #003366; border-radius: 4px; height: 6px; }
-  .reach-bar-inner.live { background: #28a745; }
-  .reach-bar-inner.pending { background: #ffc107; }
-  .reach-bar-inner.removed { background: #dc3545; }
-
-  /* Footer */
-  .footer {
-    background: #003366;
-    color: rgba(255,255,255,0.7);
-    text-align: center;
-    padding: 16px;
-    font-size: 0.78rem;
-  }
-  .footer strong { color: #FFD700; }
-
-  /* Updated tag */
-  .updated-tag { font-size: 0.75rem; color: #888; text-align: right; padding: 8px 40px 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Open Sans', sans-serif; background: #f4f6f9; color: #333; }
+.header { background: linear-gradient(135deg, #003366 0%, #004a99 100%); color: white; padding: 28px 40px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+.header-left h1 { font-family: 'Roboto', sans-serif; font-size: 1.8rem; font-weight: 700; }
+.header-left p { font-size: 0.9rem; opacity: 0.8; margin-top: 4px; }
+.header-badge { background: #FFD700; color: #003366; font-weight: 700; font-size: 0.8rem; padding: 6px 14px; border-radius: 20px; }
+.stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; padding: 24px 40px 0; }
+.stat-card { background: white; border-radius: 10px; padding: 20px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.08); border-top: 4px solid #003366; }
+.stat-card.green { border-top-color: #28a745; } .stat-card.orange { border-top-color: #ffc107; } .stat-card.red { border-top-color: #dc3545; } .stat-card.purple { border-top-color: #6f42c1; }
+.stat-number { font-family: 'Roboto', sans-serif; font-size: 2.4rem; font-weight: 700; color: #003366; }
+.stat-card.green .stat-number { color: #28a745; } .stat-card.orange .stat-number { color: #e6a800; } .stat-card.red .stat-number { color: #dc3545; } .stat-card.purple .stat-number { color: #6f42c1; }
+.stat-label { font-size: 0.8rem; color: #666; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+.charts-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; padding: 24px 40px; }
+@media (max-width: 900px) { .charts-grid { grid-template-columns: 1fr; } }
+.chart-card { background: white; border-radius: 10px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+.chart-card h3 { font-family: 'Roboto', sans-serif; font-size: 1rem; font-weight: 600; color: #003366; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid #FFD700; }
+.chart-container { position: relative; height: 220px; }
+.timeline-section { padding: 0 40px 24px; }
+.timeline-card { background: white; border-radius: 10px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+.timeline-card h3 { font-family: 'Roboto', sans-serif; font-size: 1rem; font-weight: 600; color: #003366; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid #FFD700; }
+.timeline-date-group { margin-bottom: 20px; }
+.timeline-date-label { font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 0.85rem; color: #003366; background: #eef2f8; display: inline-block; padding: 4px 12px; border-radius: 12px; margin-bottom: 10px; }
+.timeline-items { display: flex; flex-wrap: wrap; gap: 8px; }
+.timeline-item { padding: 6px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.timeline-item.live { background: #d4edda; color: #155724; } .timeline-item.pending { background: #fff3cd; color: #856404; } .timeline-item.removed { background: #f8d7da; color: #721c24; }
+.timeline-item .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.timeline-item.live .dot { background: #28a745; } .timeline-item.pending .dot { background: #ffc107; } .timeline-item.removed .dot { background: #dc3545; }
+.table-section { padding: 0 40px 40px; }
+.table-card { background: white; border-radius: 10px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); overflow-x: auto; }
+.table-card h3 { font-family: 'Roboto', sans-serif; font-size: 1rem; font-weight: 600; color: #003366; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid #FFD700; }
+table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+thead tr { background: #003366; color: white; }
+thead th { padding: 10px 12px; text-align: left; font-weight: 600; white-space: nowrap; }
+tbody tr { border-bottom: 1px solid #eee; } tbody tr:hover { background: #f8f9ff; }
+tbody td { padding: 10px 12px; vertical-align: top; }
+.badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.74rem; font-weight: 700; white-space: nowrap; }
+.badge-live { background: #d4edda; color: #155724; } .badge-pending { background: #fff3cd; color: #856404; } .badge-removed { background: #f8d7da; color: #721c24; }
+.badge-cat-mi { background: #cce5ff; color: #004085; } .badge-cat-sg { background: #e2d9f3; color: #4a1a8a; } .badge-cat-vr { background: #d1ecf1; color: #0c5460; } .badge-cat-fm { background: #ffeeba; color: #856404; }
+.members { font-weight: 600; color: #003366; } .snippet { color: #555; max-width: 260px; }
+a.group-link { color: #003366; text-decoration: none; font-weight: 600; } a.group-link:hover { text-decoration: underline; }
+.footer { background: #003366; color: rgba(255,255,255,0.7); text-align: center; padding: 16px; font-size: 0.78rem; }
+.footer strong { color: #FFD700; }
+.updated-tag { font-size: 0.75rem; color: #888; text-align: right; padding: 8px 40px 0; }
 </style>
 </head>
 <body>
-
 <div class="header">
   <div class="header-left">
     <h1>🏕️ DollyBrook Resort — Facebook Groups Campaign</h1>
@@ -207,318 +60,211 @@
   </div>
   <div class="header-badge">RUF DASHBOARD</div>
 </div>
-
-<p class="updated-tag">Last updated: April 2, 2026 · 16 posts tracked across 33 groups</p>
-
-<!-- Stats Row -->
+<p class="updated-tag">Last updated: April 02, 2026 · 16 posts tracked across 29 groups</p>
 <div class="stats-row">
-  <div class="stat-card green">
-    <div class="stat-number">4</div>
-    <div class="stat-label">Posts Live</div>
-  </div>
-  <div class="stat-card orange">
-    <div class="stat-number">11</div>
-    <div class="stat-label">Pending Approval</div>
-  </div>
-  <div class="stat-card red">
-    <div class="stat-number">1</div>
-    <div class="stat-label">Removed</div>
-  </div>
-  <div class="stat-card blue">
-    <div class="stat-number">33</div>
-    <div class="stat-label">Groups Joined/Posted</div>
-  </div>
-  <div class="stat-card purple">
-    <div class="stat-number">4.4K</div>
-    <div class="stat-label">Page Followers</div>
-  </div>
-  <div class="stat-card green">
-    <div class="stat-number">60+</div>
-    <div class="stat-label">Reactions (Top Post)</div>
-  </div>
+  <div class="stat-card green"><div class="stat-number">3</div><div class="stat-label">Posts Live</div></div>
+  <div class="stat-card orange"><div class="stat-number">12</div><div class="stat-label">Pending Approval</div></div>
+  <div class="stat-card red"><div class="stat-number">1</div><div class="stat-label">Removed</div></div>
+  <div class="stat-card blue"><div class="stat-number">29</div><div class="stat-label">Groups Active</div></div>
+  <div class="stat-card purple"><div class="stat-number">4.4K</div><div class="stat-label">Page Followers</div></div>
+  <div class="stat-card green"><div class="stat-number">60+</div><div class="stat-label">Top Post Reactions</div></div>
 </div>
-
-<!-- Charts -->
 <div class="charts-grid">
-  <!-- Donut: Status breakdown -->
-  <div class="chart-card">
-    <h3>📊 Post Status Breakdown</h3>
-    <div class="chart-container">
-      <canvas id="statusChart"></canvas>
-    </div>
-  </div>
-
-  <!-- Bar: Posts by date -->
-  <div class="chart-card">
-    <h3>📅 Posts by Date</h3>
-    <div class="chart-container">
-      <canvas id="dateChart"></canvas>
-    </div>
-  </div>
-
-  <!-- Bar: Top groups by reach -->
-  <div class="chart-card">
-    <h3>📣 Reach by Group (Members)</h3>
-    <div class="chart-container">
-      <canvas id="reachChart"></canvas>
-    </div>
-  </div>
+  <div class="chart-card"><h3>📊 Post Status Breakdown</h3><div class="chart-container"><canvas id="statusChart"></canvas></div></div>
+  <div class="chart-card"><h3>📅 Posts by Date</h3><div class="chart-container"><canvas id="dateChart"></canvas></div></div>
+  <div class="chart-card"><h3>📣 Reach by Group (Members K)</h3><div class="chart-container"><canvas id="reachChart"></canvas></div></div>
 </div>
-
-<!-- Timeline -->
 <div class="timeline-section">
   <div class="timeline-card">
     <h3>🕐 Posting Timeline</h3>
     <div class="timeline">
-      <div class="timeline-date-group">
-        <div class="timeline-date-label">March 31, 2026 — Batch 1 (10 posts)</div>
-        <div class="timeline-items">
-          <div class="timeline-item removed"><div class="dot"></div>Things to do in SW MI (removed)</div>
-          <div class="timeline-item live"><div class="dot"></div>Downtown South Haven Chatline ✨ 60 reactions</div>
-          <div class="timeline-item live"><div class="dot"></div>THE NEW Fennville Informed</div>
-          <div class="timeline-item pending"><div class="dot"></div>South Haven Michigan</div>
-          <div class="timeline-item pending"><div class="dot"></div>West Michigan Travel Ideas</div>
-          <div class="timeline-item pending"><div class="dot"></div>Southwest Michigan</div>
-          <div class="timeline-item pending"><div class="dot"></div>Saugatuck Underground</div>
-          <div class="timeline-item pending"><div class="dot"></div>Vacation Rentals in SW MI</div>
-          <div class="timeline-item pending"><div class="dot"></div>South Haven Vacation Homes</div>
-          <div class="timeline-item pending"><div class="dot"></div>Sauglasville</div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-03-31 — 10 posts</div>
+          <div class="timeline-items"><div class="timeline-item pending"><div class="dot"></div>South Haven Michigan</div>
+<div class="timeline-item pending"><div class="dot"></div>Downtown South Haven Michigan Chatline</div>
+<div class="timeline-item pending"><div class="dot"></div>West Michigan Travel Ideas</div>
+<div class="timeline-item removed"><div class="dot"></div>Things to do in Southwest MI</div>
+<div class="timeline-item pending"><div class="dot"></div>Southwest Michigan</div>
+<div class="timeline-item pending"><div class="dot"></div>Saugatuck Underground</div>
+<div class="timeline-item pending"><div class="dot"></div>Vacation Rentals in Southwest Michigan</div>
+<div class="timeline-item live"><div class="dot"></div>THE NEW AND BETTER FENNVILLE INFORMED</div>
+<div class="timeline-item pending"><div class="dot"></div>South Haven Vacation Homes Group</div>
+<div class="timeline-item pending"><div class="dot"></div>Sauglasville</div>
+</div>
         </div>
-      </div>
-      <div class="timeline-date-group">
-        <div class="timeline-date-label">April 2, 2026 — Batch 2 (6 posts)</div>
-        <div class="timeline-items">
-          <div class="timeline-item live"><div class="dot"></div>Fennville &amp; Surrounding Areas</div>
-          <div class="timeline-item live"><div class="dot"></div>Michigan Properties &amp; Cabins</div>
-          <div class="timeline-item pending"><div class="dot"></div>Holland Informed (81K)</div>
-          <div class="timeline-item pending"><div class="dot"></div>Allegan County Informed (58K)</div>
-          <div class="timeline-item pending"><div class="dot"></div>Fennville Informed (8K)</div>
-          <div class="timeline-item pending"><div class="dot"></div>Hamilton Happenings (6.4K)</div>
-        </div>
-      </div>
-    </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-02 — 6 posts</div>
+          <div class="timeline-items"><div class="timeline-item pending"><div class="dot"></div>Holland Informed (the best one)</div>
+<div class="timeline-item pending"><div class="dot"></div>Allegan County Informed</div>
+<div class="timeline-item pending"><div class="dot"></div>Fennville Informed</div>
+<div class="timeline-item live"><div class="dot"></div>Fennville & Surrounding Areas Informed</div>
+<div class="timeline-item live"><div class="dot"></div>Michigan Properties & Cabins</div>
+<div class="timeline-item pending"><div class="dot"></div>Hamilton Happenings</div>
+</div>
+        </div></div>
   </div>
 </div>
-
-<!-- Posts Table -->
 <div class="table-section">
   <div class="table-card">
     <h3>📋 All Posts — Full Detail</h3>
     <table>
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Group</th>
-          <th>Members</th>
-          <th>Category</th>
-          <th>Status</th>
-          <th>Snippet</th>
-        </tr>
-      </thead>
+      <thead><tr><th>Date</th><th>Group</th><th>Members</th><th>Category</th><th>Status</th><th>Snippet</th></tr></thead>
       <tbody>
         <tr>
-          <td>Mar 31</td>
-          <td><a class="group-link" href="https://www.facebook.com/groups/281193499185629/" target="_blank">Downtown South Haven Chatline</a></td>
-          <td class="members">21K</td>
-          <td><span class="badge badge-cat-sg">SG</span></td>
-          <td><span class="badge badge-live">✅ Live</span><br><small>60 rxns · 5 comments · 11 shares</small></td>
-          <td class="snippet">Hey South Haven neighbors! Wanted to introduce ourselves — we're Dollybrook Resort tucked in the trees just up the road in Fennville...</td>
-        </tr>
-        <tr>
-          <td>Mar 31</td>
-          <td><a class="group-link" href="https://www.facebook.com/groups/626221328137060/" target="_blank">THE NEW Fennville Informed</a></td>
-          <td class="members">—</td>
-          <td><span class="badge badge-cat-sg">SG</span></td>
-          <td><span class="badge badge-live">✅ Live</span><br><small>1 Love reaction</small></td>
-          <td class="snippet">Hey Fennville neighbors! We're right here in town - 9 cabins in the woods. Send visitors our way!</td>
-        </tr>
-        <tr>
-          <td>Apr 2</td>
-          <td><a class="group-link" href="https://www.facebook.com/groups/588030999323865/" target="_blank">Fennville &amp; Surrounding Areas</a></td>
-          <td class="members">7.1K</td>
-          <td><span class="badge badge-cat-sg">SG</span></td>
-          <td><span class="badge badge-live">✅ Live</span></td>
-          <td class="snippet">Spring greetings from DollyBrook Resort. For anyone in the Fennville area — we're your neighbors!...</td>
-        </tr>
-        <tr>
-          <td>Apr 2</td>
-          <td><a class="group-link" href="https://www.facebook.com/groups/807611214069117/" target="_blank">Michigan Properties &amp; Cabins</a></td>
-          <td class="members">6.4K</td>
-          <td><span class="badge badge-cat-vr">VR</span></td>
-          <td><span class="badge badge-live">✅ Live</span></td>
-          <td class="snippet">Curious what other Michigan property owners think about this — After 13 years running DollyBrook Resort...</td>
-        </tr>
-        <tr>
-          <td>Apr 2</td>
-          <td><a class="group-link" href="https://www.facebook.com/groups/301913630886156/" target="_blank">Holland Informed (the best one)</a></td>
-          <td class="members">81K</td>
-          <td><span class="badge badge-cat-sg">SG</span></td>
-          <td><span class="badge badge-pending">⏳ Pending</span></td>
-          <td class="snippet">Just wanted to pop in and say hi to the Holland community from your West Michigan neighbors in Fennville!...</td>
-        </tr>
-        <tr>
-          <td>Apr 2</td>
-          <td><a class="group-link" href="https://www.facebook.com/groups/290777465557262/" target="_blank">Allegan County Informed</a></td>
-          <td class="members">57K</td>
-          <td><span class="badge badge-cat-sg">SG</span></td>
-          <td><span class="badge badge-pending">⏳ Pending</span></td>
-          <td class="snippet">Hello Allegan County neighbors! Waving from Fennville. 9 wooded cabins right here in Allegan County...</td>
-        </tr>
-        <tr>
-          <td>Mar 31</td>
+          <td>2026-03-31</td>
           <td><a class="group-link" href="https://www.facebook.com/groups/southhavenmichigan/" target="_blank">South Haven Michigan</a></td>
-          <td class="members">28K</td>
+          <td class="members">28000</td>
           <td><span class="badge badge-cat-sg">SG</span></td>
           <td><span class="badge badge-pending">⏳ Pending</span></td>
-          <td class="snippet">Spring is almost here and we're getting the cabins ready for another season! 9 cabins tucked in the trees...</td>
+          <td class="snippet">Spring is almost here and we're getting the cabins ready for another season! 9 cabins tucked in the trees, fire pits, ho...</td>
         </tr>
         <tr>
-          <td>Mar 31</td>
+          <td>2026-03-31</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/281193499185629/" target="_blank">Downtown South Haven Michigan Chatline</a></td>
+          <td class="members">21000</td>
+          <td><span class="badge badge-cat-sg">SG</span></td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td class="snippet">Hey South Haven neighbors! Wanted to introduce ourselves — we're Dollybrook Resort tucked in the trees just up the road ...</td>
+        </tr>
+        <tr>
+          <td>2026-03-31</td>
           <td><a class="group-link" href="https://www.facebook.com/groups/westmichigantravelideas/" target="_blank">West Michigan Travel Ideas</a></td>
-          <td class="members">21K</td>
+          <td class="members">21000</td>
           <td><span class="badge badge-cat-mi">MI</span></td>
           <td><span class="badge badge-pending">⏳ Pending</span></td>
-          <td class="snippet">Planning a West Michigan getaway this spring or summer? Saugatuck/Fennville area... 9 cabins, fire pits, hot tubs, zero WiFi (on purpose).</td>
+          <td class="snippet">Planning a West Michigan getaway this spring or summer? Saugatuck/Fennville area... 9 cabins, fire pits, hot tubs, zero ...</td>
         </tr>
         <tr>
-          <td>Mar 31</td>
+          <td>2026-03-31</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/265738146921622/" target="_blank">Things to do in Southwest MI</a></td>
+          <td class="members">14000</td>
+          <td><span class="badge badge-cat-mi">MI</span></td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td class="snippet">Looking for a home base while exploring Southwest Michigan? 9 cabins in Fennville, minutes from Saugatuck, beaches, wine...</td>
+        </tr>
+        <tr>
+          <td>2026-03-31</td>
           <td><a class="group-link" href="https://www.facebook.com/groups/1569917773284067/" target="_blank">Southwest Michigan</a></td>
-          <td class="members">11K</td>
+          <td class="members">11000</td>
           <td><span class="badge badge-cat-mi">MI</span></td>
           <td><span class="badge badge-pending">⏳ Pending</span></td>
-          <td class="snippet">Hey Southwest Michigan! We're Dollybrook Resort in Fennville. 9 cabins, fire pits, hot tubs, proud to be part of this area.</td>
+          <td class="snippet">Hey Southwest Michigan! We're Dollybrook Resort in Fennville. 9 cabins, fire pits, hot tubs, proud to be part of this ar...</td>
         </tr>
         <tr>
-          <td>Mar 31</td>
+          <td>2026-03-31</td>
           <td><a class="group-link" href="https://www.facebook.com/groups/431102449466134/" target="_blank">Saugatuck Underground</a></td>
-          <td class="members">8.4K</td>
+          <td class="members">8400</td>
           <td><span class="badge badge-cat-sg">SG</span></td>
           <td><span class="badge badge-pending">⏳ Pending</span></td>
           <td class="snippet">Saugatuck has the art. We have the place to sleep it off. 9 cabins in Fennville, fire pits, hot tubs, zero WiFi.</td>
         </tr>
         <tr>
-          <td>Apr 2</td>
-          <td><a class="group-link" href="https://www.facebook.com/groups/1059200144109025/" target="_blank">Fennville Informed</a></td>
-          <td class="members">8K</td>
-          <td><span class="badge badge-cat-sg">SG</span></td>
+          <td>2026-03-31</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/691341305200368/" target="_blank">Vacation Rentals in Southwest Michigan</a></td>
+          <td class="members">4400</td>
+          <td><span class="badge badge-cat-vr">VR</span></td>
           <td><span class="badge badge-pending">⏳ Pending</span></td>
-          <td class="snippet">Fennville friends — happy spring from your neighbors at DollyBrook! For anyone who's driven by on 66th St...</td>
+          <td class="snippet">Dollybrook Resort - Fennville MI. 9 private cabins, fire pits, hot tubs, book direct. Minutes from Saugatuck.</td>
         </tr>
         <tr>
-          <td>Mar 31</td>
-          <td><a class="group-link" href="https://www.facebook.com/groups/892119510857517/" target="_blank">South Haven Vacation Homes</a></td>
+          <td>2026-03-31</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/626221328137060/" target="_blank">THE NEW AND BETTER FENNVILLE INFORMED</a></td>
+          <td class="members">—</td>
+          <td><span class="badge badge-cat-sg">SG</span></td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>Private group - posted immediately no approval</small></td>
+          <td class="snippet">Hey Fennville neighbors! We're right here in town - 9 cabins in the woods. Send visitors our way!</td>
+        </tr>
+        <tr>
+          <td>2026-03-31</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/892119510857517/" target="_blank">South Haven Vacation Homes Group</a></td>
           <td class="members">—</td>
           <td><span class="badge badge-cat-fm">FM</span></td>
           <td><span class="badge badge-pending">⏳ Pending</span></td>
           <td class="snippet">Looking for a cabin getaway near South Haven? Dollybrook Resort in Fennville - just a short drive away! 9 cabins.</td>
         </tr>
         <tr>
-          <td>Mar 31</td>
-          <td><a class="group-link" href="https://www.facebook.com/groups/691341305200368/" target="_blank">Vacation Rentals in SW Michigan</a></td>
-          <td class="members">4.4K</td>
-          <td><span class="badge badge-cat-vr">VR</span></td>
-          <td><span class="badge badge-pending">⏳ Pending</span></td>
-          <td class="snippet">Dollybrook Resort - Fennville MI. 9 private cabins, fire pits, hot tubs, book direct. Minutes from Saugatuck.</td>
-        </tr>
-        <tr>
-          <td>Mar 31</td>
+          <td>2026-03-31</td>
           <td><a class="group-link" href="https://www.facebook.com/groups/2630364940540577/" target="_blank">Sauglasville</a></td>
-          <td class="members">11K</td>
+          <td class="members">11000</td>
           <td><span class="badge badge-cat-sg">SG</span></td>
           <td><span class="badge badge-pending">⏳ Pending</span></td>
           <td class="snippet">Spring is here and we're ready for the season! Your neighbors in Fennville - 9 cabins, fire pits, hot tubs.</td>
         </tr>
         <tr>
-          <td>Apr 2</td>
+          <td>2026-04-02</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/301913630886156/" target="_blank">Holland Informed (the best one)</a></td>
+          <td class="members">80000</td>
+          <td><span class="badge badge-cat-sg">SG</span></td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td class="snippet">Just wanted to pop in and say hi to the Holland community from your West Michigan neighbors in Fennville! 9 wooded cabin...</td>
+        </tr>
+        <tr>
+          <td>2026-04-02</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/290777465557262/" target="_blank">Allegan County Informed</a></td>
+          <td class="members">57000</td>
+          <td><span class="badge badge-cat-sg">SG</span></td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td class="snippet">Hello Allegan County neighbors! Waving from Fennville. 9 wooded cabins right here in Allegan County...</td>
+        </tr>
+        <tr>
+          <td>2026-04-02</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1059200144109025/" target="_blank">Fennville Informed</a></td>
+          <td class="members">8000</td>
+          <td><span class="badge badge-cat-sg">SG</span></td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td class="snippet">Fennville friends — happy spring from your neighbors at DollyBrook! For anyone who's driven by on 66th St...</td>
+        </tr>
+        <tr>
+          <td>2026-04-02</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/588030999323865/" target="_blank">Fennville & Surrounding Areas Informed</a></td>
+          <td class="members">7100</td>
+          <td><span class="badge badge-cat-sg">SG</span></td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>SG category - went live immediately - IMG_5583 photo</small></td>
+          <td class="snippet">Spring greetings from DollyBrook Resort. For anyone in the Fennville area — we're your neighbors!...</td>
+        </tr>
+        <tr>
+          <td>2026-04-02</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/807611214069117/" target="_blank">Michigan Properties & Cabins</a></td>
+          <td class="members">6400</td>
+          <td><span class="badge badge-cat-vr">VR</span></td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>VR category - peer insight on positioning/identity - firepit photo</small></td>
+          <td class="snippet">Curious what other Michigan property owners think about this — After 13 years running DollyBrook Resort...</td>
+        </tr>
+        <tr>
+          <td>2026-04-02</td>
           <td><a class="group-link" href="https://www.facebook.com/groups/703254738102778/" target="_blank">Hamilton Happenings</a></td>
-          <td class="members">6.4K</td>
+          <td class="members">6400</td>
           <td><span class="badge badge-cat-sg">SG</span></td>
           <td><span class="badge badge-pending">⏳ Pending</span></td>
           <td class="snippet">Hey Hamilton neighbors — waving from just down the road in Fennville! We're DollyBrook Resort...</td>
-        </tr>
-        <tr>
-          <td>Mar 31</td>
-          <td><a class="group-link" href="https://www.facebook.com/groups/265738146921622/" target="_blank">Things to do in SW MI</a></td>
-          <td class="members">14K</td>
-          <td><span class="badge badge-cat-mi">MI</span></td>
-          <td><span class="badge badge-removed">❌ Removed</span></td>
-          <td class="snippet">Looking for a home base while exploring Southwest Michigan? 9 cabins in Fennville, minutes from Saugatuck...</td>
-        </tr>
-      </tbody>
+        </tr></tbody>
     </table>
   </div>
 </div>
-
 <div class="footer">
   <strong>DollyBrook Resort</strong> · Facebook Groups Campaign Dashboard · Agent Xavier · RUF Global Network &nbsp;|&nbsp;
   <a href="https://www.dollybrook.com" style="color:#FFD700;">dollybrook.com</a> &nbsp;|&nbsp;
-  Updated April 2, 2026
+  Updated April 02, 2026
 </div>
-
 <script>
-// Status donut
 new Chart(document.getElementById('statusChart'), {
   type: 'doughnut',
-  data: {
-    labels: ['Live', 'Pending Approval', 'Removed'],
-    datasets: [{
-      data: [4, 11, 1],
-      backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
-      borderWidth: 2,
-      borderColor: '#fff'
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: {
-      legend: { position: 'bottom', labels: { font: { size: 11 } } }
-    },
-    cutout: '65%'
-  }
+  data: { labels: ['Live', 'Pending', 'Removed'], datasets: [{ data: [3, 12, 1], backgroundColor: ['#28a745','#ffc107','#dc3545'], borderWidth: 2, borderColor: '#fff' }] },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } }, cutout: '65%' }
 });
-
-// Posts by date
 new Chart(document.getElementById('dateChart'), {
   type: 'bar',
-  data: {
-    labels: ['Mar 31', 'Apr 2'],
-    datasets: [
-      { label: 'Live', data: [2, 2], backgroundColor: '#28a745' },
-      { label: 'Pending', data: [7, 4], backgroundColor: '#ffc107' },
-      { label: 'Removed', data: [1, 0], backgroundColor: '#dc3545' }
-    ]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    scales: {
-      x: { stacked: true },
-      y: { stacked: true, ticks: { stepSize: 1 }, max: 12 }
-    },
-    plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } }
-  }
+  data: { labels: ["2026-03-31", "2026-04-02"], datasets: [
+    { label: 'Live', data: [1, 2], backgroundColor: '#28a745' },
+    { label: 'Pending', data: [8, 4], backgroundColor: '#ffc107' },
+    { label: 'Removed', data: [1, 0], backgroundColor: '#dc3545' }
+  ] },
+  options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true, ticks: { stepSize: 1 } } }, plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } } }
 });
-
-// Top groups by reach
 new Chart(document.getElementById('reachChart'), {
   type: 'bar',
-  data: {
-    labels: ['Holland\nInformed', 'Allegan Co.\nInformed', 'South Haven\nMI', 'Downtown SH\nChatline', 'West MI\nTravel', 'SW Michigan', 'Sauglasville', 'Things to\ndo SW MI'],
-    datasets: [{
-      label: 'Members (K)',
-      data: [81, 57, 28, 21, 21, 11, 11, 14],
-      backgroundColor: ['#ffc107','#ffc107','#ffc107','#28a745','#ffc107','#ffc107','#ffc107','#dc3545'],
-      borderRadius: 4
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    indexAxis: 'y',
-    scales: {
-      x: { grid: { display: false } },
-      y: { ticks: { font: { size: 10 } } }
-    },
-    plugins: { legend: { display: false } }
-  }
+  data: { labels: ["Holland Informed (the ", "Allegan County Informe", "South Haven Michigan", "Downtown South Haven M", "West Michigan Travel I", "Things to do in Southw", "Southwest Michigan", "Sauglasville"], datasets: [{ label: 'Members (K)', data: [80.0, 57.0, 28.0, 21.0, 21.0, 14.0, 11.0, 11.0], backgroundColor: ["#ffc107", "#ffc107", "#ffc107", "#ffc107", "#ffc107", "#dc3545", "#ffc107", "#ffc107"], borderRadius: 4 }] },
+  options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { grid: { display: false } }, y: { ticks: { font: { size: 10 } } } }, plugins: { legend: { display: false } } }
 });
 </script>
 </body>
