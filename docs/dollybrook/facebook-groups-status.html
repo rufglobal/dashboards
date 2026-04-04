@@ -39,7 +39,10 @@ body { font-family: 'Open Sans', sans-serif; background: #f4f6f9; color: #333; }
 .table-card h3 { font-family: 'Roboto', sans-serif; font-size: 1rem; font-weight: 600; color: #003366; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid #FFD700; }
 table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
 thead tr { background: #003366; color: white; }
-thead th { padding: 10px 12px; text-align: left; font-weight: 600; white-space: nowrap; }
+thead th { padding: 10px 12px; text-align: left; font-weight: 600; white-space: nowrap; cursor: pointer; user-select: none; }
+thead th:hover { background: #004a99; }
+thead th.sort-asc::after { content: ' B2'; font-size: 0.65rem; opacity: 0.8; }
+thead th.sort-desc::after { content: ' BC'; font-size: 0.65rem; opacity: 0.8; }
 tbody tr { border-bottom: 1px solid #eee; } tbody tr:hover { background: #f8f9ff; }
 tbody td { padding: 10px 12px; vertical-align: top; }
 .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.74rem; font-weight: 700; white-space: nowrap; }
@@ -378,6 +381,39 @@ new Chart(document.getElementById('reachChart'), {
   data: { labels: ["Holland Informed (the ", "Allegan County Informe", "South Haven Michigan", "Downtown South Haven M", "West Michigan Travel I", "Things to do in Southw", "Sister Lakes in Dowagi", "Southwest Michigan"], datasets: [{ label: 'Members (K)', data: [80.0, 57.0, 28.0, 21.0, 21.0, 14.0, 14.0, 11.0], backgroundColor: ["#28a745", "#28a745", "#ffc107", "#ffc107", "#ffc107", "#dc3545", "#ffc107", "#28a745"], borderRadius: 4 }] },
   options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { grid: { display: false } }, y: { ticks: { font: { size: 10 } } } }, plugins: { legend: { display: false } } }
 });
+</script>
+<script>
+(function() {
+  var table = document.querySelector('table');
+  if (!table) return;
+  var headers = table.querySelectorAll('thead th');
+  var sortCol = -1;
+  var sortAsc = true;
+
+  headers.forEach(function(th, col) {
+    th.addEventListener('click', function() {
+      if (sortCol === col) {
+        sortAsc = !sortAsc;
+      } else {
+        sortCol = col;
+        sortAsc = true;
+      }
+      headers.forEach(function(h) { h.classList.remove('sort-asc', 'sort-desc'); });
+      th.classList.add(sortAsc ? 'sort-asc' : 'sort-desc');
+
+      var tbody = table.querySelector('tbody');
+      var rows = Array.from(tbody.querySelectorAll('tr'));
+      rows.sort(function(a, b) {
+        var aText = a.cells[col] ? a.cells[col].innerText.trim().toLowerCase() : '';
+        var bText = b.cells[col] ? b.cells[col].innerText.trim().toLowerCase() : '';
+        if (aText < bText) return sortAsc ? -1 : 1;
+        if (aText > bText) return sortAsc ? 1 : -1;
+        return 0;
+      });
+      rows.forEach(function(r) { tbody.appendChild(r); });
+    });
+  });
+})();
 </script>
 </body>
 </html>
