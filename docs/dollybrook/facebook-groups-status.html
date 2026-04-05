@@ -63,12 +63,12 @@ a.group-link { color: #003366; text-decoration: none; font-weight: 600; } a.grou
   </div>
   <div class="header-badge">RUF DASHBOARD</div>
 </div>
-<p class="updated-tag">Last updated: April 04, 2026 · 28 posts tracked across 37 groups</p>
+<p class="updated-tag">Last updated: April 05, 2026 · 29 posts tracked across 38 groups</p>
 <div class="stats-row">
   <div class="stat-card green"><div class="stat-number">14</div><div class="stat-label">Posts Live</div></div>
-  <div class="stat-card orange"><div class="stat-number">13</div><div class="stat-label">Pending Approval</div></div>
+  <div class="stat-card orange"><div class="stat-number">14</div><div class="stat-label">Pending Approval</div></div>
   <div class="stat-card red"><div class="stat-number">1</div><div class="stat-label">Removed</div></div>
-  <div class="stat-card blue"><div class="stat-number">37</div><div class="stat-label">Groups Active</div></div>
+  <div class="stat-card blue"><div class="stat-number">38</div><div class="stat-label">Groups Active</div></div>
   <div class="stat-card purple"><div class="stat-number">4.4K</div><div class="stat-label">Page Followers</div></div>
   <div class="stat-card green"><div class="stat-number">60+</div><div class="stat-label">Top Post Reactions</div></div>
 </div>
@@ -119,6 +119,11 @@ a.group-link { color: #003366; text-decoration: none; font-weight: 600; } a.grou
 <div class="timeline-item pending"><div class="dot"></div>South Haven, Michigan (smaller)</div>
 <div class="timeline-item live"><div class="dot"></div>Fennville Informed</div>
 <div class="timeline-item live"><div class="dot"></div>Sauglasville</div>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-04 — 1 post</div>
+          <div class="timeline-items"><div class="timeline-item pending"><div class="dot"></div>WHAT TO DO IN CHICAGO</div>
 </div>
         </div></div>
   </div>
@@ -352,6 +357,14 @@ a.group-link { color: #003366; text-decoration: none; font-weight: 600; } a.grou
           <td><span class="badge badge-cat-sg">SG</span></td>
           <td><span class="badge badge-live">✅ Live</span><br><small>Bulk thank-you reply acknowledging 26 comments with restaurant recommendations - Clearbrook Noble Twist Borrowed Time Root Cafe Blue Star Barns etc</small></td>
           <td class="snippet">This is GOLD — thank you all so much! Highlights going into our guest guide...</td>
+        </tr>
+        <tr>
+          <td>2026-04-04</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/WhatToDoInChicago/" target="_blank">WHAT TO DO IN CHICAGO</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td class="snippet">If you haven't done a Michigan weekend trip yet - Saugatuck area is 2 hours from Chicago. 9 private cabins on 34 wooded ...</td>
         </tr></tbody>
     </table>
   </div>
@@ -359,20 +372,20 @@ a.group-link { color: #003366; text-decoration: none; font-weight: 600; } a.grou
 <div class="footer">
   <strong>DollyBrook Resort</strong> · Facebook Groups Campaign Dashboard · Agent Xavier · RUF Global Network &nbsp;|&nbsp;
   <a href="https://www.dollybrook.com" style="color:#FFD700;">dollybrook.com</a> &nbsp;|&nbsp;
-  Updated April 04, 2026
+  Updated April 05, 2026
 </div>
 <script>
 new Chart(document.getElementById('statusChart'), {
   type: 'doughnut',
-  data: { labels: ['Live', 'Pending', 'Removed'], datasets: [{ data: [14, 13, 1], backgroundColor: ['#28a745','#ffc107','#dc3545'], borderWidth: 2, borderColor: '#fff' }] },
+  data: { labels: ['Live', 'Pending', 'Removed'], datasets: [{ data: [14, 14, 1], backgroundColor: ['#28a745','#ffc107','#dc3545'], borderWidth: 2, borderColor: '#fff' }] },
   options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } }, cutout: '65%' }
 });
 new Chart(document.getElementById('dateChart'), {
   type: 'bar',
-  data: { labels: ["2026-03-31", "2026-04-02", "2026-04-03"], datasets: [
-    { label: 'Live', data: [4, 5, 5], backgroundColor: '#28a745' },
-    { label: 'Pending', data: [5, 1, 7], backgroundColor: '#ffc107' },
-    { label: 'Removed', data: [1, 0, 0], backgroundColor: '#dc3545' }
+  data: { labels: ["2026-03-31", "2026-04-02", "2026-04-03", "2026-04-04"], datasets: [
+    { label: 'Live', data: [4, 5, 5, 0], backgroundColor: '#28a745' },
+    { label: 'Pending', data: [5, 1, 7, 1], backgroundColor: '#ffc107' },
+    { label: 'Removed', data: [1, 0, 0, 0], backgroundColor: '#dc3545' }
   ] },
   options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true, ticks: { stepSize: 1 } } }, plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } } }
 });
