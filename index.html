@@ -4,104 +4,291 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RUF Agent Dashboards</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f7fa; color: #333; }
-  header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; padding: 32px 40px; }
-  header h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 6px; }
-  header p { opacity: 0.75; font-size: 0.95rem; }
-  .meta { display: flex; gap: 24px; margin-top: 16px; }
-  .meta span { background: rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; padding: 32px 40px; max-width: 1400px; margin: 0 auto; }
-  .card { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; transition: transform 0.15s, box-shadow 0.15s; }
-  .card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
-  .card-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #fafafa; }
-  .cat-icon { font-size: 1.3rem; }
-  .agent-badge { background: #e8f4fd; color: #1a73e8; font-size: 0.75rem; font-weight: 600; padding: 3px 10px; border-radius: 12px; }
-  .card-body { padding: 16px; }
-  .card-body h3 { font-size: 1rem; margin-bottom: 8px; }
-  .card-body h3 a { color: #1a1a2e; text-decoration: none; }
-  .card-body h3 a:hover { color: #1a73e8; }
-  .card-body p { font-size: 0.85rem; color: #666; line-height: 1.5; margin-bottom: 10px; }
-  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
-  .tag { background: #f0f0f0; color: #555; font-size: 0.72rem; padding: 2px 8px; border-radius: 10px; }
-  .card-footer { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-top: 1px solid #f0f0f0; font-size: 0.78rem; color: #999; }
-  .status.active { color: #28a745; font-weight: 600; }
-  footer { text-align: center; padding: 24px; color: #999; font-size: 0.8rem; border-top: 1px solid #eee; margin-top: 20px; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #f0f4f8; color: #222; }
+
+header {
+  background: #00ACF0;
+  color: #fff;
+  padding: 28px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+header h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; }
+header p { font-size: 0.9rem; opacity: 0.88; margin-top: 4px; }
+.meta-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+.chip { background: rgba(255,255,255,0.2); padding: 3px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 500; }
+
+.search-bar { padding: 20px 40px; background: #fff; border-bottom: 1px solid #e5e9ef; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.search-bar input { flex: 1; min-width: 200px; padding: 8px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9rem; font-family: inherit; outline: none; }
+.search-bar input:focus { border-color: #00ACF0; }
+.filter-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+.filter-btn { padding: 6px 14px; border: 1px solid #ddd; border-radius: 20px; font-size: 0.78rem; cursor: pointer; background: #fff; font-family: inherit; transition: all 0.15s; }
+.filter-btn.active, .filter-btn:hover { background: #00ACF0; color: #fff; border-color: #00ACF0; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; padding: 28px 40px; max-width: 1400px; margin: 0 auto; }
+
+.card { background: #fff; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); overflow: hidden; transition: transform 0.15s, box-shadow 0.15s; display: flex; flex-direction: column; }
+.card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.11); }
+.card-accent { height: 4px; }
+.card-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px 0; }
+.agent-badge { font-size: 0.72rem; font-weight: 600; padding: 3px 9px; border-radius: 10px; background: #e0f4fd; color: #0078b4; }
+.card-body { padding: 12px 16px 14px; flex: 1; }
+.card-body h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; }
+.card-body h3 a { color: #113268; text-decoration: none; }
+.card-body h3 a:hover { color: #00ACF0; }
+.card-body p { font-size: 0.82rem; color: #666; line-height: 1.5; margin-bottom: 10px; }
+.tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.tag { background: #f0f4f8; color: #556; font-size: 0.7rem; padding: 2px 7px; border-radius: 8px; }
+.card-footer { padding: 9px 16px; border-top: 1px solid #f0f0f0; display: flex; justify-content: space-between; font-size: 0.75rem; color: #999; }
+.status-active { color: #00875a; font-weight: 600; }
+
+.section-label { padding: 10px 40px 0; font-size: 0.75rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.08em; max-width: 1440px; margin: 0 auto; }
+
+footer { text-align: center; padding: 28px; color: #999; font-size: 0.78rem; border-top: 1px solid #e5e9ef; margin-top: 10px; }
+footer a { color: #00ACF0; text-decoration: none; }
+
+.no-results { text-align: center; padding: 60px 40px; color: #aaa; font-size: 0.95rem; display: none; }
 </style>
 </head>
 <body>
+
 <header>
-  <h1>🔐 RUF Agent Dashboards</h1>
-  <p>Centralized dashboard index for all RUF agents — maintained by Knox</p>
-  <div class="meta">
-    <span>📊 4 Dashboards</span>
-    <span>🔄 Updated 2026-04-07</span>
-    <span>🏢 rufglobal.github.io/dashboards</span>
+  <div>
+    <h1>🔐 RUF Agent Dashboards</h1>
+    <p>Centralized dashboard index — maintained by Knox · Romanian United Foundation</p>
+    <div class="meta-chips">
+      <span class="chip" id="total-count">18 Dashboards</span>
+      <span class="chip">Updated 2026-04-07</span>
+      <span class="chip">rufglobal.github.io/dashboards</span>
+    </div>
   </div>
 </header>
-<div class="grid">
-    <div class="card">
-      <div class="card-header" style="border-left: 4px solid #28a745">
-        <span class="cat-icon">📊</span>
-        <span class="agent-badge">Clara</span>
-      </div>
-      <div class="card-body">
-        <h3><a href="https://rufglobal.github.io/dashboards/usage/agent-api-usage.html">Agent API Usage Report</a></h3>
-        <p>Real-time API usage tracking and cost analysis for all RUF agents</p>
-        <div class="tags"><span class="tag">api</span><span class="tag">usage</span><span class="tag">costs</span><span class="tag">monitoring</span></div>
-      </div>
-      <div class="card-footer">
-        <span>Updated: 2026-03-21</span>
-        <span class="status active">ACTIVE</span>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header" style="border-left: 4px solid #6f42c1">
-        <span class="cat-icon">📚</span>
-        <span class="agent-badge">Emma</span>
-      </div>
-      <div class="card-body">
-        <h3><a href="https://rufglobal.github.io/dashboards/docs/globalromania/welcome-dashboard.html">GlobalRomania Welcome Tracker</a></h3>
-        <p>Tracks 20 new member welcomes sent March 2026, photo status, and stage 2 reply tracking.</p>
-        <div class="tags"><span class="tag">globalromania</span><span class="tag">welcome</span><span class="tag">members</span><span class="tag">tracking</span></div>
-      </div>
-      <div class="card-footer">
-        <span>Updated: 2026-03-31</span>
-        <span class="status active">ACTIVE</span>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header" style="border-left: 4px solid #23372C">
-        <span class="cat-icon">📣</span>
-        <span class="agent-badge">Xavier</span>
-      </div>
-      <div class="card-body">
-        <h3><a href="https://rufglobal.github.io/dashboards/dollybrook/facebook-post-performance.html">DollyBrook Facebook Post Performance</a></h3>
-        <p>Interactive FB group post performance tracker (Mar 31–Apr 7 2026). Page views chart, engagement by group, sortable post log, priority actions.</p>
-        <div class="tags"><span class="tag">dollybrook</span><span class="tag">facebook</span><span class="tag">groups</span><span class="tag">performance</span></div>
-      </div>
-      <div class="card-footer">
-        <span>Updated: 2026-04-07</span>
-        <span class="status active">ACTIVE</span>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header" style="border-left: 4px solid #fd7e14">
-        <span class="cat-icon">⚙️</span>
-        <span class="agent-badge">Knox</span>
-      </div>
-      <div class="card-body">
-        <h3><a href="https://rufglobal.github.io/dashboards/admin/knox-security-overview.html">Knox Security Oversight Dashboard</a></h3>
-        <p>security-overview - System security status, agent oversight, and operational monitoring for RUF infrastructure</p>
-        <div class="tags"></div>
-      </div>
-      <div class="card-footer">
-        <span>Updated: 2026-03-21</span>
-        <span class="status active">ACTIVE</span>
-      </div>
-    </div>
+
+<div class="search-bar">
+  <input type="text" id="search" placeholder="Search dashboards…" oninput="filterCards()">
+  <div class="filter-btns">
+    <button class="filter-btn active" onclick="filterByTag('all', this)">All</button>
+    <button class="filter-btn" onclick="filterByTag('dollybrook', this)">DollyBrook</button>
+    <button class="filter-btn" onclick="filterByTag('globalromania', this)">GlobalRomania</button>
+    <button class="filter-btn" onclick="filterByTag('usage', this)">Usage</button>
+    <button class="filter-btn" onclick="filterByTag('ruf', this)">RUF</button>
+    <button class="filter-btn" onclick="filterByTag('docs', this)">Docs</button>
+  </div>
 </div>
-<footer>Knox Dashboard Index · Romanian United Foundation · rufglobal.github.io/dashboards</footer>
+
+<div class="grid" id="grid">
+
+  <!-- DollyBrook -->
+  <div class="card" data-tags="dollybrook facebook groups xavier">
+    <div class="card-accent" style="background:#23372C"></div>
+    <div class="card-header"><span></span><span class="agent-badge">Xavier</span></div>
+    <div class="card-body">
+      <h3><a href="https://rufglobal.github.io/dashboards/docs/dollybrook/facebook-post-performance.html">DollyBrook FB Post Performance</a></h3>
+      <p>Interactive FB group post performance tracker Mar 31–Apr 7 2026. Engagement by group, sortable post log, priority actions.</p>
+      <div class="tags"><span class="tag">dollybrook</span><span class="tag">facebook</span><span class="tag">groups</span><span class="tag">performance</span></div>
+    </div>
+    <div class="card-footer"><span>2026-04-07</span><span class="status-active">ACTIVE</span></div>
+  </div>
+
+  <div class="card" data-tags="dollybrook facebook groups xavier">
+    <div class="card-accent" style="background:#23372C"></div>
+    <div class="card-header"><span></span><span class="agent-badge">Xavier</span></div>
+    <div class="card-body">
+      <h3><a href="https://rufglobal.github.io/dashboards/docs/dollybrook/facebook-groups-status.html">DollyBrook FB Groups Status</a></h3>
+      <p>Facebook groups campaign dashboard — posting log, group status, reach tracking.</p>
+      <div class="tags"><span class="tag">dollybrook</span><span class="tag">facebook</span><span class="tag">campaign</span></div>
+    </div>
+    <div class="card-footer"><span>2026-04-05</span><span class="status-active">ACTIVE</span></div>
+  </div>
+
+  <div class="card" data-tags="dollybrook xavier">
+    <div class="card-accent" style="background:#23372C"></div>
+    <div class="card-header"><span></span><span class="agent-badge">Xavier</span></div>
+    <div class="card-body">
+      <h3><a href="https://rufglobal.github.io/dashboards/docs/dollybrook/daily-report-2026-04-04.html">DollyBrook Daily Report Apr 4</a></h3>
+      <p>Daily operations report — bookings, activity, metrics for April 4 2026.</p>
+      <div class="tags"><span class="tag">dollybrook</span><span class="tag">daily</span><span class="tag">report</span></div>
+    </div>
+    <div class="card-footer"><span>2026-04-04</span><span class="status-active">ACTIVE</span></div>
+  </div>
+
+  <div class="card" data-tags="dollybrook xavier">
+    <div class="card-accent" style="background:#23372C"></div>
+    <div class="card-header"><span></span><span class="agent-badge">Xavier</span></div>
+    <div class="card-body">
+      <h3><a href="https://rufglobal.github.io/dashboards/docs/dollybrook/daily-report-2026-04-03.html">DollyBrook Daily Report Apr 3</a></h3>
+      <p>Daily operations report — bookings, activity, metrics for April 3 2026.</p>
+      <div class="tags"><span class="tag">dollybrook</span><span class="tag">daily</span><span class="tag">report</span></div>
+    </div>
+    <div class="card-footer"><span>2026-04-03</span><span class="status-active">ACTIVE</span></div>
+  </div>
+
+  <!-- GlobalRomania -->
+  <div class="card" data-tags="globalromania members emma">
+    <div class="card-accent" style="background:#00ACF0"></div>
+    <div class="card-header"><span></span><span class="agent-badge">Emma</span></div>
+    <div class="card-body">
+      <h3><a href="https://rufglobal.github.io/dashboards/docs/globalromania/welcome-dashboard.html">GlobalRomania Welcome Tracker</a></h3>
+      <p>Tracks new member welcomes sent March 2026, photo status, and stage 2 reply tracking.</p>
+      <div class="tags"><span class="tag">globalromania</span><span class="tag">welcome</span><span class="tag">members</span></div>
+    </div>
+    <div class="card-footer"><span>2026-03-31</span><span class="status-active">ACTIVE</span></div>
+  </div>
+
+  <div class="card" data-tags="globalromania members emma">
+    <div class="card-accent" style="background:#00ACF0"></div>
+    <div class="card-header"><span></span><span class="agent-badge">Emma</span></div>
+    <div class="card-body">
+      <h3><a href="https://rufglobal.github.io/dashboards/docs/globalromania/member-status.html">GlobalRomania Member Status</a></h3>
+      <p>Current member status overview for GlobalRomania (Circle) community.</p>
+      <div class="tags"><span class="tag">globalromania</span><span class="tag">members</span><span class="tag">status</span></div>
+    </div>
+    <div class="card-footer"><span>2026-03-31</span><span class="status-active">ACTIVE</span></div>
+  </div>
+
+  <div class="card" data-tags="globalromania members reports">
+    <div class="card-accent" style="background:#00ACF0"></div>
+    <div class="card-header"><span></span><span class="agent-badge">Emma</span></div>
+    <div class="card-body">
+      <h3><a href="https://rufglobal.github.io/dashboards/docs/reports/globalromania-member-status-dashboard.html">GlobalRomania Member Status Report</a></h3>
+      <p>Detailed member status report for GlobalRomania community.</p>
+      <div class="tags"><span class="tag">globalromania</span><span class="tag">report</span></div>
+    </div>
+    <div class="card-footer"><span>2026-03-31</span><span class="status-active">ACTIVE</span></div>
+  </div>
+
+  <!-- RUF Core -->
+  <div class="card" data-tags="ruf roadmap strategy">
+    <div class="card-accent" style="background:#113268"></div>
+    <div class="card-header"><span></span><span class="agent-badge">Knox</span></div>
+    <div class="card-body">
+      <h3><a href="https://rufglobal.github.io/dashboards/docs/ruf-roadmap/index.html">RUF Roadmap 2020–2050</a></h3>
+      <p>Long-term strategic roadmap for Romanian United Foundation.</p>
+      <div class="tags"><span class="tag">ruf</span><span class="tag">roadmap</span><span class="tag">strategy</span></div>
+    </div>
+    <div class="card-footer"><span>2026-03</span><span class="status-active">ACTIVE</span></div>
+  </div>
+
+  <div class="card" data-tags="ruf roadmap strategy">
+    <div class="card-accent" style="background:#113268"></div>
+    <div class="card-header"><span></span><span class="agent-badge">Knox</span></div>
+    <div class="card-body">
+      <h3><a href="https://rufglobal.github.io/dashboards/docs/ruf-roadmap-landscape/index.html">RUF Roadmap (Landscape)</a></h3>
+      <p>Landscape-format version of the RUF 2020–2050 strategic roadmap.</p>
+      <div class="tags"><span class="tag">ruf</span><span class="tag">roadmap</span></div>
+    </div>
+    <div class="card-footer"><span>2026-03</span><span class="status-active">ACTIVE</span></div>
+  </div>
+
+  <!-- Usage / Billing -->
+  <div class="card" data-tags="usage billing knox">
+    <div class="card-accent" style="background:#EF7D00"></div>
+    <div class="card-header"><span></span><span class="agent-badge">Knox</span></div>
+    <div class="card-body">
+      <h3><a href="https://rufglobal.github.io/dashboards/docs/billing/index.html">Agent Billing & Usage</a></h3>
+      <p>Claude API usage costs, current balance, agent spending breakdown, daily usage patterns.</p>
+      <div class="tags"><span class="tag">usage</span><span class="tag">billing</span><span class="tag">api</span><span class="tag">costs</span></div>
+    </div>
+    <div class="card-footer"><span>2026-04-06</span><span class="status-active">ACTIVE</span></div>
+  </div>
+
+  <div class="card" data-tags="usage billing">
+    <div class="card-accent" style="background:#EF7D00"></div>
+    <div class="card-header"><span></span><span class="agent-badge">Knox</span></div>
+    <div class="card-body">
+      <h3><a href="https://rufglobal.github.io/dashboards/docs/usage/index.html">Usage Dashboard (Latest)</a></h3>
+      <p>Latest daily agent API usage snapshot. Historical snapshots available by date.</p>
+      <div class="tags"><span class="tag">usage</span><span class="tag">api</span><span class="tag">daily</span></div>
+    </div>
+    <div class="card-footer"><span>2026-04-05</span><span class="status-active">ACTIVE</span></div>
+  </div>
+
+  <!-- Docs / Admin -->
+  <div class="card" data-tags="docs admin ana zoom">
+    <div class="card-accent" style="background:#00ACF0"></div>
+    <div class="card-header"><span></span><span class="agent-badge">Ana</span></div>
+    <div class="card-body">
+      <h3><a href="https://rufglobal.github.io/dashboards/docs/user-guides/ana-complete-manual.html">Ana Complete Manual</a></h3>
+      <p>Full user guide for Ana's capabilities — Zoom filing, Slack management, meeting minutes workflow.</p>
+      <div class="tags"><span class="tag">docs</span><span class="tag">ana</span><span class="tag">manual</span><span class="tag">zoom</span></div>
+    </div>
+    <div class="card-footer"><span>2026-04</span><span class="status-active">ACTIVE</span></div>
+  </div>
+
+  <div class="card" data-tags="docs member-stats ruf">
+    <div class="card-accent" style="background:#00ACF0"></div>
+    <div class="card-header"><span></span><span class="agent-badge">Alice</span></div>
+    <div class="card-body">
+      <h3><a href="https://rufglobal.github.io/dashboards/docs/member-stats/index.html">Member Stats</a></h3>
+      <p>RUF member statistics and analytics dashboard.</p>
+      <div class="tags"><span class="tag">ruf</span><span class="tag">members</span><span class="tag">stats</span></div>
+    </div>
+    <div class="card-footer"><span>2026-03</span><span class="status-active">ACTIVE</span></div>
+  </div>
+
+  <div class="card" data-tags="docs zoom ana">
+    <div class="card-accent" style="background:#00ACF0"></div>
+    <div class="card-header"><span></span><span class="agent-badge">Ana</span></div>
+    <div class="card-body">
+      <h3><a href="https://rufglobal.github.io/dashboards/docs/zoom.html">Zoom Dashboard</a></h3>
+      <p>Zoom meeting management and filing dashboard.</p>
+      <div class="tags"><span class="tag">zoom</span><span class="tag">ana</span><span class="tag">meetings</span></div>
+    </div>
+    <div class="card-footer"><span>2026-03</span><span class="status-active">ACTIVE</span></div>
+  </div>
+
+  <div class="card" data-tags="admin knox security">
+    <div class="card-accent" style="background:#113268"></div>
+    <div class="card-header"><span></span><span class="agent-badge">Knox</span></div>
+    <div class="card-body">
+      <h3><a href="https://rufglobal.github.io/dashboards/admin/knox-security-overview.html">Knox Security Oversight</a></h3>
+      <p>System security status, agent oversight, and operational monitoring for RUF infrastructure.</p>
+      <div class="tags"><span class="tag">admin</span><span class="tag">security</span><span class="tag">knox</span></div>
+    </div>
+    <div class="card-footer"><span>2026-03-21</span><span class="status-active">ACTIVE</span></div>
+  </div>
+
+</div>
+
+<div class="no-results" id="no-results">No dashboards match your search.</div>
+
+<footer>
+  Knox Dashboard Index · <a href="https://ruf.global">Romanian United Foundation</a> · 
+  <a href="https://rufglobal.github.io/dashboards/">rufglobal.github.io/dashboards</a>
+</footer>
+
+<script>
+let activeTag = 'all';
+
+function filterCards() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const cards = document.querySelectorAll('.card');
+  let visible = 0;
+  cards.forEach(c => {
+    const text = c.textContent.toLowerCase();
+    const tags = c.dataset.tags || '';
+    const matchSearch = !q || text.includes(q);
+    const matchTag = activeTag === 'all' || tags.includes(activeTag);
+    const show = matchSearch && matchTag;
+    c.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  document.getElementById('no-results').style.display = visible === 0 ? 'block' : 'none';
+  document.getElementById('total-count').textContent = visible + ' Dashboard' + (visible !== 1 ? 's' : '');
+}
+
+function filterByTag(tag, btn) {
+  activeTag = tag;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterCards();
+}
+</script>
+
 </body>
 </html>
