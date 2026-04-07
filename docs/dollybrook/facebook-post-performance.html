@@ -4,197 +4,367 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DollyBrook — Facebook Group Post Performance</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
+:root {
+  --db-dark-green: #23372C;
+  --db-dark-blue: #23262D;
+  --db-eggshell: #F1F0D9;
+  --db-beige: #CEAA78;
+  --db-beige-light: rgba(206,170,120,0.15);
+  --radius: 1rem;
+  --status-live: #28a745;
+  --status-live-bg: #d4edda;
+  --status-live-text: #155724;
+  --status-declined: #dc3545;
+  --status-declined-bg: #f8d7da;
+  --status-declined-text: #721c24;
+  --status-pending-bg: #fff3cd;
+  --status-pending-text: #856404;
+  --status-removed-bg: #f5c6cb;
+  --status-removed-text: #721c24;
+  --status-skip-bg: #e2e3e5;
+  --status-skip-text: #383d41;
+  --eng-high: #28a745;
+  --eng-mid: #e6a800;
+  --eng-low: #999;
+}
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Open Sans', sans-serif; background: #f4f6f9; color: #333; }
-.header { background: linear-gradient(135deg, #003366 0%, #004a99 100%); color: white; padding: 28px 40px; display: flex; align-items: center; justify-content: space-between; }
-.header h1 { font-family: 'Roboto', sans-serif; font-size: 1.7rem; font-weight: 700; }
-.header p { font-size: 0.85rem; opacity: 0.8; margin-top: 4px; }
-.header-badge { background: #FFD700; color: #003366; font-weight: 700; font-size: 0.8rem; padding: 6px 14px; border-radius: 20px; white-space: nowrap; }
-.container { padding: 24px 40px; }
-.insight-box { background: #fff3cd; border-left: 5px solid #FFD700; border-radius: 8px; padding: 18px 22px; margin-bottom: 24px; }
-.insight-box h3 { font-family: 'Roboto', sans-serif; color: #003366; font-size: 1rem; margin-bottom: 8px; }
-.insight-box p { font-size: 0.88rem; line-height: 1.6; color: #444; }
-.stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-bottom: 28px; }
-.stat-card { background: white; border-radius: 10px; padding: 18px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.08); border-top: 4px solid #003366; }
-.stat-card.green { border-top-color: #28a745; }
-.stat-card.gold { border-top-color: #FFD700; }
-.stat-card.red { border-top-color: #dc3545; }
-.stat-card.purple { border-top-color: #6f42c1; }
-.stat-number { font-family: 'Roboto', sans-serif; font-size: 2rem; font-weight: 700; color: #003366; }
-.stat-card.green .stat-number { color: #28a745; }
-.stat-card.gold .stat-number { color: #856404; }
-.stat-card.red .stat-number { color: #dc3545; }
-.stat-card.purple .stat-number { color: #6f42c1; }
-.stat-label { font-size: 0.75rem; color: #666; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-.chart-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; margin-bottom: 28px; }
-@media (max-width: 900px) { .chart-grid { grid-template-columns: 1fr; } .container { padding: 16px; } }
-.chart-card { background: white; border-radius: 10px; padding: 22px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
-.chart-card h3 { font-family: 'Roboto', sans-serif; font-size: 0.95rem; font-weight: 600; color: #003366; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid #FFD700; }
+body { font-family: 'Inter', sans-serif; background: var(--db-eggshell); color: var(--db-dark-blue); line-height: 1.6; }
+
+/* HERO */
+.hero {
+  background: linear-gradient(135deg, var(--db-dark-green) 0%, #1a2a22 100%);
+  color: var(--db-eggshell);
+  padding: 44px 48px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+.hero p {
+  font-size: 0.88rem;
+  opacity: 0.7;
+  margin-top: 6px;
+  font-weight: 300;
+}
+.hero-badge {
+  background: var(--db-beige);
+  color: var(--db-dark-green);
+  font-weight: 700;
+  font-size: 0.75rem;
+  font-family: 'Inter', sans-serif;
+  padding: 7px 16px;
+  border-radius: 2rem;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* CONTAINER */
+.container { padding: 36px 48px; max-width: 1400px; margin: 0 auto; }
+@media (max-width: 768px) { .container { padding: 20px; } .hero { padding: 28px 20px; } }
+
+/* INSIGHT BOX */
+.insight-box {
+  background: white;
+  border: 1px solid var(--db-beige);
+  border-left: 5px solid var(--db-dark-green);
+  border-radius: var(--radius);
+  padding: 22px 26px;
+  margin-bottom: 28px;
+}
+.insight-box h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  color: var(--db-dark-green);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.insight-box p { font-size: 0.88rem; line-height: 1.7; color: var(--db-dark-blue); }
+
+/* STAT CARDS */
+.stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); gap: 16px; margin-bottom: 32px; }
+.stat-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 20px 18px;
+  text-align: center;
+  border: 1px solid var(--db-beige);
+  border-top: 4px solid var(--db-beige);
+}
+.stat-card.primary { border-top-color: var(--db-dark-green); }
+.stat-card.green { border-top-color: var(--status-live); }
+.stat-card.red { border-top-color: var(--status-declined); }
+.stat-number { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--db-dark-green); }
+.stat-card.green .stat-number { color: var(--status-live); }
+.stat-card.red .stat-number { color: var(--status-declined); }
+.stat-label { font-size: 0.73rem; color: #666; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; line-height: 1.4; }
+
+/* CHARTS */
+.chart-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; margin-bottom: 32px; }
+@media (max-width: 900px) { .chart-grid { grid-template-columns: 1fr; } }
+.chart-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 24px;
+  border: 1px solid var(--db-beige);
+}
+.chart-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--db-dark-green);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--db-beige);
+}
 .chart-container { position: relative; height: 240px; }
-.section-title { font-family: 'Roboto', sans-serif; font-size: 1.05rem; font-weight: 700; color: #003366; margin: 28px 0 14px; padding-bottom: 8px; border-bottom: 2px solid #FFD700; display: flex; align-items: center; gap: 8px; }
-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.08); margin-bottom: 28px; }
-thead tr { background: #003366; color: white; }
-thead th { padding: 11px 14px; text-align: left; font-weight: 600; white-space: nowrap; }
-tbody tr { border-bottom: 1px solid #eee; }
-tbody tr:hover { background: #f8f9ff; }
-tbody td { padding: 10px 14px; vertical-align: middle; }
-.badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.73rem; font-weight: 700; white-space: nowrap; }
-.badge-live { background: #d4edda; color: #155724; }
-.badge-pending { background: #fff3cd; color: #856404; }
-.badge-declined { background: #f8d7da; color: #721c24; }
-.badge-removed { background: #f5c6cb; color: #721c24; }
-.badge-skip { background: #e2e3e5; color: #383d41; }
-.eng-high { color: #28a745; font-weight: 700; }
-.eng-mid { color: #e6a800; font-weight: 600; }
-.eng-low { color: #999; }
-.star { color: #FFD700; }
-a { color: #003366; text-decoration: none; }
+.chart-note { font-size: 0.72rem; color: #888; margin-top: 8px; text-align: right; font-style: italic; }
+
+/* SECTION TITLES */
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--db-dark-green);
+  margin: 32px 0 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--db-beige);
+}
+
+/* TABLE */
+.table-wrap { background: white; border-radius: var(--radius); border: 1px solid var(--db-beige); overflow: hidden; margin-bottom: 32px; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.82rem; min-width: 900px; }
+thead tr { background: var(--db-dark-green); color: var(--db-eggshell); }
+thead th {
+  padding: 12px 14px;
+  text-align: left;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+thead th:hover { background: rgba(255,255,255,0.1); }
+thead th.sort-asc::after { content: ' \25B2'; font-size: 0.65rem; opacity: 0.8; }
+thead th.sort-desc::after { content: ' \25BC'; font-size: 0.65rem; opacity: 0.8; }
+tbody tr { border-bottom: 1px solid rgba(206,170,120,0.2); }
+tbody tr:hover { background: var(--db-beige-light); }
+tbody tr.highlight { background: rgba(35,55,44,0.04); }
+tbody td { padding: 11px 14px; vertical-align: middle; }
+
+/* BADGES — keep green/red for status */
+.badge { display: inline-block; padding: 3px 10px; border-radius: 2rem; font-size: 0.72rem; font-weight: 700; white-space: nowrap; letter-spacing: 0.02em; }
+.badge-live { background: var(--status-live-bg); color: var(--status-live-text); }
+.badge-pending { background: var(--status-pending-bg); color: var(--status-pending-text); }
+.badge-declined { background: var(--status-declined-bg); color: var(--status-declined-text); }
+.badge-removed { background: var(--status-removed-bg); color: var(--status-removed-text); }
+.badge-skip { background: var(--status-skip-bg); color: var(--status-skip-text); }
+
+/* Engagement colors — keep green/amber/grey */
+.eng-high { color: var(--eng-high); font-weight: 700; }
+.eng-mid { color: var(--eng-mid); font-weight: 600; }
+.eng-low { color: var(--eng-low); }
+
+a { color: var(--db-dark-green); text-decoration: none; font-weight: 500; }
 a:hover { text-decoration: underline; }
-.lesson-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+
+/* LESSONS */
+.lesson-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px; }
 @media (max-width: 700px) { .lesson-grid { grid-template-columns: 1fr; } }
-.lesson-card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
-.lesson-card h4 { font-family: 'Roboto', sans-serif; font-size: 0.9rem; font-weight: 700; margin-bottom: 10px; }
-.lesson-card.works h4 { color: #28a745; }
-.lesson-card.doesnt h4 { color: #dc3545; }
-.lesson-card ul { padding-left: 18px; font-size: 0.83rem; line-height: 1.8; color: #444; }
-.footer { background: #003366; color: rgba(255,255,255,0.7); text-align: center; padding: 16px; font-size: 0.78rem; margin-top: 20px; }
-.footer strong { color: #FFD700; }
-.views-annotation { font-size: 0.75rem; color: #888; margin-top: 6px; text-align: right; }
+.lesson-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 22px;
+  border: 1px solid var(--db-beige);
+}
+.lesson-card h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--db-beige);
+}
+.lesson-card.works h4 { color: var(--status-live); }
+.lesson-card.doesnt h4 { color: var(--status-declined); }
+.lesson-card ul { padding-left: 18px; font-size: 0.83rem; line-height: 1.9; color: var(--db-dark-blue); }
+.lesson-card ul li { margin-bottom: 2px; }
+
+/* ACTIONS TABLE */
+.action-table { background: white; border-radius: var(--radius); border: 1px solid var(--db-beige); overflow: hidden; margin-bottom: 32px; }
+.action-table table { min-width: 0; }
+.action-table thead tr { background: var(--db-dark-green); }
+.priority-red { color: var(--status-declined); font-weight: 700; }
+.priority-amber { color: var(--eng-mid); font-weight: 700; }
+.priority-green { color: var(--status-live); font-weight: 700; }
+
+/* FOOTER */
+.footer {
+  background: var(--db-dark-green);
+  color: rgba(241,240,217,0.65);
+  text-align: center;
+  padding: 20px;
+  font-size: 0.78rem;
+  font-style: italic;
+}
+.footer strong { color: var(--db-eggshell); font-style: normal; }
+.footer a { color: var(--db-beige); }
 </style>
 </head>
 <body>
 
-<div class="header">
+<!-- HERO -->
+<div class="hero">
   <div>
-    <h1>📊 DollyBrook — FB Group Post Performance</h1>
-    <p>Mar 31 – Apr 7, 2026 · What worked, what didn't, what's next · Agent Xavier</p>
+    <h1>Facebook Group<br>Post Performance</h1>
+    <p>March 31 – April 7, 2026 &nbsp;·&nbsp; What worked, what didn't, what's next &nbsp;·&nbsp; Agent Xavier</p>
   </div>
-  <div class="header-badge">INTERNAL REPORT</div>
+  <div class="hero-badge">Internal Report</div>
 </div>
 
 <div class="container">
 
+  <!-- KEY INSIGHT -->
   <div class="insight-box">
-    <h3>🔑 The Core Finding</h3>
-    <p>Small hyper-local community groups (6K–80K members) consistently outperform large generic groups (200K+). The <strong>Sauglasville thread (26 comments, Apr 3-4)</strong> drove a <strong>+130% spike in page views to 34K/day</strong> — more than any other single action. Community threads that become conversations are the #1 traffic driver. Large cold posts to 200K+ groups produce near-zero engagement and high decline rates.</p>
+    <h3>The Core Finding</h3>
+    <p>Small hyper-local community groups (6K–80K members) consistently outperform large generic groups (200K+). The <strong>Sauglasville thread (26 comments, Apr 3–4)</strong> drove a <strong>+130% spike in page views to 34,000/day</strong> — more than any other single action. Community threads that become conversations are the #1 traffic driver. Content that sparks a 20-comment thread is worth more than 10 posts that get 5 likes each. Large cold posts to 200K+ groups produce near-zero engagement and high decline rates.</p>
   </div>
 
+  <!-- STATS -->
   <div class="stat-row">
     <div class="stat-card green"><div class="stat-number">16</div><div class="stat-label">Posts Live</div></div>
-    <div class="stat-card gold"><div class="stat-number">53</div><div class="stat-label">Top Post Reactions<br><small style="font-size:0.7rem;color:#888">(Fennville Informed)</small></div></div>
-    <div class="stat-card purple"><div class="stat-number">26</div><div class="stat-label">Top Thread Comments<br><small style="font-size:0.7rem;color:#888">(Sauglasville)</small></div></div>
-    <div class="stat-card"><div class="stat-number">0.66%</div><div class="stat-label">Peak Engagement Rate<br><small style="font-size:0.7rem;color:#888">(Fennville Informed)</small></div></div>
-    <div class="stat-card green"><div class="stat-number">34K</div><div class="stat-label">Peak Daily Page Views<br><small style="font-size:0.7rem;color:#888">(Apr 4)</small></div></div>
-    <div class="stat-card red"><div class="stat-number">+63%</div><div class="stat-label">Views Growth<br><small style="font-size:0.7rem;color:#888">(14-day period)</small></div></div>
+    <div class="stat-card primary"><div class="stat-number">53</div><div class="stat-label">Top Post Reactions<br>Fennville Informed</div></div>
+    <div class="stat-card primary"><div class="stat-number">26</div><div class="stat-label">Top Thread Comments<br>Sauglasville</div></div>
+    <div class="stat-card primary"><div class="stat-number">0.66%</div><div class="stat-label">Peak Engagement Rate<br>Fennville Informed</div></div>
+    <div class="stat-card green"><div class="stat-number">34K</div><div class="stat-label">Peak Daily Page Views<br>April 4</div></div>
+    <div class="stat-card red"><div class="stat-number">+63%</div><div class="stat-label">Views Growth<br>14-day period</div></div>
   </div>
 
+  <!-- CHARTS -->
   <div class="chart-grid">
     <div class="chart-card">
-      <h3>📈 Daily Page Views — Mar 24 to Apr 6</h3>
+      <h3>Daily Page Views — Mar 24 to Apr 6</h3>
       <div class="chart-container"><canvas id="viewsChart"></canvas></div>
-      <p class="views-annotation">Source: Facebook Page Insights · Spike on Apr 4 = Sauglasville thread</p>
+      <p class="chart-note">Source: Facebook Page Insights &nbsp;·&nbsp; Gold dot = Sauglasville thread peak</p>
     </div>
     <div class="chart-card">
-      <h3>🏆 Engagement Rate by Group</h3>
+      <h3>Engagement Rate by Group</h3>
       <div class="chart-container"><canvas id="engChart"></canvas></div>
     </div>
   </div>
 
-  <div class="section-title">📋 Full Post Log — All Batches</div>
+  <!-- POST LOG TABLE -->
+  <div class="section-title">Full Post Log — All Batches</div>
+  <div class="table-wrap">
+    <table id="postTable">
+      <thead>
+        <tr>
+          <th data-col="0">Date</th>
+          <th data-col="1">Group</th>
+          <th data-col="2">Members</th>
+          <th data-col="3">Status</th>
+          <th data-col="4">Reactions</th>
+          <th data-col="5">Comments</th>
+          <th data-col="6">Eng Rate</th>
+          <th data-col="7">Key Insight</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- BATCH 1 — Mar 31 -->
+        <tr><td>Mar 31</td><td><a href="https://www.facebook.com/groups/southhavenmichigan/" target="_blank">South Haven Michigan</a></td><td data-val="29000">29K</td><td><span class="badge badge-declined">Declined</span></td><td data-val="0">0</td><td data-val="0">0</td><td data-val="0" class="eng-low">—</td><td>Cold post, no prior relationship</td></tr>
+        <tr><td>Mar 31</td><td><a href="https://www.facebook.com/groups/281193499185629/" target="_blank">Downtown SH Chatline</a></td><td data-val="21000">21K</td><td><span class="badge badge-pending">Pending</span></td><td data-val="157" class="eng-high">157*</td><td data-val="0">?</td><td data-val="0.75" class="eng-high">0.75%*</td><td>*If real — massive. Check admin approval</td></tr>
+        <tr><td>Mar 31</td><td><a href="https://www.facebook.com/groups/westmichigantravelideas/" target="_blank">West MI Travel Ideas</a></td><td data-val="21000">21K</td><td><span class="badge badge-declined">Declined</span></td><td data-val="0">0</td><td data-val="0">0</td><td data-val="0" class="eng-low">—</td><td>Membership pending since Mar 31</td></tr>
+        <tr><td>Mar 31</td><td><a href="https://www.facebook.com/groups/265738146921622/" target="_blank">Things to do in SW MI</a></td><td data-val="14000">14K</td><td><span class="badge badge-removed">Removed</span></td><td data-val="0">0</td><td data-val="0">0</td><td data-val="0" class="eng-low">—</td><td>Post removed Apr 2 — comment-only now</td></tr>
+        <tr><td>Mar 31</td><td><a href="https://www.facebook.com/groups/1569917773284067/posts/4363630773912739/" target="_blank">Southwest Michigan</a></td><td data-val="11000">11K</td><td><span class="badge badge-live">Live</span></td><td data-val="5">~5</td><td data-val="0">0</td><td data-val="0.05" class="eng-low">0.05%</td><td>Modest engagement, approved</td></tr>
+        <tr><td>Mar 31</td><td><a href="https://www.facebook.com/groups/431102449466134/" target="_blank">Saugatuck Underground</a></td><td data-val="8600">8.6K</td><td><span class="badge badge-declined">Declined</span></td><td data-val="0">0</td><td data-val="0">0</td><td data-val="0" class="eng-low">—</td><td>Arts community, cold post</td></tr>
+        <tr><td>Mar 31</td><td><a href="https://www.facebook.com/groups/691341305200368/posts/1677511213250034/" target="_blank">Vacation Rentals SW MI</a></td><td data-val="4500">4.5K</td><td><span class="badge badge-live">Live</span></td><td data-val="1">1</td><td data-val="0">0</td><td data-val="0.02" class="eng-low">0.02%</td><td>Own like only — listing group</td></tr>
+        <tr class="highlight"><td>Mar 31</td><td><a href="https://www.facebook.com/groups/1059200144109025/posts/27335857936016554/" target="_blank"><strong>Fennville Informed</strong></a></td><td data-val="8000">8K</td><td><span class="badge badge-live">Live</span></td><td data-val="53" class="eng-high"><strong>53</strong></td><td data-val="6" class="eng-high">6</td><td data-val="0.66" class="eng-high"><strong>0.66%</strong></td><td>Top post — hyper-local, we're neighbors</td></tr>
+        <tr><td>Mar 31</td><td><a href="https://www.facebook.com/groups/892119510857517/" target="_blank">South Haven Vacation Homes</a></td><td data-val="8000">8K</td><td><span class="badge badge-declined">Declined</span></td><td data-val="0">0</td><td data-val="0">0</td><td data-val="0" class="eng-low">—</td><td>Members-only restricted group</td></tr>
+        <tr class="highlight"><td>Mar 31</td><td><a href="https://www.facebook.com/groups/2630364940540577/posts/4474514892792230/" target="_blank"><strong>Sauglasville</strong></a></td><td data-val="11000">11K</td><td><span class="badge badge-live">Live</span></td><td data-val="18" class="eng-high"><strong>18</strong></td><td data-val="26" class="eng-high"><strong>26</strong></td><td data-val="0.40" class="eng-high"><strong>0.40%</strong></td><td>26-comment thread drove 34K views spike</td></tr>
+        <!-- BATCH 2 — Apr 2 -->
+        <tr><td>Apr 2</td><td><a href="https://www.facebook.com/groups/301913630886156/posts/1591438871933619/" target="_blank">Holland Informed</a></td><td data-val="80000">80K</td><td><span class="badge badge-live">Live</span></td><td data-val="18" class="eng-mid">18</td><td data-val="0">0</td><td data-val="0.02" class="eng-low">0.02%</td><td>2 shares — large group, modest</td></tr>
+        <tr><td>Apr 2</td><td><a href="https://www.facebook.com/groups/290777465557262/posts/1592508105384185/" target="_blank">Allegan County Informed</a></td><td data-val="57000">57K</td><td><span class="badge badge-live">Live</span></td><td data-val="1">1</td><td data-val="0">0</td><td data-val="0.002" class="eng-low">0.002%</td><td>Low engagement, posting angle needs work</td></tr>
+        <tr><td>Apr 2</td><td><a href="https://www.facebook.com/groups/588030999323865/posts/1274978980629060/" target="_blank">Fennville &amp; Surrounding</a></td><td data-val="7100">7.1K</td><td><span class="badge badge-live">Live</span></td><td data-val="6">6</td><td data-val="0">0</td><td data-val="0.08" class="eng-low">0.08%</td><td>Went live immediately</td></tr>
+        <tr class="highlight"><td>Apr 2</td><td><a href="https://www.facebook.com/groups/703254738102778/posts/1530153618746215/" target="_blank"><strong>Hamilton Happenings</strong></a></td><td data-val="6400">6.4K</td><td><span class="badge badge-live">Live</span></td><td data-val="39" class="eng-high"><strong>39</strong></td><td data-val="2" class="eng-mid">2</td><td data-val="0.61" class="eng-high"><strong>0.61%</strong></td><td>3 shares — strong community feel</td></tr>
+        <!-- BATCH 3 — Apr 3 -->
+        <tr><td>Apr 3</td><td><a href="https://www.facebook.com/groups/77860661428/" target="_blank">Sister Lakes</a></td><td data-val="14000">14K</td><td><span class="badge badge-declined">Declined</span></td><td data-val="0">0</td><td data-val="0">0</td><td data-val="0" class="eng-low">—</td><td>Cold post</td></tr>
+        <tr><td>Apr 3</td><td><a href="https://www.facebook.com/groups/774022029429430/posts/3510834652414807/" target="_blank">White Lake W Michigan</a></td><td data-val="8600">8.6K</td><td><span class="badge badge-live">Live</span></td><td data-val="5">~5</td><td data-val="0">0</td><td data-val="0.06" class="eng-low">0.06%</td><td>Went live immediately</td></tr>
+        <tr><td>Apr 3</td><td><a href="https://www.facebook.com/groups/91850887444/posts/10164586218902445/" target="_blank">Union Pier, Michigan</a></td><td data-val="5000">5K</td><td><span class="badge badge-live">Live</span></td><td data-val="6">6</td><td data-val="0">0</td><td data-val="0.12" class="eng-low">0.12%</td><td>Harbor Country angle, moderate</td></tr>
+        <!-- BATCH 4 — Apr 4-5 -->
+        <tr><td>Apr 4</td><td><a href="https://www.facebook.com/groups/WhatToDoInChicago/" target="_blank">WHAT TO DO IN CHICAGO</a></td><td data-val="203000">203K</td><td><span class="badge badge-pending">Pending</span></td><td data-val="0">0</td><td data-val="0">0</td><td data-val="0" class="eng-low">—</td><td>Large group, likely declined</td></tr>
+        <tr><td>Apr 5</td><td><a href="https://www.facebook.com/groups/157059191540681/" target="_blank">Abandoned Places Michigan</a></td><td data-val="420000">420K</td><td><span class="badge badge-pending">Pending</span></td><td data-val="0">0</td><td data-val="0">0</td><td data-val="0" class="eng-low">—</td><td>Wrong content type for this group</td></tr>
+        <tr><td>Apr 5</td><td><a href="https://www.facebook.com/groups/731525285826948/user/100063247416933/" target="_blank">Growing Up in Chicago</a></td><td data-val="68000">68K</td><td><span class="badge badge-live">Live</span></td><td data-val="0">?</td><td data-val="0">?</td><td data-val="0" class="eng-low">TBD</td><td>Nostalgia angle — went live, tracking</td></tr>
+        <tr><td>Apr 5</td><td><a href="https://www.facebook.com/groups/276308850878370/user/100063247416933/" target="_blank">Michigan Cabin Rentals</a></td><td data-val="52000">52K</td><td><span class="badge badge-pending">Pending</span></td><td data-val="0">0</td><td data-val="0">0</td><td data-val="0" class="eng-low">—</td><td>Listing post with link</td></tr>
+        <!-- BATCH 5 — Apr 6-7 -->
+        <tr><td>Apr 6</td><td><a href="https://www.facebook.com/groups/1485307128340098/user/100063247416933/" target="_blank">Overheard MI Ski Resorts</a></td><td data-val="42000">42K</td><td><span class="badge badge-pending">Pending</span></td><td data-val="0">0</td><td data-val="0">0</td><td data-val="0" class="eng-low">—</td><td>Spring pivot, 10% discount angle</td></tr>
+        <tr><td>Apr 6</td><td><a href="https://www.facebook.com/groups/902669401133623/user/100063247416933/" target="_blank">Greater MI Vacation STR</a></td><td data-val="40000">40K</td><td><span class="badge badge-live">Live</span></td><td data-val="0">?</td><td data-val="0">ISO</td><td data-val="0" class="eng-low">TBD</td><td>Mitchell Norton group lead generated</td></tr>
+        <tr><td>Apr 6</td><td><a href="https://www.facebook.com/groups/651352386231094/user/100063247416933/" target="_blank">SW Michigan Wedding Group</a></td><td data-val="8500">8.5K</td><td><span class="badge badge-pending">Pending</span></td><td data-val="0">0</td><td data-val="0">0</td><td data-val="0" class="eng-low">—</td><td>Venue/bachelorette angle</td></tr>
+        <tr><td>Apr 7</td><td><a href="https://www.facebook.com/groups/902669401133623/permalink/2049533783113840/" target="_blank">Greater MI STR — Reply</a></td><td data-val="40000">40K</td><td><span class="badge badge-live">Live — Reply</span></td><td data-val="0">—</td><td data-val="1">1</td><td data-val="0" class="eng-low">—</td><td>Emili Villagomez, 2 guests, ranked #1 Most Relevant</td></tr>
+      </tbody>
+    </table>
+  </div>
 
-  <table id="postTable">
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Group</th>
-        <th>Members</th>
-        <th>Status</th>
-        <th>Reactions</th>
-        <th>Comments</th>
-        <th>Eng Rate</th>
-        <th>Key Insight</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- BATCH 1 — Mar 31 -->
-      <tr><td>Mar 31</td><td><a href="https://www.facebook.com/groups/southhavenmichigan/" target="_blank">South Haven Michigan</a></td><td>29K</td><td><span class="badge badge-declined">Declined</span></td><td>0</td><td>0</td><td class="eng-low">—</td><td>Cold post, no relationship</td></tr>
-      <tr><td>Mar 31</td><td><a href="https://www.facebook.com/groups/281193499185629/" target="_blank">Downtown SH Chatline</a></td><td>21K</td><td><span class="badge badge-pending">Pending</span></td><td class="eng-high">157*</td><td>?</td><td class="eng-high">0.75%*</td><td>*If real — massive. Check admin</td></tr>
-      <tr><td>Mar 31</td><td><a href="https://www.facebook.com/groups/westmichigantravelideas/" target="_blank">West MI Travel Ideas</a></td><td>21K</td><td><span class="badge badge-declined">Declined</span></td><td>0</td><td>0</td><td class="eng-low">—</td><td>Membership pending</td></tr>
-      <tr><td>Mar 31</td><td><a href="https://www.facebook.com/groups/265738146921622/" target="_blank">Things to do in SW MI</a></td><td>14K</td><td><span class="badge badge-removed">Removed</span></td><td>0</td><td>0</td><td class="eng-low">—</td><td>Post removed Apr 2 — comment-only now</td></tr>
-      <tr><td>Mar 31</td><td><a href="https://www.facebook.com/groups/1569917773284067/posts/4363630773912739/" target="_blank">Southwest Michigan</a></td><td>11K</td><td><span class="badge badge-live">✅ Live</span></td><td>~5</td><td>0</td><td class="eng-low">0.05%</td><td>Modest, approved</td></tr>
-      <tr><td>Mar 31</td><td><a href="https://www.facebook.com/groups/431102449466134/" target="_blank">Saugatuck Underground</a></td><td>8.6K</td><td><span class="badge badge-declined">Declined</span></td><td>0</td><td>0</td><td class="eng-low">—</td><td>Arts community, cold post</td></tr>
-      <tr><td>Mar 31</td><td><a href="https://www.facebook.com/groups/691341305200368/posts/1677511213250034/" target="_blank">Vacation Rentals SW MI</a></td><td>4.5K</td><td><span class="badge badge-live">✅ Live</span></td><td>1</td><td>0</td><td class="eng-low">0.02%</td><td>Own like only — listing group</td></tr>
-      <tr style="background:#f0fff4"><td>Mar 31</td><td><a href="https://www.facebook.com/groups/1059200144109025/posts/27335857936016554/" target="_blank">⭐ Fennville Informed</a></td><td>8K</td><td><span class="badge badge-live">✅ Live</span></td><td class="eng-high">53</td><td>6</td><td class="eng-high">0.66%</td><td>TOP POST — hyper-local, we're neighbors</td></tr>
-      <tr><td>Mar 31</td><td><a href="https://www.facebook.com/groups/892119510857517/" target="_blank">South Haven Vacation Homes</a></td><td>8K</td><td><span class="badge badge-declined">Declined</span></td><td>0</td><td>0</td><td class="eng-low">—</td><td>Rules-restricted, members-only</td></tr>
-      <tr style="background:#f0fff4"><td>Mar 31</td><td><a href="https://www.facebook.com/groups/2630364940540577/posts/4474514892792230/" target="_blank">⭐ Sauglasville</a></td><td>11K</td><td><span class="badge badge-live">✅ Live</span></td><td class="eng-high">18</td><td class="eng-high">26</td><td class="eng-high">0.40%</td><td>GOLD — 26-comment thread drove 34K views spike</td></tr>
-      <!-- BATCH 2 — Apr 2 -->
-      <tr><td>Apr 2</td><td><a href="https://www.facebook.com/groups/301913630886156/posts/1591438871933619/" target="_blank">Holland Informed</a></td><td>80K</td><td><span class="badge badge-live">✅ Live</span></td><td class="eng-mid">18</td><td>0</td><td class="eng-low">0.02%</td><td>2 shares — large group, modest</td></tr>
-      <tr><td>Apr 2</td><td><a href="https://www.facebook.com/groups/290777465557262/posts/1592508105384185/" target="_blank">Allegan County Informed</a></td><td>57K</td><td><span class="badge badge-live">✅ Live</span></td><td>1</td><td>0</td><td class="eng-low">0.002%</td><td>Low engagement, wrong angle</td></tr>
-      <tr><td>Apr 2</td><td><a href="https://www.facebook.com/groups/588030999323865/posts/1274978980629060/" target="_blank">Fennville & Surrounding</a></td><td>7.1K</td><td><span class="badge badge-live">✅ Live</span></td><td>6</td><td>0</td><td class="eng-low">0.08%</td><td>Went live immediately</td></tr>
-      <tr style="background:#f0fff4"><td>Apr 2</td><td><a href="https://www.facebook.com/groups/703254738102778/posts/1530153618746215/" target="_blank">⭐ Hamilton Happenings</a></td><td>6.4K</td><td><span class="badge badge-live">✅ Live</span></td><td class="eng-high">39</td><td>2</td><td class="eng-high">0.61%</td><td>3 shares — strong community feel</td></tr>
-      <!-- BATCH 3 — Apr 3 -->
-      <tr><td>Apr 3</td><td><a href="https://www.facebook.com/groups/77860661428/" target="_blank">Sister Lakes</a></td><td>14K</td><td><span class="badge badge-declined">Declined</span></td><td>0</td><td>0</td><td class="eng-low">—</td><td>Cold post</td></tr>
-      <tr><td>Apr 3</td><td><a href="https://www.facebook.com/groups/774022029429430/posts/3510834652414807/" target="_blank">White Lake W Michigan</a></td><td>8.6K</td><td><span class="badge badge-live">✅ Live</span></td><td>~5</td><td>0</td><td class="eng-low">0.06%</td><td>Went live immediately</td></tr>
-      <tr><td>Apr 3</td><td><a href="https://www.facebook.com/groups/91850887444/posts/10164586218902445/" target="_blank">Union Pier, Michigan</a></td><td>5K</td><td><span class="badge badge-live">✅ Live</span></td><td>6</td><td>0</td><td class="eng-low">0.12%</td><td>Harbor Country angle</td></tr>
-      <!-- BATCH 4 — Apr 4-5 -->
-      <tr><td>Apr 4</td><td><a href="https://www.facebook.com/groups/WhatToDoInChicago/" target="_blank">WHAT TO DO IN CHICAGO</a></td><td>203K</td><td><span class="badge badge-pending">Pending</span></td><td>0</td><td>0</td><td class="eng-low">—</td><td>Large group, likely declined</td></tr>
-      <tr><td>Apr 5</td><td><a href="https://www.facebook.com/groups/157059191540681/" target="_blank">Abandoned Places MI</a></td><td>420K</td><td><span class="badge badge-pending">Pending</span></td><td>0</td><td>0</td><td class="eng-low">—</td><td>Wrong content type for this group</td></tr>
-      <tr><td>Apr 5</td><td><a href="https://www.facebook.com/groups/731525285826948/user/100063247416933/" target="_blank">Growing Up in Chicago</a></td><td>68K</td><td><span class="badge badge-live">✅ Live</span></td><td>?</td><td>?</td><td class="eng-low">TBD</td><td>Nostalgia angle — went live</td></tr>
-      <tr><td>Apr 5</td><td><a href="https://www.facebook.com/groups/276308850878370/user/100063247416933/" target="_blank">Michigan Cabin Rentals</a></td><td>52K</td><td><span class="badge badge-pending">Pending</span></td><td>0</td><td>0</td><td class="eng-low">—</td><td>Listing post with link</td></tr>
-      <!-- BATCH 5 — Apr 6-7 -->
-      <tr><td>Apr 6</td><td><a href="https://www.facebook.com/groups/1485307128340098/user/100063247416933/" target="_blank">Overheard MI Ski Resorts</a></td><td>42K</td><td><span class="badge badge-pending">Pending</span></td><td>0</td><td>0</td><td class="eng-low">—</td><td>Spring pivot, 10% discount angle</td></tr>
-      <tr><td>Apr 6</td><td><a href="https://www.facebook.com/groups/902669401133623/user/100063247416933/" target="_blank">Greater MI Vacation STR</a></td><td>40K</td><td><span class="badge badge-live">✅ Live</span></td><td>?</td><td>ISO</td><td class="eng-low">TBD</td><td>Mitchell Norton lead generated</td></tr>
-      <tr><td>Apr 6</td><td><a href="https://www.facebook.com/groups/651352386231094/user/100063247416933/" target="_blank">SW MI Wedding Group</a></td><td>8.5K</td><td><span class="badge badge-pending">Pending</span></td><td>0</td><td>0</td><td class="eng-low">—</td><td>Venue/bachelorette angle</td></tr>
-      <tr><td>Apr 7</td><td><a href="https://www.facebook.com/groups/902669401133623/" target="_blank">Greater MI Vacation STR</a></td><td>40K</td><td><span class="badge badge-live">✅ Reply</span></td><td>—</td><td>1</td><td class="eng-low">—</td><td>Emili Villagomez — 2 guests, this weekend — ranked #1 relevant</td></tr>
-    </tbody>
-  </table>
-
-  <div class="section-title">💡 What Works vs What Doesn't</div>
+  <!-- LESSONS -->
+  <div class="section-title">What Works vs What Doesn't</div>
   <div class="lesson-grid">
     <div class="lesson-card works">
-      <h4>✅ What Works</h4>
+      <h4>What Works</h4>
       <ul>
-        <li><strong>Small community groups (6K–80K)</strong> — local feel, admin trust, community threads</li>
-        <li><strong>Hyper-local neighbor angle</strong> — "we're right here in Fennville" beats any promo pitch</li>
-        <li><strong>Posts that spark threads</strong> — ask a local question, invite conversation. One 26-comment thread = 34K page views</li>
-        <li><strong>ISO reply pipeline</strong> — warm lead replies convert far better than cold posts</li>
-        <li><strong>Pool + firepit photos</strong> — top engagement types (score 32 and 26.6)</li>
-        <li><strong>Comments before first post</strong> — relationship capital = admin approval</li>
+        <li><strong>Small community groups (6K–80K)</strong> — local feel, admin trust, thread potential</li>
+        <li><strong>Hyper-local neighbor angle</strong> — "we're in Fennville" beats any promo pitch</li>
+        <li><strong>Posts that spark threads</strong> — one 26-comment thread = 34K page views</li>
+        <li><strong>ISO reply pipeline</strong> — warm leads convert far better than cold posts</li>
+        <li><strong>Pool + firepit photos</strong> — score 32.0 and 26.6 respectively</li>
+        <li><strong>Relationship capital first</strong> — comment before posting = admin approval</li>
       </ul>
     </div>
     <div class="lesson-card doesnt">
-      <h4>❌ What Doesn't Work</h4>
+      <h4>What Doesn't Work</h4>
       <ul>
-        <li><strong>Large groups 200K+</strong> — strict moderation, cold posts declined, zero thread momentum</li>
+        <li><strong>Large groups 200K+</strong> — strict moderation, zero thread potential</li>
         <li><strong>Links in post body</strong> — Facebook throttles reach, higher decline rate</li>
         <li><strong>Cold posts with no relationship</strong> — declined or removed every time</li>
-        <li><strong>Wide posting bursts</strong> — 10 groups in a day then silence for days</li>
+        <li><strong>Burst posting, then silence</strong> — Facebook rewards weekly consistency</li>
         <li><strong>Nostalgia groups</strong> — no promo tolerance, wrong audience</li>
-        <li><strong>Wrong-fit ISOs</strong> — lakefront + dock required = skip, don't reply</li>
+        <li><strong>Wrong-fit ISO replies</strong> — lakefront/dock required = skip entirely</li>
       </ul>
     </div>
   </div>
 
-  <div class="section-title">🚀 What's Next — Priority Actions</div>
-  <table>
-    <thead><tr><th>Priority</th><th>Action</th><th>Why</th></tr></thead>
-    <tbody>
-      <tr><td>🔴 #1</td><td>Post community-style content in Sauglasville, Hamilton Happenings, Fennville Informed this week</td><td>Maintain thread momentum — these groups drove the views spike</td></tr>
-      <tr><td>🔴 #2</td><td>Pool countdown content now → Memorial Day</td><td>Pool = #1 content type (score 32). Opens Memorial Day. 7 weeks of buildup = sustained engagement</td></tr>
-      <tr><td>🟡 #3</td><td>Add UTM params to every link going forward</td><td>2 weeks of attribution data lost — fix immediately</td></tr>
-      <tr><td>🟡 #4</td><td>Update Ana scoring: dock + lakefront required = auto-disqualify (≤3/10)</td><td>Prevent wasted replies on hard mismatches</td></tr>
-      <tr><td>🟢 #5</td><td>Weekly reaction report to Mihai (invite list)</td><td>Fennville: 53, Hamilton: 39, Sauglasville: 18 — all invitable now</td></tr>
-    </tbody>
-  </table>
+  <!-- PRIORITY ACTIONS -->
+  <div class="section-title">Priority Actions</div>
+  <div class="action-table">
+    <table>
+      <thead><tr><th>Priority</th><th>Action</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td class="priority-red">#1 High</td><td>Post community-style content in Sauglasville, Hamilton Happenings, Fennville Informed this week</td><td>Maintain thread momentum — these groups drove the views spike</td></tr>
+        <tr><td class="priority-red">#2 High</td><td>Pool countdown content now through Memorial Day</td><td>Pool = #1 content type (score 32). 7 weeks of buildup = sustained engagement</td></tr>
+        <tr><td class="priority-amber">#3 Medium</td><td>Add UTM params to every link going forward</td><td>2 weeks of attribution data lost — fix immediately</td></tr>
+        <tr><td class="priority-amber">#4 Medium</td><td>Update Ana scoring: dock + lakefront required = disqualify (&le;3/10)</td><td>Prevent wasted replies on hard mismatches</td></tr>
+        <tr><td class="priority-green">#5 Low</td><td>Weekly reaction report to Mihai (invite list)</td><td>Fennville: 53, Hamilton: 39, Sauglasville: 18 — all invitable now</td></tr>
+      </tbody>
+    </table>
+  </div>
 
 </div>
 
 <div class="footer">
-  <strong>DollyBrook Resort</strong> · Facebook Group Campaign Performance Report · Agent Xavier · April 7, 2026 &nbsp;|&nbsp;
-  <a href="https://www.dollybrook.com" style="color:#FFD700;">dollybrook.com</a>
+  <strong>DollyBrook Resort</strong> &nbsp;·&nbsp; Facebook Group Campaign Performance Report &nbsp;·&nbsp; Agent Xavier &nbsp;·&nbsp; April 7, 2026 &nbsp;·&nbsp;
+  <a href="https://dollybrook.com">dollybrook.com</a>
 </div>
 
 <script>
@@ -206,49 +376,77 @@ new Chart(document.getElementById('viewsChart'), {
     datasets: [{
       label: 'Page Views',
       data: [15000,15000,15100,14000,13000,18000,19800,18500,17500,14800,16000,34000,28000,23000],
-      borderColor: '#003366',
-      backgroundColor: 'rgba(0,51,102,0.08)',
-      tension: 0.3,
+      borderColor: '#23372C',
+      backgroundColor: 'rgba(35,55,44,0.07)',
+      tension: 0.35,
       fill: true,
-      pointBackgroundColor: (ctx) => ctx.dataIndex === 11 ? '#FFD700' : '#003366',
-      pointRadius: (ctx) => ctx.dataIndex === 11 ? 8 : 4,
+      pointBackgroundColor: (ctx) => ctx.dataIndex === 11 ? '#CEAA78' : '#23372C',
+      pointRadius: (ctx) => ctx.dataIndex === 11 ? 9 : 4,
       pointBorderColor: '#fff',
       pointBorderWidth: 2
     }]
   },
   options: {
     responsive: true, maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      annotation: { annotations: { spike: { type: 'point', xValue: 'Apr 4', yValue: 34000, backgroundColor: '#FFD700', radius: 10, label: { content: 'SPIKE', enabled: true } } } }
-    },
+    plugins: { legend: { display: false } },
     scales: {
-      y: { ticks: { callback: v => v >= 1000 ? (v/1000) + 'K' : v } }
+      y: { ticks: { callback: v => v >= 1000 ? (v/1000) + 'K' : v, font: { family: 'Inter', size: 11 } }, grid: { color: 'rgba(206,170,120,0.2)' } },
+      x: { ticks: { font: { family: 'Inter', size: 11 } }, grid: { color: 'rgba(206,170,120,0.15)' } }
     }
   }
 });
 
-// Engagement Rate Chart
+// Engagement Chart
 new Chart(document.getElementById('engChart'), {
   type: 'bar',
   data: {
-    labels: ['Fennville\nInformed', 'Hamilton\nHappenings', 'Sauglasville', 'Holland\nInformed', 'Union Pier', 'Fennville &\nSurrounding'],
+    labels: ['Fennville\nInformed', 'Hamilton\nHappenings', 'Sauglasville', 'Union Pier', 'Fennville\n& Surr.', 'Holland\nInformed'],
     datasets: [{
       label: 'Engagement Rate %',
-      data: [0.66, 0.61, 0.40, 0.02, 0.12, 0.08],
-      backgroundColor: ['#28a745','#28a745','#FFD700','#6c757d','#6c757d','#6c757d'],
-      borderRadius: 5
+      data: [0.66, 0.61, 0.40, 0.12, 0.08, 0.02],
+      backgroundColor: ['#28a745','#28a745','#CEAA78','#23372C','#23372C','#23372C'],
+      borderRadius: 6
     }]
   },
   options: {
     responsive: true, maintainAspectRatio: false, indexAxis: 'y',
     plugins: { legend: { display: false } },
     scales: {
-      x: { ticks: { callback: v => v + '%' } },
-      y: { ticks: { font: { size: 11 } } }
+      x: { ticks: { callback: v => v + '%', font: { family: 'Inter', size: 11 } }, grid: { color: 'rgba(206,170,120,0.2)' } },
+      y: { ticks: { font: { family: 'Inter', size: 10 } }, grid: { display: false } }
     }
   }
 });
+
+// Sortable table
+(function() {
+  const table = document.getElementById('postTable');
+  if (!table) return;
+  const headers = table.querySelectorAll('thead th');
+  let sortCol = -1, sortAsc = true;
+
+  headers.forEach(function(th, col) {
+    th.style.cursor = 'pointer';
+    th.addEventListener('click', function() {
+      if (sortCol === col) { sortAsc = !sortAsc; } else { sortCol = col; sortAsc = col === 0 ? false : true; }
+      headers.forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
+      th.classList.add(sortAsc ? 'sort-asc' : 'sort-desc');
+      const tbody = table.querySelector('tbody');
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      rows.sort(function(a, b) {
+        const aCell = a.cells[col];
+        const bCell = b.cells[col];
+        const aVal = aCell ? (aCell.dataset.val !== undefined ? parseFloat(aCell.dataset.val) : aCell.innerText.trim().toLowerCase()) : '';
+        const bVal = bCell ? (bCell.dataset.val !== undefined ? parseFloat(bCell.dataset.val) : bCell.innerText.trim().toLowerCase()) : '';
+        if (typeof aVal === 'number' && typeof bVal === 'number') return sortAsc ? aVal - bVal : bVal - aVal;
+        if (aVal < bVal) return sortAsc ? -1 : 1;
+        if (aVal > bVal) return sortAsc ? 1 : -1;
+        return 0;
+      });
+      rows.forEach(r => tbody.appendChild(r));
+    });
+  });
+})();
 </script>
 </body>
 </html>
