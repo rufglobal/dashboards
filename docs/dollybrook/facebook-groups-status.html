@@ -61,24 +61,28 @@ a.group-link { color: var(--db-dark-green); text-decoration: none; font-weight: 
 .updated-tag { font-size: 0.75rem; color: #888; text-align: right; padding: 8px 40px 0; }
 .calendar-section { padding: 0 40px 32px; }
 .calendar-card { background: white; border-radius: var(--radius); border: 1px solid var(--db-beige); overflow: hidden; }
-.calendar-card h3 { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--db-dark-green); padding: 20px 24px 14px; border-bottom: 1px solid var(--db-beige); margin: 0; }
+.calendar-card h3 { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--db-dark-green); padding: 18px 24px 14px; border-bottom: 1px solid var(--db-beige); margin: 0; }
 .cal-day { border-bottom: 1px solid rgba(206,170,120,0.2); }
 .cal-day:last-child { border-bottom: none; }
-.cal-date { background: rgba(35,55,44,0.04); padding: 8px 24px; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.8rem; color: var(--db-dark-green); letter-spacing: 0.05em; text-transform: uppercase; }
-.cal-posts { padding: 4px 0; }
-.cal-post { display: grid; grid-template-columns: 90px 1fr 80px 120px; gap: 12px; align-items: start; padding: 12px 24px; border-bottom: 1px solid rgba(206,170,120,0.1); font-size: 0.82rem; }
-.cal-post:last-child { border-bottom: none; }
-.cal-platform { font-weight: 700; color: var(--db-dark-green); font-size: 0.75rem; }
-.cal-content { }
-.cal-title { font-weight: 600; color: var(--db-dark-blue); margin-bottom: 4px; font-size: 0.83rem; }
-.cal-text { color: #666; font-size: 0.78rem; line-height: 1.5; white-space: pre-wrap; max-height: 80px; overflow: hidden; }
-.cal-photo { font-size: 0.73rem; color: #888; font-style: italic; margin-top: 4px; }
-.cal-status { }
-.status-draft { background: #e2e3e5; color: #383d41; padding: 3px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; display: inline-block; }
-.status-approved { background: #d4edda; color: #155724; padding: 3px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; display: inline-block; }
-.status-skip { background: #f8d7da; color: #721c24; padding: 3px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; display: inline-block; }
-.status-posted { background: var(--db-dark-green); color: var(--db-eggshell); padding: 3px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; display: inline-block; }
-.status-revised { background: #fff3cd; color: #856404; padding: 3px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; display: inline-block; }
+.cal-date { background: rgba(35,55,44,0.04); padding: 7px 20px; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.76rem; color: var(--db-dark-green); letter-spacing: 0.06em; text-transform: uppercase; }
+.cal-row { border-bottom: 1px solid rgba(206,170,120,0.12); }
+.cal-row:last-child { border-bottom: none; }
+.cal-row-summary { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; cursor: pointer; font-size: 0.82rem; transition: background 0.15s; }
+.cal-row-summary:hover { background: rgba(206,170,120,0.08); }
+.cal-row-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; color: var(--db-dark-blue); }
+.cal-row-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.cal-plat-tag { background: rgba(35,55,44,0.08); color: var(--db-dark-green); font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; white-space: nowrap; letter-spacing: 0.04em; text-transform: uppercase; }
+.cal-chevron { color: var(--db-beige); font-size: 0.65rem; }
+.cal-detail { padding: 12px 20px 16px; background: rgba(241,240,217,0.5); border-top: 1px solid rgba(206,170,120,0.2); }
+.cal-detail-text { font-size: 0.8rem; color: #444; line-height: 1.6; white-space: pre-wrap; max-height: 200px; overflow-y: auto; font-family: monospace; background: white; border: 1px solid rgba(206,170,120,0.3); border-radius: 6px; padding: 10px 12px; }
+details summary { list-style: none; }
+details summary::-webkit-details-marker { display: none; }
+details[open] .cal-chevron { transform: rotate(180deg); display: inline-block; }
+.status-draft { background: #e2e3e5; color: #383d41; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 700; display: inline-block; }
+.status-approved { background: #d4edda; color: #155724; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 700; display: inline-block; }
+.status-skip { background: #f8d7da; color: #721c24; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 700; display: inline-block; }
+.status-posted { background: var(--db-dark-green); color: var(--db-eggshell); padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 700; display: inline-block; }
+.status-revised { background: #fff3cd; color: #856404; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 700; display: inline-block; }
 .cal-empty { padding: 24px; text-align: center; color: #aaa; font-style: italic; font-size: 0.85rem; }
 </style>
 </head>
@@ -103,6 +107,128 @@ a.group-link { color: var(--db-dark-green); text-decoration: none; font-weight: 
   <div class="chart-card"><h3>📊 Post Status Breakdown</h3><div class="chart-container"><canvas id="statusChart"></canvas></div></div>
   <div class="chart-card"><h3>📅 Posts by Date</h3><div class="chart-container"><canvas id="dateChart"></canvas></div></div>
   <div class="chart-card"><h3>📣 Reach by Group (Members K)</h3><div class="chart-container"><canvas id="reachChart"></canvas></div></div>
+</div>
+
+<div class="calendar-section">
+  <div class="calendar-card">
+    <h3>Upcoming Content &mdash; <small style="font-family:Inter;font-weight:400;font-size:0.82rem;color:#888">Edit file to SKIP before 6 AM to block &middot; click row to expand</small></h3>
+    
+          <div class="cal-day">
+            <div class="cal-date">Friday, April 10</div>
+            
+            <div class="cal-row">
+              <div class="cal-row-summary" onclick="document.getElementById('cal-bd8d9936').open = !document.getElementById('cal-bd8d9936').open">
+                <span class="cal-row-left"><span class="cal-plat-tag">Facebook</span> Fennville Informed — DRAFT</span>
+                <span class="cal-row-right"><span class="status-draft">DRAFT</span> <span class="cal-chevron">&#9660;</span></span>
+              </div>
+              <details id="cal-bd8d9936">
+                <summary style="display:none"></summary>
+                <div class="cal-detail">
+                  <div class="cal-detail-text">It's officially happening.
+
+Pool opens at DollyBrook Memorial Day weekend. We are exactly [X] weeks out and the water is going to feel amazing.
+
+For anyone in the Fennville area who hasn't been -- we're your neighbors on 66th Street. 9 private cabins on 34 acres, and the pool is the heart of summer here.
+
+What are you most looking forward to about SW Michigan this summer?</div>
+                  <div style="margin-top:8px;font-size:0.75rem;color:#888"><strong>Photo:</strong> `assets/sarah-photos/pool-group-summer-hero.jpg` — friends at pool, summer energy, best pool asset</div>
+                </div>
+              </details>
+            </div>
+            <div class="cal-row">
+              <div class="cal-row-summary" onclick="document.getElementById('cal-37c5581b').open = !document.getElementById('cal-37c5581b').open">
+                <span class="cal-row-left"><span class="cal-plat-tag">Facebook</span> Sauglasville — DRAFT</span>
+                <span class="cal-row-right"><span class="status-draft">DRAFT</span> <span class="cal-chevron">&#9660;</span></span>
+              </div>
+              <details id="cal-37c5581b">
+                <summary style="display:none"></summary>
+                <div class="cal-detail">
+                  <div class="cal-detail-text">Update from our Sauglasville community post last week:
+
+We asked for your favorite local spots. You delivered. The Whatnot Inn, Wild West Ranch, Hawk's Nest -- all going into the guide.
+
+We're still building it. If you haven't dropped your recommendation yet -- what's the one spot in this area that visitors almost always miss?</div>
+                  <div style="margin-top:8px;font-size:0.75rem;color:#888"><strong>Photo:</strong> `assets/sarah-photos/rank88_firepit_pond_adirondack_chairs.jpg` — firepit, cozy</div>
+                </div>
+              </details>
+            </div>
+            <div class="cal-row">
+              <div class="cal-row-summary" onclick="document.getElementById('cal-3e8c3a80').open = !document.getElementById('cal-3e8c3a80').open">
+                <span class="cal-row-left"><span class="cal-plat-tag">X</span> @DollybrookMI — DRAFT</span>
+                <span class="cal-row-right"><span class="status-draft">DRAFT</span> <span class="cal-chevron">&#9660;</span></span>
+              </div>
+              <details id="cal-3e8c3a80">
+                <summary style="display:none"></summary>
+                <div class="cal-detail">
+                  <div class="cal-detail-text">&gt; Everyone's "disconnecting for the weekend" from a place with better WiFi than their apartment.
+&gt;
+&gt; That's not disconnecting. That's relocation.
+
+&gt; The lake doesn't buzz. It doesn't beep. It doesn't have opinions.
+&gt;
+&gt; That's not nothing. That's everything.
+
+&gt; Your out-of-office auto-reply is not a vacation.</div>
+                  
+                </div>
+              </details>
+            </div>
+          </div>
+          <div class="cal-day">
+            <div class="cal-date">Saturday, April 11</div>
+            
+            <div class="cal-row">
+              <div class="cal-row-summary" onclick="document.getElementById('cal-c5ab4fab').open = !document.getElementById('cal-c5ab4fab').open">
+                <span class="cal-row-left"><span class="cal-plat-tag">Facebook</span> Hamilton Happenings — DRAFT</span>
+                <span class="cal-row-right"><span class="status-draft">DRAFT</span> <span class="cal-chevron">&#9660;</span></span>
+              </div>
+              <details id="cal-c5ab4fab">
+                <summary style="display:none"></summary>
+                <div class="cal-detail">
+                  <div class="cal-detail-text">Summer checklist for a SW Michigan weekend at DollyBrook:
+
+Pool opens Memorial Day weekend. Check.
+Two brand-new regulation pickleball courts. Check.
+Fire pits at every cabin. Check.
+9 private cabins on 34 wooded acres. Check.
+
+Hamilton neighbors -- what's on your summer checklist this year?</div>
+                  <div style="margin-top:8px;font-size:0.75rem;color:#888"><strong>Photo:</strong> `assets/sarah-photos/pool-group-summer-hero.jpg` — pool with friends, summer</div>
+                </div>
+              </details>
+            </div>
+            <div class="cal-row">
+              <div class="cal-row-summary" onclick="document.getElementById('cal-db949b17').open = !document.getElementById('cal-db949b17').open">
+                <span class="cal-row-left"><span class="cal-plat-tag">Facebook</span> Southwest Michigan — DRAFT</span>
+                <span class="cal-row-right"><span class="status-draft">DRAFT</span> <span class="cal-chevron">&#9660;</span></span>
+              </div>
+              <details id="cal-db949b17">
+                <summary style="display:none"></summary>
+                <div class="cal-detail">
+                  <div class="cal-detail-text">SW Michigan pool season is almost here.
+
+DollyBrook Resort in Fennville opens our private outdoor pool Memorial Day weekend. 9 cabins, 34 wooded acres, 10 minutes from Saugatuck.
+
+If you have been thinking about a SW Michigan summer trip -- what's the one thing that makes or breaks the destination for you?</div>
+                  <div style="margin-top:8px;font-size:0.75rem;color:#888"><strong>Photo:</strong> `assets/sarah-photos/rank85_poolloungechairsgazebosummer.jpg` — pool lounge, summer</div>
+                </div>
+              </details>
+            </div>
+            <div class="cal-row">
+              <div class="cal-row-summary" onclick="document.getElementById('cal-f87705cb').open = !document.getElementById('cal-f87705cb').open">
+                <span class="cal-row-left"><span class="cal-plat-tag">X</span> @DollybrookMI — DRAFT</span>
+                <span class="cal-row-right"><span class="status-draft">DRAFT</span> <span class="cal-chevron">&#9660;</span></span>
+              </div>
+              <details id="cal-f87705cb">
+                <summary style="display:none"></summary>
+                <div class="cal-detail">
+                  <div class="cal-detail-text"><em>No text drafted yet</em></div>
+                  
+                </div>
+              </details>
+            </div>
+          </div>
+  </div>
 </div>
 <div class="timeline-section">
   <div class="timeline-card">
@@ -903,104 +1029,6 @@ a.group-link { color: var(--db-dark-green); text-decoration: none; font-weight: 
           <td class="snippet">Love seeing this group so active heading into spring! Quick question for locals: has anyone tried th...</td>
         </tr></tbody>
     </table>
-  </div>
-</div>
-
-<div class="calendar-section">
-  <div class="calendar-card">
-    <h3>Upcoming Content Calendar &mdash; Edit to SKIP before 6 AM to block a post</h3>
-    
-            <div class="cal-day">
-              <div class="cal-date">Friday, April 10</div>
-              <div class="cal-posts">
-                <div class="cal-post">
-                  <div class="cal-platform">Facebook</div>
-                  <div class="cal-content">
-                    <div class="cal-title">FACEBOOK 1 — Fennville Informed — DRAFT</div>
-                    <div class="cal-text">It's officially happening.
-
-Pool opens at DollyBrook Memorial Day weekend. We are exactly [X] weeks out and the water is going to feel amazing.
-
-For anyone in the Fennville area who hasn't been -- we're your neighbors on 66th Street. 9 private cabins on 34 acres, and the pool is the heart of summer here.
-
-What are you most looking forward to about SW Michigan this summer?</div>
-                    <div class="cal-photo">Photo: `assets/sarah-photos/pool-group-summer-hero.jpg` — friends at pool, summer energy, best pool asset</div>
-                  </div>
-                  <div class="cal-status"><span class="status-draft">DRAFT</span></div>
-                </div>
-                <div class="cal-post">
-                  <div class="cal-platform">Facebook</div>
-                  <div class="cal-content">
-                    <div class="cal-title">FACEBOOK 2 — Sauglasville — DRAFT</div>
-                    <div class="cal-text">Update from our Sauglasville community post last week:
-
-We asked for your favorite local spots. You delivered. The Whatnot Inn, Wild West Ranch, Hawk's Nest -- all going into the guide.
-
-We're still building it. If you haven't dropped your recommendation yet -- what's the one spot in this area that visitors almost always miss?</div>
-                    <div class="cal-photo">Photo: `assets/sarah-photos/rank88_firepit_pond_adirondack_chairs.jpg` — firepit, cozy</div>
-                  </div>
-                  <div class="cal-status"><span class="status-draft">DRAFT</span></div>
-                </div>
-                <div class="cal-post">
-                  <div class="cal-platform">X</div>
-                  <div class="cal-content">
-                    <div class="cal-title">X — @DollybrookMI — DRAFT</div>
-                    <div class="cal-text">&gt; Everyone's "disconnecting for the weekend" from a place with better WiFi than their apartment.
-&gt;
-&gt; That's not disconnecting. That's relocation.
-
-&gt; The lake doesn't buzz. It doesn't beep. It doesn't have opinions.
-&gt;
-&gt; That's not nothing. That's everything.
-
-&gt; Your out-of-office auto-reply is not a vacation.</div>
-                    
-                  </div>
-                  <div class="cal-status"><span class="status-draft">DRAFT</span></div>
-                </div></div>
-            </div>
-            <div class="cal-day">
-              <div class="cal-date">Saturday, April 11</div>
-              <div class="cal-posts">
-                <div class="cal-post">
-                  <div class="cal-platform">Facebook</div>
-                  <div class="cal-content">
-                    <div class="cal-title">FACEBOOK 1 — Hamilton Happenings — DRAFT</div>
-                    <div class="cal-text">Summer checklist for a SW Michigan weekend at DollyBrook:
-
-Pool opens Memorial Day weekend. Check.
-Two brand-new regulation pickleball courts. Check.
-Fire pits at every cabin. Check.
-9 private cabins on 34 wooded acres. Check.
-
-Hamilton neighbors -- what's on your summer checklist this year?</div>
-                    <div class="cal-photo">Photo: `assets/sarah-photos/pool-group-summer-hero.jpg` — pool with friends, summer</div>
-                  </div>
-                  <div class="cal-status"><span class="status-draft">DRAFT</span></div>
-                </div>
-                <div class="cal-post">
-                  <div class="cal-platform">Facebook</div>
-                  <div class="cal-content">
-                    <div class="cal-title">FACEBOOK 2 — Southwest Michigan — DRAFT</div>
-                    <div class="cal-text">SW Michigan pool season is almost here.
-
-DollyBrook Resort in Fennville opens our private outdoor pool Memorial Day weekend. 9 cabins, 34 wooded acres, 10 minutes from Saugatuck.
-
-If you have been thinking about a SW Michigan summer trip -- what's the one thing that makes or breaks the destination for you?</div>
-                    <div class="cal-photo">Photo: `assets/sarah-photos/rank85_poolloungechairsgazebosummer.jpg` — pool lounge, summer</div>
-                  </div>
-                  <div class="cal-status"><span class="status-draft">DRAFT</span></div>
-                </div>
-                <div class="cal-post">
-                  <div class="cal-platform">X</div>
-                  <div class="cal-content">
-                    <div class="cal-title">X — @DollybrookMI — DRAFT</div>
-                    <div class="cal-text"><em>No text yet</em></div>
-                    
-                  </div>
-                  <div class="cal-status"><span class="status-draft">DRAFT</span></div>
-                </div></div>
-            </div>
   </div>
 </div>
 <div class="footer">
