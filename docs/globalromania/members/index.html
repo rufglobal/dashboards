@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GlobalRomania Member Dashboard</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f6fa; color: #333; }
+  header { background: linear-gradient(135deg, #1a1a2e, #16213e); color: white; padding: 24px 32px; }
+  header h1 { font-size: 22px; font-weight: 700; }
+  header p { font-size: 13px; opacity: 0.6; margin-top: 4px; }
+  .stats { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; padding: 24px 32px; }
+  .stat { background: white; border-radius: 10px; padding: 16px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .stat .num { font-size: 28px; font-weight: 800; }
+  .stat .label { font-size: 11px; color: #888; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat.green .num { color: #27ae60; }
+  .stat.red .num { color: #e74c3c; }
+  .stat.orange .num { color: #e67e22; }
+  .stat.blue .num { color: #2980b9; }
+  .stat.gray .num { color: #555; }
+  .table-wrap { padding: 0 32px 32px; }
+  .filter-bar { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .filter-bar button { padding: 6px 14px; border-radius: 20px; border: 1.5px solid #ddd; background: white; cursor: pointer; font-size: 12px; font-weight: 600; color: #555; transition: all 0.15s; }
+  .filter-bar button.active, .filter-bar button:hover { background: #1a1a2e; color: white; border-color: #1a1a2e; }
+  table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08); font-size: 13px; }
+  thead { background: #1a1a2e; color: white; }
+  th { padding: 12px 14px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+  th.center, td.center { text-align: center; }
+  td { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; }
+  tr:last-child td { border-bottom: none; }
+  tr.unwelcomed { background: #fff9f9; }
+  tr:hover { background: #f8f9ff; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+  .badge.green { background: #eafaf1; color: #27ae60; }
+  .badge.red { background: #fdf0f0; color: #e74c3c; }
+  .badge.orange { background: #fef9f0; color: #e67e22; }
+  .badge.blue { background: #eaf4fd; color: #2980b9; }
+  .updated { padding: 0 32px 16px; font-size: 11px; color: #aaa; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🌍 GlobalRomania — Member Status Dashboard</h1>
+  <p>Last updated: April 08, 2026 at 20:53 CST</p>
+</header>
+
+<div class="stats">
+  <div class="stat gray"><div class="num">100</div><div class="label">Total Members</div></div>
+  <div class="stat green"><div class="num">42</div><div class="label">Welcomed</div></div>
+  <div class="stat red"><div class="num">58</div><div class="label">Not Welcomed</div></div>
+  <div class="stat green"><div class="num">73</div><div class="label">Has Photo</div></div>
+  <div class="stat orange"><div class="num">27</div><div class="label">No Photo</div></div>
+  <div class="stat blue"><div class="num">0</div><div class="label">Replied</div></div>
+  <div class="stat blue"><div class="num">0</div><div class="label">Stage 2 Sent</div></div>
+</div>
+
+<div class="table-wrap">
+  <div class="filter-bar">
+    <button class="active" onclick="filter('all')">All (100)</button>
+    <button onclick="filter('unwelcomed')">❌ Not Welcomed (58)</button>
+    <button onclick="filter('no-photo')">🚫 No Photo (27)</button>
+    <button onclick="filter('stage2')">💬 Stage 2 Needed</button>
+  </div>
+  <table id="memberTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Joined</th>
+        <th class="center">Welcomed</th>
+        <th class="center">Photo</th>
+        <th class="center">Replied</th>
+        <th class="center">Stage 2</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr class="">
+      <td><strong>Alexandra Popescu</strong></td>
+      <td>2026-04-08</td>
+      <td class="center">✅</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge orange">No photo</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Ioana Guset</strong></td>
+      <td>2026-04-07</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Sabin Gîlceavă</strong></td>
+      <td>2026-04-07</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Teodora Comanita</strong></td>
+      <td>2026-04-06</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Oana Mican</strong></td>
+      <td>2026-04-04</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Ioana Campian</strong></td>
+      <td>2026-04-02</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Cristian Stollberg</strong></td>
+      <td>2026-04-02</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Alexandra Constantin</strong></td>
+      <td>2026-04-02</td>
+      <td class="center">❌</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Andrei Bogdan</strong></td>
+      <td>2026-04-01</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Marius Popescu</strong></td>
+      <td>2026-03-31</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Asim Raza</strong></td>
+      <td>2026-03-29</td>
+      <td class="center">✅</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge orange">No photo</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Alexandru Floristean</strong></td>
+      <td>2026-03-28</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Candin Pop</strong></td>
+      <td>2026-03-26</td>
+      <td class="center">✅</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge orange">No photo</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Daniel Toda</strong></td>
+      <td>2026-03-26</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Maria Dimulescu</strong></td>
+      <td>2026-03-24</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Tudor Ancas</strong></td>
+      <td>2026-03-21</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Vlad Bina</strong></td>
+      <td>2026-03-21</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Madalina Bouros</strong></td>
+      <td>2026-03-19</td>
+      <td class="center">✅</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge orange">No photo</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Mariana Mesu</strong></td>
+      <td>2026-03-18</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>David Balan</strong></td>
+      <td>2026-03-17</td>
+      <td class="center">✅</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge orange">No photo</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Adrian Dumitrescu</strong></td>
+      <td>2026-03-17</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Adrian Dragoiescu</strong></td>
+      <td>2026-03-16</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Radu Lovin</strong></td>
+      <td>2026-03-16</td>
+      <td class="center">✅</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge orange">No photo</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Mihaela Pasalega</strong></td>
+      <td>2026-03-16</td>
+      <td class="center">✅</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge orange">No photo</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Ovidiu Valea</strong></td>
+      <td>2026-03-13</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Adrian Luput</strong></td>
+      <td>2026-03-13</td>
+      <td class="center">✅</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge orange">No photo</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Stefan Bota</strong></td>
+      <td>2026-03-09</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Florin Blideran</strong></td>
+      <td>2026-03-09</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Robert Dumitrescu</strong></td>
+      <td>2026-03-09</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Naomi Bucur</strong></td>
+      <td>2026-03-09</td>
+      <td class="center">✅</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge orange">No photo</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Maria Alecsandra Volintiru</strong></td>
+      <td>2026-03-08</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Ioana Orășteanu</strong></td>
+      <td>2026-03-06</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Ioana Nistor</strong></td>
+      <td>2026-03-06</td>
+      <td class="center">❌</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Sara-Elena Muraretu</strong></td>
+      <td>2026-03-06</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Claudiu Pavalache</strong></td>
+      <td>2026-03-06</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Albert Artemie</strong></td>
+      <td>2026-03-06</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>George Gradinaru</strong></td>
+      <td>2026-03-06</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Rosemarie Benciu</strong></td>
+      <td>2026-03-03</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Alexandru Istrate</strong></td>
+      <td>2026-03-02</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Mihai Matei</strong></td>
+      <td>2026-03-02</td>
+      <td class="center">❌</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Bianca Santha</strong></td>
+      <td>2026-03-02</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Radu Magdin</strong></td>
+      <td>2026-03-02</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Alexandru-Radu Popescu</strong></td>
+      <td>2026-03-01</td>
+      <td class="center">❌</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Vlad Negrut</strong></td>
+      <td>2026-02-27</td>
+      <td class="center">❌</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Michael Volintiru</strong></td>
+      <td>2026-02-27</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Florin Pricop</strong></td>
+      <td>2026-02-27</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Ioana Paris</strong></td>
+      <td>2026-02-27</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Mihai Bora</strong></td>
+      <td>2026-02-26</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>David Timis</strong></td>
+      <td>2026-02-26</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Ana Ciubancan</strong></td>
+      <td>2026-02-25</td>
+      <td class="center">✅</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge orange">No photo</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Daniel Marchis</strong></td>
+      <td>2026-02-25</td>
+      <td class="center">❌</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Paula Ionescu</strong></td>
+      <td>2026-02-23</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Daciana Healey</strong></td>
+      <td>2026-02-22</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Vladimir Bud</strong></td>
+      <td>2026-02-21</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Petre Lee</strong></td>
+      <td>2026-02-20</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Miruna Magdalena Craioveanu</strong></td>
+      <td>2026-02-20</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="">
+      <td><strong>Raluca-Ramona Craioveanu</strong></td>
+      <td>2026-02-20</td>
+      <td class="center">✅</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge green">OK</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Raul Cristian Muresan</strong></td>
+      <td>2026-02-20</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Tiberiu Gavris</strong></td>
+      <td>2026-02-19</td>
+      <td class="center">❌</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Violeta Suciu</strong></td>
+      <td>2026-02-19</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Paul Ghita</strong></td>
+      <td>2026-02-19</td>
+      <td class="center">❌</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Preda Lucian</strong></td>
+      <td>2026-02-19</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Mihai Vladut</strong></td>
+      <td>2026-02-19</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Rada Mocean</strong></td>
+      <td>2026-02-18</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Ioana Marin</strong></td>
+      <td>2026-02-18</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Mihaela Simianu</strong></td>
+      <td>2026-02-17</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>A.J. Manaseer</strong></td>
+      <td>2026-02-17</td>
+      <td class="center">❌</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Eugen Bold</strong></td>
+      <td>2026-02-17</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Andrei Flutur</strong></td>
+      <td>2026-02-13</td>
+      <td class="center">❌</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Sebastian Boncu</strong></td>
+      <td>2026-02-13</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Marius Popescu</strong></td>
+      <td>2026-02-12</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Adrian Stefan Mihaltianu</strong></td>
+      <td>2026-02-12</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Stefan Cangea</strong></td>
+      <td>2026-02-11</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Stefania Mirica</strong></td>
+      <td>2026-02-11</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Nicolae Dorlea</strong></td>
+      <td>2026-02-10</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Simona Dean</strong></td>
+      <td>2026-02-10</td>
+      <td class="center">❌</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Corina Hrom</strong></td>
+      <td>2026-02-05</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Septimiu Popescu</strong></td>
+      <td>2026-01-31</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Ramona Martinovici</strong></td>
+      <td>2026-01-30</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Eduard Litvac</strong></td>
+      <td>2026-01-27</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Catalin Serban</strong></td>
+      <td>2026-01-27</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Ana-Maria Groza</strong></td>
+      <td>2026-01-27</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Ana Everling</strong></td>
+      <td>2026-01-26</td>
+      <td class="center">❌</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Stefania Muresan</strong></td>
+      <td>2026-01-26</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Alexandru Lazar</strong></td>
+      <td>2026-01-25</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>DR Claudia Cotca</strong></td>
+      <td>2026-01-24</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Ramona Pindus</strong></td>
+      <td>2026-01-24</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Mihai Pora</strong></td>
+      <td>2026-01-19</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Tudor Marchis</strong></td>
+      <td>2026-01-18</td>
+      <td class="center">❌</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Cătălin Constantin Mihalache</strong></td>
+      <td>2026-01-18</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Popescu Radu Ștefan</strong></td>
+      <td>2026-01-18</td>
+      <td class="center">❌</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Andrei Toniuc</strong></td>
+      <td>2026-01-15</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Alexandra Radu</strong></td>
+      <td>2026-01-09</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Ioana Marcoux</strong></td>
+      <td>2025-12-23</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Gena Lazar</strong></td>
+      <td>2025-12-19</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Ana Grecu</strong></td>
+      <td>2025-12-19</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Vinicius Cordos</strong></td>
+      <td>2025-12-19</td>
+      <td class="center">❌</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Alina Ispas Montbriand</strong></td>
+      <td>2025-12-18</td>
+      <td class="center">❌</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Ruxandra-Elena Ursache</strong></td>
+      <td>2025-12-18</td>
+      <td class="center">❌</td>
+      <td class="center">🚫</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr>
+    <tr class="unwelcomed">
+      <td><strong>Antonia Tarfulea</strong></td>
+      <td>2025-12-17</td>
+      <td class="center">❌</td>
+      <td class="center">📸</td>
+      <td class="center">—</td>
+      <td class="center">—</td>
+      <td><span class="badge red">Not welcomed</span></td>
+    </tr></tbody>
+  </table>
+</div>
+
+<div class="updated">Data source: Circle API · Knowledge base: member-status.json · 100 members tracked</div>
+
+<script>
+function filter(type) {
+  document.querySelectorAll('.filter-bar button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  const rows = document.querySelectorAll('#memberTable tbody tr');
+  rows.forEach(row => {
+    const badges = row.querySelector('.badge');
+    const badgeText = badges ? badges.textContent : '';
+    if (type === 'all') row.style.display = '';
+    else if (type === 'unwelcomed') row.style.display = badgeText.includes('Not welcomed') ? '' : 'none';
+    else if (type === 'no-photo') row.style.display = badgeText.includes('No photo') ? '' : 'none';
+    else if (type === 'stage2') row.style.display = badgeText.includes('Stage 2') ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>
