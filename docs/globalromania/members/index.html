@@ -1,1000 +1,861 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GlobalRomania Member Dashboard</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f6fa; color: #333; }
-  header { background: linear-gradient(135deg, #1a1a2e, #16213e); color: white; padding: 24px 32px; }
-  header h1 { font-size: 22px; font-weight: 700; }
-  header p { font-size: 13px; opacity: 0.6; margin-top: 4px; }
-  .stats { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; padding: 24px 32px; }
-  .stat { background: white; border-radius: 10px; padding: 16px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
-  .stat .num { font-size: 28px; font-weight: 800; }
-  .stat .label { font-size: 11px; color: #888; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .stat.green .num { color: #27ae60; }
-  .stat.red .num { color: #e74c3c; }
-  .stat.orange .num { color: #e67e22; }
-  .stat.blue .num { color: #2980b9; }
-  .stat.gray .num { color: #555; }
-  .table-wrap { padding: 0 32px 32px; }
-  .filter-bar { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
-  .filter-bar button { padding: 6px 14px; border-radius: 20px; border: 1.5px solid #ddd; background: white; cursor: pointer; font-size: 12px; font-weight: 600; color: #555; transition: all 0.15s; }
-  .filter-bar button.active, .filter-bar button:hover { background: #1a1a2e; color: white; border-color: #1a1a2e; }
-  table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08); font-size: 13px; }
-  thead { background: #1a1a2e; color: white; }
-  th { padding: 12px 14px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
-  th.center, td.center { text-align: center; }
-  td { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; }
-  tr:last-child td { border-bottom: none; }
-  tr.unwelcomed { background: #fff9f9; }
-  tr:hover { background: #f8f9ff; }
-  .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
-  .badge.green { background: #eafaf1; color: #27ae60; }
-  .badge.red { background: #fdf0f0; color: #e74c3c; }
-  .badge.orange { background: #fef9f0; color: #e67e22; }
-  .badge.blue { background: #eaf4fd; color: #2980b9; }
-  .badge.gray { background: #f0f0f0; color: #888; }
-  .updated { padding: 0 32px 16px; font-size: 11px; color: #aaa; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GlobalRomania Members — RUF</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',sans-serif;background:#f0f4f8;color:#222}
+    header{background:#00ACF0;color:#fff;padding:22px 36px;display:flex;align-items:center;gap:18px}
+    header .logo{width:48px;height:48px;background:rgba(255,255,255,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.2rem;flex-shrink:0}
+    header h1{font-size:1.45rem;font-weight:700;margin-bottom:2px}
+    header p{font-size:0.85rem;opacity:0.85}
+    main{max-width:1280px;margin:32px auto;padding:0 24px}
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin-bottom:28px}
+    .stat-card{background:#fff;border-radius:12px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-top:4px solid #00ACF0}
+    .stat-card.orange{border-top-color:#EF7D00}
+    .stat-card.green{border-top-color:#22c55e}
+    .stat-card.dark{border-top-color:#113268}
+    .stat-card.red{border-top-color:#ef4444}
+    .stat-num{font-size:2.2rem;font-weight:800;color:#113268;line-height:1}
+    .stat-num.accent{color:#00ACF0}
+    .stat-num.orange{color:#EF7D00}
+    .stat-num.green{color:#22c55e}
+    .stat-num.red{color:#ef4444}
+    .stat-label{font-size:0.78rem;color:#666;margin-top:6px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em}
+    .stat-sub{font-size:0.75rem;color:#aaa;margin-top:2px}
+    .section{background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,0.07);overflow:hidden;margin-bottom:24px}
+    .section-header{background:#113268;color:#fff;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+    .section-header h2{font-size:1rem;font-weight:600}
+    .section-header span{font-size:0.82rem;opacity:0.75}
+    .progress-bar{background:#e5e7eb;border-radius:4px;height:8px;margin:4px 0 2px}
+    .progress-fill{height:100%;border-radius:4px;background:#00ACF0;transition:width 0.8s ease}
+    .progress-section{padding:20px 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+    .progress-item label{font-size:0.8rem;color:#555;font-weight:600;margin-bottom:6px;display:block}
+    .progress-item .pct{font-size:0.75rem;color:#888;text-align:right;margin-top:2px}
+    table{width:100%;border-collapse:collapse}
+    th{background:#113268;color:#fff;padding:11px 16px;text-align:left;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.05em;cursor:pointer;user-select:none;white-space:nowrap}
+    th:hover{background:#00ACF0}
+    td{padding:10px 16px;border-bottom:1px solid #f0f0f0;vertical-align:middle}
+    tr:last-child td{border-bottom:none}
+    tr:hover td{background:#f0f9ff}
+    .controls{padding:14px 20px;border-bottom:1px solid #eee;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    input[type=text]{border:1px solid #ddd;border-radius:6px;padding:7px 12px;font-size:0.85rem;outline:none;width:260px}
+    input[type=text]:focus{border-color:#00ACF0}
+    select{border:1px solid #ddd;border-radius:6px;padding:7px 10px;font-size:0.85rem;outline:none;cursor:pointer}
+    footer{text-align:center;padding:28px;color:#888;font-size:0.78rem;border-top:1px solid #e5e7eb;margin-top:8px}
+    @media(max-width:768px){header{padding:16px 20px}header h1{font-size:1.1rem}main{padding:0 12px}}
+  </style>
 </head>
 <body>
 <header>
-  <h1>🌍 GlobalRomania — Member Status Dashboard</h1>
-  <p>Last updated: April 08, 2026 at 21:38 CST</p>
-</header>
-
-<div class="stats">
-  <div class="stat gray"><div class="num">100</div><div class="label">Total Members</div></div>
-  <div class="stat green"><div class="num">43</div><div class="label">Welcomed</div></div>
-  <div class="stat red"><div class="num">1</div><div class="label">Not Welcomed</div></div>
-  <div class="stat gray"><div class="num">56</div><div class="label">Pre-Tracker Unknown</div></div>
-  <div class="stat green"><div class="num">73</div><div class="label">Has Photo</div></div>
-  <div class="stat orange"><div class="num">27</div><div class="label">No Photo</div></div>
-  <div class="stat blue"><div class="num">1</div><div class="label">Replied</div></div>
-  <div class="stat blue"><div class="num">1</div><div class="label">Stage 2 Sent</div></div>
-</div>
-
-<div class="table-wrap">
-  <div class="filter-bar">
-    <button class="active" onclick="filter('all')">All (100)</button>
-    <button onclick="filter('unwelcomed')">❌ Not Welcomed (1)</button>
-    <button onclick="filter('no-photo')">🚫 No Photo (27)</button>
-    <button onclick="filter('stage2')">💬 Stage 2 Needed</button>
+  <div class="logo">🌍</div>
+  <div>
+    <h1>GlobalRomania Members Dashboard</h1>
+    <p>Romanian United Foundation · Updated: April 8, 2026 · 100 members tracked</p>
   </div>
-  <table id="memberTable">
-    <thead>
-      <tr>
+</header>
+<main>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-num accent">100</div><div class="stat-label">Total Tracked</div></div>
+    <div class="stat-card green"><div class="stat-num green">43</div><div class="stat-label">Welcomed</div><div class="stat-sub">43% coverage</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:#6b7280">56</div><div class="stat-label">Status Unknown</div><div class="stat-sub">pre-tracker</div></div>
+    <div class="stat-card green"><div class="stat-num green">73</div><div class="stat-label">Have Photo</div><div class="stat-sub">73% completion</div></div>
+    <div class="stat-card red"><div class="stat-num red">27</div><div class="stat-label">No Photo</div></div>
+    <div class="stat-card orange"><div class="stat-num orange">10</div><div class="stat-label">Photo Nudges</div><div class="stat-sub">pending</div></div>
+    <div class="stat-card dark"><div class="stat-num" style="color:#113268">1</div><div class="stat-label">Replied</div></div>
+    <div class="stat-card dark"><div class="stat-num" style="color:#113268">1</div><div class="stat-label">Instructions Sent</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><h2>📈 Engagement Progress</h2></div>
+    <div class="progress-section">
+      <div class="progress-item"><label>Welcome Coverage</label><div class="progress-bar"><div class="progress-fill" style="width:43%"></div></div><div class="pct">43 of 100 members (43%)</div></div>
+      <div class="progress-item"><label>Profile Photo Completion</label><div class="progress-bar"><div class="progress-fill" style="width:73%;background:#22c55e"></div></div><div class="pct">73 of 100 members (73%)</div></div>
+      <div class="progress-item"><label>Photo Nudge Campaign</label><div class="progress-bar"><div class="progress-fill" style="width:37%;background:#EF7D00"></div></div><div class="pct">10 of 27 no-photo members contacted (37%)</div></div>
+      <div class="progress-item"><label>Reply Rate</label><div class="progress-bar"><div class="progress-fill" style="width:2%;background:#113268"></div></div><div class="pct">1 of 43 welcomed replied (2%)</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><h2>👥 Member Directory</h2><span>100 members · sorted by join date</span></div>
+    <div class="controls">
+      <input type="text" id="search" placeholder="🔍 Search by name or email..." oninput="filterTable()">
+      <select id="statusFilter" onchange="filterTable()">
+        <option value="">All Statuses</option>
+        <option value="replied">Replied</option>
+        <option value="welcomed">Welcomed</option>
+        <option value="not welcomed">Not Welcomed</option>
+        <option value="unknown">Unknown</option>
+      </select>
+      <select id="photoFilter" onchange="filterTable()">
+        <option value="">All Photos</option>
+        <option value="photo">Has Photo</option>
+        <option value="no photo">No Photo</option>
+        <option value="nudge">Nudge Sent</option>
+      </select>
+    </div>
+    <div style="overflow-x:auto">
+    <table id="memberTable">
+      <thead><tr>
         <th>Name</th>
+        <th>Email</th>
         <th>Joined</th>
-        <th class="center">Welcomed</th>
-        <th class="center">Photo</th>
-        <th class="center">Replied</th>
-        <th class="center">Stage 2</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody>
-    <tr class="">
-      <td><strong>Alexandra Popescu</strong></td>
-      <td>2026-04-08</td>
-      <td class="center">✅</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge orange">No photo</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Ioana Guset</strong></td>
-      <td>2026-04-07</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Sabin Gîlceavă</strong></td>
-      <td>2026-04-07</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Teodora Comanita</strong></td>
-      <td>2026-04-06</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Oana Mican</strong></td>
-      <td>2026-04-04</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Ioana Campian</strong></td>
-      <td>2026-04-02</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Cristian Stollberg</strong></td>
-      <td>2026-04-02</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Alexandra Constantin</strong></td>
-      <td>2026-04-02</td>
-      <td class="center">❌</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge red">Not welcomed</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Andrei Bogdan</strong></td>
-      <td>2026-04-01</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Marius Popescu</strong></td>
-      <td>2026-03-31</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Asim Raza</strong></td>
-      <td>2026-03-29</td>
-      <td class="center">✅</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge orange">No photo</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Alexandru Floristean</strong></td>
-      <td>2026-03-28</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Candin Pop</strong></td>
-      <td>2026-03-26</td>
-      <td class="center">✅</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge orange">No photo</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Daniel Toda</strong></td>
-      <td>2026-03-26</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Maria Dimulescu</strong></td>
-      <td>2026-03-24</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Tudor Ancas</strong></td>
-      <td>2026-03-21</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Vlad Bina</strong></td>
-      <td>2026-03-21</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Madalina Bouros</strong></td>
-      <td>2026-03-19</td>
-      <td class="center">✅</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge orange">No photo</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Mariana Mesu</strong></td>
-      <td>2026-03-18</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>David Balan</strong></td>
-      <td>2026-03-17</td>
-      <td class="center">✅</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge orange">No photo</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Adrian Dumitrescu</strong></td>
-      <td>2026-03-17</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Adrian Dragoiescu</strong></td>
-      <td>2026-03-16</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Radu Lovin</strong></td>
-      <td>2026-03-16</td>
-      <td class="center">✅</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge orange">No photo</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Mihaela Pasalega</strong></td>
-      <td>2026-03-16</td>
-      <td class="center">✅</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge orange">No photo</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Ovidiu Valea</strong></td>
-      <td>2026-03-13</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Adrian Luput</strong></td>
-      <td>2026-03-13</td>
-      <td class="center">✅</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge orange">No photo</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Stefan Bota</strong></td>
-      <td>2026-03-09</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Florin Blideran</strong></td>
-      <td>2026-03-09</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Robert Dumitrescu</strong></td>
-      <td>2026-03-09</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Naomi Bucur</strong></td>
-      <td>2026-03-09</td>
-      <td class="center">✅</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge orange">No photo</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Maria Alecsandra Volintiru</strong></td>
-      <td>2026-03-08</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Ioana Orășteanu</strong></td>
-      <td>2026-03-06</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Ioana Nistor</strong></td>
-      <td>2026-03-06</td>
-      <td class="center">❓</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Sara-Elena Muraretu</strong></td>
-      <td>2026-03-06</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Claudiu Pavalache</strong></td>
-      <td>2026-03-06</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Albert Artemie</strong></td>
-      <td>2026-03-06</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>George Gradinaru</strong></td>
-      <td>2026-03-06</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Rosemarie Benciu</strong></td>
-      <td>2026-03-03</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Alexandru Istrate</strong></td>
-      <td>2026-03-02</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Mihai Matei</strong></td>
-      <td>2026-03-02</td>
-      <td class="center">❓</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Bianca Santha</strong></td>
-      <td>2026-03-02</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Radu Magdin</strong></td>
-      <td>2026-03-02</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Alexandru-Radu Popescu</strong></td>
-      <td>2026-03-01</td>
-      <td class="center">❓</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Vlad Negrut</strong></td>
-      <td>2026-02-27</td>
-      <td class="center">❓</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Michael Volintiru</strong></td>
-      <td>2026-02-27</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Florin Pricop</strong></td>
-      <td>2026-02-27</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Ioana Paris</strong></td>
-      <td>2026-02-27</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Mihai Bora</strong></td>
-      <td>2026-02-26</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>David Timis</strong></td>
-      <td>2026-02-26</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Ana Ciubancan</strong></td>
-      <td>2026-02-25</td>
-      <td class="center">✅</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge orange">No photo</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Daniel Marchis</strong></td>
-      <td>2026-02-25</td>
-      <td class="center">❓</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Paula Ionescu</strong></td>
-      <td>2026-02-23</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Daciana Healey</strong></td>
-      <td>2026-02-22</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Vladimir Bud</strong></td>
-      <td>2026-02-21</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">💬</td>
-      <td class="center">✅</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Petre Lee</strong></td>
-      <td>2026-02-20</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Miruna Magdalena Craioveanu</strong></td>
-      <td>2026-02-20</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="">
-      <td><strong>Raluca-Ramona Craioveanu</strong></td>
-      <td>2026-02-20</td>
-      <td class="center">✅</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge green">OK</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Raul Cristian Muresan</strong></td>
-      <td>2026-02-20</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Tiberiu Gavris</strong></td>
-      <td>2026-02-19</td>
-      <td class="center">❓</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Violeta Suciu</strong></td>
-      <td>2026-02-19</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Paul Ghita</strong></td>
-      <td>2026-02-19</td>
-      <td class="center">❓</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Preda Lucian</strong></td>
-      <td>2026-02-19</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Mihai Vladut</strong></td>
-      <td>2026-02-19</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Rada Mocean</strong></td>
-      <td>2026-02-18</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Ioana Marin</strong></td>
-      <td>2026-02-18</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Mihaela Simianu</strong></td>
-      <td>2026-02-17</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>A.J. Manaseer</strong></td>
-      <td>2026-02-17</td>
-      <td class="center">❓</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Eugen Bold</strong></td>
-      <td>2026-02-17</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Andrei Flutur</strong></td>
-      <td>2026-02-13</td>
-      <td class="center">❓</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Sebastian Boncu</strong></td>
-      <td>2026-02-13</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Marius Popescu</strong></td>
-      <td>2026-02-12</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Adrian Stefan Mihaltianu</strong></td>
-      <td>2026-02-12</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Stefan Cangea</strong></td>
-      <td>2026-02-11</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Stefania Mirica</strong></td>
-      <td>2026-02-11</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Nicolae Dorlea</strong></td>
-      <td>2026-02-10</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Simona Dean</strong></td>
-      <td>2026-02-10</td>
-      <td class="center">❓</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Corina Hrom</strong></td>
-      <td>2026-02-05</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Septimiu Popescu</strong></td>
-      <td>2026-01-31</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Ramona Martinovici</strong></td>
-      <td>2026-01-30</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Eduard Litvac</strong></td>
-      <td>2026-01-27</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Catalin Serban</strong></td>
-      <td>2026-01-27</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Ana-Maria Groza</strong></td>
-      <td>2026-01-27</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Ana Everling</strong></td>
-      <td>2026-01-26</td>
-      <td class="center">❓</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Stefania Muresan</strong></td>
-      <td>2026-01-26</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Alexandru Lazar</strong></td>
-      <td>2026-01-25</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>DR Claudia Cotca</strong></td>
-      <td>2026-01-24</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Ramona Pindus</strong></td>
-      <td>2026-01-24</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Mihai Pora</strong></td>
-      <td>2026-01-19</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Tudor Marchis</strong></td>
-      <td>2026-01-18</td>
-      <td class="center">❓</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Cătălin Constantin Mihalache</strong></td>
-      <td>2026-01-18</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Popescu Radu Ștefan</strong></td>
-      <td>2026-01-18</td>
-      <td class="center">❓</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Andrei Toniuc</strong></td>
-      <td>2026-01-15</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Alexandra Radu</strong></td>
-      <td>2026-01-09</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Ioana Marcoux</strong></td>
-      <td>2025-12-23</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Gena Lazar</strong></td>
-      <td>2025-12-19</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Ana Grecu</strong></td>
-      <td>2025-12-19</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Vinicius Cordos</strong></td>
-      <td>2025-12-19</td>
-      <td class="center">❓</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Alina Ispas Montbriand</strong></td>
-      <td>2025-12-18</td>
-      <td class="center">❓</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Ruxandra-Elena Ursache</strong></td>
-      <td>2025-12-18</td>
-      <td class="center">❓</td>
-      <td class="center">🚫</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr>
-    <tr class="unwelcomed">
-      <td><strong>Antonia Tarfulea</strong></td>
-      <td>2025-12-17</td>
-      <td class="center">❓</td>
-      <td class="center">📸</td>
-      <td class="center">—</td>
-      <td class="center">—</td>
-      <td><span class="badge gray">Unknown — pre-tracker</span></td>
-    </tr></tbody>
-  </table>
-</div>
-
-<div class="updated">Data source: Circle API · Knowledge base: member-status.json · 100 members tracked</div>
-
+        <th>Welcome Status</th>
+        <th>Photo</th>
+        <th>Welcome Date</th>
+      </tr></thead>
+      <tbody><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AP</div><strong style="font-size:0.88rem">Alexandra Popescu</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">a***8@dartmouth.edu</td>
+    <td style="font-size:0.85rem">2026-04-08</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#fef3c7;color:#92400e;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Nudge Sent</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-04-08</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">SG</div><strong style="font-size:0.88rem">Sabin Gîlceavă</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">s***n@me.com</td>
+    <td style="font-size:0.85rem">2026-04-07</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-04-08</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">IG</div><strong style="font-size:0.88rem">Ioana Guset</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">i***g@romanianunitedfund.org</td>
+    <td style="font-size:0.85rem">2026-04-07</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-04-08</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">TC</div><strong style="font-size:0.88rem">Teodora Comanita</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">i***c@gmail.com</td>
+    <td style="font-size:0.85rem">2026-04-06</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-04-08</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">OM</div><strong style="font-size:0.88rem">Oana Mican</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">o***1@gmail.com</td>
+    <td style="font-size:0.85rem">2026-04-04</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-04-07</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AC</div><strong style="font-size:0.88rem">Alexandra Constantin</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">c***g@gmail.com</td>
+    <td style="font-size:0.85rem">2026-04-02</td>
+    <td><span style="background:#ffedd5;color:#9a3412;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Not Welcomed</span></td>
+    <td><span style="background:#ffedd5;color:#9a3412;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">No Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">CS</div><strong style="font-size:0.88rem">Cristian Stollberg</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">c***g@gmail.com</td>
+    <td style="font-size:0.85rem">2026-04-02</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-04-07</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">IC</div><strong style="font-size:0.88rem">Ioana Campian</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">i***n@proton.me</td>
+    <td style="font-size:0.85rem">2026-04-02</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-04-02</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AB</div><strong style="font-size:0.88rem">Andrei Bogdan</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">a***n@onealpha.ro</td>
+    <td style="font-size:0.85rem">2026-04-01</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-04-02</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">MP</div><strong style="font-size:0.88rem">Marius Popescu</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">m***3@outlook.com</td>
+    <td style="font-size:0.85rem">2026-03-31</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-04-02</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AR</div><strong style="font-size:0.88rem">Asim Raza</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">a***5@gmail.com</td>
+    <td style="font-size:0.85rem">2026-03-29</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#fef3c7;color:#92400e;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Nudge Sent</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-03-31</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AF</div><strong style="font-size:0.88rem">Alexandru Floristean</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">a***x@hylegal.eu</td>
+    <td style="font-size:0.85rem">2026-03-28</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-03-31</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">DT</div><strong style="font-size:0.88rem">Daniel Toda</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">d***a@gmail.com</td>
+    <td style="font-size:0.85rem">2026-03-26</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-03-31</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">CP</div><strong style="font-size:0.88rem">Candin Pop</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">c***p@gmail.com</td>
+    <td style="font-size:0.85rem">2026-03-26</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#fef3c7;color:#92400e;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Nudge Sent</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-03-31</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">MD</div><strong style="font-size:0.88rem">Maria Dimulescu</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">m***u@gmail.com</td>
+    <td style="font-size:0.85rem">2026-03-24</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-03-31</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">VB</div><strong style="font-size:0.88rem">Vlad Bina</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">v***a@hotmail.com</td>
+    <td style="font-size:0.85rem">2026-03-21</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-03-31</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">TA</div><strong style="font-size:0.88rem">Tudor Ancas</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">t***s@gmail.com</td>
+    <td style="font-size:0.85rem">2026-03-21</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-04-02</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">MB</div><strong style="font-size:0.88rem">Madalina Bouros</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">b***a@gmail.com</td>
+    <td style="font-size:0.85rem">2026-03-19</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#fef3c7;color:#92400e;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Nudge Sent</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-03-31</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">MM</div><strong style="font-size:0.88rem">Mariana Mesu</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">m***3@gmail.com</td>
+    <td style="font-size:0.85rem">2026-03-18</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-03-31</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AD</div><strong style="font-size:0.88rem">Adrian Dumitrescu</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">a***u@rospin.org</td>
+    <td style="font-size:0.85rem">2026-03-17</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-03-31</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">DB</div><strong style="font-size:0.88rem">David Balan</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">d***n@icloud.com</td>
+    <td style="font-size:0.85rem">2026-03-17</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#fef3c7;color:#92400e;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Nudge Sent</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-03-31</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">MP</div><strong style="font-size:0.88rem">Mihaela Pasalega</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">p***a@gmail.com</td>
+    <td style="font-size:0.85rem">2026-03-16</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#fef3c7;color:#92400e;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Nudge Sent</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-03-31</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">RL</div><strong style="font-size:0.88rem">Radu Lovin</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">r***n@gmail.com</td>
+    <td style="font-size:0.85rem">2026-03-16</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#fef3c7;color:#92400e;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Nudge Sent</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-03-31</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AD</div><strong style="font-size:0.88rem">Adrian Dragoiescu</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">a***n@dragoiescu.com</td>
+    <td style="font-size:0.85rem">2026-03-16</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-03-31</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AL</div><strong style="font-size:0.88rem">Adrian Luput</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">a***t@gmail.com</td>
+    <td style="font-size:0.85rem">2026-03-13</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#fef3c7;color:#92400e;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Nudge Sent</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-03-31</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">OV</div><strong style="font-size:0.88rem">Ovidiu Valea</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">o***@cyberopsnetwork.com</td>
+    <td style="font-size:0.85rem">2026-03-13</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-03-31</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">NB</div><strong style="font-size:0.88rem">Naomi Bucur</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">n***r@carteadaliei.ro</td>
+    <td style="font-size:0.85rem">2026-03-09</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#fef3c7;color:#92400e;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Nudge Sent</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-03-31</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">RD</div><strong style="font-size:0.88rem">Robert Dumitrescu</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">r***u@gmail.com</td>
+    <td style="font-size:0.85rem">2026-03-09</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-03-31</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">FB</div><strong style="font-size:0.88rem">Florin Blideran</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">f***n@gmail.com</td>
+    <td style="font-size:0.85rem">2026-03-09</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-03-31</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">SB</div><strong style="font-size:0.88rem">Stefan Bota</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">b***n@gmail.com</td>
+    <td style="font-size:0.85rem">2026-03-09</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-03-31</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">MA</div><strong style="font-size:0.88rem">Maria Alecsandra Volintiru</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">m***l@gmail.com</td>
+    <td style="font-size:0.85rem">2026-03-08</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-03-31</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">GG</div><strong style="font-size:0.88rem">George Gradinaru</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">g***i@gmail.com</td>
+    <td style="font-size:0.85rem">2026-03-06</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AA</div><strong style="font-size:0.88rem">Albert Artemie</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">a***t@gmail.com</td>
+    <td style="font-size:0.85rem">2026-03-06</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-04-02</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">CP</div><strong style="font-size:0.88rem">Claudiu Pavalache</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">c***o@hotmail.com</td>
+    <td style="font-size:0.85rem">2026-03-06</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-04-02</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">SM</div><strong style="font-size:0.88rem">Sara-Elena Muraretu</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">s***k@gmail.com</td>
+    <td style="font-size:0.85rem">2026-03-06</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">IN</div><strong style="font-size:0.88rem">Ioana Nistor</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">i***1@yahoo.com</td>
+    <td style="font-size:0.85rem">2026-03-06</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#ffedd5;color:#9a3412;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">No Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">IO</div><strong style="font-size:0.88rem">Ioana Orășteanu</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">i***u@gmail.com</td>
+    <td style="font-size:0.85rem">2026-03-06</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-04-02</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">RB</div><strong style="font-size:0.88rem">Rosemarie Benciu</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">r***u@gmail.com</td>
+    <td style="font-size:0.85rem">2026-03-03</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">RM</div><strong style="font-size:0.88rem">Radu Magdin</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">r***n@thesmartlink.org</td>
+    <td style="font-size:0.85rem">2026-03-02</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">BS</div><strong style="font-size:0.88rem">Bianca Santha</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">b***a@rebeldot.com</td>
+    <td style="font-size:0.85rem">2026-03-02</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">MM</div><strong style="font-size:0.88rem">Mihai Matei</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">y***4@pazuric.com</td>
+    <td style="font-size:0.85rem">2026-03-02</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#ffedd5;color:#9a3412;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">No Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AI</div><strong style="font-size:0.88rem">Alexandru Istrate</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">a***x@arithmasports.com</td>
+    <td style="font-size:0.85rem">2026-03-02</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AP</div><strong style="font-size:0.88rem">Alexandru-Radu Popescu</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">p***u@yahoo.it</td>
+    <td style="font-size:0.85rem">2026-03-01</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#ffedd5;color:#9a3412;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">No Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">IP</div><strong style="font-size:0.88rem">Ioana Paris</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">i***s@yahoo.com</td>
+    <td style="font-size:0.85rem">2026-02-27</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">FP</div><strong style="font-size:0.88rem">Florin Pricop</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">f***0@gmail.com</td>
+    <td style="font-size:0.85rem">2026-02-27</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-04-02</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">MV</div><strong style="font-size:0.88rem">Michael Volintiru</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">m***u@gmail.com</td>
+    <td style="font-size:0.85rem">2026-02-27</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">VN</div><strong style="font-size:0.88rem">Vlad Negrut</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">v***t@gmail.com</td>
+    <td style="font-size:0.85rem">2026-02-27</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#ffedd5;color:#9a3412;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">No Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">DT</div><strong style="font-size:0.88rem">David Timis</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">d***1@gmail.com</td>
+    <td style="font-size:0.85rem">2026-02-26</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-04-02</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">MB</div><strong style="font-size:0.88rem">Mihai Bora</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">m***a@gmail.com</td>
+    <td style="font-size:0.85rem">2026-02-26</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-04-02</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">DM</div><strong style="font-size:0.88rem">Daniel Marchis</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">m***l@gmail.com</td>
+    <td style="font-size:0.85rem">2026-02-25</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#ffedd5;color:#9a3412;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">No Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AC</div><strong style="font-size:0.88rem">Ana Ciubancan</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">a***n@gmail.com</td>
+    <td style="font-size:0.85rem">2026-02-25</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#fef3c7;color:#92400e;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Nudge Sent</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-04-02</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">PI</div><strong style="font-size:0.88rem">Paula Ionescu</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">p***a@cdpconsulting.ro</td>
+    <td style="font-size:0.85rem">2026-02-23</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-04-02</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">DH</div><strong style="font-size:0.88rem">Daciana Healey</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">d***u@hotmail.com</td>
+    <td style="font-size:0.85rem">2026-02-22</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-04-02</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">VB</div><strong style="font-size:0.88rem">Vladimir Bud</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">v***0@gmail.com</td>
+    <td style="font-size:0.85rem">2026-02-21</td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Replied</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">before-2026-03-09</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">RC</div><strong style="font-size:0.88rem">Raul Cristian Muresan</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">r***n@gmail.com</td>
+    <td style="font-size:0.85rem">2026-02-20</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">RC</div><strong style="font-size:0.88rem">Raluca-Ramona Craioveanu</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">r***5@gmail.com</td>
+    <td style="font-size:0.85rem">2026-02-20</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-04-02</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">MM</div><strong style="font-size:0.88rem">Miruna Magdalena Craioveanu</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">m***4@gmail.com</td>
+    <td style="font-size:0.85rem">2026-02-20</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-04-02</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">PL</div><strong style="font-size:0.88rem">Petre Lee</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">p***2@cornell.edu</td>
+    <td style="font-size:0.85rem">2026-02-20</td>
+    <td><span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Welcomed</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">2026-04-02</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">MV</div><strong style="font-size:0.88rem">Mihai Vladut</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">m***v@gmail.com</td>
+    <td style="font-size:0.85rem">2026-02-19</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">PL</div><strong style="font-size:0.88rem">Preda Lucian</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">l***a@protonmail.com</td>
+    <td style="font-size:0.85rem">2026-02-19</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">PG</div><strong style="font-size:0.88rem">Paul Ghita</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">p***a@bbm.ventures</td>
+    <td style="font-size:0.85rem">2026-02-19</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#ffedd5;color:#9a3412;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">No Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">VS</div><strong style="font-size:0.88rem">Violeta Suciu</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">v***u@gmail.com</td>
+    <td style="font-size:0.85rem">2026-02-19</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">TG</div><strong style="font-size:0.88rem">Tiberiu Gavris</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">m***@gavristiberiu.com</td>
+    <td style="font-size:0.85rem">2026-02-19</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#ffedd5;color:#9a3412;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">No Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">IM</div><strong style="font-size:0.88rem">Ioana Marin</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">i***5@gmail.com</td>
+    <td style="font-size:0.85rem">2026-02-18</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">RM</div><strong style="font-size:0.88rem">Rada Mocean</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">r***m@gmail.com</td>
+    <td style="font-size:0.85rem">2026-02-18</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">EB</div><strong style="font-size:0.88rem">Eugen Bold</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">e***d@yahoo.com</td>
+    <td style="font-size:0.85rem">2026-02-17</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AM</div><strong style="font-size:0.88rem">A.J. Manaseer</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">a***@inhabitrealtygroup.com</td>
+    <td style="font-size:0.85rem">2026-02-17</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#ffedd5;color:#9a3412;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">No Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">MS</div><strong style="font-size:0.88rem">Mihaela Simianu</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">m***u@gmail.com</td>
+    <td style="font-size:0.85rem">2026-02-17</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">SB</div><strong style="font-size:0.88rem">Sebastian Boncu</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">s***u@gmail.com</td>
+    <td style="font-size:0.85rem">2026-02-13</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AF</div><strong style="font-size:0.88rem">Andrei Flutur</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">a***8@yahoo.com</td>
+    <td style="font-size:0.85rem">2026-02-13</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#ffedd5;color:#9a3412;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">No Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AS</div><strong style="font-size:0.88rem">Adrian Stefan Mihaltianu</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">a***u@pressone.ro</td>
+    <td style="font-size:0.85rem">2026-02-12</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">MP</div><strong style="font-size:0.88rem">Marius Popescu</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">m***3@gmail.com</td>
+    <td style="font-size:0.85rem">2026-02-12</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">SM</div><strong style="font-size:0.88rem">Stefania Mirica</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">s***6@georgetown.edu</td>
+    <td style="font-size:0.85rem">2026-02-11</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">SC</div><strong style="font-size:0.88rem">Stefan Cangea</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">s***a@gmail.com</td>
+    <td style="font-size:0.85rem">2026-02-11</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">SD</div><strong style="font-size:0.88rem">Simona Dean</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">s***n@gmail.com</td>
+    <td style="font-size:0.85rem">2026-02-10</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#ffedd5;color:#9a3412;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">No Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">ND</div><strong style="font-size:0.88rem">Nicolae Dorlea</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">n***e@stratifyvp.com</td>
+    <td style="font-size:0.85rem">2026-02-10</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">CH</div><strong style="font-size:0.88rem">Corina Hrom</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">h***a@gmail.com</td>
+    <td style="font-size:0.85rem">2026-02-05</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">SP</div><strong style="font-size:0.88rem">Septimiu Popescu</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">s***7@gmail.com</td>
+    <td style="font-size:0.85rem">2026-01-31</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">RM</div><strong style="font-size:0.88rem">Ramona Martinovici</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">i***o@ramonamartinovici.com</td>
+    <td style="font-size:0.85rem">2026-01-30</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AG</div><strong style="font-size:0.88rem">Ana-Maria Groza</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">a***a@gmail.com</td>
+    <td style="font-size:0.85rem">2026-01-27</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">CS</div><strong style="font-size:0.88rem">Catalin Serban</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">c***t@iproskills.com</td>
+    <td style="font-size:0.85rem">2026-01-27</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">EL</div><strong style="font-size:0.88rem">Eduard Litvac</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">e***c@routeonegroup.com</td>
+    <td style="font-size:0.85rem">2026-01-27</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">SM</div><strong style="font-size:0.88rem">Stefania Muresan</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">s***a@techsylvania.com</td>
+    <td style="font-size:0.85rem">2026-01-26</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AE</div><strong style="font-size:0.88rem">Ana Everling</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">a***@anaeverling.com</td>
+    <td style="font-size:0.85rem">2026-01-26</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#ffedd5;color:#9a3412;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">No Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AL</div><strong style="font-size:0.88rem">Alexandru Lazar</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">a***@intlaw.eu</td>
+    <td style="font-size:0.85rem">2026-01-25</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">RP</div><strong style="font-size:0.88rem">Ramona Pindus</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">r***a@romanianunitedfund.org</td>
+    <td style="font-size:0.85rem">2026-01-24</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">DC</div><strong style="font-size:0.88rem">DR Claudia Cotca</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">d***@dclaserdentist.com</td>
+    <td style="font-size:0.85rem">2026-01-24</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">MP</div><strong style="font-size:0.88rem">Mihai Pora</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">m***a@gmail.com</td>
+    <td style="font-size:0.85rem">2026-01-19</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">PR</div><strong style="font-size:0.88rem">Popescu Radu Ștefan</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">r***9@gmail.com</td>
+    <td style="font-size:0.85rem">2026-01-18</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#ffedd5;color:#9a3412;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">No Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">CC</div><strong style="font-size:0.88rem">Cătălin Constantin Mihalache</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">c***e@blackseastrategies.com</td>
+    <td style="font-size:0.85rem">2026-01-18</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">TM</div><strong style="font-size:0.88rem">Tudor Marchis</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">t***s@icloud.com</td>
+    <td style="font-size:0.85rem">2026-01-18</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#ffedd5;color:#9a3412;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">No Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AT</div><strong style="font-size:0.88rem">Andrei Toniuc</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">a***c@tasuleasasocial.ro</td>
+    <td style="font-size:0.85rem">2026-01-15</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AR</div><strong style="font-size:0.88rem">Alexandra Radu</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">a***u@romanianunitedfund.org</td>
+    <td style="font-size:0.85rem">2026-01-09</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">IM</div><strong style="font-size:0.88rem">Ioana Marcoux</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">i***x@gmail.com</td>
+    <td style="font-size:0.85rem">2025-12-23</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">VC</div><strong style="font-size:0.88rem">Vinicius Cordos</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">v***e@cordos.net</td>
+    <td style="font-size:0.85rem">2025-12-19</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#ffedd5;color:#9a3412;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">No Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AG</div><strong style="font-size:0.88rem">Ana Grecu</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">g***g@yahoo.com</td>
+    <td style="font-size:0.85rem">2025-12-19</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">GL</div><strong style="font-size:0.88rem">Gena Lazar</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">g***r@gmail.com</td>
+    <td style="font-size:0.85rem">2025-12-19</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">RU</div><strong style="font-size:0.88rem">Ruxandra-Elena Ursache</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">r***0@cam.ac.uk</td>
+    <td style="font-size:0.85rem">2025-12-18</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#ffedd5;color:#9a3412;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">No Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AI</div><strong style="font-size:0.88rem">Alina Ispas Montbriand</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">a***9@gmail.com</td>
+    <td style="font-size:0.85rem">2025-12-18</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#ffedd5;color:#9a3412;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">No Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr><tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#00ACF0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">AT</div><strong style="font-size:0.88rem">Antonia Tarfulea</strong></div></td>
+    <td style="font-size:0.82rem;color:#666">a***s@gmail.com</td>
+    <td style="font-size:0.85rem">2025-12-17</td>
+    <td><span style="background:#f3f4f6;color:#6b7280;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">Unknown</span></td>
+    <td><span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap">✓ Photo</span></td>
+    <td style="font-size:0.82rem;color:#888">—</td>
+  </tr></tbody>
+    </table>
+    </div>
+    <div id="noResults" style="display:none;padding:32px;text-align:center;color:#888">No members match your filter.</div>
+  </div>
+</main>
+<footer>Romanian United Foundation · GlobalRomania Community · rufglobal.github.io/dashboards · April 8, 2026</footer>
 <script>
-function filter(type) {
-  document.querySelectorAll('.filter-bar button').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-  const rows = document.querySelectorAll('#memberTable tbody tr');
-  rows.forEach(row => {
-    const badges = row.querySelector('.badge');
-    const badgeText = badges ? badges.textContent : '';
-    if (type === 'all') row.style.display = '';
-    else if (type === 'unwelcomed') row.style.display = badgeText.includes('Not welcomed') ? '' : 'none';
-    else if (type === 'no-photo') row.style.display = badgeText.includes('No photo') ? '' : 'none';
-    else if (type === 'stage2') row.style.display = badgeText.includes('Stage 2') ? '' : 'none';
+document.querySelectorAll('table').forEach(table => {
+  table.querySelectorAll('th').forEach((th, colIndex) => {
+    let asc = true;
+    th.addEventListener('click', () => {
+      const tbody = table.querySelector('tbody');
+      const rows = Array.from(tbody.querySelectorAll('tr')).filter(r => r.style.display !== 'none');
+      rows.sort((a, b) => {
+        const aT = a.cells[colIndex]?.textContent.trim() ?? '';
+        const bT = b.cells[colIndex]?.textContent.trim() ?? '';
+        const aN = parseFloat(aT.replace(/[^0-9.-]/g, ''));
+        const bN = parseFloat(bT.replace(/[^0-9.-]/g, ''));
+        if (!isNaN(aN) && !isNaN(bN)) return asc ? aN - bN : bN - aN;
+        return asc ? aT.localeCompare(bT) : bT.localeCompare(aT);
+      });
+      rows.forEach(r => tbody.appendChild(r));
+      table.querySelectorAll('th').forEach(h => h.textContent = h.textContent.replace(/ [▲▼]$/, ''));
+      th.textContent += asc ? ' ▲' : ' ▼';
+      asc = !asc;
+    });
   });
+});
+
+function filterTable() {
+  const search = document.getElementById('search').value.toLowerCase();
+  const statusF = document.getElementById('statusFilter').value.toLowerCase();
+  const photoF = document.getElementById('photoFilter').value.toLowerCase();
+  const rows = document.querySelectorAll('#memberTable tbody tr');
+  let visible = 0;
+  rows.forEach(row => {
+    const name = row.cells[0].textContent.toLowerCase();
+    const email = row.cells[1].textContent.toLowerCase();
+    const status = row.cells[3].textContent.toLowerCase();
+    const photo = row.cells[4].textContent.toLowerCase();
+    const matchSearch = !search || name.includes(search) || email.includes(search);
+    const matchStatus = !statusF || status.includes(statusF);
+    const matchPhoto = !photoF || photo.includes(photoF);
+    const show = matchSearch && matchStatus && matchPhoto;
+    row.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
 }
 </script>
 </body>
