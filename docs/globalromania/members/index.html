@@ -3,79 +3,88 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GlobalRomania Member Dashboard</title>
+<title>GlobalRomania Member Status Dashboard — Romanian United Foundation</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f6fa; color: #333; }
-  header { background: linear-gradient(135deg, #1a1a2e, #16213e); color: white; padding: 24px 32px; }
-  header h1 { font-size: 22px; font-weight: 700; }
-  header p { font-size: 13px; opacity: 0.6; margin-top: 4px; }
-  .stats { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; padding: 24px 32px; }
-  .stat { background: white; border-radius: 10px; padding: 16px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
-  .stat .num { font-size: 28px; font-weight: 800; }
-  .stat .label { font-size: 11px; color: #888; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .stat.green .num { color: #27ae60; }
-  .stat.red .num { color: #e74c3c; }
-  .stat.orange .num { color: #e67e22; }
-  .stat.blue .num { color: #2980b9; }
-  .stat.gray .num { color: #555; }
-  .table-wrap { padding: 0 32px 32px; }
-  .filter-bar { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
-  .filter-bar button { padding: 6px 14px; border-radius: 20px; border: 1.5px solid #ddd; background: white; cursor: pointer; font-size: 12px; font-weight: 600; color: #555; transition: all 0.15s; }
-  .filter-bar button.active, .filter-bar button:hover { background: #1a1a2e; color: white; border-color: #1a1a2e; }
-  table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08); font-size: 13px; }
-  thead { background: #1a1a2e; color: white; }
-  th { padding: 12px 14px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
-  th.center, td.center { text-align: center; }
-  td { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; }
-  tr:last-child td { border-bottom: none; }
-  tr.unwelcomed { background: #fff9f9; }
-  tr:hover { background: #f8f9ff; }
-  .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
-  .badge.green { background: #eafaf1; color: #27ae60; }
-  .badge.red { background: #fdf0f0; color: #e74c3c; }
-  .badge.orange { background: #fef9f0; color: #e67e22; }
-  .badge.blue { background: #eaf4fd; color: #2980b9; }
-  .updated { padding: 0 32px 16px; font-size: 11px; color: #aaa; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #f0f4f8; color: #222; }
+header { background: #00ACF0; color: #fff; padding: 24px 36px; }
+header h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.01em; }
+header p { font-size: 0.88rem; opacity: 0.88; margin-top: 4px; }
+.meta { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+.chip { background: rgba(255,255,255,0.22); padding: 3px 11px; border-radius: 20px; font-size: 0.76rem; font-weight: 500; }
+.stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; padding: 24px 36px 0; max-width: 1300px; margin: 0 auto; }
+.stat { background: #fff; border-radius: 10px; padding: 16px 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+.stat .num { font-size: 2rem; font-weight: 700; color: #113268; line-height: 1; }
+.stat .label { font-size: 0.75rem; color: #888; margin-top: 5px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
+.stat.accent .num { color: #00ACF0; }
+.stat.orange .num { color: #EF7D00; }
+.table-wrap { max-width: 1300px; margin: 20px auto 0; padding: 0 36px 36px; }
+.search-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; }
+.search-row input { flex: 1; min-width: 200px; padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.88rem; font-family: inherit; outline: none; }
+.search-row input:focus { border-color: #00ACF0; }
+.search-row .filter-btn { padding: 7px 14px; border: 1px solid #ddd; border-radius: 20px; font-size: 0.78rem; cursor: pointer; background: #fff; font-family: inherit; }
+.search-row .filter-btn.active, .search-row .filter-btn:hover { background: #00ACF0; color: #fff; border-color: #00ACF0; }
+table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+th { background: #113268; color: #fff; padding: 11px 14px; text-align: left; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; user-select: none; white-space: nowrap; }
+th:hover { background: #00ACF0; }
+th.center { text-align: center; }
+td { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; font-size: 0.85rem; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f7fbff; }
+td.center { text-align: center; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.72rem; font-weight: 600; }
+.badge-green { background: #e6f9f0; color: #00875a; }
+.badge-gray { background: #f0f0f0; color: #888; }
+.badge-blue { background: #e0f4fd; color: #0078b4; }
+footer { text-align: center; padding: 24px; color: #aaa; font-size: 0.78rem; margin-top: 10px; }
+footer a { color: #00ACF0; text-decoration: none; }
+.no-results { text-align: center; padding: 40px; color: #aaa; display: none; }
 </style>
 </head>
 <body>
 <header>
   <h1>🌍 GlobalRomania — Member Status Dashboard</h1>
-  <p>Last updated: April 08, 2026 at 20:53 CST</p>
+  <p>Romanian United Foundation · Member welcome tracking &amp; onboarding status</p>
+  <div class="meta">
+    <span class="chip">Updated 2026-04-09</span>
+    <span class="chip">100 Members</span>
+    <span class="chip">rufglobal.github.io/dashboards</span>
+  </div>
 </header>
 
 <div class="stats">
-  <div class="stat gray"><div class="num">100</div><div class="label">Total Members</div></div>
-  <div class="stat green"><div class="num">42</div><div class="label">Welcomed</div></div>
-  <div class="stat red"><div class="num">58</div><div class="label">Not Welcomed</div></div>
-  <div class="stat green"><div class="num">73</div><div class="label">Has Photo</div></div>
-  <div class="stat orange"><div class="num">27</div><div class="label">No Photo</div></div>
-  <div class="stat blue"><div class="num">0</div><div class="label">Replied</div></div>
-  <div class="stat blue"><div class="num">0</div><div class="label">Stage 2 Sent</div></div>
+  <div class="stat"><div class="num">100</div><div class="label">Total Members</div></div>
+  <div class="stat accent"><div class="num">42</div><div class="label">Welcomed</div></div>
+  <div class="stat"><div class="num">58</div><div class="label">Not Welcomed</div></div>
+  <div class="stat accent"><div class="num">73</div><div class="label">Has Photo</div></div>
+  <div class="stat"><div class="num">27</div><div class="label">No Photo</div></div>
+  <div class="stat orange"><div class="num">0</div><div class="label">Replied</div></div>
+  <div class="stat orange"><div class="num">0</div><div class="label">Stage 2</div></div>
 </div>
 
 <div class="table-wrap">
-  <div class="filter-bar">
-    <button class="active" onclick="filter('all')">All (100)</button>
-    <button onclick="filter('unwelcomed')">❌ Not Welcomed (58)</button>
-    <button onclick="filter('no-photo')">🚫 No Photo (27)</button>
-    <button onclick="filter('stage2')">💬 Stage 2 Needed</button>
+  <div class="search-row">
+    <input type="text" id="search" placeholder="Search members…" oninput="filterTable()">
+    <button class="filter-btn active" onclick="filterStatus('all',this)">All</button>
+    <button class="filter-btn" onclick="filterStatus('welcomed',this)">Welcomed ✅</button>
+    <button class="filter-btn" onclick="filterStatus('not-welcomed',this)">Not Welcomed</button>
+    <button class="filter-btn" onclick="filterStatus('no-photo',this)">No Photo</button>
   </div>
   <table id="memberTable">
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Joined</th>
-        <th class="center">Welcomed</th>
-        <th class="center">Photo</th>
-        <th class="center">Replied</th>
-        <th class="center">Stage 2</th>
-        <th>Status</th>
+        <th onclick="sortTable(0)">Name ↕</th>
+        <th onclick="sortTable(1)">Joined ↕</th>
+        <th class="center" onclick="sortTable(2)">Welcomed ↕</th>
+        <th class="center" onclick="sortTable(3)">Photo ↕</th>
+        <th class="center" onclick="sortTable(4)">Replied ↕</th>
+        <th class="center" onclick="sortTable(5)">Stage 2 ↕</th>
+        <th onclick="sortTable(6)">Status ↕</th>
       </tr>
     </thead>
-    <tbody>
-    <tr class="">
+    <tbody id="tbody">
+<tr class="">
       <td><strong>Alexandra Popescu</strong></td>
       <td>2026-04-08</td>
       <td class="center">✅</td>
@@ -974,25 +983,68 @@
       <td class="center">—</td>
       <td class="center">—</td>
       <td><span class="badge red">Not welcomed</span></td>
-    </tr></tbody>
+    </tr>
+    </tbody>
   </table>
+  <div class="no-results" id="no-results">No members match your filter.</div>
 </div>
 
-<div class="updated">Data source: Circle API · Knowledge base: member-status.json · 100 members tracked</div>
+<footer>
+  GlobalRomania Member Dashboard · <a href="https://ruf.global">Romanian United Foundation</a> ·
+  <a href="https://rufglobal.github.io/dashboards/">All Dashboards</a>
+</footer>
 
 <script>
-function filter(type) {
-  document.querySelectorAll('.filter-bar button').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-  const rows = document.querySelectorAll('#memberTable tbody tr');
-  rows.forEach(row => {
-    const badges = row.querySelector('.badge');
-    const badgeText = badges ? badges.textContent : '';
-    if (type === 'all') row.style.display = '';
-    else if (type === 'unwelcomed') row.style.display = badgeText.includes('Not welcomed') ? '' : 'none';
-    else if (type === 'no-photo') row.style.display = badgeText.includes('No photo') ? '' : 'none';
-    else if (type === 'stage2') row.style.display = badgeText.includes('Stage 2') ? '' : 'none';
+let sortCol = -1, sortAsc = true;
+let activeFilter = 'all';
+
+function sortTable(col) {
+  const tbody = document.getElementById('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  if (sortCol === col) { sortAsc = !sortAsc; } else { sortCol = col; sortAsc = true; }
+  rows.sort((a, b) => {
+    const aT = a.cells[col]?.textContent.trim() ?? '';
+    const bT = b.cells[col]?.textContent.trim() ?? '';
+    const aN = parseFloat(aT.replace(/[^0-9.-]/g,''));
+    const bN = parseFloat(bT.replace(/[^0-9.-]/g,''));
+    if (!isNaN(aN) && !isNaN(bN)) return sortAsc ? aN-bN : bN-aN;
+    return sortAsc ? aT.localeCompare(bT) : bT.localeCompare(aT);
   });
+  rows.forEach(r => tbody.appendChild(r));
+  document.querySelectorAll('th').forEach((th,i) => {
+    th.textContent = th.textContent.replace(/ [▲▼↕]$/,'') + (i===col ? (sortAsc?' ▲':' ▼') : ' ↕');
+  });
+}
+
+function filterTable() {
+  const q = document.getElementById('search').value.toLowerCase();
+  applyFilters(q, activeFilter);
+}
+
+function filterStatus(f, btn) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters(document.getElementById('search').value.toLowerCase(), f);
+}
+
+function applyFilters(q, f) {
+  const rows = document.querySelectorAll('#tbody tr');
+  let visible = 0;
+  rows.forEach(r => {
+    const text = r.textContent.toLowerCase();
+    const cells = r.cells;
+    const welcomed = cells[2]?.textContent.trim();
+    const photo = cells[3]?.textContent.trim();
+    const matchQ = !q || text.includes(q);
+    let matchF = true;
+    if (f === 'welcomed') matchF = welcomed === '✅';
+    if (f === 'not-welcomed') matchF = welcomed !== '✅';
+    if (f === 'no-photo') matchF = photo !== '✅';
+    r.style.display = matchQ && matchF ? '' : 'none';
+    if (matchQ && matchF) visible++;
+  });
+  document.getElementById('no-results').style.display = visible===0 ? 'block' : 'none';
 }
 </script>
 </body>
