@@ -1005,8 +1005,8 @@ function sortTable(col) {
   rows.sort((a, b) => {
     const aT = a.cells[col]?.textContent.trim() ?? '';
     const bT = b.cells[col]?.textContent.trim() ?? '';
-    const aN = parseFloat(aT.replace(/[^0-9.-]/g,''));
-    const bN = parseFloat(bT.replace(/[^0-9.-]/g,''));
+    const aN = parseFloat(aT.replace(/-/g,'').replace(/[^0-9.]/g,''));
+    const bN = parseFloat(bT.replace(/-/g,'').replace(/[^0-9.]/g,''));
     if (!isNaN(aN) && !isNaN(bN)) return sortAsc ? aN-bN : bN-aN;
     return sortAsc ? aT.localeCompare(bT) : bT.localeCompare(aT);
   });
