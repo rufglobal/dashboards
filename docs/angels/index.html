@@ -1,0 +1,2992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RUF Angels Dashboard — Calling Campaign</title>
+<style>
+  :root {
+    --blue: #007CFF;
+    --purple: #B823FF;
+    --orange: #FF6F3C;
+    --dark: #0A0E27;
+    --dark2: #1E1E2B;
+    --card: #16192A;
+    --border: #2A2D4A;
+    --text: #E8EAF6;
+    --muted: #8892B0;
+    --grad: linear-gradient(135deg, #007CFF 0%, #B823FF 100%);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--dark); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 13px; }
+
+  /* HEADER */
+  .header { background: var(--grad); padding: 28px 36px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .header-left h1 { font-size: 26px; font-weight: 700; color: #fff; letter-spacing: -0.5px; }
+  .header-left p { color: rgba(255,255,255,0.8); margin-top: 4px; font-size: 13px; }
+  .ruf-logo { font-size: 32px; font-weight: 900; color: #fff; letter-spacing: -2px; }
+
+  /* STATS CARDS */
+  .stats { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; padding: 20px 36px; }
+  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; text-align: center; }
+  .stat-card .num { font-size: 28px; font-weight: 700; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .stat-card .label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+  .stat-card.warn .num { background: none; -webkit-text-fill-color: #E67E22; }
+  .stat-card.danger .num { background: none; -webkit-text-fill-color: #E74C3C; }
+
+  /* FILTERS */
+  .filters { padding: 0 36px 16px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .filters input { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: 8px; font-size: 13px; width: 240px; outline: none; }
+  .filters input:focus { border-color: var(--blue); }
+  .filter-btn { background: var(--card); border: 1px solid var(--border); color: var(--muted); padding: 7px 14px; border-radius: 8px; cursor: pointer; font-size: 12px; transition: all 0.2s; }
+  .filter-btn:hover, .filter-btn.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .filter-label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .count-label { color: var(--muted); font-size: 12px; margin-left: auto; }
+
+  /* TABLE */
+  .table-wrap { padding: 0 36px 36px; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  th { background: var(--card); color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 10px 12px; text-align: left; position: sticky; top: 0; cursor: pointer; white-space: nowrap; border-bottom: 2px solid var(--border); user-select: none; }
+  th:hover { color: var(--text); }
+  th.sorted-asc::after { content: ' ↑'; color: var(--blue); }
+  th.sorted-desc::after { content: ' ↓'; color: var(--blue); }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tr:hover td { background: rgba(255,255,255,0.03); }
+  tr.hidden { display: none; }
+
+  /* CELLS */
+  .angel-name { font-weight: 600; color: #fff; }
+  .angel-meta { color: var(--muted); font-size: 11px; margin-top: 2px; }
+  .nb-link { color: var(--blue); text-decoration: none; font-size: 11px; }
+  .nb-link:hover { text-decoration: underline; }
+  .phone { color: var(--muted); font-size: 11px; }
+  .employer-cell { color: var(--muted); max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .contact-cell { min-width: 180px; }
+
+  /* BADGES */
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .badge-active { background: rgba(46,204,113,0.15); color: #2ECC71; }
+  .badge-failed { background: rgba(231,76,60,0.15); color: #E74C3C; }
+  .badge-paused { background: rgba(243,156,18,0.15); color: #F39C12; }
+  .badge-cancelled { background: rgba(149,165,166,0.15); color: #95A5A6; }
+  .level-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; border: 1px solid; }
+  .sc-tier { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; color: #fff; font-weight: 600; }
+
+  /* SCORE BAR */
+  .score-cell { display: flex; align-items: center; gap: 8px; min-width: 100px; }
+  .score-bar-bg { flex: 1; background: var(--border); border-radius: 4px; height: 6px; overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 4px; }
+  .score-num { font-weight: 700; color: #fff; font-size: 13px; min-width: 30px; text-align: right; }
+  .pillar-val { font-weight: 600; color: var(--text); }
+
+  /* FOOTER */
+  .footer { padding: 16px 36px; color: var(--muted); font-size: 11px; border-top: 1px solid var(--border); text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>🏛️ Angels Dashboard — Calling Campaign</h1>
+    <p>Romanian United Foundation · Social Capital Pipeline · Generated April 09, 2026 at 05:17 UTC</p>
+  </div>
+  <div class="ruf-logo">RUF</div>
+</div>
+
+<div class="stats">
+  <div class="stat-card"><div class="num">116</div><div class="label">Total Angels</div></div>
+  <div class="stat-card"><div class="num">113</div><div class="label">Active</div></div>
+  <div class="stat-card"><div class="num">60</div><div class="label">Founding Angels</div></div>
+  <div class="stat-card warn"><div class="num">3</div><div class="label">Failed Payment</div></div>
+  <div class="stat-card warn"><div class="num">0</div><div class="label">Paused</div></div>
+  <div class="stat-card"><div class="num">30.5</div><div class="label">Avg SC Score</div></div>
+</div>
+
+<div class="filters">
+  <span class="filter-label">Filter:</span>
+  <input type="text" id="searchInput" placeholder="Search name, email, employer..." oninput="filterTable()">
+  <button class="filter-btn active" onclick="filterStatus('all', this)">All</button>
+  <button class="filter-btn" onclick="filterStatus('active', this)">Active</button>
+  <button class="filter-btn" onclick="filterStatus('failed', this)">⚠ Failed Payment</button>
+  <button class="filter-btn" onclick="filterStatus('paused', this)">Paused</button>
+  <button class="filter-btn" onclick="filterStatus('founding', this)">⭐ Founding</button>
+  <span class="count-label" id="countLabel">Showing 116 of 116</span>
+</div>
+
+<div class="table-wrap">
+<table id="angelsTable">
+  <thead>
+    <tr>
+      <th onclick="sortTable(0)">Angel</th>
+      <th onclick="sortTable(1)">Level</th>
+      <th onclick="sortTable(2)">Status</th>
+      <th onclick="sortTable(3)" data-type="num">SC Score</th>
+      <th onclick="sortTable(4)" data-type="num">P1 Contrib</th>
+      <th onclick="sortTable(5)" data-type="num">P2 Connect</th>
+      <th onclick="sortTable(6)" data-type="num">P3 Potential</th>
+      <th onclick="sortTable(7)">SC Tier</th>
+      <th onclick="sortTable(8)">Contact</th>
+      <th onclick="sortTable(9)">Location</th>
+      <th onclick="sortTable(10)">Employer</th>
+      <th onclick="sortTable(11)">Last FA Donation</th>
+      <th onclick="sortTable(12)">Last Any Donation</th>
+    </tr>
+  </thead>
+  <tbody id="tableBody">
+    
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Mihai Lehene</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/353" target="_blank" class="nb-link">NB#353</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="98"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:98.0%;background:#2ECC71"></div></div>
+        <span class="score-num">98.0</span>
+    </div></td>
+            <td><span class="pillar-val">88.0</span></td>
+            <td><span class="pillar-val">87.0</span></td>
+            <td><span class="pillar-val">84.0</span></td>
+            <td><span class="sc-tier" style="background:#7B2FBE">🏛️ Cornerstone</span></td>
+            <td class="contact-cell">
+                <div>mihai@romanianunitedfund.org</div>
+                <div class="phone">+17732898696</div>
+            </td>
+            <td>Glenview, IL</td>
+            <td class="employer-cell">Romanian United Foundation (RUF); MDL Investments (family office)</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Mihaela Simianu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/11962" target="_blank" class="nb-link">NB#11962</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="64"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:64.0%;background:#2ECC71"></div></div>
+        <span class="score-num">64.0</span>
+    </div></td>
+            <td><span class="pillar-val">50.0</span></td>
+            <td><span class="pillar-val">54.0</span></td>
+            <td><span class="pillar-val">71.0</span></td>
+            <td><span class="sc-tier" style="background:#E67E22">🔨 Builder</span></td>
+            <td class="contact-cell">
+                <div>simianu_mihaela@live.com</div>
+                <div class="phone">13173780903</div>
+            </td>
+            <td>Bloomington, IN</td>
+            <td class="employer-cell">CONCORDIA MCS, LLC</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Oana Dobrean-Urzica</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/1034" target="_blank" class="nb-link">NB#1034</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="64"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:64.0%;background:#2ECC71"></div></div>
+        <span class="score-num">64.0</span>
+    </div></td>
+            <td><span class="pillar-val">61.0</span></td>
+            <td><span class="pillar-val">58.0</span></td>
+            <td><span class="pillar-val">48.0</span></td>
+            <td><span class="sc-tier" style="background:#E67E22">🔨 Builder</span></td>
+            <td class="contact-cell">
+                <div>odobreanu@rocochicago.org</div>
+                <div class="phone">+17737873623</div>
+            </td>
+            <td>Skokie, IL</td>
+            <td class="employer-cell">Physical Therapist</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Onita Circu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/5297" target="_blank" class="nb-link">NB#5297</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="61"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:61.0%;background:#2ECC71"></div></div>
+        <span class="score-num">61.0</span>
+    </div></td>
+            <td><span class="pillar-val">53.0</span></td>
+            <td><span class="pillar-val">53.0</span></td>
+            <td><span class="pillar-val">59.0</span></td>
+            <td><span class="sc-tier" style="background:#E67E22">🔨 Builder</span></td>
+            <td class="contact-cell">
+                <div>onitacircu@yahoo.com</div>
+                <div class="phone">7735171034</div>
+            </td>
+            <td>Lake Villa, IL</td>
+            <td class="employer-cell">Self-employed (Real Estate Investor)</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Diana Gini</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/9069" target="_blank" class="nb-link">NB#9069</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-failed">⚠ Failed Payment</span></td>
+            <td data-sort="53"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:53.0%;background:#3498DB"></div></div>
+        <span class="score-num">53.0</span>
+    </div></td>
+            <td><span class="pillar-val">48.0</span></td>
+            <td><span class="pillar-val">60.0</span></td>
+            <td><span class="pillar-val">30.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>dgini@ruf.global</div>
+                <div class="phone">+34681015939</div>
+            </td>
+            <td>Colmenar Viejo, Community of Madrid</td>
+            <td class="employer-cell">Romanian United Foundation</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Diana Dram</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/4861" target="_blank" class="nb-link">NB#4861</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="53"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:53.0%;background:#3498DB"></div></div>
+        <span class="score-num">53.0</span>
+    </div></td>
+            <td><span class="pillar-val">46.0</span></td>
+            <td><span class="pillar-val">51.0</span></td>
+            <td><span class="pillar-val">47.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>diana.dram@romanianunitedfund.org</div>
+                <div class="phone">+16306053660</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">McDonald's</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Cristian Luput</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/1198" target="_blank" class="nb-link">NB#1198</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="52"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:52.0%;background:#3498DB"></div></div>
+        <span class="score-num">52.0</span>
+    </div></td>
+            <td><span class="pillar-val">42.0</span></td>
+            <td><span class="pillar-val">45.0</span></td>
+            <td><span class="pillar-val">58.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>cluput88@gmail.com</div>
+                <div class="phone">+13128067365</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">Optimus Realty Inc</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Camelia Bratu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/9408" target="_blank" class="nb-link">NB#9408</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="50"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:50.0%;background:#3498DB"></div></div>
+        <span class="score-num">50.0</span>
+    </div></td>
+            <td><span class="pillar-val">54.0</span></td>
+            <td><span class="pillar-val">48.0</span></td>
+            <td><span class="pillar-val">48.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>camelia@romanianunitedfund.org</div>
+                <div class="phone">7022051713</div>
+            </td>
+            <td>Henderson, NV</td>
+            <td class="employer-cell">Clinical Research; Romanian United Fund</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Ligia Apostoaia</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/369" target="_blank" class="nb-link">NB#369</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="50"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:50.0%;background:#3498DB"></div></div>
+        <span class="score-num">50.0</span>
+    </div></td>
+            <td><span class="pillar-val">45.0</span></td>
+            <td><span class="pillar-val">52.0</span></td>
+            <td><span class="pillar-val">34.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>ligia@romanianunitedfund.org</div>
+                <div class="phone">+13129251168</div>
+            </td>
+            <td>Glenview, IL</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Nelu Lazar</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/9135" target="_blank" class="nb-link">NB#9135</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="49"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:49.0%;background:#3498DB"></div></div>
+        <span class="score-num">49.0</span>
+    </div></td>
+            <td><span class="pillar-val">39.0</span></td>
+            <td><span class="pillar-val">52.0</span></td>
+            <td><span class="pillar-val">60.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>nelu@romanianunitedfund.org</div>
+                <div class="phone">+17655320672</div>
+            </td>
+            <td>Lafayette, IN</td>
+            <td class="employer-cell">Caterpillar Inc.</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Dan Nicolae</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/6" target="_blank" class="nb-link">NB#6</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="49"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:49.0%;background:#3498DB"></div></div>
+        <span class="score-num">49.0</span>
+    </div></td>
+            <td><span class="pillar-val">44.0</span></td>
+            <td><span class="pillar-val">38.0</span></td>
+            <td><span class="pillar-val">50.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>danliviunicolae@gmail.com</div>
+                <div class="phone">+17739346999</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">The University of Chicago</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Romina Ionascu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/9060" target="_blank" class="nb-link">NB#9060</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="48"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:48.0%;background:#3498DB"></div></div>
+        <span class="score-num">48.0</span>
+    </div></td>
+            <td><span class="pillar-val">52.0</span></td>
+            <td><span class="pillar-val">45.0</span></td>
+            <td><span class="pillar-val">45.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>romina@romanianunitedfund.org</div>
+                <div class="phone">+17156105940</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">Romanian United Fund (RUF)</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Simona Vasile</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/780" target="_blank" class="nb-link">NB#780</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="48"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:48.0%;background:#3498DB"></div></div>
+        <span class="score-num">48.0</span>
+    </div></td>
+            <td><span class="pillar-val">40.0</span></td>
+            <td><span class="pillar-val">49.0</span></td>
+            <td><span class="pillar-val">65.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>simonacvasile@gmail.com</div>
+                <div class="phone">+12039792924</div>
+            </td>
+            <td>Wilton, CT</td>
+            <td class="employer-cell">BDO (BDO USA)</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Cristian Merdariu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/611" target="_blank" class="nb-link">NB#611</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="48"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:48.0%;background:#3498DB"></div></div>
+        <span class="score-num">48.0</span>
+    </div></td>
+            <td><span class="pillar-val">43.0</span></td>
+            <td><span class="pillar-val">43.0</span></td>
+            <td><span class="pillar-val">66.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>cristian.merdariu@gmail.com</div>
+                <div class="phone">+17735016879</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">City Habitat Realty, LLC</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Ioana Savos</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/118" target="_blank" class="nb-link">NB#118</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="48"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:48.0%;background:#3498DB"></div></div>
+        <span class="score-num">48.0</span>
+    </div></td>
+            <td><span class="pillar-val">46.0</span></td>
+            <td><span class="pillar-val">48.0</span></td>
+            <td><span class="pillar-val">53.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>isavos@yahoo.com</div>
+                <div class="phone">+17733167603</div>
+            </td>
+            <td>Lake Forest, IL</td>
+            <td class="employer-cell">New Explode Construction, Inc.</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Donna Miller</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/11740" target="_blank" class="nb-link">NB#11740</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="44"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:44.0%;background:#3498DB"></div></div>
+        <span class="score-num">44.0</span>
+    </div></td>
+            <td><span class="pillar-val">30.0</span></td>
+            <td><span class="pillar-val">34.0</span></td>
+            <td><span class="pillar-val">62.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>FLGHTRN@YAHOO.COM</div>
+                <div class="phone">+17023353027</div>
+            </td>
+            <td>Las Vegas, NV</td>
+            <td class="employer-cell">Reinventions Professionals LLC</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Adina Sandu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/354" target="_blank" class="nb-link">NB#354</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="44"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:44.0%;background:#3498DB"></div></div>
+        <span class="score-num">44.0</span>
+    </div></td>
+            <td><span class="pillar-val">39.0</span></td>
+            <td><span class="pillar-val">46.0</span></td>
+            <td><span class="pillar-val">51.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>sandu.adina@gmail.com</div>
+                <div class="phone">+17739363134</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">Romanian United Fund (RUF); ROCO (Romanian Community Foundation of Chicago / ROCO Chicago)</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Angie Matei</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/7795" target="_blank" class="nb-link">NB#7795</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="43"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:43.0%;background:#3498DB"></div></div>
+        <span class="score-num">43.0</span>
+    </div></td>
+            <td><span class="pillar-val">40.0</span></td>
+            <td><span class="pillar-val">51.0</span></td>
+            <td><span class="pillar-val">20.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>nglcmt@gmail.com</div>
+                <div class="phone">+18479897908</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">Hawthorn Surgical Care Affiliates- Vernon Hills </td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Monica Ferchi</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/1189" target="_blank" class="nb-link">NB#1189</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="43"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:43.0%;background:#3498DB"></div></div>
+        <span class="score-num">43.0</span>
+    </div></td>
+            <td><span class="pillar-val">42.0</span></td>
+            <td><span class="pillar-val">42.0</span></td>
+            <td><span class="pillar-val">25.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>info@talentconnectinc.com</div>
+                <div class="phone">+14156069948</div>
+            </td>
+            <td>reno, NV</td>
+            <td class="employer-cell">TransUSA Exchange</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">George Marius Dinulescu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/486" target="_blank" class="nb-link">NB#486</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="43"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:43.0%;background:#3498DB"></div></div>
+        <span class="score-num">43.0</span>
+    </div></td>
+            <td><span class="pillar-val">34.0</span></td>
+            <td><span class="pillar-val">27.0</span></td>
+            <td><span class="pillar-val">63.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>dgmarius@hotmail.com</div>
+                <div class="phone">+17702624096</div>
+            </td>
+            <td>Suwanee, GA</td>
+            <td class="employer-cell">HOPE Dentistry; HOPE Primary Care & Dentistry</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Ovidiu Stoica</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/11" target="_blank" class="nb-link">NB#11</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="43"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:43.0%;background:#3498DB"></div></div>
+        <span class="score-num">43.0</span>
+    </div></td>
+            <td><span class="pillar-val">38.0</span></td>
+            <td><span class="pillar-val">38.0</span></td>
+            <td><span class="pillar-val">52.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>valovist@gmail.com</div>
+                <div class="phone">+17735107028</div>
+            </td>
+            <td>Adelaide, SA</td>
+            <td class="employer-cell">Arup</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Andreea Raicu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/7565" target="_blank" class="nb-link">NB#7565</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="42"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:42.0%;background:#3498DB"></div></div>
+        <span class="score-num">42.0</span>
+    </div></td>
+            <td><span class="pillar-val">44.0</span></td>
+            <td><span class="pillar-val">41.0</span></td>
+            <td><span class="pillar-val">20.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>andreea.oana.raicu@gmail.com</div>
+                <div class="phone">+13124200635</div>
+            </td>
+            <td>Park Ridge, IL</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Bianca Nicoara</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/649" target="_blank" class="nb-link">NB#649</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="42"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:42.0%;background:#3498DB"></div></div>
+        <span class="score-num">42.0</span>
+    </div></td>
+            <td><span class="pillar-val">37.0</span></td>
+            <td><span class="pillar-val">48.0</span></td>
+            <td><span class="pillar-val">43.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>bianicoara@gmail.com</div>
+                <div class="phone">+17173323405</div>
+            </td>
+            <td>Lake Mary, FL</td>
+            <td class="employer-cell">Orlando Health; Osmosis (Knowledge Diffusion); Pennsylvania College of Health Sciences</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Andreea Coloji</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/7622" target="_blank" class="nb-link">NB#7622</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="41"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:41.0%;background:#3498DB"></div></div>
+        <span class="score-num">41.0</span>
+    </div></td>
+            <td><span class="pillar-val">36.0</span></td>
+            <td><span class="pillar-val">40.0</span></td>
+            <td><span class="pillar-val">49.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>Andreeacleaningservice@yahoo.com</div>
+                <div class="phone">7736822283</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">Andreea Cleaning Service / Andreea Cleaning Service Inc</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Eduard Litvac</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/7446" target="_blank" class="nb-link">NB#7446</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="39"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:39.0%;background:#E67E22"></div></div>
+        <span class="score-num">39.0</span>
+    </div></td>
+            <td><span class="pillar-val">30.0</span></td>
+            <td><span class="pillar-val">30.0</span></td>
+            <td><span class="pillar-val">54.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>eduard.litvac@routeonegroup.com</div>
+                <div class="phone">+17325002677</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">Route One Group</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">George Roth</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/1299" target="_blank" class="nb-link">NB#1299</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="39"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:39.0%;background:#E67E22"></div></div>
+        <span class="score-num">39.0</span>
+    </div></td>
+            <td><span class="pillar-val">38.0</span></td>
+            <td><span class="pillar-val">30.0</span></td>
+            <td><span class="pillar-val">37.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>groth@recognos.com</div>
+                <div class="phone">+14152543154</div>
+            </td>
+            <td>San Francisco, CA</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Mihaela Madaras</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/23823" target="_blank" class="nb-link">NB#23823</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="38"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:38.0%;background:#E67E22"></div></div>
+        <span class="score-num">38.0</span>
+    </div></td>
+            <td><span class="pillar-val">32.0</span></td>
+            <td><span class="pillar-val">42.0</span></td>
+            <td><span class="pillar-val">28.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>mihaela.madaras@romanianunitedfund.org</div>
+                <div class="phone">+16363465255</div>
+            </td>
+            <td>Mason, OH</td>
+            <td class="employer-cell">Sun Chemical</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Gabriela Tatar-Cordos</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/8729" target="_blank" class="nb-link">NB#8729</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="38"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:38.0%;background:#E67E22"></div></div>
+        <span class="score-num">38.0</span>
+    </div></td>
+            <td><span class="pillar-val">34.0</span></td>
+            <td><span class="pillar-val">36.0</span></td>
+            <td><span class="pillar-val">29.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>gctatar@gmail.com</div>
+                <div class="phone">+17735019300</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">Century 21</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Mihaela Lovin</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/6836" target="_blank" class="nb-link">NB#6836</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="38"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:38.0%;background:#E67E22"></div></div>
+        <span class="score-num">38.0</span>
+    </div></td>
+            <td><span class="pillar-val">28.0</span></td>
+            <td><span class="pillar-val">40.0</span></td>
+            <td><span class="pillar-val">33.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>mihaela.lovin@gmail.com</div>
+                <div class="phone">+18042456434</div>
+            </td>
+            <td>Detroit, MI</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Cosmin Lehene</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/1347" target="_blank" class="nb-link">NB#1347</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="38"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:38.0%;background:#E67E22"></div></div>
+        <span class="score-num">38.0</span>
+    </div></td>
+            <td><span class="pillar-val">33.0</span></td>
+            <td><span class="pillar-val">32.0</span></td>
+            <td><span class="pillar-val">56.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>clehene@gmail.com</div>
+                <div class="phone">+14154818642</div>
+            </td>
+            <td>Mill Valley, CA</td>
+            <td class="employer-cell">TapWater</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Simona Oarga</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/102" target="_blank" class="nb-link">NB#102</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="38"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:38.0%;background:#E67E22"></div></div>
+        <span class="score-num">38.0</span>
+    </div></td>
+            <td><span class="pillar-val">37.0</span></td>
+            <td><span class="pillar-val">44.0</span></td>
+            <td><span class="pillar-val">31.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>ooosimona@yahoo.com</div>
+                <div class="phone">+13128234734</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">Founding Angel</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">A.J. Manaseer</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/44778" target="_blank" class="nb-link">NB#44778</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="37"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:37.0%;background:#E67E22"></div></div>
+        <span class="score-num">37.0</span>
+    </div></td>
+            <td><span class="pillar-val">25.0</span></td>
+            <td><span class="pillar-val">32.0</span></td>
+            <td><span class="pillar-val">52.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>aj@inhabitrealtygroup.com</div>
+                <div class="phone">+13129459193</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">Inhabit Realty Group</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Cristian Spuza</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/39828" target="_blank" class="nb-link">NB#39828</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="37"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:37.0%;background:#E67E22"></div></div>
+        <span class="score-num">37.0</span>
+    </div></td>
+            <td><span class="pillar-val">28.0</span></td>
+            <td><span class="pillar-val">29.0</span></td>
+            <td><span class="pillar-val">53.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>cristian.spuza@gmail.com</div>
+                <div class="phone">+14129323130</div>
+            </td>
+            <td>Glenview, IL</td>
+            <td class="employer-cell">The Kraft Heinz Company</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Constantin Raduca</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/4945" target="_blank" class="nb-link">NB#4945</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="37"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:37.0%;background:#E67E22"></div></div>
+        <span class="score-num">37.0</span>
+    </div></td>
+            <td><span class="pillar-val">42.0</span></td>
+            <td><span class="pillar-val">35.0</span></td>
+            <td><span class="pillar-val">16.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>ctraduca@gmail.com</div>
+                <div class="phone">+12487982814</div>
+            </td>
+            <td>Detroit, MI</td>
+            <td class="employer-cell">COMUNITATE Romani in Michigan</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Miron Lila</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/11431" target="_blank" class="nb-link">NB#11431</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="36"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:36.0%;background:#E67E22"></div></div>
+        <span class="score-num">36.0</span>
+    </div></td>
+            <td><span class="pillar-val">34.0</span></td>
+            <td><span class="pillar-val">33.0</span></td>
+            <td><span class="pillar-val">46.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>miron.lila@gmail.com</div>
+                <div class="phone">+85269013229</div>
+            </td>
+            <td>Hong Kong, Hong Kong</td>
+            <td class="employer-cell">Caidya</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">matthew bowker</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/5150" target="_blank" class="nb-link">NB#5150</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="36"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:36.0%;background:#E67E22"></div></div>
+        <span class="score-num">36.0</span>
+    </div></td>
+            <td><span class="pillar-val">30.0</span></td>
+            <td><span class="pillar-val">34.0</span></td>
+            <td><span class="pillar-val">52.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>matt@lodgefinancial.com</div>
+                <div class="phone">+17732306221</div>
+            </td>
+            <td>Skokie, IL</td>
+            <td class="employer-cell">Lodge Financial LLC</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Simona Haiduc</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/1146" target="_blank" class="nb-link">NB#1146</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="36"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:36.0%;background:#E67E22"></div></div>
+        <span class="score-num">36.0</span>
+    </div></td>
+            <td><span class="pillar-val">29.0</span></td>
+            <td><span class="pillar-val">30.0</span></td>
+            <td><span class="pillar-val">39.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>a.simona.haiduc@gmail.com</div>
+                <div class="phone">+16302424158</div>
+            </td>
+            <td>Woodridge, IL</td>
+            <td class="employer-cell">Opportunity International</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Loredana Ghete</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/10023" target="_blank" class="nb-link">NB#10023</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="35"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:35.0%;background:#E67E22"></div></div>
+        <span class="score-num">35.0</span>
+    </div></td>
+            <td><span class="pillar-val">28.0</span></td>
+            <td><span class="pillar-val">32.0</span></td>
+            <td><span class="pillar-val">57.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>loredana.ghete@gmail.com</div>
+                <div class="phone">+17702039475</div>
+            </td>
+            <td>Alpharetta, GA</td>
+            <td class="employer-cell">Keller Williams North Atlanta (Georgia Legacy Group)</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Vlad Negrut</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/4879" target="_blank" class="nb-link">NB#4879</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="35"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:35.0%;background:#E67E22"></div></div>
+        <span class="score-num">35.0</span>
+    </div></td>
+            <td><span class="pillar-val">31.0</span></td>
+            <td><span class="pillar-val">36.0</span></td>
+            <td><span class="pillar-val">45.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>vlad.negrut@gmail.com</div>
+                <div class="phone">+13134527530</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">W.W. Grainger</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Valentin Daraban</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/190" target="_blank" class="nb-link">NB#190</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="35"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:35.0%;background:#E67E22"></div></div>
+        <span class="score-num">35.0</span>
+    </div></td>
+            <td><span class="pillar-val">27.0</span></td>
+            <td><span class="pillar-val">36.0</span></td>
+            <td><span class="pillar-val">32.0</span></td>
+            <td><span class="sc-tier" style="background:#2980B9">⚡ Active</span></td>
+            <td class="contact-cell">
+                <div>keeperdev@gmail.com</div>
+                <div class="phone">+13127305838</div>
+            </td>
+            <td>Golf , IL</td>
+            <td class="employer-cell">Keeper Development</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Valentin Precup</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/16035" target="_blank" class="nb-link">NB#16035</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="34"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:34.0%;background:#E67E22"></div></div>
+        <span class="score-num">34.0</span>
+    </div></td>
+            <td><span class="pillar-val">27.0</span></td>
+            <td><span class="pillar-val">30.0</span></td>
+            <td><span class="pillar-val">34.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>contact@outdooraficionado.com</div>
+                <div class="phone">+33637819067</div>
+            </td>
+            <td>Dijon</td>
+            <td class="employer-cell">Outdoor Aficionados</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Miruna Zamfirescu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/68" target="_blank" class="nb-link">NB#68</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="34"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:34.0%;background:#E67E22"></div></div>
+        <span class="score-num">34.0</span>
+    </div></td>
+            <td><span class="pillar-val">35.0</span></td>
+            <td><span class="pillar-val">41.0</span></td>
+            <td><span class="pillar-val">23.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>fmiruna@yahoo.com</div>
+                <div class="phone">3122878616</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">Senior Quantitative Analyst</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Claudia Petrache</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/32535" target="_blank" class="nb-link">NB#32535</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="33"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:33.0%;background:#E67E22"></div></div>
+        <span class="score-num">33.0</span>
+    </div></td>
+            <td><span class="pillar-val">20.0</span></td>
+            <td><span class="pillar-val">28.0</span></td>
+            <td><span class="pillar-val">46.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>claudia.pes@gmail.com</div>
+                <div class="phone">+18722357690</div>
+            </td>
+            <td>Grace Lake, IL</td>
+            <td class="employer-cell">AbbVie</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Marina Busu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/9939" target="_blank" class="nb-link">NB#9939</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="33"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:33.0%;background:#E67E22"></div></div>
+        <span class="score-num">33.0</span>
+    </div></td>
+            <td><span class="pillar-val">38.0</span></td>
+            <td><span class="pillar-val">37.0</span></td>
+            <td><span class="pillar-val">20.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>marinelabusu78@gmail.com</div>
+                <div class="phone">7738175643</div>
+            </td>
+            <td>Park Ridge, IL</td>
+            <td class="employer-cell">Romanian United Fund; ROSummit (appears on volunteer/organizing listings)</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Adriana Trandafirescu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/8766" target="_blank" class="nb-link">NB#8766</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="33"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:33.0%;background:#E67E22"></div></div>
+        <span class="score-num">33.0</span>
+    </div></td>
+            <td><span class="pillar-val">34.0</span></td>
+            <td><span class="pillar-val">35.0</span></td>
+            <td><span class="pillar-val">27.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>adriana@romanianunitedfund.org</div>
+                <div class="phone">+16462677042</div>
+            </td>
+            <td>Flushing, NY</td>
+            <td class="employer-cell">Education | Law | Mindset | Self-Realization&amp; more </td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Grigore Rosu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/8214" target="_blank" class="nb-link">NB#8214</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="33"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:33.0%;background:#E67E22"></div></div>
+        <span class="score-num">33.0</span>
+    </div></td>
+            <td><span class="pillar-val">31.0</span></td>
+            <td><span class="pillar-val">28.0</span></td>
+            <td><span class="pillar-val">27.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>grosu@illinois.edu</div>
+                <div class="phone">+12176498738</div>
+            </td>
+            <td>Champaign, IL</td>
+            <td class="employer-cell">Professor University of Illinois at Urbana-Champaign</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Gabriel Taut</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/7592" target="_blank" class="nb-link">NB#7592</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="33"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:33.0%;background:#E67E22"></div></div>
+        <span class="score-num">33.0</span>
+    </div></td>
+            <td><span class="pillar-val">30.0</span></td>
+            <td><span class="pillar-val">38.0</span></td>
+            <td><span class="pillar-val">31.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>gvtdag@gmail.com</div>
+                <div class="phone">+17736566832</div>
+            </td>
+            <td>highland park, IL</td>
+            <td class="employer-cell">ARxIUM</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Ciprian Fiastru</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/365" target="_blank" class="nb-link">NB#365</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="33"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:33.0%;background:#E67E22"></div></div>
+        <span class="score-num">33.0</span>
+    </div></td>
+            <td><span class="pillar-val">29.0</span></td>
+            <td><span class="pillar-val">30.0</span></td>
+            <td><span class="pillar-val">32.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>ciprian@chicagocleanhome.com</div>
+                <div class="phone">+17737326613</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">Owner</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Calin Moigradan</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/8666" target="_blank" class="nb-link">NB#8666</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="32"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:32.0%;background:#E67E22"></div></div>
+        <span class="score-num">32.0</span>
+    </div></td>
+            <td><span class="pillar-val">35.0</span></td>
+            <td><span class="pillar-val">32.0</span></td>
+            <td><span class="pillar-val">28.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>calinmoigradan2018@gmail.com</div>
+                <div class="phone">+13128886076</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">Ladybud Daycare</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Dan Cosma</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/10574" target="_blank" class="nb-link">NB#10574</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-failed">⚠ Failed Payment</span></td>
+            <td data-sort="31"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:31.0%;background:#E67E22"></div></div>
+        <span class="score-num">31.0</span>
+    </div></td>
+            <td><span class="pillar-val">30.0</span></td>
+            <td><span class="pillar-val">23.0</span></td>
+            <td><span class="pillar-val">29.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>cosmadan@gmail.com</div>
+                <div class="phone">+33688329588</div>
+            </td>
+            <td>Bucharest, Bucharest</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Catalin Maticiuc</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/5491" target="_blank" class="nb-link">NB#5491</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="31"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:31.0%;background:#E67E22"></div></div>
+        <span class="score-num">31.0</span>
+    </div></td>
+            <td><span class="pillar-val">35.0</span></td>
+            <td><span class="pillar-val">35.0</span></td>
+            <td><span class="pillar-val">18.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>catalinmaticiuc@gmail.com</div>
+                <div class="phone">+17734748497</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">JPMorgan Chase Bank</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Cristian Taut</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/39862" target="_blank" class="nb-link">NB#39862</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="30"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:30.0%;background:#E67E22"></div></div>
+        <span class="score-num">30.0</span>
+    </div></td>
+            <td><span class="pillar-val">14.0</span></td>
+            <td><span class="pillar-val">30.0</span></td>
+            <td><span class="pillar-val">41.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>cristianctaut@gmail.com</div>
+                <div class="phone">+18572752078</div>
+            </td>
+            <td>Redding, CT</td>
+            <td class="employer-cell">Thinking Forward</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Razvan Dominic Ionescu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/7322" target="_blank" class="nb-link">NB#7322</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="30"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:30.0%;background:#E67E22"></div></div>
+        <span class="score-num">30.0</span>
+    </div></td>
+            <td><span class="pillar-val">16.0</span></td>
+            <td><span class="pillar-val">33.0</span></td>
+            <td><span class="pillar-val">50.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>razvan@rdionescu.com</div>
+                <div class="phone">+14849052386</div>
+            </td>
+            <td>Philadelphia, PA</td>
+            <td class="employer-cell">Citizens Bank</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Dan Patrascan</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/5378" target="_blank" class="nb-link">NB#5378</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="30"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:30.0%;background:#E67E22"></div></div>
+        <span class="score-num">30.0</span>
+    </div></td>
+            <td><span class="pillar-val">27.0</span></td>
+            <td><span class="pillar-val">36.0</span></td>
+            <td><span class="pillar-val">24.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>petroill@yahoo.com</div>
+                <div class="phone">+13127300299</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">City Habitat (City Habitat Chicago / City Habitat Realty)</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Flaviu Simihaian</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/4807" target="_blank" class="nb-link">NB#4807</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="30"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:30.0%;background:#E67E22"></div></div>
+        <span class="score-num">30.0</span>
+    </div></td>
+            <td><span class="pillar-val">26.0</span></td>
+            <td><span class="pillar-val">35.0</span></td>
+            <td><span class="pillar-val">22.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>flaviu@simihaian.com</div>
+                <div class="phone">+17047960453</div>
+            </td>
+            <td>New York, NY</td>
+            <td class="employer-cell">Troy Medicare</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Vlad Vitoc</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/689" target="_blank" class="nb-link">NB#689</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="30"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:30.0%;background:#E67E22"></div></div>
+        <span class="score-num">30.0</span>
+    </div></td>
+            <td><span class="pillar-val">28.0</span></td>
+            <td><span class="pillar-val">29.0</span></td>
+            <td><span class="pillar-val">20.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>vvitoc@live.com</div>
+                <div class="phone">+12159715488</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Cristian Puscas</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/5285" target="_blank" class="nb-link">NB#5285</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="29"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:29.0%;background:#E67E22"></div></div>
+        <span class="score-num">29.0</span>
+    </div></td>
+            <td><span class="pillar-val">23.0</span></td>
+            <td><span class="pillar-val">28.0</span></td>
+            <td><span class="pillar-val">27.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>cpuscas@ruf.global</div>
+                <div class="phone">+40746848891</div>
+            </td>
+            <td>Timișoara, TM</td>
+            <td class="employer-cell">Romanian United Fund / Romanian United Foundation; ATS FREEWAY (affiliation listed on RUF)</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Eric Miclea</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/827" target="_blank" class="nb-link">NB#827</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="29"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:29.0%;background:#E67E22"></div></div>
+        <span class="score-num">29.0</span>
+    </div></td>
+            <td><span class="pillar-val">26.0</span></td>
+            <td><span class="pillar-val">30.0</span></td>
+            <td><span class="pillar-val">25.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>anca7@yahoo.com</div>
+                <div class="phone">+17739687270</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">Miclea &amp; Associates/City Habitat</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Mihaela Livanu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/352" target="_blank" class="nb-link">NB#352</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="29"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:29.0%;background:#E67E22"></div></div>
+        <span class="score-num">29.0</span>
+    </div></td>
+            <td><span class="pillar-val">31.0</span></td>
+            <td><span class="pillar-val">28.0</span></td>
+            <td><span class="pillar-val">14.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>mihaela@romanianunitedfund.org</div>
+                <div class="phone">+40766501866</div>
+            </td>
+            <td>Cluj Napoca, Cluj</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Virgil Ungur</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/7396" target="_blank" class="nb-link">NB#7396</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="28"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:28.0%;background:#E67E22"></div></div>
+        <span class="score-num">28.0</span>
+    </div></td>
+            <td><span class="pillar-val">19.0</span></td>
+            <td><span class="pillar-val">31.0</span></td>
+            <td><span class="pillar-val">32.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>v.ungur@outlook.com</div>
+                <div class="phone">+18473721930</div>
+            </td>
+            <td>Darien, IL</td>
+            <td class="employer-cell">Compass Truck Sales</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Dana Bucin</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/1432" target="_blank" class="nb-link">NB#1432</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="28"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:28.0%;background:#E67E22"></div></div>
+        <span class="score-num">28.0</span>
+    </div></td>
+            <td><span class="pillar-val">29.0</span></td>
+            <td><span class="pillar-val">20.0</span></td>
+            <td><span class="pillar-val">37.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>dbucin@murthalaw.com</div>
+                <div class="phone">+18608692940</div>
+            </td>
+            <td>Portland, CT</td>
+            <td class="employer-cell">Immigration Attorney Dana Bucin</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Mike Dinescu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/1164" target="_blank" class="nb-link">NB#1164</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="28"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:28.0%;background:#E67E22"></div></div>
+        <span class="score-num">28.0</span>
+    </div></td>
+            <td><span class="pillar-val">29.0</span></td>
+            <td><span class="pillar-val">29.0</span></td>
+            <td><span class="pillar-val">14.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>dinescumiky@gmail.com</div>
+                <div class="phone">+17737428733</div>
+            </td>
+            <td>Irvine, CA</td>
+            <td class="employer-cell">DONAQ LLC</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Mircea Prejbeanu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/790" target="_blank" class="nb-link">NB#790</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="27"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:27.0%;background:#E67E22"></div></div>
+        <span class="score-num">27.0</span>
+    </div></td>
+            <td><span class="pillar-val">26.0</span></td>
+            <td><span class="pillar-val">21.0</span></td>
+            <td><span class="pillar-val">24.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>mprejbeanu@gmail.com</div>
+                <div class="phone">+14143243333</div>
+            </td>
+            <td>Wauwatosa, WI</td>
+            <td class="employer-cell">Paul's Jewelers & Jost LLC</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Ionel Nechiti</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/692" target="_blank" class="nb-link">NB#692</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="27"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:27.0%;background:#E67E22"></div></div>
+        <span class="score-num">27.0</span>
+    </div></td>
+            <td><span class="pillar-val">24.0</span></td>
+            <td><span class="pillar-val">23.0</span></td>
+            <td><span class="pillar-val">26.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>inechiti@gmail.com</div>
+                <div class="phone">+18326073393</div>
+            </td>
+            <td>Houston, TX</td>
+            <td class="employer-cell">Aramco Ventures</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Eduard Chira</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/5331" target="_blank" class="nb-link">NB#5331</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="26"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:26.0%;background:#E67E22"></div></div>
+        <span class="score-num">26.0</span>
+    </div></td>
+            <td><span class="pillar-val">28.0</span></td>
+            <td><span class="pillar-val">30.0</span></td>
+            <td><span class="pillar-val">13.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>Edychira@yahoo.com</div>
+                <div class="phone">+13129310831</div>
+            </td>
+            <td>Burr ridge, IL</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Dan Serban</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/542" target="_blank" class="nb-link">NB#542</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="26"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:26.0%;background:#E67E22"></div></div>
+        <span class="score-num">26.0</span>
+    </div></td>
+            <td><span class="pillar-val">32.0</span></td>
+            <td><span class="pillar-val">25.0</span></td>
+            <td><span class="pillar-val">14.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>dserban28@gmail.com</div>
+                <div class="phone">+13057972352</div>
+            </td>
+            <td>Key West, FL</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Alexandru Bogdan</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/11651" target="_blank" class="nb-link">NB#11651</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="25"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:25.0%;background:#E67E22"></div></div>
+        <span class="score-num">25.0</span>
+    </div></td>
+            <td><span class="pillar-val">19.0</span></td>
+            <td><span class="pillar-val">28.0</span></td>
+            <td><span class="pillar-val">20.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>alexandru.bogdan1981@gmail.com</div>
+                <div class="phone">+40720020100</div>
+            </td>
+            <td>Bucharest, Bucharest</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Mihai Popovici</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/8818" target="_blank" class="nb-link">NB#8818</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="25"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:25.0%;background:#E67E22"></div></div>
+        <span class="score-num">25.0</span>
+    </div></td>
+            <td><span class="pillar-val">21.0</span></td>
+            <td><span class="pillar-val">28.0</span></td>
+            <td><span class="pillar-val">28.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>mihai@popovici.com</div>
+                <div class="phone">+16502195389</div>
+            </td>
+            <td>Katy, TX</td>
+            <td class="employer-cell">Z-Terra</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Monica Magdas Miller</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/1438" target="_blank" class="nb-link">NB#1438</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="25"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:25.0%;background:#E67E22"></div></div>
+        <span class="score-num">25.0</span>
+    </div></td>
+            <td><span class="pillar-val">29.0</span></td>
+            <td><span class="pillar-val">20.0</span></td>
+            <td><span class="pillar-val">21.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>mmagdasmiller@gmail.com</div>
+                <div class="phone">+13108046217</div>
+            </td>
+            <td>Topanga, CA</td>
+            <td class="employer-cell">Iconoclast Studios</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Patricia Vlad Gordin</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/12103" target="_blank" class="nb-link">NB#12103</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-failed">⚠ Failed Payment</span></td>
+            <td data-sort="24"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:24.0%;background:#E67E22"></div></div>
+        <span class="score-num">24.0</span>
+    </div></td>
+            <td><span class="pillar-val">24.0</span></td>
+            <td><span class="pillar-val">20.0</span></td>
+            <td><span class="pillar-val">20.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>vladpatricia@gmail.com</div>
+                <div class="phone">+447471807751</div>
+            </td>
+            <td>Bern, BE</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Ovidiu Pop</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/5078" target="_blank" class="nb-link">NB#5078</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="24"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:24.0%;background:#E67E22"></div></div>
+        <span class="score-num">24.0</span>
+    </div></td>
+            <td><span class="pillar-val">14.0</span></td>
+            <td><span class="pillar-val">26.0</span></td>
+            <td><span class="pillar-val">27.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>ovypop20@gmail.com</div>
+                <div class="phone">+17738790790</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Octavian Voicu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/590" target="_blank" class="nb-link">NB#590</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="24"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:24.0%;background:#E67E22"></div></div>
+        <span class="score-num">24.0</span>
+    </div></td>
+            <td><span class="pillar-val">27.0</span></td>
+            <td><span class="pillar-val">21.0</span></td>
+            <td><span class="pillar-val">14.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>octavian.voicu@gmail.com</div>
+                <div class="phone">+16503355759</div>
+            </td>
+            <td>San Francisco, CA</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Marcel Podar</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/179" target="_blank" class="nb-link">NB#179</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="24"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:24.0%;background:#E67E22"></div></div>
+        <span class="score-num">24.0</span>
+    </div></td>
+            <td><span class="pillar-val">20.0</span></td>
+            <td><span class="pillar-val">23.0</span></td>
+            <td><span class="pillar-val">22.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>marcelpodar@gmail.com</div>
+                <div class="phone">+17739561777</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell"> Limo Pro Chicago Inc</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Monica Zaha</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/16" target="_blank" class="nb-link">NB#16</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="24"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:24.0%;background:#E67E22"></div></div>
+        <span class="score-num">24.0</span>
+    </div></td>
+            <td><span class="pillar-val">22.0</span></td>
+            <td><span class="pillar-val">24.0</span></td>
+            <td><span class="pillar-val">16.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>monicazaha@yahoo.com</div>
+                <div class="phone">+17739913091</div>
+            </td>
+            <td>Wimette, IL</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Ramona Ratiu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/10170" target="_blank" class="nb-link">NB#10170</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="23"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:23.0%;background:#E67E22"></div></div>
+        <span class="score-num">23.0</span>
+    </div></td>
+            <td><span class="pillar-val">17.0</span></td>
+            <td><span class="pillar-val">26.0</span></td>
+            <td><span class="pillar-val">27.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>ratiuramona@gmail.com</div>
+                <div class="phone">+12526191797</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Nicolae Popescu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/7654" target="_blank" class="nb-link">NB#7654</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="23"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:23.0%;background:#E67E22"></div></div>
+        <span class="score-num">23.0</span>
+    </div></td>
+            <td><span class="pillar-val">22.0</span></td>
+            <td><span class="pillar-val">24.0</span></td>
+            <td><span class="pillar-val">24.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>nick_pnl@yahoo.com</div>
+                <div class="phone">+14436551940</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">Hermes NVC Corp</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Alex Urdea</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/6419" target="_blank" class="nb-link">NB#6419</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="23"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:23.0%;background:#E67E22"></div></div>
+        <span class="score-num">23.0</span>
+    </div></td>
+            <td><span class="pillar-val">19.0</span></td>
+            <td><span class="pillar-val">28.0</span></td>
+            <td><span class="pillar-val">24.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>alex@deepoceanpartners.com</div>
+                <div class="phone">+15163753078</div>
+            </td>
+            <td>Oyster Bay, NY</td>
+            <td class="employer-cell">Deep Ocean Partners</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Nicole Blajan</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/5060" target="_blank" class="nb-link">NB#5060</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="23"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:23.0%;background:#E67E22"></div></div>
+        <span class="score-num">23.0</span>
+    </div></td>
+            <td><span class="pillar-val">24.0</span></td>
+            <td><span class="pillar-val">25.0</span></td>
+            <td><span class="pillar-val">9.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>bnicky09@yahoo.com</div>
+                <div class="phone">+17737048040</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Cristian Comsa</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/4866" target="_blank" class="nb-link">NB#4866</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="23"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:23.0%;background:#E67E22"></div></div>
+        <span class="score-num">23.0</span>
+    </div></td>
+            <td><span class="pillar-val">27.0</span></td>
+            <td><span class="pillar-val">23.0</span></td>
+            <td><span class="pillar-val">17.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>comsirom@yahoo.com</div>
+                <div class="phone">+447814570026</div>
+            </td>
+            <td>Milano</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Claudiu Radu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/360" target="_blank" class="nb-link">NB#360</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="23"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:23.0%;background:#E67E22"></div></div>
+        <span class="score-num">23.0</span>
+    </div></td>
+            <td><span class="pillar-val">27.0</span></td>
+            <td><span class="pillar-val">21.0</span></td>
+            <td><span class="pillar-val">21.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>clauderadu@gmail.com</div>
+                <div class="phone">+17732202333</div>
+            </td>
+            <td>Wilmette, IL</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Monika Calugar</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/357" target="_blank" class="nb-link">NB#357</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="23"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:23.0%;background:#E67E22"></div></div>
+        <span class="score-num">23.0</span>
+    </div></td>
+            <td><span class="pillar-val">27.0</span></td>
+            <td><span class="pillar-val">15.0</span></td>
+            <td><span class="pillar-val">20.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>monikavarga@yahoo.com</div>
+                <div class="phone">+13126596363</div>
+            </td>
+            <td>Golf, IL</td>
+            <td class="employer-cell">ITW</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Radu Chindris</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/24747" target="_blank" class="nb-link">NB#24747</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="22"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:22.0%;background:#E67E22"></div></div>
+        <span class="score-num">22.0</span>
+    </div></td>
+            <td><span class="pillar-val">16.0</span></td>
+            <td><span class="pillar-val">21.0</span></td>
+            <td><span class="pillar-val">22.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>raduchindris@yahoo.com</div>
+                <div class="phone">+18436834511</div>
+            </td>
+            <td>Jacksonville , FL</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Ted Cominos</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/1138" target="_blank" class="nb-link">NB#1138</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="22"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:22.0%;background:#E67E22"></div></div>
+        <span class="score-num">22.0</span>
+    </div></td>
+            <td><span class="pillar-val">21.0</span></td>
+            <td><span class="pillar-val">21.0</span></td>
+            <td><span class="pillar-val">14.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>ted.cominos@spyglassmanagement.com</div>
+                <div class="phone">+18319051528</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">Eversheds Sutherland LLP</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Adrian Calugar</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/1030" target="_blank" class="nb-link">NB#1030</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="22"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:22.0%;background:#E67E22"></div></div>
+        <span class="score-num">22.0</span>
+    </div></td>
+            <td><span class="pillar-val">21.0</span></td>
+            <td><span class="pillar-val">20.0</span></td>
+            <td><span class="pillar-val">16.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>adrian.calugar@outlook.com</div>
+                <div class="phone">+17173322290</div>
+            </td>
+            <td>Spring Grove, PA</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Lavinia Shimkus</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/705" target="_blank" class="nb-link">NB#705</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="22"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:22.0%;background:#E67E22"></div></div>
+        <span class="score-num">22.0</span>
+    </div></td>
+            <td><span class="pillar-val">23.0</span></td>
+            <td><span class="pillar-val">21.0</span></td>
+            <td><span class="pillar-val">23.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>lavinia.shimkus@gmail.com</div>
+                <div class="phone">+17737327640</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">City Habitat Realty,LLC</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Horatiu Suciu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/27" target="_blank" class="nb-link">NB#27</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="22"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:22.0%;background:#E67E22"></div></div>
+        <span class="score-num">22.0</span>
+    </div></td>
+            <td><span class="pillar-val">26.0</span></td>
+            <td><span class="pillar-val">19.0</span></td>
+            <td><span class="pillar-val">19.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>horatziu_ro@yahoo.com</div>
+                <div class="phone">+13128044875</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">City Habitat Realty</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Ioana Necs</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/11977" target="_blank" class="nb-link">NB#11977</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="21"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:21.0%;background:#E67E22"></div></div>
+        <span class="score-num">21.0</span>
+    </div></td>
+            <td><span class="pillar-val">20.0</span></td>
+            <td><span class="pillar-val">19.0</span></td>
+            <td><span class="pillar-val">18.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>mim_ioana@yahoo.com</div>
+                <div class="phone">+17025410110</div>
+            </td>
+            <td>Las Vegas, NV</td>
+            <td class="employer-cell">Summerlin Hospital and Medical Center</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Alexander Turik</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/1297" target="_blank" class="nb-link">NB#1297</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="21"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:21.0%;background:#E67E22"></div></div>
+        <span class="score-num">21.0</span>
+    </div></td>
+            <td><span class="pillar-val">22.0</span></td>
+            <td><span class="pillar-val">19.0</span></td>
+            <td><span class="pillar-val">10.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>alexturik@hancapitalgroup.com</div>
+                <div class="phone">+17736219222</div>
+            </td>
+            <td>Boca Raton, FL</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Ioana Salajanu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/1118" target="_blank" class="nb-link">NB#1118</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="21"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:21.0%;background:#E67E22"></div></div>
+        <span class="score-num">21.0</span>
+    </div></td>
+            <td><span class="pillar-val">20.0</span></td>
+            <td><span class="pillar-val">14.0</span></td>
+            <td><span class="pillar-val">24.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>sedeidu@yahoo.com</div>
+                <div class="phone">+17738755438</div>
+            </td>
+            <td>Geneva</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Marius Butas</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/1114" target="_blank" class="nb-link">NB#1114</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="21"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:21.0%;background:#E67E22"></div></div>
+        <span class="score-num">21.0</span>
+    </div></td>
+            <td><span class="pillar-val">20.0</span></td>
+            <td><span class="pillar-val">18.0</span></td>
+            <td><span class="pillar-val">16.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>padurea@yahoo.com</div>
+                <div class="phone">+14809806161</div>
+            </td>
+            <td>Mesa, AZ</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Ruxandra Muys-Stoian</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/10946" target="_blank" class="nb-link">NB#10946</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#CD7F32;color:#CD7F32">Archangel</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="20"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:20.0%;background:#E67E22"></div></div>
+        <span class="score-num">20.0</span>
+    </div></td>
+            <td><span class="pillar-val">14.0</span></td>
+            <td><span class="pillar-val">23.0</span></td>
+            <td><span class="pillar-val">18.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>ruxandra.stoian@gmail.com</div>
+                <div class="phone">+16506807494</div>
+            </td>
+            <td>Sunnyvale, California,, CA</td>
+            <td class="employer-cell">WIT Angels Club</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Razvan C. Sofronie</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/1612" target="_blank" class="nb-link">NB#1612</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="20"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:20.0%;background:#E67E22"></div></div>
+        <span class="score-num">20.0</span>
+    </div></td>
+            <td><span class="pillar-val">15.0</span></td>
+            <td><span class="pillar-val">25.0</span></td>
+            <td><span class="pillar-val">24.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>Razvanso@gmail.com</div>
+                <div class="phone">+13126856565</div>
+            </td>
+            <td>Lincolnwood, IL</td>
+            <td class="employer-cell">DJS Financial Services (DJS Consulting)</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Alex Fratila</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/10622" target="_blank" class="nb-link">NB#10622</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#C0C0C0;color:#C0C0C0">Guardian Angel</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="19"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:19.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">19.0</span>
+    </div></td>
+            <td><span class="pillar-val">22.0</span></td>
+            <td><span class="pillar-val">17.0</span></td>
+            <td><span class="pillar-val">13.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>al3xfratila@gmail.com</div>
+                <div class="phone">+18478978285</div>
+            </td>
+            <td>Miami, FL</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Laurentiu Vlad</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/6938" target="_blank" class="nb-link">NB#6938</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="19"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:19.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">19.0</span>
+    </div></td>
+            <td><span class="pillar-val">19.0</span></td>
+            <td><span class="pillar-val">15.0</span></td>
+            <td><span class="pillar-val">15.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>lau_vlad@yahoo.com</div>
+                <div class="phone">+17732599802</div>
+            </td>
+            <td>Tampa, FL</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Alexander Tosa</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/5301" target="_blank" class="nb-link">NB#5301</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="19"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:19.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">19.0</span>
+    </div></td>
+            <td><span class="pillar-val">22.0</span></td>
+            <td><span class="pillar-val">19.0</span></td>
+            <td><span class="pillar-val">12.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>toshalex12@gmail.com</div>
+                <div class="phone">+18479026729</div>
+            </td>
+            <td>Dekalb, IL</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Ross Vangalis</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/846" target="_blank" class="nb-link">NB#846</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#CD7F32;color:#CD7F32">Archangel</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="19"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:19.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">19.0</span>
+    </div></td>
+            <td><span class="pillar-val">20.0</span></td>
+            <td><span class="pillar-val">20.0</span></td>
+            <td><span class="pillar-val">17.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>rvangalis@in-queue.com</div>
+                <div class="phone">+13129520487</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">Queue Brand Communications inc</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Stelian Danciutiu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/356" target="_blank" class="nb-link">NB#356</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="19"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:19.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">19.0</span>
+    </div></td>
+            <td><span class="pillar-val">23.0</span></td>
+            <td><span class="pillar-val">18.0</span></td>
+            <td><span class="pillar-val">13.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>stecorporation@gmail.com</div>
+                <div class="phone">+17737151765</div>
+            </td>
+            <td>Elmhurst, IL</td>
+            <td class="employer-cell">Stecor Construction</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Relu Stan</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/70" target="_blank" class="nb-link">NB#70</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="19"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:19.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">19.0</span>
+    </div></td>
+            <td><span class="pillar-val">20.0</span></td>
+            <td><span class="pillar-val">18.0</span></td>
+            <td><span class="pillar-val">17.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>relu@fultonmarkethospitality.com</div>
+                <div class="phone">+13123751099</div>
+            </td>
+            <td>chicago, IL</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Bogdan Ciobotaru</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/16167" target="_blank" class="nb-link">NB#16167</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#CD7F32;color:#CD7F32">Archangel</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="17"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:17.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">17.0</span>
+    </div></td>
+            <td><span class="pillar-val">17.0</span></td>
+            <td><span class="pillar-val">17.0</span></td>
+            <td><span class="pillar-val">18.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>ciobotarub@gmail.com</div>
+                <div class="phone">+447786171829</div>
+            </td>
+            <td>London</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Dan Dudici</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/4874" target="_blank" class="nb-link">NB#4874</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="17"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:17.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">17.0</span>
+    </div></td>
+            <td><span class="pillar-val">17.0</span></td>
+            <td><span class="pillar-val">17.0</span></td>
+            <td><span class="pillar-val">18.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>ddudici@yahoo.com</div>
+                <div class="phone">+13314312621</div>
+            </td>
+            <td>Aurora, IL</td>
+            <td class="employer-cell">STS</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Cristina Toropu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/22141" target="_blank" class="nb-link">NB#22141</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="16"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:16.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">16.0</span>
+    </div></td>
+            <td><span class="pillar-val">18.0</span></td>
+            <td><span class="pillar-val">13.0</span></td>
+            <td><span class="pillar-val">9.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>ctoropu@hotmail.com</div>
+                <div class="phone">+15054339563</div>
+            </td>
+            <td>Houston, TX</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Cristian Petrus</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/1467" target="_blank" class="nb-link">NB#1467</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#C0C0C0;color:#C0C0C0">Guardian Angel</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="16"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:16.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">16.0</span>
+    </div></td>
+            <td><span class="pillar-val">15.0</span></td>
+            <td><span class="pillar-val">15.0</span></td>
+            <td><span class="pillar-val">17.0</span></td>
+            <td><span class="sc-tier" style="background:#27AE60">👤 Member</span></td>
+            <td class="contact-cell">
+                <div>cristianpetrus@gmail.com</div>
+                <div class="phone">+14155216855</div>
+            </td>
+            <td>Bucharest</td>
+            <td class="employer-cell">CABA Design</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Catalin Serban</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/8701" target="_blank" class="nb-link">NB#8701</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#C0C0C0;color:#C0C0C0">Guardian Angel</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="15"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:15.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">15.0</span>
+    </div></td>
+            <td><span class="pillar-val">17.0</span></td>
+            <td><span class="pillar-val">11.0</span></td>
+            <td><span class="pillar-val">9.0</span></td>
+            <td><span class="sc-tier" style="background:#95A5A6">💤 Dormant</span></td>
+            <td class="contact-cell">
+                <div>contact@iproskills.com</div>
+                <div class="phone">+17737990535</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Mihaela Ungureanu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/7717" target="_blank" class="nb-link">NB#7717</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="15"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:15.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">15.0</span>
+    </div></td>
+            <td><span class="pillar-val">19.0</span></td>
+            <td><span class="pillar-val">10.0</span></td>
+            <td><span class="pillar-val">14.0</span></td>
+            <td><span class="sc-tier" style="background:#95A5A6">💤 Dormant</span></td>
+            <td class="contact-cell">
+                <div>mungureanu@saugatuckrowing.com</div>
+                <div class="phone">+17866121142</div>
+            </td>
+            <td>Norwalk, CT</td>
+            <td class="employer-cell">CEO</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Garri Covalschi</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/7448" target="_blank" class="nb-link">NB#7448</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="15"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:15.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">15.0</span>
+    </div></td>
+            <td><span class="pillar-val">10.0</span></td>
+            <td><span class="pillar-val">22.0</span></td>
+            <td><span class="pillar-val">17.0</span></td>
+            <td><span class="sc-tier" style="background:#95A5A6">💤 Dormant</span></td>
+            <td class="contact-cell">
+                <div>gary@hermesnvc.com</div>
+                <div class="phone">+16305665154</div>
+            </td>
+            <td>Plainfield, IL</td>
+            <td class="employer-cell">Hermes NVC Corp</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Marius Cechina</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/11508" target="_blank" class="nb-link">NB#11508</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="14"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:14.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">14.0</span>
+    </div></td>
+            <td><span class="pillar-val">19.0</span></td>
+            <td><span class="pillar-val">13.0</span></td>
+            <td><span class="pillar-val">8.0</span></td>
+            <td><span class="sc-tier" style="background:#95A5A6">💤 Dormant</span></td>
+            <td class="contact-cell">
+                <div>Cechinamarius92@gmail.com</div>
+                <div class="phone">+18478490636</div>
+            </td>
+            <td>Chicago, IL</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Oana Cotor</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/7684" target="_blank" class="nb-link">NB#7684</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="14"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:14.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">14.0</span>
+    </div></td>
+            <td><span class="pillar-val">14.0</span></td>
+            <td><span class="pillar-val">14.0</span></td>
+            <td><span class="pillar-val">13.0</span></td>
+            <td><span class="sc-tier" style="background:#95A5A6">💤 Dormant</span></td>
+            <td class="contact-cell">
+                <div>redwheels2014@gmail.com</div>
+                <div class="phone">+16306770512</div>
+            </td>
+            <td>Naperville, IL</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Allan Cruse</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/1150" target="_blank" class="nb-link">NB#1150</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="14"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:14.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">14.0</span>
+    </div></td>
+            <td><span class="pillar-val">13.0</span></td>
+            <td><span class="pillar-val">13.0</span></td>
+            <td><span class="pillar-val">9.0</span></td>
+            <td><span class="sc-tier" style="background:#95A5A6">💤 Dormant</span></td>
+            <td class="contact-cell">
+                <div>cruse@cs.usfca.edu</div>
+                <div class="phone">+14155525968</div>
+            </td>
+            <td>San Francisco, CA</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Codruta Girlea</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/11724" target="_blank" class="nb-link">NB#11724</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="13"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:13.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">13.0</span>
+    </div></td>
+            <td><span class="pillar-val">13.0</span></td>
+            <td><span class="pillar-val">9.0</span></td>
+            <td><span class="pillar-val">14.0</span></td>
+            <td><span class="sc-tier" style="background:#95A5A6">💤 Dormant</span></td>
+            <td class="contact-cell">
+                <div>codruta.liliana@gmail.com</div>
+                <div class="phone">+12173727972</div>
+            </td>
+            <td>San Francisco, CA</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Eugen Vasile</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/5051" target="_blank" class="nb-link">NB#5051</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="12"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:12.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">12.0</span>
+    </div></td>
+            <td><span class="pillar-val">15.0</span></td>
+            <td><span class="pillar-val">12.0</span></td>
+            <td><span class="pillar-val">7.0</span></td>
+            <td><span class="sc-tier" style="background:#95A5A6">💤 Dormant</span></td>
+            <td class="contact-cell">
+                <div>evcora@gmail.com</div>
+                <div class="phone">+18475141673</div>
+            </td>
+            <td>Lincolnshire , IL</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Radu Georgescu</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/4815" target="_blank" class="nb-link">NB#4815</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="12"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:12.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">12.0</span>
+    </div></td>
+            <td><span class="pillar-val">12.0</span></td>
+            <td><span class="pillar-val">10.0</span></td>
+            <td><span class="pillar-val">9.0</span></td>
+            <td><span class="sc-tier" style="background:#95A5A6">💤 Dormant</span></td>
+            <td class="contact-cell">
+                <div>radu.georgescu@gecad.com</div>
+                <div class="phone">+40722544116</div>
+            </td>
+            <td>Bucharest, Bucharest</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Septimiu Pop</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/11716" target="_blank" class="nb-link">NB#11716</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="11"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:11.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">11.0</span>
+    </div></td>
+            <td><span class="pillar-val">6.0</span></td>
+            <td><span class="pillar-val">12.0</span></td>
+            <td><span class="pillar-val">14.0</span></td>
+            <td><span class="sc-tier" style="background:#95A5A6">💤 Dormant</span></td>
+            <td class="contact-cell">
+                <div>septi@bellavistacluj.ro</div>
+                <div class="phone">+40722306003</div>
+            </td>
+            <td>Cluj-Napoca, CJ</td>
+            <td class="employer-cell">DaVinci Restaurant </td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Roxana Muntean</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/47716" target="_blank" class="nb-link">NB#47716</a></div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="10"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:10.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">10.0</span>
+    </div></td>
+            <td><span class="pillar-val">11.0</span></td>
+            <td><span class="pillar-val">12.0</span></td>
+            <td><span class="pillar-val">7.0</span></td>
+            <td><span class="sc-tier" style="background:#95A5A6">💤 Dormant</span></td>
+            <td class="contact-cell">
+                <div>roxana@rmunteancpa.com</div>
+                <div class="phone">+17347653354</div>
+            </td>
+            <td>Rochester Hills, MI</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Robert Rdzak</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/5136" target="_blank" class="nb-link">NB#5136</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="9"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:9.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">9.0</span>
+    </div></td>
+            <td><span class="pillar-val">10.0</span></td>
+            <td><span class="pillar-val">10.0</span></td>
+            <td><span class="pillar-val">7.0</span></td>
+            <td><span class="sc-tier" style="background:#95A5A6">💤 Dormant</span></td>
+            <td class="contact-cell">
+                <div>robertrdzak@me.com</div>
+                <div class="phone">+18476090333</div>
+            </td>
+            <td>New York, NY</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Harley Rosenthal</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/5312" target="_blank" class="nb-link">NB#5312</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="8"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:8.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">8.0</span>
+    </div></td>
+            <td><span class="pillar-val">8.0</span></td>
+            <td><span class="pillar-val">9.0</span></td>
+            <td><span class="pillar-val">7.0</span></td>
+            <td><span class="sc-tier" style="background:#95A5A6">💤 Dormant</span></td>
+            <td class="contact-cell">
+                <div>harley@rosenthallawgroup.com</div>
+                <div class="phone">+12249356861</div>
+            </td>
+            <td>lincolnwood, IL</td>
+            <td class="employer-cell">—</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+        <tr>
+            <td class="name-cell">
+                <div class="angel-name">Cozma Demian</div>
+                <div class="angel-meta"><a href="https://ruf.nationbuilder.com/admin/signups/5326" target="_blank" class="nb-link">NB#5326</a>&nbsp;⭐</div>
+            </td>
+            <td><span class="level-badge" style="border-color:#4A90D9;color:#4A90D9">Benefactor</span></td>
+            <td><span class="badge badge-active">Active</span></td>
+            <td data-sort="7"><div class="score-cell">
+        <div class="score-bar-bg"><div class="score-bar-fill" style="width:7.0%;background:#BDC3C7"></div></div>
+        <span class="score-num">7.0</span>
+    </div></td>
+            <td><span class="pillar-val">7.0</span></td>
+            <td><span class="pillar-val">8.0</span></td>
+            <td><span class="pillar-val">7.0</span></td>
+            <td><span class="sc-tier" style="background:#95A5A6">💤 Dormant</span></td>
+            <td class="contact-cell">
+                <div>cozma77@yahoo.com</div>
+                <div class="phone">+17734256087</div>
+            </td>
+            <td>Lincolnwood, IL</td>
+            <td class="employer-cell">DEMIAN CONSTRUCTION</td>
+            <td>—<br><small>—</small></td>
+            <td>—<br><small>—</small></td>
+        </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="footer">RUF Angels Dashboard · 116 angels · Social Capital KB v1 · Alice (rufbot) · April 09, 2026 at 05:17 UTC</div>
+
+<script>
+let sortCol = 3, sortDir = 'desc', currentStatus = 'all';
+
+function sortTable(col) {
+  const th = document.querySelectorAll('th');
+  th.forEach(t => t.classList.remove('sorted-asc','sorted-desc'));
+  if (sortCol === col) sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+  else { sortCol = col; sortDir = 'desc'; }
+  th[col].classList.add('sorted-' + sortDir);
+
+  const tbody = document.getElementById('tableBody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  const isNum = th[col].dataset.type === 'num';
+
+  rows.sort((a, b) => {
+    let av = a.children[col].dataset.sort || a.children[col].textContent.trim();
+    let bv = b.children[col].dataset.sort || b.children[col].textContent.trim();
+    if (isNum) { av = parseFloat(av) || 0; bv = parseFloat(bv) || 0; }
+    if (av < bv) return sortDir === 'asc' ? -1 : 1;
+    if (av > bv) return sortDir === 'asc' ? 1 : -1;
+    return 0;
+  });
+  rows.forEach(r => tbody.appendChild(r));
+  updateCount();
+}
+
+function filterTable() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const rows = document.querySelectorAll('#tableBody tr');
+  rows.forEach(r => {
+    const text = r.textContent.toLowerCase();
+    const matchSearch = !q || text.includes(q);
+    const matchStatus = checkStatus(r);
+    r.classList.toggle('hidden', !(matchSearch && matchStatus));
+  });
+  updateCount();
+}
+
+function checkStatus(row) {
+  if (currentStatus === 'all') return true;
+  const text = row.textContent;
+  if (currentStatus === 'active') return text.includes('Active') && !text.includes('Failed') && !text.includes('Paused') && !text.includes('Cancelled');
+  if (currentStatus === 'failed') return text.includes('Failed Payment');
+  if (currentStatus === 'paused') return text.includes('Paused');
+  if (currentStatus === 'founding') return text.includes('NB#') && row.innerHTML.includes('⭐');
+  return true;
+}
+
+function filterStatus(status, btn) {
+  currentStatus = status;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterTable();
+}
+
+function updateCount() {
+  const visible = document.querySelectorAll('#tableBody tr:not(.hidden)').length;
+  const total = document.querySelectorAll('#tableBody tr').length;
+  document.getElementById('countLabel').textContent = `Showing ${visible} of ${total}`;
+}
+
+// Initial sort by SC Score
+document.querySelector('th:nth-child(4)').classList.add('sorted-desc');
+</script>
+</body>
+</html>
