@@ -9706,8 +9706,8 @@ document.querySelectorAll('table').forEach(table => {
       rows.sort((a, b) => {
         const aT = a.cells[colIndex]?.textContent.trim() ?? '';
         const bT = b.cells[colIndex]?.textContent.trim() ?? '';
-        const aN = parseFloat(aT.replace(/[^0-9.-]/g, ''));
-        const bN = parseFloat(bT.replace(/[^0-9.-]/g, ''));
+        const aN = parseFloat(aT.replace(/-/g,'').replace(/[^0-9.]/g, ''));
+        const bN = parseFloat(bT.replace(/-/g,'').replace(/[^0-9.]/g, ''));
         if (!isNaN(aN) && !isNaN(bN)) return asc ? aN - bN : bN - aN;
         return asc ? aT.localeCompare(bT) : bT.localeCompare(aT);
       });
