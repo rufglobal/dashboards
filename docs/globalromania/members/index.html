@@ -45,6 +45,7 @@
     .controls{padding:12px 18px;border-bottom:1px solid #f0f0f0;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
     input[type=text]{border:1px solid #ddd;border-radius:6px;padding:6px 11px;font-size:0.84rem;outline:none;min-width:220px}
     input[type=text]:focus{border-color:#00ACF0;box-shadow:0 0 0 2px rgba(0,172,240,0.15)}
+    .search-active-note{font-size:0.75rem;color:#00ACF0;display:none;margin-left:4px}
     select{border:1px solid #ddd;border-radius:6px;padding:6px 10px;font-size:0.84rem;outline:none;cursor:pointer;background:#fff}
     .filter-btn{padding:6px 14px;border-radius:20px;border:1.5px solid #ddd;background:#fff;font-size:0.8rem;cursor:pointer;font-weight:500;transition:all 0.15s}
     .filter-btn:hover,.filter-btn.active{background:#00ACF0;color:#fff;border-color:#00ACF0}
@@ -112,7 +113,7 @@
       <span>499 people · sorted by most recent join · click name to open profile</span>
     </div>
     <div class="controls">
-      <input type="text" id="search" placeholder="🔍 Search name or email…" oninput="filterTable()">
+      <input type="text" id="search" placeholder="🔍 Search name or email… (searches all 499)" oninput="onSearch()">
       <select id="photoFilter" onchange="filterTable()">
         <option value="">All Photos</option>
         <option value="yes">Has Photo</option>
@@ -2774,7 +2775,7 @@
     <td style="font-size:0.82rem">2026-01-31</td>
     <td><span class="badge badge-active">✓ Active Member</span></td>
     <td><span class="badge badge-photo">✓ Photo</span></td>
-    <td><span style="color:#16a34a;font-size:0.8rem">6d ago</span></td>
+    <td><span style="color:#16a34a;font-size:0.8rem">7d ago</span></td>
     <td style="font-size:0.8rem;color:#888">0</td>
     <td style="font-size:0.8rem;color:#888">3</td>
   </tr><tr data-status="inserted" data-photo="no">
@@ -3918,7 +3919,7 @@
     <td style="font-size:0.82rem">2025-12-12</td>
     <td><span class="badge badge-active">✓ Active Member</span></td>
     <td><span class="badge badge-photo">✓ Photo</span></td>
-    <td><span style="color:#dc2626;font-size:0.8rem">86d ago</span></td>
+    <td><span style="color:#dc2626;font-size:0.8rem">87d ago</span></td>
     <td style="font-size:0.8rem;color:#888">0</td>
     <td style="font-size:0.8rem;color:#888">0</td>
   </tr><tr data-status="active" data-photo="no">
@@ -4868,7 +4869,7 @@
     <td style="font-size:0.82rem">2025-11-12</td>
     <td><span class="badge badge-active">✓ Active Member</span></td>
     <td><span class="badge badge-nophoto">No Photo</span></td>
-    <td><span style="color:#ca8a04;font-size:0.8rem">14d ago</span></td>
+    <td><span style="color:#ca8a04;font-size:0.8rem">15d ago</span></td>
     <td style="font-size:0.8rem;color:#888">0</td>
     <td style="font-size:0.8rem;color:#888">0</td>
   </tr><tr data-status="invited" data-photo="no">
@@ -5267,7 +5268,7 @@
     <td style="font-size:0.82rem">2025-10-21</td>
     <td><span class="badge badge-active">✓ Active Member</span></td>
     <td><span class="badge badge-photo">✓ Photo</span></td>
-    <td><span style="color:#16a34a;font-size:0.8rem">1d ago</span></td>
+    <td><span style="color:#16a34a;font-size:0.8rem">2d ago</span></td>
     <td style="font-size:0.8rem;color:#888">1</td>
     <td style="font-size:0.8rem;color:#888">7</td>
   </tr><tr data-status="active" data-photo="yes">
@@ -5742,7 +5743,7 @@
     <td style="font-size:0.82rem">2025-09-17</td>
     <td><span class="badge badge-active">✓ Active Member</span></td>
     <td><span class="badge badge-photo">✓ Photo</span></td>
-    <td><span style="color:#dc2626;font-size:0.8rem">37d ago</span></td>
+    <td><span style="color:#dc2626;font-size:0.8rem">38d ago</span></td>
     <td style="font-size:0.8rem;color:#888">0</td>
     <td style="font-size:0.8rem;color:#888">0</td>
   </tr><tr data-status="active" data-photo="yes">
@@ -9656,6 +9657,17 @@ function setFilter(status, btn) {
   currentStatusFilter = status;
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  filterTable();
+}
+
+function onSearch() {
+  const search = document.getElementById('search').value;
+  // When typing, always search across ALL members regardless of status filter
+  if (search) {
+    currentStatusFilter = 'all';
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('btn-all').classList.add('active');
+  }
   filterTable();
 }
 
