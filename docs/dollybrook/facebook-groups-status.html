@@ -4,32 +4,32 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DollyBrook Resort — Facebook Groups Campaign Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Arya:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root { --db-dark-green: #23372C; --db-eggshell: #F1F0D9; --db-beige: #CEAA78; --db-dark-blue: #23262D; --radius: 1rem; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Inter', sans-serif; background: var(--db-eggshell); color: var(--db-dark-blue); }
+body { font-family: 'Lato', sans-serif; background: var(--db-eggshell); color: var(--db-dark-blue); }
 .header { background: linear-gradient(135deg, var(--db-dark-green) 0%, #1a2a22 100%); color: var(--db-eggshell); padding: 32px 40px; display: flex; align-items: flex-end; justify-content: space-between; }
-.header-left h1 { font-family: 'Playfair Display', serif; font-size: 1.9rem; font-weight: 700; }
+.header-left h1 { font-family: 'Arya', serif; font-size: 1.9rem; font-weight: 700; }
 .header-left p { font-size: 0.85rem; opacity: 0.7; margin-top: 6px; font-weight: 300; }
 .header-badge { background: var(--db-beige); color: var(--db-dark-green); font-weight: 700; font-size: 0.75rem; padding: 7px 16px; border-radius: 2rem; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
 .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; padding: 24px 40px 0; }
 .stat-card { background: white; border-radius: var(--radius); padding: 20px; text-align: center; border: 1px solid var(--db-beige); border-top: 4px solid var(--db-beige); }
 .stat-card.green { border-top-color: #28a745; } .stat-card.orange { border-top-color: #ffc107; } .stat-card.red { border-top-color: #dc3545; }
-.stat-number { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: var(--db-dark-green); }
+.stat-number { font-family: 'Arya', serif; font-size: 2.2rem; font-weight: 700; color: var(--db-dark-green); }
 .stat-card.green .stat-number { color: #28a745; } .stat-card.orange .stat-number { color: #e6a800; } .stat-card.red .stat-number { color: #dc3545; }
 .stat-label { font-size: 0.75rem; color: #666; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; }
 .charts-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; padding: 24px 40px; }
 @media (max-width: 900px) { .charts-grid { grid-template-columns: 1fr; } }
 .chart-card { background: white; border-radius: var(--radius); padding: 24px; border: 1px solid var(--db-beige); }
-.chart-card h3 { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--db-dark-green); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--db-beige); }
+.chart-card h3 { font-family: 'Arya', serif; font-size: 1rem; font-weight: 600; color: var(--db-dark-green); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--db-beige); }
 .chart-container { position: relative; height: 220px; }
 .timeline-section { padding: 0 40px 24px; }
 .timeline-card { background: white; border-radius: var(--radius); padding: 24px; border: 1px solid var(--db-beige); }
-.timeline-card h3 { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--db-dark-green); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--db-beige); }
+.timeline-card h3 { font-family: 'Arya', serif; font-size: 1rem; font-weight: 600; color: var(--db-dark-green); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--db-beige); }
 .timeline-date-group { margin-bottom: 20px; }
-.timeline-date-label { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.82rem; color: var(--db-dark-green); background: rgba(206,170,120,0.2); display: inline-block; padding: 4px 12px; border-radius: 12px; margin-bottom: 10px; }
+.timeline-date-label { font-family: 'Lato', sans-serif; font-weight: 700; font-size: 0.82rem; color: var(--db-dark-green); background: rgba(206,170,120,0.2); display: inline-block; padding: 4px 12px; border-radius: 12px; margin-bottom: 10px; }
 .timeline-items { display: flex; flex-wrap: wrap; gap: 8px; }
 .timeline-item { padding: 6px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; display: flex; align-items: center; gap: 6px; }
 .timeline-item.live { background: #d4edda; color: #155724; } .timeline-item.pending { background: #fff3cd; color: #856404; } .timeline-item.removed { background: #f8d7da; color: #721c24; }
@@ -37,7 +37,7 @@ body { font-family: 'Inter', sans-serif; background: var(--db-eggshell); color: 
 .timeline-item.live .dot { background: #28a745; } .timeline-item.pending .dot { background: #ffc107; } .timeline-item.removed .dot { background: #dc3545; }
 .table-section { padding: 0 40px 40px; }
 .table-card { background: white; border-radius: var(--radius); padding: 24px; border: 1px solid var(--db-beige); overflow-x: auto; }
-.table-card h3 { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--db-dark-green); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--db-beige); }
+.table-card h3 { font-family: 'Arya', serif; font-size: 1rem; font-weight: 600; color: var(--db-dark-green); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--db-beige); }
 table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
 thead tr { background: var(--db-dark-green); color: var(--db-eggshell); }
 thead th { padding: 10px 12px; text-align: left; font-weight: 600; white-space: nowrap; cursor: pointer; user-select: none; font-size: 0.78rem; letter-spacing: 0.03em; }
@@ -61,10 +61,10 @@ a.group-link { color: var(--db-dark-green); text-decoration: none; font-weight: 
 .updated-tag { font-size: 0.75rem; color: #888; text-align: right; padding: 8px 40px 0; }
 .calendar-section { padding: 0 40px 32px; }
 .calendar-card { background: white; border-radius: var(--radius); border: 1px solid var(--db-beige); overflow: hidden; }
-.calendar-card h3 { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--db-dark-green); padding: 18px 24px 14px; border-bottom: 1px solid var(--db-beige); margin: 0; }
+.calendar-card h3 { font-family: 'Arya', serif; font-size: 1rem; font-weight: 600; color: var(--db-dark-green); padding: 18px 24px 14px; border-bottom: 1px solid var(--db-beige); margin: 0; }
 .cal-day { border-bottom: 1px solid rgba(206,170,120,0.2); }
 .cal-day:last-child { border-bottom: none; }
-.cal-date { background: rgba(35,55,44,0.04); padding: 7px 20px; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.76rem; color: var(--db-dark-green); letter-spacing: 0.06em; text-transform: uppercase; }
+.cal-date { background: rgba(35,55,44,0.04); padding: 7px 20px; font-family: 'Lato', sans-serif; font-weight: 700; font-size: 0.76rem; color: var(--db-dark-green); letter-spacing: 0.06em; text-transform: uppercase; }
 .cal-row { border-bottom: 1px solid rgba(206,170,120,0.12); }
 .cal-row:last-child { border-bottom: none; }
 .cal-row-summary { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; cursor: pointer; font-size: 0.82rem; transition: background 0.15s; }
@@ -100,7 +100,7 @@ details[open] .cal-chevron { transform: rotate(180deg); display: inline-block; }
   <div class="stat-card orange"><div class="stat-number">36</div><div class="stat-label">Pending Approval</div></div>
   <div class="stat-card red"><div class="stat-number">1</div><div class="stat-label">Removed</div></div>
   <div class="stat-card"><div class="stat-number">38</div><div class="stat-label">Groups Active</div></div>
-  <div class="stat-card"><div class="stat-number">4,682</div><div class="stat-label">Page Followers</div></div>
+  <div class="stat-card"><div class="stat-number">4,683</div><div class="stat-label">Page Followers</div></div>
   <div class="stat-card green"><div class="stat-number">196</div><div class="stat-label">Top Post Reactions</div></div>
 </div>
 <div class="charts-grid">
@@ -117,11 +117,11 @@ details[open] .cal-chevron { transform: rotate(180deg); display: inline-block; }
             <div class="cal-date">Friday, April 10</div>
             
             <div class="cal-row">
-              <div class="cal-row-summary" onclick="document.getElementById('cal-bd8d9936').open = !document.getElementById('cal-bd8d9936').open">
+              <div class="cal-row-summary" onclick="document.getElementById('cal-47fd68a4').open = !document.getElementById('cal-47fd68a4').open">
                 <span class="cal-row-left"><span class="cal-plat-tag">Facebook</span> Fennville Informed — DRAFT</span>
                 <span class="cal-row-right"><span class="status-draft">DRAFT</span> <span class="cal-chevron">&#9660;</span></span>
               </div>
-              <details id="cal-bd8d9936">
+              <details id="cal-47fd68a4">
                 <summary style="display:none"></summary>
                 <div class="cal-detail">
                   <div class="cal-detail-text">It's officially happening.
@@ -136,11 +136,11 @@ What are you most looking forward to about SW Michigan this summer?</div>
               </details>
             </div>
             <div class="cal-row">
-              <div class="cal-row-summary" onclick="document.getElementById('cal-37c5581b').open = !document.getElementById('cal-37c5581b').open">
+              <div class="cal-row-summary" onclick="document.getElementById('cal-e7e93e43').open = !document.getElementById('cal-e7e93e43').open">
                 <span class="cal-row-left"><span class="cal-plat-tag">Facebook</span> Sauglasville — DRAFT</span>
                 <span class="cal-row-right"><span class="status-draft">DRAFT</span> <span class="cal-chevron">&#9660;</span></span>
               </div>
-              <details id="cal-37c5581b">
+              <details id="cal-e7e93e43">
                 <summary style="display:none"></summary>
                 <div class="cal-detail">
                   <div class="cal-detail-text">Update from our Sauglasville community post last week:
@@ -153,11 +153,11 @@ We're still building it. If you haven't dropped your recommendation yet -- what'
               </details>
             </div>
             <div class="cal-row">
-              <div class="cal-row-summary" onclick="document.getElementById('cal-3e8c3a80').open = !document.getElementById('cal-3e8c3a80').open">
+              <div class="cal-row-summary" onclick="document.getElementById('cal-e1934c91').open = !document.getElementById('cal-e1934c91').open">
                 <span class="cal-row-left"><span class="cal-plat-tag">X</span> @DollybrookMI — DRAFT</span>
                 <span class="cal-row-right"><span class="status-draft">DRAFT</span> <span class="cal-chevron">&#9660;</span></span>
               </div>
-              <details id="cal-3e8c3a80">
+              <details id="cal-e1934c91">
                 <summary style="display:none"></summary>
                 <div class="cal-detail">
                   <div class="cal-detail-text">&gt; Everyone's "disconnecting for the weekend" from a place with better WiFi than their apartment.
@@ -178,11 +178,11 @@ We're still building it. If you haven't dropped your recommendation yet -- what'
             <div class="cal-date">Saturday, April 11</div>
             
             <div class="cal-row">
-              <div class="cal-row-summary" onclick="document.getElementById('cal-c5ab4fab').open = !document.getElementById('cal-c5ab4fab').open">
+              <div class="cal-row-summary" onclick="document.getElementById('cal-d24f8544').open = !document.getElementById('cal-d24f8544').open">
                 <span class="cal-row-left"><span class="cal-plat-tag">Facebook</span> Hamilton Happenings — DRAFT</span>
                 <span class="cal-row-right"><span class="status-draft">DRAFT</span> <span class="cal-chevron">&#9660;</span></span>
               </div>
-              <details id="cal-c5ab4fab">
+              <details id="cal-d24f8544">
                 <summary style="display:none"></summary>
                 <div class="cal-detail">
                   <div class="cal-detail-text">Summer checklist for a SW Michigan weekend at DollyBrook:
@@ -198,11 +198,11 @@ Hamilton neighbors -- what's on your summer checklist this year?</div>
               </details>
             </div>
             <div class="cal-row">
-              <div class="cal-row-summary" onclick="document.getElementById('cal-db949b17').open = !document.getElementById('cal-db949b17').open">
+              <div class="cal-row-summary" onclick="document.getElementById('cal-2dfc9b78').open = !document.getElementById('cal-2dfc9b78').open">
                 <span class="cal-row-left"><span class="cal-plat-tag">Facebook</span> Southwest Michigan — DRAFT</span>
                 <span class="cal-row-right"><span class="status-draft">DRAFT</span> <span class="cal-chevron">&#9660;</span></span>
               </div>
-              <details id="cal-db949b17">
+              <details id="cal-2dfc9b78">
                 <summary style="display:none"></summary>
                 <div class="cal-detail">
                   <div class="cal-detail-text">SW Michigan pool season is almost here.
@@ -215,11 +215,43 @@ If you have been thinking about a SW Michigan summer trip -- what's the one thin
               </details>
             </div>
             <div class="cal-row">
-              <div class="cal-row-summary" onclick="document.getElementById('cal-f87705cb').open = !document.getElementById('cal-f87705cb').open">
+              <div class="cal-row-summary" onclick="document.getElementById('cal-9d937d56').open = !document.getElementById('cal-9d937d56').open">
                 <span class="cal-row-left"><span class="cal-plat-tag">X</span> @DollybrookMI — DRAFT</span>
                 <span class="cal-row-right"><span class="status-draft">DRAFT</span> <span class="cal-chevron">&#9660;</span></span>
               </div>
-              <details id="cal-f87705cb">
+              <details id="cal-9d937d56">
+                <summary style="display:none"></summary>
+                <div class="cal-detail">
+                  <div class="cal-detail-text"><em>No text drafted yet</em></div>
+                  
+                </div>
+              </details>
+            </div>
+            <div class="cal-row">
+              <div class="cal-row-summary" onclick="document.getElementById('cal-00c7e315').open = !document.getElementById('cal-00c7e315').open">
+                <span class="cal-row-left"><span class="cal-plat-tag">Facebook</span> FACEBOOK 3 (Apr 11) — Girls' Trip Photo Post — DRAFT</span>
+                <span class="cal-row-right"><span class="status-draft">DRAFT</span> <span class="cal-chevron">&#9660;</span></span>
+              </div>
+              <details id="cal-00c7e315">
+                <summary style="display:none"></summary>
+                <div class="cal-detail">
+                  <div class="cal-detail-text">These five found us on a winter weekend trip and still made it look like summer.
+
+Saugatuck in the off-season hits different when you have the right crew.
+Private dock. Lake. No crowds. Just this.
+
+If you have been sleeping on a SW Michigan girls' weekend -- don't.
+What's your go-to for a Michigan trip with the girls?</div>
+                  <div style="margin-top:8px;font-size:0.75rem;color:#888"><strong>Photo:</strong> `assets/real-photos/influencer-group-dock-lake.jpg` — dock/lake/lake hero shot ✔️</div>
+                </div>
+              </details>
+            </div>
+            <div class="cal-row">
+              <div class="cal-row-summary" onclick="document.getElementById('cal-290b5ca3').open = !document.getElementById('cal-290b5ca3').open">
+                <span class="cal-row-left"><span class="cal-plat-tag">Facebook</span> FACEBOOK BONUS (Apr 11) — Girls' Trip ISO Reply Template — DRAFT</span>
+                <span class="cal-row-right"><span class="status-draft">DRAFT</span> <span class="cal-chevron">&#9660;</span></span>
+              </div>
+              <details id="cal-290b5ca3">
                 <summary style="display:none"></summary>
                 <div class="cal-detail">
                   <div class="cal-detail-text"><em>No text drafted yet</em></div>
@@ -885,12 +917,12 @@ If you have been thinking about a SW Michigan summer trip -- what's the one thin
           <td class="snippet">Pool comment reply + Deborah/Melinda replies</td>
         </tr>
         <tr>
-          <td><a class="group-link" href="https://www.facebook.com/groups/301913630886156/user/100063247416933/" target="_blank">2026-04-02</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/301913630886156/posts/1591826128561560/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-02 ⚠️</a></td>
           <td><a class="group-link" href="https://www.facebook.com/groups/301913630886156/" target="_blank">Holland Informed (the best one)</a></td>
           <td class="members">80000</td>
           <td><span class="badge badge-cat-sg">SG</span></td>
-          <td><span class="badge badge-live">✅ Live</span><br><small>18 reactions (15 likes + 3 loves) + 2 shares - SG category - community neighbor tone - firepit photo attached | NOTE: Original post URL was incorrect (stored wrong post ID). Actual post confirmed live on profile page Apr 9 2026. Direct post URL unknown - use profile URL.</small></td>
-          <td style="text-align:center;white-space:nowrap"><span class="score-mid">29</span><br><small style="color:#aaa;font-size:0.7rem">19R 0C 2S</small></td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>18 reactions (15 likes + 3 loves) + 2 shares - SG category - community neighbor tone - firepit photo attached | Correct post URL recovered Apr 9 from profile page activity feed.</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-high">31</span><br><small style="color:#aaa;font-size:0.7rem">21R 0C 2S</small></td>
           <td class="snippet">Just wanted to pop in and say hi to the Holland community from your West Michigan neighbors in Fennv...</td>
         </tr>
         <tr>
@@ -1039,7 +1071,7 @@ If you have been thinking about a SW Michigan summer trip -- what's the one thin
 new Chart(document.getElementById('statusChart'), {
   type: 'doughnut',
   data: { labels: ['Live', 'Pending', 'Removed'], datasets: [{ data: [34, 36, 1], backgroundColor: ['#28a745','#CEAA78','#dc3545'], borderWidth: 2, borderColor: '#F1F0D9' }] },
-  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { font: { size: 11, family: 'Inter' } } } }, cutout: '65%' }
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { font: { size: 11, family: 'Lato' } } } }, cutout: '65%' }
 });
 new Chart(document.getElementById('dateChart'), {
   type: 'bar',
@@ -1048,12 +1080,12 @@ new Chart(document.getElementById('dateChart'), {
     { label: 'Pending', data: [5, 1, 7, 1, 3, 1, 1, 2, 0, 2, 3, 0, 0, 2, 1, 0, 2, 0, 5], backgroundColor: '#CEAA78' },
     { label: 'Removed', data: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], backgroundColor: '#dc3545' }
   ] },
-  options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true, ticks: { font: { family: 'Inter', size: 10 } }, grid: { color: 'rgba(206,170,120,0.2)' } }, y: { stacked: true, ticks: { stepSize: 1, font: { family: 'Inter', size: 10 } }, grid: { color: 'rgba(206,170,120,0.2)' } } }, plugins: { legend: { position: 'bottom', labels: { font: { size: 11, family: 'Inter' } } } } }
+  options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true, ticks: { font: { family: 'Lato', size: 10 } }, grid: { color: 'rgba(206,170,120,0.2)' } }, y: { stacked: true, ticks: { stepSize: 1, font: { family: 'Lato', size: 10 } }, grid: { color: 'rgba(206,170,120,0.2)' } } }, plugins: { legend: { position: 'bottom', labels: { font: { size: 11, family: 'Lato' } } } } }
 });
 new Chart(document.getElementById('reachChart'), {
   type: 'bar',
   data: { labels: ["Holland Informed (the ", "Allegan County Informe", "Michigan Cabin Rentals", "Overheard in Michigan ", "Greater Michigan - Vac", "South Haven Michigan", "Downtown South Haven M", "West Michigan Travel I"], datasets: [{ label: 'Members (K)', data: [80.0, 57.0, 51.0, 42.0, 39.0, 28.0, 21.0, 21.0], backgroundColor: ["#28a745", "#28a745", "#ffc107", "#ffc107", "#28a745", "#ffc107", "#ffc107", "#ffc107"], borderRadius: 4 }] },
-  options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { grid: { color: 'rgba(206,170,120,0.2)' } }, y: { ticks: { font: { size: 10, family: 'Inter' } }, grid: { display: false } } }, plugins: { legend: { display: false } } }
+  options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { grid: { color: 'rgba(206,170,120,0.2)' } }, y: { ticks: { font: { size: 10, family: 'Lato' } }, grid: { display: false } } }, plugins: { legend: { display: false } } }
 });
 </script>
 <script>
