@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RCS26 Venue Partnership Proposal — Philadelphia Church of God</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', 'Open Sans', sans-serif; background: #f5f7fa; color: #1a1a2e; font-size: 14px; line-height: 1.6; }
+
+    /* Header */
+    .header { background: #00ACF0; color: #fff; padding: 28px 48px; display: flex; align-items: center; justify-content: space-between; }
+    .header-left h1 { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.01em; }
+    .header-left p { font-size: 0.82rem; opacity: 0.88; margin-top: 3px; }
+    .header-badge { background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 5px 14px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.03em; white-space: nowrap; }
+
+    /* Layout */
+    .wrapper { max-width: 900px; margin: 0 auto; padding: 36px 24px 48px; }
+
+    /* Salutation */
+    .salutation { background: #fff; border-radius: 10px; border-left: 4px solid #00ACF0; padding: 22px 28px; margin-bottom: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .salutation .to-label { font-size: 0.72rem; font-weight: 600; color: #00ACF0; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .salutation .to-name { font-size: 1rem; font-weight: 600; color: #113268; }
+    .salutation .to-title { font-size: 0.85rem; color: #555; }
+    .salutation .intro { margin-top: 14px; color: #333; font-size: 0.88rem; }
+
+    /* Section cards */
+    .section { background: #fff; border-radius: 10px; padding: 22px 28px; margin-bottom: 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .section h2 { font-size: 0.78rem; font-weight: 700; color: #00ACF0; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .section h2::after { content: ''; flex: 1; height: 1px; background: #e8f6fd; }
+    .section p { color: #444; font-size: 0.88rem; margin-bottom: 10px; }
+    .section p:last-child { margin-bottom: 0; }
+
+    /* Stats row */
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+    .stat { background: #fff; border-radius: 10px; padding: 16px 18px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-top: 3px solid #00ACF0; }
+    .stat .num { font-size: 1.5rem; font-weight: 700; color: #113268; line-height: 1; }
+    .stat .lbl { font-size: 0.7rem; color: #777; margin-top: 4px; font-weight: 500; }
+
+    /* Schedule table */
+    .schedule { width: 100%; border-collapse: collapse; }
+    .schedule th { background: #113268; color: #fff; padding: 9px 14px; text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+    .schedule td { padding: 10px 14px; border-bottom: 1px solid #eef2f5; font-size: 0.85rem; }
+    .schedule tr:last-child td { border-bottom: none; }
+    .schedule tr:hover td { background: #f0f9ff; }
+    .tag { display: inline-block; padding: 2px 9px; border-radius: 10px; font-size: 0.72rem; font-weight: 600; }
+    .tag-vip { background: #EF7D0022; color: #b85c00; }
+    .tag-full { background: #00ACF022; color: #006fa8; }
+    .tag-half { background: #11326822; color: #113268; }
+
+    /* Two-col layout */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+
+    /* Requirements list */
+    .req-list { list-style: none; }
+    .req-list li { display: flex; gap: 10px; padding: 7px 0; border-bottom: 1px solid #f0f4f8; font-size: 0.85rem; color: #333; }
+    .req-list li:last-child { border-bottom: none; }
+    .req-list li::before { content: '✓'; color: #00ACF0; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+    /* Partner benefits */
+    .benefit { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f0f4f8; font-size: 0.85rem; }
+    .benefit:last-child { border-bottom: none; }
+    .benefit-icon { width: 22px; height: 22px; background: #00ACF0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #fff; flex-shrink: 0; margin-top: 1px; }
+
+    /* Why section */
+    .highlight-box { background: linear-gradient(135deg, #113268 0%, #00ACF0 100%); border-radius: 10px; padding: 24px 28px; color: #fff; margin-bottom: 18px; }
+    .highlight-box h2 { color: #fff; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 12px; opacity: 0.85; }
+    .highlight-box p { font-size: 0.9rem; line-height: 1.65; opacity: 0.95; }
+
+    /* CTA footer */
+    .cta { background: #fff; border-radius: 10px; padding: 22px 28px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .cta-text h3 { font-size: 0.95rem; font-weight: 700; color: #113268; margin-bottom: 4px; }
+    .cta-text p { font-size: 0.83rem; color: #555; }
+    .cta-contact { text-align: right; }
+    .cta-contact .name { font-size: 0.9rem; font-weight: 700; color: #113268; }
+    .cta-contact .title { font-size: 0.78rem; color: #777; }
+    .cta-contact .links { margin-top: 6px; }
+    .cta-contact a { color: #00ACF0; text-decoration: none; font-size: 0.8rem; font-weight: 500; display: block; }
+    .cta-contact a:hover { text-decoration: underline; }
+
+    /* Footer */
+    .page-footer { text-align: center; padding: 20px; color: #aaa; font-size: 0.75rem; }
+    .page-footer span { color: #00ACF0; font-weight: 600; }
+
+    @media (max-width: 640px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .two-col { grid-template-columns: 1fr; }
+      .cta { flex-direction: column; text-align: center; }
+      .cta-contact { text-align: center; }
+      .header { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Romanian Community Summit 2026 — Venue Partnership Proposal</h1>
+      <p>Romanian United Foundation &nbsp;·&nbsp; April 2026 &nbsp;·&nbsp; Prepared by Mihai Lehene</p>
+    </div>
+    <div class="header-badge">CONFIDENTIAL</div>
+  </div>
+
+  <div class="wrapper">
+
+    <!-- Salutation -->
+    <div class="salutation">
+      <div class="to-label">Addressed to</div>
+      <div class="to-name">Bishop Florin Cîmpean</div>
+      <div class="to-title">Administrative Bishop, Church of God Romanian Territory &amp; Council of Philadelphia Church of God</div>
+      <p class="intro">
+        On behalf of the Romanian United Foundation and the Romanian Community Summit organizing team, we are honored to present this formal invitation to partner with <strong>Philadelphia Church of God</strong> as the home venue of <strong>RCS26 — the Romanian Community Summit 2026</strong>. This is more than a venue arrangement — it is an invitation to stand together as the two pillars of our community, in front of Romania's highest-level representatives and 800+ community members.
+      </p>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat">
+        <div class="num">363</div>
+        <div class="lbl">On-site 2025</div>
+      </div>
+      <div class="stat">
+        <div class="num">1,000+</div>
+        <div class="lbl">Online viewers</div>
+      </div>
+      <div class="stat">
+        <div class="num">800–1,000</div>
+        <div class="lbl">Target 2026 / day</div>
+      </div>
+      <div class="stat">
+        <div class="num">4th</div>
+        <div class="lbl">Edition — RCS26</div>
+      </div>
+    </div>
+
+    <!-- About -->
+    <div class="section">
+      <h2>About the Romanian Community Summit</h2>
+      <p>The Romanian Community Summit is the <strong>premier annual gathering of the Romanian-American community</strong>, organized by RUF under the auspices of the Embassy of Romania to the United States and the Consulate General of Romania in Chicago. RCS25 featured the Romanian Minister of Foreign Affairs, Minister of Education, the Ambassador of Romania to the US, five Ambassadors and Consuls General, Father Constantin Necula, and 45 youth Heritage Award recipients — representing communities from across the US, Canada, and Romania.</p>
+      <p>RCS26 expands to a <strong>3-day, federated summit</strong>: partner organizations run their own thematic events within the summit framework. Morning sessions are open to the public (800–1,000/day at $15–$20); afternoon sessions serve 200 registered participants. The event streams live on GlobalRomania.</p>
+    </div>
+
+    <!-- Schedule -->
+    <div class="section">
+      <h2>Event Schedule — September 18–20, 2026</h2>
+      <table class="schedule">
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>Date</th>
+            <th>Format</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Friday</strong></td>
+            <td>Sep 18, 2026</td>
+            <td><span class="tag tag-vip">VIP Dinner</span></td>
+            <td>Exclusive dinner for VIPs, speakers &amp; key stakeholders — no other activities</td>
+          </tr>
+          <tr>
+            <td><strong>Saturday</strong></td>
+            <td>Sep 19, 2026</td>
+            <td><span class="tag tag-full">Full Day</span></td>
+            <td>Main summit day — plenary sessions, keynotes, panels, awards, networking</td>
+          </tr>
+          <tr>
+            <td><strong>Sunday</strong></td>
+            <td>Sep 20, 2026</td>
+            <td><span class="tag tag-half">Half Day</span></td>
+            <td>Continuation programming, breakouts, networking, closing</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Requirements + Benefits -->
+    <div class="two-col">
+      <div class="section" style="margin-bottom:0">
+        <h2>Space &amp; Operational Needs</h2>
+        <ul class="req-list">
+          <li>Main auditorium — up to <strong>700–800 seats</strong> for plenary</li>
+          <li>Secondary hall for parallel sessions</li>
+          <li><strong>3–4 breakout rooms</strong> (50–100 capacity each)</li>
+          <li>Catering kitchen + <strong>lunch for ~350</strong> (Saturday)</li>
+          <li>Light refreshments / breakfast setup area</li>
+          <li>Professional audio infrastructure (fixed)</li>
+          <li>Video / projection in main hall + rooms</li>
+          <li>Welcome &amp; check-in reception area</li>
+          <li><strong>Parking for 300+ vehicles</strong></li>
+          <li>Access from <strong>Friday evening for setup</strong></li>
+          <li>Church volunteer participation warmly welcomed</li>
+        </ul>
+      </div>
+
+      <div class="section" style="margin-bottom:0">
+        <h2>What We Bring</h2>
+        <div class="benefit">
+          <div class="benefit-icon">🎤</div>
+          <div>Full event organization, programming, staffing &amp; A/V production crew</div>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon">🌍</div>
+          <div>National &amp; international speaker recruitment and logistics</div>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon">📢</div>
+          <div>All marketing, communications, signage &amp; branded assets</div>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon">🎬</div>
+          <div>Professional A/V production crew &amp; live streaming team</div>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon">⭐</div>
+          <div><strong>Premier Community Partner</strong> recognition on all materials</div>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon">🎙</div>
+          <div>Church representative invited to address participants from main stage</div>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon">🍽</div>
+          <div>Invitation to VIP Dinner — Friday, September 18</div>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon">📬</div>
+          <div>Featured in all post-event comms to <strong>6,500+ community members</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Why Philadelphia -->
+    <div class="highlight-box">
+      <h2>Why Philadelphia Church of God</h2>
+      <p>We are coming to you not just because of your facilities — but because of what this partnership <em>represents</em>. Philadelphia Church of God has been a cornerstone of the Romanian community in Chicago for decades. Your congregation embodies the same values the Summit is built around: <strong>faith, family, unity, service, and love for Romania</strong>. Hosting RCS26 at Philadelphia would send a powerful signal to the entire diaspora that our church and our civic institutions stand together — one community, walking forward in the same direction. We believe this would be a historic and deeply meaningful occasion for your congregation and for every Romanian-American who attends.</p>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta">
+      <div class="cta-text">
+        <h3>We would be honored to meet with you and the council.</h3>
+        <p>We are committed to making this a partnership that works well for everyone involved and look forward to building this milestone together.</p>
+      </div>
+      <div class="cta-contact">
+        <div class="name">Mihai Lehene</div>
+        <div class="title">Founder &amp; Executive Director, Romanian United Foundation</div>
+        <div class="links">
+          <a href="tel:+17732898696">📞 +1 (773) 289-8696</a>
+          <a href="mailto:mihai@ruf.global">✉️ mihai@ruf.global</a>
+          <a href="https://rosummit.org" target="_blank">🌐 rosummit.org</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <span>Romanian United Foundation</span> &nbsp;·&nbsp; Romanian Community Summit 2026 &nbsp;·&nbsp; ruf.global &nbsp;·&nbsp; rosummit.org
+  </div>
+
+</body>
+</html>
