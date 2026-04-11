@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Romanian Community Summit 2026 — Invitație pentru Corpul Consular Român</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', 'Open Sans', sans-serif; background: #f5f7fa; color: #1a1a2e; font-size: 14px; line-height: 1.65; }
+
+    /* Header */
+    .header { background: #00ACF0; color: #fff; padding: 30px 48px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .header-left h1 { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.3; }
+    .header-left .subtitle { font-size: 0.82rem; opacity: 0.88; margin-top: 5px; }
+    .header-right { text-align: right; flex-shrink: 0; }
+    .header-right .edition { background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 5px 14px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.03em; display: inline-block; margin-bottom: 6px; }
+    .header-right .date { font-size: 0.82rem; opacity: 0.88; }
+
+    /* Tricolor accent bar */
+    .tricolor { height: 4px; display: flex; }
+    .tricolor-blue { flex: 1; background: #002B7F; }
+    .tricolor-yellow { flex: 1; background: #FCD116; }
+    .tricolor-red { flex: 1; background: #CE1126; }
+
+    /* Layout */
+    .wrapper { max-width: 900px; margin: 0 auto; padding: 36px 24px 48px; }
+
+    /* Intro */
+    .intro-card { background: #fff; border-radius: 10px; border-left: 4px solid #00ACF0; padding: 24px 28px; margin-bottom: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .intro-card .to-label { font-size: 0.72rem; font-weight: 700; color: #00ACF0; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
+    .intro-card .to-name { font-size: 1.05rem; font-weight: 700; color: #113268; margin-bottom: 2px; }
+    .intro-card .to-sub { font-size: 0.85rem; color: #666; margin-bottom: 14px; }
+    .intro-card p { color: #333; font-size: 0.9rem; margin-bottom: 10px; }
+    .intro-card p:last-child { margin-bottom: 0; }
+
+    /* Stats */
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+    .stat { background: #fff; border-radius: 10px; padding: 16px 14px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-top: 3px solid #00ACF0; }
+    .stat .num { font-size: 1.55rem; font-weight: 700; color: #113268; line-height: 1; }
+    .stat .lbl { font-size: 0.68rem; color: #777; margin-top: 5px; font-weight: 500; line-height: 1.3; }
+
+    /* Section card */
+    .section { background: #fff; border-radius: 10px; padding: 22px 28px; margin-bottom: 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .section h2 { font-size: 0.78rem; font-weight: 700; color: #00ACF0; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .section h2::after { content: ''; flex: 1; height: 1px; background: #e8f6fd; }
+    .section p { color: #444; font-size: 0.88rem; margin-bottom: 10px; }
+    .section p:last-child { margin-bottom: 0; }
+
+    /* Two col */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+
+    /* Pillar cards */
+    .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+    .pillar { background: #fff; border-radius: 10px; padding: 18px 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-top: 3px solid #113268; }
+    .pillar .pillar-num { font-size: 1.4rem; font-weight: 700; color: #00ACF0; line-height: 1; margin-bottom: 6px; }
+    .pillar h3 { font-size: 0.82rem; font-weight: 700; color: #113268; margin-bottom: 8px; }
+    .pillar p { font-size: 0.8rem; color: #555; line-height: 1.5; }
+
+    /* Schedule */
+    .schedule { width: 100%; border-collapse: collapse; }
+    .schedule th { background: #113268; color: #fff; padding: 9px 14px; text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .schedule td { padding: 10px 14px; border-bottom: 1px solid #eef2f5; font-size: 0.85rem; }
+    .schedule tr:last-child td { border-bottom: none; }
+    .schedule tr:hover td { background: #f0f9ff; }
+    .tag { display: inline-block; padding: 2px 9px; border-radius: 10px; font-size: 0.72rem; font-weight: 600; }
+    .tag-vip { background: #EF7D0022; color: #b85c00; }
+    .tag-full { background: #00ACF022; color: #006fa8; }
+    .tag-half { background: #11326822; color: #113268; }
+
+    /* Benefits list */
+    .benefit-list { list-style: none; }
+    .benefit-list li { display: flex; gap: 10px; padding: 7px 0; border-bottom: 1px solid #f0f4f8; font-size: 0.85rem; color: #333; align-items: flex-start; }
+    .benefit-list li:last-child { border-bottom: none; }
+    .benefit-list li .icon { color: #00ACF0; font-weight: 700; flex-shrink: 0; margin-top: 1px; width: 18px; }
+
+    /* Highlight box */
+    .highlight { background: linear-gradient(135deg, #113268 0%, #00ACF0 100%); border-radius: 10px; padding: 24px 28px; color: #fff; margin-bottom: 18px; }
+    .highlight h2 { color: rgba(255,255,255,0.85); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 12px; }
+    .highlight p { font-size: 0.92rem; line-height: 1.7; opacity: 0.96; }
+    .highlight strong { color: #fff; }
+
+    /* Speakers strip */
+    .speakers { background: #f0f9ff; border-radius: 10px; padding: 18px 24px; margin-bottom: 18px; border: 1px solid #d0edfb; }
+    .speakers h2 { font-size: 0.78rem; font-weight: 700; color: #00ACF0; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 10px; }
+    .speakers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .speaker-item { font-size: 0.8rem; color: #333; }
+    .speaker-item strong { color: #113268; display: block; font-size: 0.82rem; }
+    .speaker-item span { color: #777; font-size: 0.75rem; }
+
+    /* CTA */
+    .cta { background: #fff; border-radius: 10px; padding: 24px 28px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .cta-text h3 { font-size: 1rem; font-weight: 700; color: #113268; margin-bottom: 5px; }
+    .cta-text p { font-size: 0.83rem; color: #555; }
+    .cta-contact { text-align: right; flex-shrink: 0; }
+    .cta-contact .name { font-size: 0.92rem; font-weight: 700; color: #113268; }
+    .cta-contact .title { font-size: 0.78rem; color: #777; margin-bottom: 6px; }
+    .cta-contact a { color: #00ACF0; text-decoration: none; font-size: 0.8rem; font-weight: 500; display: block; line-height: 1.7; }
+    .cta-contact a:hover { text-decoration: underline; }
+
+    /* Partners strip */
+    .partners { text-align: center; background: #fff; border-radius: 10px; padding: 16px 24px; margin-bottom: 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); font-size: 0.8rem; color: #666; }
+    .partners strong { color: #113268; }
+
+    /* Footer */
+    .page-footer { text-align: center; padding: 20px; color: #aaa; font-size: 0.75rem; }
+    .page-footer span { color: #00ACF0; font-weight: 600; }
+
+    @media (max-width: 700px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .pillars { grid-template-columns: 1fr; }
+      .two-col { grid-template-columns: 1fr; }
+      .speakers-grid { grid-template-columns: 1fr 1fr; }
+      .cta { flex-direction: column; }
+      .cta-contact { text-align: left; }
+      .header { flex-direction: column; gap: 14px; }
+      .header-right { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Summitul Comunității Române 2026<br>Invitație pentru Corpul Consular Român</h1>
+      <div class="subtitle">Romanian United Foundation &nbsp;·&nbsp; Ediția a IV-a &nbsp;·&nbsp; Chicago, Illinois</div>
+    </div>
+    <div class="header-right">
+      <div class="edition">RCS26 — Ediția a IV-a</div>
+      <div class="date">18–20 septembrie 2026 · Chicago, IL</div>
+    </div>
+  </div>
+  <div class="tricolor">
+    <div class="tricolor-blue"></div>
+    <div class="tricolor-yellow"></div>
+    <div class="tricolor-red"></div>
+  </div>
+
+  <div class="wrapper">
+
+    <!-- Intro -->
+    <div class="intro-card">
+      <div class="to-label">Adresat</div>
+      <div class="to-name">Corpului Consular Român din Statele Unite ale Americii</div>
+      <div class="to-sub">Consulilor Generali, Consulilor Onorifici și reprezentanților diplomatici ai României</div>
+      <p>Stimate Coleg,</p>
+      <p>Vă scriem cu bucurie și cu respect, pentru a vă invita să fiți parte din <strong>Summitul Comunității Române 2026 (RCS26)</strong> — cel mai important eveniment anual al diasporei românești din Statele Unite.</p>
+      <p>RCS26 nu este doar un eveniment — este o platformă strategică de unitate, acțiune și vizibilitate pentru întreaga comunitate română din America de Nord. Și credem că <strong>prezența Corpului Consular Român</strong> este esențială pentru succesul și legitimitatea acestui proiect.</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat">
+        <div class="num">363</div>
+        <div class="lbl">Participanți<br>la RCS25</div>
+      </div>
+      <div class="stat">
+        <div class="num">1.000+</div>
+        <div class="lbl">Vizionări<br>online</div>
+      </div>
+      <div class="stat">
+        <div class="num">800–1.000</div>
+        <div class="lbl">Țintă 2026<br>pe zi</div>
+      </div>
+      <div class="stat">
+        <div class="num">6.500+</div>
+        <div class="lbl">Persoane în<br>rețeaua RUF</div>
+      </div>
+    </div>
+
+    <!-- Ce este summitul -->
+    <div class="section">
+      <h2>Ce este Summitul Comunității Române?</h2>
+      <p>Summitul Comunității Române este <strong>cel mai important eveniment anual al diasporei românești</strong> din America de Nord, organizat de Romanian United Foundation (RUF) sub auspiciile Ambasadei României la Washington și ale Consulatului General al României la Chicago.</p>
+      <p>Acum la a <strong>IV-a ediție</strong>, summitul reunește lideri din business, educație, religie, civism și cultură — oameni care reprezintă mii de români din Chicago, New York, California, Canada, România și din întreaga diasporă.</p>
+      <p><strong>RCS26 face un salt de amploare:</strong> eveniment pe 3 zile, sesiuni deschise publicului larg (800–1.000 persoane/zi), transmisie live pe platforma GlobalRomania, și pentru prima dată — <strong>participarea structurată a Corpului Consular</strong> ca partener în organizare.</p>
+    </div>
+
+    <!-- Program -->
+    <div class="section">
+      <h2>Programul RCS26 — 18–20 Septembrie 2026</h2>
+      <table class="schedule">
+        <thead>
+          <tr>
+            <th>Zi</th>
+            <th>Dată</th>
+            <th>Format</th>
+            <th>Descriere</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Vineri</strong></td>
+            <td>18 sept.</td>
+            <td><span class="tag tag-vip">Cină VIP</span></td>
+            <td>Cină exclusivă pentru VIP-uri, ambasadori, consuli generali și invitați speciali</td>
+          </tr>
+          <tr>
+            <td><strong>Sâmbătă</strong></td>
+            <td>19 sept.</td>
+            <td><span class="tag tag-full">Zi Completă</span></td>
+            <td>Ziua principală — conferințe plenare, paneluri, discursuri, premii, networking</td>
+          </tr>
+          <tr>
+            <td><strong>Duminică</strong></td>
+            <td>20 sept.</td>
+            <td><span class="tag tag-half">Jumătate de Zi</span></td>
+            <td>Sesiuni de continuare, proiecte comunitare regionale, networking informal</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Speakeri RCS25 -->
+    <div class="speakers">
+      <h2>Speakeri de referință — RCS25 (2025)</h2>
+      <div class="speakers-grid">
+        <div class="speaker-item">
+          <strong>Min. Oana Țoiu</strong>
+          <span>Ministrul Afacerilor Externe, România</span>
+        </div>
+        <div class="speaker-item">
+          <strong>Min. Daniel David</strong>
+          <span>Ministrul Educației și Cercetării</span>
+        </div>
+        <div class="speaker-item">
+          <strong>Amb. Andrei Muraru</strong>
+          <span>Ambasadorul României în SUA</span>
+        </div>
+        <div class="speaker-item">
+          <strong>Pr. Prof. Constantin Necula</strong>
+          <span>Teolog, vorbitor public de renume</span>
+        </div>
+        <div class="speaker-item">
+          <strong>CG Lucian Stănică</strong>
+          <span>Consul General al României la Chicago</span>
+        </div>
+        <div class="speaker-item">
+          <strong>CG Anton Lungu</strong>
+          <span>Consul General al Republicii Moldova</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cum participați -->
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-num">01</div>
+        <h3>Participare la Summit</h3>
+        <p>Prezența Consulului General sau a unui reprezentant consular la cina VIP (vineri) și la ziua principală (sâmbătă). Introduși din scenă în fața a 800+ participanți.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">02</div>
+        <h3>Voluntari din Comunitate</h3>
+        <p>Invităm fiecare consulat să nominalizeze <strong>1–3 voluntari</strong> din comunitatea românească locală pentru echipa de organizare. Este un privilegiu și o oportunitate de vizibilitate națională.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">03</div>
+        <h3>Spotlight Regional</h3>
+        <p>In 2026, 1–2 comunități regionale vor fi prezentate la nivel național. <strong>Los Angeles și New York</strong> sunt principalii candidați. Consulatele locale co-prezintă proiectele comunității lor.</p>
+      </div>
+    </div>
+
+    <!-- Two col: ce oferim / ce cerem -->
+    <div class="two-col">
+      <div class="section" style="margin-bottom:0">
+        <h2>Ce oferim</h2>
+        <ul class="benefit-list">
+          <li><span class="icon">★</span><div>Statut de <strong>Partener Consular Oficial</strong> al RCS26</div></li>
+          <li><span class="icon">★</span><div>Logo și denumire pe toate materialele evenimentului, website și program tipărit</div></li>
+          <li><span class="icon">★</span><div>Reprezentantul consulatului introdus din scenă în fața a 800+ participanți</div></li>
+          <li><span class="icon">★</span><div>Invitație la Cina VIP — vineri, 18 septembrie</div></li>
+          <li><span class="icon">★</span><div>Prezentare în toate comunicările post-eveniment (6.500+ persoane)</div></li>
+          <li><span class="icon">★</span><div>Acces la rețeaua de lideri, afaceriști și organizații din diaspora română</div></li>
+          <li><span class="icon">★</span><div>Posibilitate de a promova evenimentul în rețeaua comunității locale</div></li>
+        </ul>
+      </div>
+      <div class="section" style="margin-bottom:0">
+        <h2>Ce ne dorim</h2>
+        <ul class="benefit-list">
+          <li><span class="icon">✓</span><div>Prezența consulului sau a unui reprezentant la ziua principală (19 sept.)</div></li>
+          <li><span class="icon">✓</span><div>Nominalizarea a <strong>1–3 voluntari</strong> din comunitatea locală pentru echipa de organizare</div></li>
+          <li><span class="icon">✓</span><div>Distribuirea invitației summitului în rețeaua comunității românești locale</div></li>
+          <li><span class="icon">✓</span><div>Sprijin pentru identificarea proiectelor comunitare locale (pentru Spotlight regional)</div></li>
+          <li><span class="icon">✓</span><div>O scurtă conversație introductivă (30 min., Zoom) pentru a ne cunoaște și a construi împreună</div></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- De ce contează -->
+    <div class="highlight">
+      <h2>De ce contează prezența dumneavoastră</h2>
+      <p>Corpul Consular Român reprezintă comunitatea română în fiecare colț al Americii. RCS26 este platforma unde această comunitate se unește — iar <strong>prezența consulatelor confirmă legitimitatea și importanța evenimentului</strong> în ochii tuturor: lideri locali, oficiali americani, parteneri internaționali și diaspora globală.</p>
+      <p style="margin-top:10px">Acesta este un moment de construcție istorică. Nu există un precedent pentru implicarea structurată a Corpului Consular Român într-un eveniment al diasporei la această scară. <strong>Împreună, putem crea un nou model de colaborare</strong> — unul care va deveni un standard pentru generațiile viitoare.</p>
+    </div>
+
+    <!-- Parteneri -->
+    <div class="partners">
+      <strong>Parteneri strategici ai RCS26:</strong> &nbsp; Ambasada României la Washington D.C. &nbsp;·&nbsp; Consulatul General al României la Chicago &nbsp;·&nbsp; Institutul Cultural Român – New York (ICR)
+    </div>
+
+    <!-- CTA -->
+    <div class="cta">
+      <div class="cta-text">
+        <h3>Suntem onorați să construim aceasta împreună cu dumneavoastră.</h3>
+        <p>Vă invităm la o conversație introductivă de 30 de minute pentru a discuta cum putem colabora cel mai bine în cadrul RCS26.</p>
+      </div>
+      <div class="cta-contact">
+        <div class="name">Mihai Lehene</div>
+        <div class="title">Fondator & Director Executiv, Romanian United Foundation</div>
+        <a href="tel:+17732898696">📞 +1 (773) 289-8696</a>
+        <a href="mailto:mihai@ruf.global">✉️ mihai@ruf.global</a>
+        <a href="https://rosummit.org" target="_blank">🌐 rosummit.org</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="tricolor">
+    <div class="tricolor-blue"></div>
+    <div class="tricolor-yellow"></div>
+    <div class="tricolor-red"></div>
+  </div>
+  <div class="page-footer">
+    <span>Romanian United Foundation</span> &nbsp;·&nbsp; Summitul Comunității Române 2026 &nbsp;·&nbsp; ruf.global &nbsp;·&nbsp; rosummit.org
+  </div>
+
+</body>
+</html>
