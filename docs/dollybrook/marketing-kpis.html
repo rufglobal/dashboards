@@ -216,6 +216,36 @@ thead th:hover { opacity: 0.8; }
 </div>
 
 
+
+<!-- NOTIFICATION QUALITY TRACKER -->
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <h3>Slack Notifications — Volume & Quality (Week of Apr 6-11)</h3>
+    <div class="chart-container"><canvas id="notifChart"></canvas></div>
+  </div>
+  <div class="kpi-card">
+    <h3>Notification Source Quality — Which Groups to Keep?</h3>
+    <div class="chart-container"><canvas id="notifSourceChart"></canvas></div>
+  </div>
+</div>
+
+<div class="rank-table">
+  <h3>Group Notification Quality — Keep / Add / Drop Recommendations</h3>
+  <table id="notifTable">
+    <thead><tr><th>Group</th><th>Members</th><th>Notifications</th><th>Avg Score</th><th>Replied</th><th>Converted</th><th>Recommendation</th></tr></thead>
+    <tbody>
+      <tr><td><a href="https://www.facebook.com/groups/902669401133623/" target="_blank" style="color:#23372C;font-weight:700">Greater MI Vacation STR</a></td><td>40K</td><td>5</td><td style="color:#28a745;font-weight:700">7.2</td><td>3</td><td style="color:#28a745;font-weight:700">1</td><td style="color:#28a745;font-weight:700">🔴 KEEP — #1 lead source</td></tr>
+      <tr><td><a href="https://www.facebook.com/groups/276308850878370/" target="_blank" style="color:#23372C;font-weight:700">Michigan Cabin Rentals</a></td><td>52K</td><td>3</td><td style="color:#28a745">6.7</td><td>1</td><td>0</td><td style="color:#28a745;font-weight:700">🔴 KEEP — pure ISO group</td></tr>
+      <tr><td><a href="https://www.facebook.com/groups/michiganbucketlist/" target="_blank" style="color:#23372C;font-weight:700">Day Trips in Michigan</a></td><td>743K</td><td>2</td><td>5.5</td><td>1</td><td>0</td><td>🟡 KEEP — comment-only</td></tr>
+      <tr><td><a href="https://www.facebook.com/groups/691341305200368/" target="_blank" style="color:#23372C;font-weight:700">Vacation Rentals SW MI</a></td><td>4.5K</td><td>2</td><td>4.0</td><td>0</td><td>0</td><td>🟡 KEEP — lakefront skips</td></tr>
+      <tr><td><a href="https://www.facebook.com/groups/518397456396998/" target="_blank" style="color:#23372C;font-weight:700">Lake Michigan VR</a></td><td>26K</td><td>1</td><td style="color:#dc3545">3.0</td><td>0</td><td>0</td><td>🟡 Monitor — beachfront bias</td></tr>
+      <tr><td><a href="https://www.facebook.com/groups/southhavenmichigan/" target="_blank" style="color:#23372C;font-weight:700">South Haven MI</a></td><td>29K</td><td>1</td><td>4.0</td><td>0</td><td>0</td><td>🟡 KEEP — occasional ISOs</td></tr>
+      <tr><td><a href="https://www.facebook.com/groups/301913630886156/" target="_blank" style="color:#23372C;font-weight:700">Holland Informed</a></td><td>82K</td><td>1</td><td style="color:#dc3545">2.0</td><td>0</td><td>0</td><td>⚪ DROP from notifications (keep for posting)</td></tr>
+      <tr style="background:rgba(206,170,120,0.08)"><td colspan="7" style="font-style:italic;color:#888;padding:12px"><strong>Consider Adding:</strong> Michigan Short Term Rentals (~30K) · Fun Things to Do in MI (114K) · Michigan Everything (76K) · Upper MI Resorts (15K)</td></tr>
+    </tbody>
+  </table>
+</div>
+
 <!-- GROUP POINTS TRACKER -->
 <div class="rank-table">
   <h3>Group Points — Comment Impact (Week of Apr 11)</h3>
@@ -427,6 +457,38 @@ document.querySelectorAll('table').forEach(function(table) {
       rows.forEach(function(r) { tbody.appendChild(r); });
     });
   });
+});
+
+// Notification Volume & Quality
+new Chart(document.getElementById('notifChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Week Apr 6-11'],
+    datasets: [
+      { label: 'Total Notifications', data: [15], backgroundColor: '#23372C', borderRadius: 6 },
+      { label: 'Replied', data: [5], backgroundColor: '#28a745', borderRadius: 6 },
+      { label: 'Converted', data: [1], backgroundColor: '#CEAA78', borderRadius: 6 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom', labels: { font: { family: 'Lato', size: 10 } } } },
+    scales: { y: { ticks: { font: { family: 'Lato', size: 10 } }, grid: { color: 'rgba(206,170,120,0.2)' } }, x: { grid: { display: false } } }
+  }
+});
+
+// Notification Source Quality
+new Chart(document.getElementById('notifSourceChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Greater MI\nVacation STR', 'MI Cabin\nRentals', 'Day Trips\nMI', 'VR SW MI', 'Lake MI VR', 'South Haven', 'Holland\nInformed'],
+    datasets: [{ label: 'Avg Quality Score', data: [7.2, 6.7, 5.5, 4.0, 3.0, 4.0, 2.0], backgroundColor: ['#28a745','#28a745','#CEAA78','#CEAA78','#dc3545','#CEAA78','#dc3545'], borderRadius: 6 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+    plugins: { legend: { display: false } },
+    scales: { x: { min: 0, max: 10, ticks: { font: { family: 'Lato', size: 10 } }, grid: { color: 'rgba(206,170,120,0.2)' } }, y: { ticks: { font: { family: 'Lato', size: 9 } }, grid: { display: false } } }
+  }
 });
 </script>
 </body>
