@@ -4,172 +4,293 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DollyBrook Operational Intelligence Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Arya:wght@400;700&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
-    --bg: #0f1117;
-    --card: #1a1d2e;
-    --card-border: #2a2d3e;
-    --text: #e4e4e7;
-    --text-dim: #9ca3af;
-    --accent: #f59e0b;
-    --green: #22c55e;
-    --red: #ef4444;
-    --blue: #3b82f6;
-    --purple: #a855f7;
-    --pink: #ec4899;
-    --cyan: #06b6d4;
-    --orange: #f97316;
+    --dark-green: #23372C;
+    --eggshell: #F1F0D9;
+    --beige: #CEAA78;
+    --dark-blue: #23262D;
+    --light-green: #3a5a46;
+    --pale-green: #d4e8db;
+    --text: #23262D;
+    --text-dim: #6b7280;
+    --white: #ffffff;
+    --card-bg: #ffffff;
+    --card-border: #e5e0c8;
+    --section-bg: #f7f5ea;
+    --beige-light: #e8d9b8;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: var(--bg);
+    font-family: 'Lato', sans-serif;
+    background: var(--eggshell);
     color: var(--text);
-    line-height: 1.5;
-    padding: 24px;
+    line-height: 1.6;
+    padding: 0;
     min-height: 100vh;
   }
+
+  /* ===== GATE ===== */
+  #gate {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--dark-green);
+    z-index: 9999;
+    display: flex; align-items: center; justify-content: center; flex-direction: column;
+  }
+  #gate .gate-box {
+    text-align: center; max-width: 400px; padding: 48px 40px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(206,170,120,0.3);
+    border-radius: 16px;
+  }
+  #gate h2 { font-family: 'Arya', sans-serif; color: var(--beige); font-size: 1.8rem; margin-bottom: 6px; }
+  #gate .gate-sub { color: rgba(241,240,217,0.6); font-size: 0.9rem; margin-bottom: 28px; }
+  #gate input {
+    width: 100%; padding: 14px 18px;
+    background: rgba(241,240,217,0.08); border: 1px solid rgba(206,170,120,0.4);
+    border-radius: 8px; color: var(--eggshell); font-size: 1rem; font-family: 'Lato', sans-serif;
+    outline: none; margin-bottom: 12px; text-align: center; letter-spacing: 2px;
+  }
+  #gate input:focus { border-color: var(--beige); }
+  #gate button {
+    width: 100%; padding: 14px;
+    background: var(--beige); color: var(--dark-green);
+    border: none; border-radius: 8px;
+    font-weight: 700; font-size: 1rem; font-family: 'Lato', sans-serif;
+    cursor: pointer; transition: background 0.2s;
+  }
+  #gate button:hover { background: #d9b88a; }
+  #gateError { color: #f87171; margin-top: 12px; font-size: 0.85rem; display: none; }
+
+  /* ===== HEADER ===== */
   .header {
-    text-align: center;
-    margin-bottom: 32px;
-    padding: 32px 0;
-    border-bottom: 1px solid var(--card-border);
+    background: var(--dark-green);
+    color: var(--eggshell);
+    padding: 40px 48px 36px;
+    position: relative;
+  }
+  .header-inner { max-width: 1400px; margin: 0 auto; }
+  .header .logo-line {
+    font-family: 'Arya', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--beige);
+    margin-bottom: 8px;
+    opacity: 0.85;
   }
   .header h1 {
-    font-size: 2rem;
+    font-family: 'Arya', sans-serif;
+    font-size: 2.4rem;
     font-weight: 700;
     letter-spacing: -0.5px;
-    margin-bottom: 8px;
+    line-height: 1.1;
+    margin-bottom: 10px;
+    color: var(--eggshell);
   }
   .header .subtitle {
-    color: var(--text-dim);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+    color: rgba(241,240,217,0.6);
   }
-  .header .subtitle span { color: var(--accent); font-weight: 600; }
+  .header .subtitle strong { color: var(--beige); }
 
-  /* KPI strip */
+  /* ===== MAIN CONTENT ===== */
+  .main { max-width: 1400px; margin: 0 auto; padding: 40px 48px 80px; }
+  @media (max-width: 900px) { .main { padding: 24px 20px 60px; } .header { padding: 28px 20px; } }
+
+  /* ===== KPI STRIP ===== */
   .kpi-strip {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(6, 1fr);
     gap: 16px;
-    margin-bottom: 32px;
+    margin-bottom: 48px;
+    margin-top: -24px;
   }
+  @media (max-width: 1100px) { .kpi-strip { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 600px) { .kpi-strip { grid-template-columns: repeat(2, 1fr); } }
+
   .kpi {
-    background: var(--card);
+    background: var(--white);
     border: 1px solid var(--card-border);
     border-radius: 12px;
-    padding: 20px;
+    padding: 20px 16px;
     text-align: center;
+    box-shadow: 0 2px 8px rgba(35,55,44,0.06);
+    position: relative;
+    overflow: hidden;
   }
-  .kpi .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); margin-bottom: 6px; }
-  .kpi .value { font-size: 1.8rem; font-weight: 700; }
-  .kpi .delta { font-size: 0.8rem; margin-top: 4px; }
-  .kpi .up { color: var(--green); }
-  .kpi .down { color: var(--red); }
-  .kpi .neutral { color: var(--accent); }
+  .kpi::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--dark-green);
+  }
+  .kpi .label {
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--text-dim); margin-bottom: 8px; font-weight: 700;
+  }
+  .kpi .value {
+    font-family: 'Arya', sans-serif;
+    font-size: 1.9rem; font-weight: 700; color: var(--dark-green); line-height: 1;
+  }
+  .kpi .delta { font-size: 0.75rem; margin-top: 6px; font-weight: 700; }
+  .kpi .up { color: #16a34a; }
+  .kpi .neutral { color: var(--text-dim); }
+  .kpi .partial { color: #d97706; }
 
-  /* Section titles */
+  /* ===== SECTION TITLES ===== */
   .section-title {
-    font-size: 1.1rem;
-    font-weight: 600;
+    font-family: 'Arya', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--accent);
-    margin: 40px 0 20px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--card-border);
+    color: var(--dark-green);
+    margin: 48px 0 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--beige);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .num {
+    background: var(--dark-green); color: var(--beige);
+    font-family: 'Arya', sans-serif; font-size: 0.85rem;
+    padding: 2px 10px; border-radius: 4px; letter-spacing: 1px;
   }
 
-  /* Grid layouts */
+  /* ===== GRIDS ===== */
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
   .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px; }
   .grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px; }
   .grid-1-2 { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; margin-bottom: 20px; }
   @media (max-width: 900px) { .grid-2, .grid-3, .grid-2-1, .grid-1-2 { grid-template-columns: 1fr; } }
 
-  /* Cards */
+  /* ===== CARDS ===== */
   .card {
-    background: var(--card);
+    background: var(--white);
     border: 1px solid var(--card-border);
     border-radius: 12px;
     padding: 24px;
+    box-shadow: 0 2px 8px rgba(35,55,44,0.05);
   }
   .card h3 {
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-dim);
-    margin-bottom: 16px;
+    font-family: 'Arya', sans-serif;
+    font-size: 0.9rem; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--dark-green);
+    margin-bottom: 18px; font-weight: 700;
   }
   .card canvas { max-height: 320px; }
+  .card-full { margin-bottom: 20px; }
 
-  /* Tables */
-  .data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-  .data-table th {
-    text-align: left;
-    padding: 10px 12px;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text-dim);
-    border-bottom: 1px solid var(--card-border);
-  }
-  .data-table td {
-    padding: 10px 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-  }
-  .data-table tr:hover { background: rgba(255,255,255,0.03); }
-  .star { color: var(--accent); }
-  .tag {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 0.7rem;
-    font-weight: 600;
-  }
-  .tag-green { background: rgba(34,197,94,0.15); color: var(--green); }
-  .tag-yellow { background: rgba(245,158,11,0.15); color: var(--accent); }
-  .tag-red { background: rgba(239,68,68,0.15); color: var(--red); }
-  .tag-blue { background: rgba(59,130,246,0.15); color: var(--blue); }
-  .tag-purple { background: rgba(168,85,247,0.15); color: var(--purple); }
-
-  /* Insight callouts */
+  /* ===== INSIGHT CALLOUTS ===== */
   .insight {
-    background: rgba(245,158,11,0.08);
-    border-left: 3px solid var(--accent);
-    padding: 14px 18px;
+    background: rgba(35,55,44,0.06);
+    border-left: 4px solid var(--dark-green);
+    padding: 16px 20px;
     border-radius: 0 8px 8px 0;
-    margin: 16px 0;
-    font-size: 0.88rem;
+    margin: 20px 0;
+    font-size: 0.9rem;
     color: var(--text-dim);
+    line-height: 1.7;
   }
-  .insight strong { color: var(--text); }
+  .insight strong { color: var(--dark-green); }
+  .insight .insight-icon { font-size: 1.1rem; margin-right: 6px; }
 
-  /* Bar segments inline */
-  .bar-container { display: flex; height: 32px; border-radius: 6px; overflow: hidden; margin: 8px 0; }
-  .bar-seg { display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 600; color: #fff; min-width: 30px; }
-  .legend-row { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 10px; }
-  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--text-dim); }
-  .legend-dot { width: 10px; height: 10px; border-radius: 3px; }
-
-  /* Print / download */
-  @media print {
-    body { background: #fff; color: #222; padding: 12px; }
-    .card { border-color: #ddd; break-inside: avoid; }
-    .kpi { border-color: #ddd; }
-    .section-title { color: #b45309; }
+  /* ===== SPECIAL SEGMENT CARDS ===== */
+  .seg-cards {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
   }
+  @media (max-width: 1100px) { .seg-cards { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 600px) { .seg-cards { grid-template-columns: repeat(2, 1fr); } }
+
+  .seg-card {
+    background: var(--dark-green);
+    color: var(--eggshell);
+    border-radius: 10px;
+    padding: 18px 14px;
+    text-align: center;
+  }
+  .seg-card .seg-num {
+    font-family: 'Arya', sans-serif;
+    font-size: 2.2rem; font-weight: 700; color: var(--beige); line-height: 1;
+  }
+  .seg-card .seg-label {
+    font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;
+    color: rgba(241,240,217,0.7); margin-top: 8px; line-height: 1.3;
+  }
+
+  /* ===== TABLES ===== */
+  .table-wrap { overflow-x: auto; }
+  .data-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 0.84rem;
+  }
+  .data-table th {
+    text-align: left; padding: 10px 14px;
+    font-size: 0.7rem; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--text-dim); font-weight: 700;
+    border-bottom: 2px solid var(--card-border);
+    cursor: pointer; user-select: none; white-space: nowrap;
+    background: var(--section-bg);
+  }
+  .data-table th:hover { color: var(--dark-green); }
+  .data-table th.sort-asc::after { content: ' ▲'; font-size: 0.6rem; color: var(--dark-green); }
+  .data-table th.sort-desc::after { content: ' ▼'; font-size: 0.6rem; color: var(--dark-green); }
+  .data-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    vertical-align: middle;
+  }
+  .data-table tr:hover td { background: rgba(35,55,44,0.03); }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+
+  .star { color: var(--beige); }
+  .tag {
+    display: inline-block; padding: 2px 8px;
+    border-radius: 4px; font-size: 0.68rem; font-weight: 700; white-space: nowrap;
+  }
+  .tag-green { background: #dcfce7; color: #15803d; }
+  .tag-yellow { background: #fef9c3; color: #a16207; }
+  .tag-blue { background: #dbeafe; color: #1d4ed8; }
+  .tag-purple { background: #f3e8ff; color: #7e22ce; }
+  .tag-beige { background: #fdf3e0; color: #92400e; }
+  .tag-gray { background: #f3f4f6; color: #4b5563; }
+
+  .rank-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 50%;
+    font-size: 0.75rem; font-weight: 700;
+    background: var(--section-bg); color: var(--text-dim);
+  }
+  .rank-1 { background: #fef3c7; color: #92400e; }
+  .rank-2 { background: #f3f4f6; color: #6b7280; }
+  .rank-3 { background: #fde8d8; color: #c2410c; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center; padding: 32px;
+    color: var(--text-dim); font-size: 0.8rem;
+    border-top: 1px solid var(--card-border);
+    margin-top: 40px;
+  }
+  .footer strong { color: var(--dark-green); }
 </style>
 </head>
 <body>
-<div id="gate" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#0f1117;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column">
-  <div style="text-align:center;max-width:400px;padding:40px">
-    <h2 style="color:#f59e0b;font-size:1.5rem;margin-bottom:12px">DollyBrook Intelligence</h2>
-    <p style="color:#9ca3af;margin-bottom:24px;font-size:0.9rem">Enter access phrase to continue</p>
-    <input id="gateInput" type="password" placeholder="Access phrase" style="width:100%;padding:12px 16px;background:#1a1d2e;border:1px solid #2a2d3e;border-radius:8px;color:#e4e4e7;font-size:1rem;outline:none;margin-bottom:12px" autofocus>
-    <button onclick="checkGate()" style="width:100%;padding:12px;background:#f59e0b;color:#0f1117;border:none;border-radius:8px;font-weight:700;font-size:0.95rem;cursor:pointer">Enter</button>
-    <p id="gateError" style="color:#ef4444;margin-top:12px;font-size:0.85rem;display:none">Incorrect phrase</p>
+
+<!-- ===== KEYPHRASE GATE ===== -->
+<div id="gate">
+  <div class="gate-box">
+    <div style="font-family:'Arya',sans-serif;color:var(--beige);font-size:0.75rem;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px;opacity:0.7">DollyBrook Resort</div>
+    <h2>Operational Intelligence</h2>
+    <p class="gate-sub">Enter access phrase to continue</p>
+    <input id="gateInput" type="password" placeholder="••••••••••••••" autofocus>
+    <button onclick="checkGate()">Access Dashboard</button>
+    <p id="gateError">Incorrect phrase. Please try again.</p>
   </div>
 </div>
 <script>
@@ -181,44 +302,55 @@ function checkGate() {
   } else {
     document.getElementById('gateError').style.display = 'block';
     document.getElementById('gateInput').value = '';
+    document.getElementById('gateInput').focus();
   }
 }
 document.getElementById('gateInput').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') checkGate();
+  if (document.getElementById('gateError').style.display !== 'none') {
+    document.getElementById('gateError').style.display = 'none';
+  }
 });
-// Check if already authenticated this session
 if (sessionStorage.getItem('db_auth') === 'true') {
   document.getElementById('gate').style.display = 'none';
 }
 </script>
 
-
+<!-- ===== HEADER ===== -->
 <div class="header">
-  <h1>DollyBrook Operational Intelligence</h1>
-  <div class="subtitle">543 customers &bull; 2023 &ndash; 2026 forward &bull; Report date: <span>April 2026</span></div>
+  <div class="header-inner">
+    <div class="logo-line">DollyBrook Resort · Fennville, Michigan</div>
+    <h1>Operational Intelligence Dashboard</h1>
+    <div class="subtitle">
+      <strong>543 customer records</strong> &bull; Data through 2023–2026 forward &bull;
+      Report date: <strong>April 2026</strong>
+    </div>
+  </div>
 </div>
+
+<div class="main">
 
 <!-- ===== KPI STRIP ===== -->
 <div class="kpi-strip">
   <div class="kpi">
     <div class="label">2025 Revenue</div>
     <div class="value">$279K</div>
-    <div class="delta up">+40% vs 2024</div>
+    <div class="delta up">↑ +40% vs 2024 ($199K)</div>
   </div>
   <div class="kpi">
-    <div class="label">2026 Booked (Mar)</div>
-    <div class="value">$277K</div>
-    <div class="delta neutral">99% of full 2025 — already</div>
+    <div class="label">2026 Booked (Mar 31)</div>
+    <div class="value">$176K</div>
+    <div class="delta partial">63% of 2025 · 9 mo. remaining</div>
   </div>
   <div class="kpi">
     <div class="label">2026 ADR</div>
-    <div class="value">$477</div>
-    <div class="delta up">+103% vs 2025 ($235)</div>
+    <div class="value">$278</div>
+    <div class="delta up">↑ +18% vs 2025 ($235)</div>
   </div>
   <div class="kpi">
-    <div class="label">Total Customers</div>
-    <div class="value">543</div>
-    <div class="delta neutral">Master database</div>
+    <div class="label">Active Customers</div>
+    <div class="value">398</div>
+    <div class="delta neutral">Across 25/26 combined</div>
   </div>
   <div class="kpi">
     <div class="label">2023 Cult Return Rate</div>
@@ -226,544 +358,813 @@ if (sessionStorage.getItem('db_auth') === 'true') {
     <div class="delta neutral">22 of 163 returned</div>
   </div>
   <div class="kpi">
-    <div class="label">Top 25 Concentration</div>
+    <div class="label">Top 25 Revenue Share</div>
     <div class="value">42%</div>
-    <div class="delta down">of all 25/26 revenue</div>
+    <div class="delta partial">$236K of $556K total</div>
   </div>
 </div>
 
-<!-- ===== SECTION 1: REVENUE ===== -->
-<div class="section-title">Revenue & Growth</div>
+<!-- ===== SECTION 1: REVENUE & GROWTH ===== -->
+<div class="section-title"><span class="num">01</span> Revenue &amp; Growth</div>
 
 <div class="grid-2">
   <div class="card">
-    <h3>Year-over-Year Revenue</h3>
+    <h3>Chart 1 · Year-over-Year Revenue</h3>
     <canvas id="chartYoY"></canvas>
   </div>
   <div class="card">
-    <h3>ADR Trend</h3>
+    <h3>Chart 2 · ADR Trend (Average Daily Rate)</h3>
     <canvas id="chartADR"></canvas>
   </div>
 </div>
 
-<div class="card" style="margin-bottom:20px">
-  <h3>2025 Monthly Revenue & Occupancy</h3>
-  <canvas id="chartMonthly"></canvas>
+<div class="card card-full">
+  <h3>Chart 3 · 2025 Monthly Revenue &amp; Occupancy</h3>
+  <canvas id="chartMonthly2025" style="max-height:300px"></canvas>
 </div>
 
 <div class="insight">
-  <strong>July alone = $93K (33% of 2025 revenue)</strong> at 92% occupancy. May–Aug delivers 80% of annual revenue. Q1 generates just ~$8K. The business is radically seasonal.
+  <span class="insight-icon">📊</span>
+  <strong>July alone = $93K in 2025 (33% of revenue) at 92% occupancy.</strong> 2026 July already at $87K booked.
+  May–Aug = 80% of annual revenue. This is a radically seasonal business.
 </div>
 
-<!-- ===== SECTION 2: CUSTOMER SEGMENTS ===== -->
-<div class="section-title">Customer Segmentation</div>
+<div class="card card-full">
+  <h3>Chart 4 · 2026 Monthly Revenue (Booked as of Mar 31)</h3>
+  <canvas id="chartMonthly2026" style="max-height:300px"></canvas>
+</div>
+
+<!-- ===== SECTION 2: CUSTOMER SEGMENTATION ===== -->
+<div class="section-title"><span class="num">02</span> Customer Segmentation</div>
 
 <div class="grid-2">
   <div class="card">
-    <h3>Customer Grade Distribution</h3>
-    <canvas id="chartStars"></canvas>
+    <h3>Chart 5a · Customer Grade Distribution (Count)</h3>
+    <canvas id="chartGradeCount"></canvas>
   </div>
   <div class="card">
-    <h3>Revenue by Customer Grade</h3>
-    <canvas id="chartStarRev"></canvas>
-  </div>
-</div>
-
-<div class="card" style="margin-bottom:20px">
-  <h3>Revenue Concentration (Pareto)</h3>
-  <div class="bar-container">
-    <div class="bar-seg" style="width:25%;background:var(--red)">Top 10: 25%</div>
-    <div class="bar-seg" style="width:17%;background:var(--orange)">11–25: 17%</div>
-    <div class="bar-seg" style="width:13%;background:var(--accent)">26–50: 13%</div>
-    <div class="bar-seg" style="width:45%;background:var(--blue)">51–396: 45%</div>
-  </div>
-  <div class="legend-row">
-    <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Top 10 = $138K</div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div>Top 25 = $236K</div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Top 50 = $306K</div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>All 396 active = $556K</div>
+    <h3>Chart 5b · Revenue by Customer Grade</h3>
+    <canvas id="chartGradeRevenue"></canvas>
   </div>
 </div>
 
 <div class="grid-2">
   <div class="card">
-    <h3>Customer Lifecycle Cohorts</h3>
-    <canvas id="chartCohort"></canvas>
+    <h3>Chart 6 · Revenue Concentration (Pareto)</h3>
+    <canvas id="chartPareto"></canvas>
   </div>
   <div class="card">
-    <h3>Spend Distribution</h3>
-    <canvas id="chartSpendDist"></canvas>
+    <h3>Chart 7 · Customer Lifecycle Cohorts</h3>
+    <canvas id="chartLifecycle"></canvas>
   </div>
 </div>
 
 <div class="insight">
-  <strong>141 lost 2023 customers</strong> are the single highest-ROI reactivation target. Known names, confirmed historical intent, $0 acquisition cost. This is growth lever #1.
+  <span class="insight-icon">🎯</span>
+  <strong>141 lost 2023 customers are the #1 reactivation target.</strong> Known names, confirmed purchase history,
+  $0 acquisition cost. <strong>23 whales (4% of customers) drive 41% of all revenue.</strong>
 </div>
 
 <!-- ===== SECTION 3: BOOKING PATTERNS ===== -->
-<div class="section-title">Booking Patterns</div>
+<div class="section-title"><span class="num">03</span> Booking Patterns</div>
 
 <div class="grid-3">
   <div class="card">
-    <h3>Stay Length Distribution</h3>
-    <canvas id="chartNights"></canvas>
+    <h3>Chart 8 · Spend Distribution</h3>
+    <canvas id="chartSpend"></canvas>
   </div>
   <div class="card">
-    <h3>Bookings per Customer</h3>
-    <canvas id="chartBookings"></canvas>
+    <h3>Chart 9 · Stay Length Distribution</h3>
+    <canvas id="chartStayLength"></canvas>
   </div>
   <div class="card">
-    <h3>Special Segments</h3>
-    <div style="margin-top:12px">
-      <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--card-border)">
-        <span>Multi-Cabin Events</span>
-        <span style="font-weight:700;color:var(--accent)">18</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--card-border)">
-        <span>Whole-Property Buyouts</span>
-        <span style="font-weight:700;color:var(--pink)">4</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--card-border)">
-        <span>Extended Stay (10+ nights)</span>
-        <span style="font-weight:700;color:var(--cyan)">23</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--card-border)">
-        <span>2023 Cult Returners</span>
-        <span style="font-weight:700;color:var(--green)">22</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;padding:14px 0">
-        <span>Frequent (3+ trips)</span>
-        <span style="font-weight:700;color:var(--purple)">7</span>
-      </div>
-    </div>
+    <h3>Chart 10 · Bookings per Customer</h3>
+    <canvas id="chartRepeat"></canvas>
   </div>
 </div>
 
 <div class="insight">
-  <strong>87% of stays are 4 nights or fewer.</strong> Median lead time = 15 days. 49% book within 14 days. This is a last-minute, weekend-driven business. Optimize for rolling 2-week windows, not seasonal campaigns.
+  <span class="insight-icon">📅</span>
+  <strong>93% of customers book exactly once.</strong> 87% stay 4 nights or fewer. Median lead time = 15 days.
+  This is a last-minute, weekend-driven business — <strong>optimize for rolling 2-week windows, not seasonal campaigns.</strong>
 </div>
 
 <!-- ===== SECTION 4: CABIN PERFORMANCE ===== -->
-<div class="section-title">Cabin Performance (2025)</div>
+<div class="section-title"><span class="num">04</span> Cabin Performance (2026 Booked)</div>
 
 <div class="grid-2">
   <div class="card">
-    <h3>Revenue by Cabin</h3>
-    <canvas id="chartCabinRev"></canvas>
+    <h3>Chart 11 · Cabin Revenue (2026 Booked)</h3>
+    <canvas id="chartCabinRevenue" style="max-height:340px"></canvas>
   </div>
   <div class="card">
-    <h3>ADR by Cabin</h3>
-    <canvas id="chartCabinADR"></canvas>
+    <h3>Chart 12 · Cabin ADR (2026 Booked)</h3>
+    <canvas id="chartCabinADR" style="max-height:340px"></canvas>
   </div>
 </div>
 
 <div class="insight">
-  ADR spread is <strong>$179 to $327 — a 73% gap</strong> between cheapest and most expensive cabin. Sled Loft and Captain's Lodge command premium pricing. Sunshine Loft ($189) and Winter Wonderland ($179) are underpriced or under-differentiated.
+  <span class="insight-icon">🏠</span>
+  <strong>Sled Loft ($460 ADR) and Captain's Lodge ($405) are clear premium leaders.</strong>
+  Winter Wonderland ($167) and Dreamy Den ($178) are the value tier.
+  ADR spread is <strong>175%</strong> from cheapest to most expensive.
 </div>
 
-<!-- ===== SECTION 5: MULTI-CABIN / REUNION ===== -->
-<div class="section-title">Reunion & Multi-Cabin Trends</div>
+<!-- ===== SECTION 5: REUNION & GROUP DYNAMICS ===== -->
+<div class="section-title"><span class="num">05</span> Reunion &amp; Group Dynamics</div>
 
 <div class="grid-2">
   <div class="card">
-    <h3>Multi-Cabin Party Size (2024 vs 2025)</h3>
-    <canvas id="chartMulti"></canvas>
+    <h3>Chart 13 · Multi-Cabin Party Size (2024 vs 2025)</h3>
+    <canvas id="chartMultiCabin"></canvas>
   </div>
-  <div class="card">
-    <h3>Reunion Product Reality Check</h3>
-    <div style="margin-top:12px">
-      <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--card-border)">
-        <span style="color:var(--text-dim)">Multi-cabin parties 2024</span>
-        <span style="font-weight:700">15 <span style="color:var(--text-dim);font-weight:400">(11% of parties)</span></span>
+  <div class="card" style="display:flex;flex-direction:column;justify-content:center;">
+    <h3>Chart 14 · Special Segments</h3>
+    <div class="seg-cards" style="grid-template-columns:1fr 1fr;margin-top:8px;margin-bottom:0">
+      <div class="seg-card">
+        <div class="seg-num">18</div>
+        <div class="seg-label">Multi-Cabin Event Bookers</div>
       </div>
-      <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--card-border)">
-        <span style="color:var(--text-dim)">Multi-cabin parties 2025</span>
-        <span style="font-weight:700;color:var(--red)">10 <span style="color:var(--text-dim);font-weight:400">(3.4% of parties)</span></span>
+      <div class="seg-card">
+        <div class="seg-num">4</div>
+        <div class="seg-label">Whole-Property Buyouts</div>
       </div>
-      <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--card-border)">
-        <span style="color:var(--text-dim)">Whole-property buyouts</span>
-        <span style="font-weight:700;color:var(--green)">0 &rarr; 2 (new in 2025)</span>
+      <div class="seg-card">
+        <div class="seg-num">23</div>
+        <div class="seg-label">Extended Stay (10+ nights)</div>
       </div>
-      <div style="display:flex;justify-content:space-between;padding:14px 0">
-        <span style="color:var(--text-dim)">Single-cabin bookings</span>
-        <span style="font-weight:700">97% of 2025 customers</span>
+      <div class="seg-card">
+        <div class="seg-num">22</div>
+        <div class="seg-label">2023 Cult Returners</div>
       </div>
-    </div>
-    <div class="insight" style="margin-top:16px">
-      The reunion product is <strong>3% of the business, not the homepage</strong>. Lead with the weekend escape; surface full-property deeper.
-    </div>
-  </div>
-</div>
-
-<!-- ===== SECTION 6: TOP CUSTOMERS ===== -->
-<div class="section-title">Top 20 Customers</div>
-
-<div class="card">
-  <table class="data-table">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Grade</th>
-        <th>Name</th>
-        <th>Bookings</th>
-        <th>Nights</th>
-        <th>Total Spend</th>
-        <th>Avg/Night</th>
-        <th>Type</th>
-        <th>Cult?</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>1</td><td><span class="star">★★★★★</span></td><td>Kris Harvey</td><td>5</td><td>100</td><td>$23,123</td><td>$231</td><td><span class="tag tag-purple">Extended</span></td><td>New</td></tr>
-      <tr><td>2</td><td><span class="star">★★★★★</span></td><td>Annalee Albrecht</td><td>1</td><td>24</td><td>$19,621</td><td>$818</td><td><span class="tag tag-blue">Multi-cabin</span></td><td>New</td></tr>
-      <tr><td>3</td><td><span class="star">★★★★★</span></td><td>Katie Soeffing</td><td>1</td><td>4</td><td>$14,827</td><td>$3,707</td><td><span class="tag tag-green">Premium</span></td><td>New</td></tr>
-      <tr><td>4</td><td><span class="star">★★★★★</span></td><td>Kay Thenhaus</td><td>1</td><td>28</td><td>$14,109</td><td>$504</td><td><span class="tag tag-blue">Multi-cabin</span></td><td>New</td></tr>
-      <tr><td>5</td><td><span class="star">★★★★★</span></td><td>Kristin Nelson</td><td>1</td><td>36</td><td>$13,628</td><td>$379</td><td><span class="tag tag-red">Buyout</span></td><td>New</td></tr>
-      <tr><td>6</td><td><span class="star">★★★★★</span></td><td>Viet Nguyen</td><td>1</td><td>27</td><td>$11,485</td><td>$425</td><td><span class="tag tag-red">Buyout</span></td><td>New</td></tr>
-      <tr><td>7</td><td><span class="star">★★★★★</span></td><td>Courtney Ross</td><td>1</td><td>3</td><td>$10,640</td><td>$3,547</td><td><span class="tag tag-green">Premium</span></td><td>New</td></tr>
-      <tr><td>8</td><td><span class="star">★★★★★</span></td><td>Kristina Sinks</td><td>2</td><td>4</td><td>$10,274</td><td>$2,568</td><td><span class="tag tag-green">Premium</span></td><td>New</td></tr>
-      <tr><td>9</td><td><span class="star">★★★★★</span></td><td>Hailey Flynn</td><td>2</td><td>27</td><td>$10,144</td><td>$376</td><td><span class="tag tag-red">Buyout</span></td><td>New</td></tr>
-      <tr><td>10</td><td><span class="star">★★★★★</span></td><td>Janelle Kloske</td><td>1</td><td>3</td><td>$10,000</td><td>$3,333</td><td><span class="tag tag-green">Premium</span></td><td>New</td></tr>
-      <tr><td>11</td><td><span class="star">★★★★★</span></td><td>Sue Powers</td><td>1</td><td>16</td><td>$9,874</td><td>$617</td><td><span class="tag tag-blue">Multi-cabin</span></td><td>New</td></tr>
-      <tr><td>12</td><td><span class="star">★★★★★</span></td><td>Katherine Scherer</td><td>2</td><td>28</td><td>$9,205</td><td>$329</td><td><span class="tag tag-yellow">Returner</span></td><td>2023 Cult</td></tr>
-      <tr><td>13</td><td><span class="star">★★★★★</span></td><td>Rita Kienzler</td><td>1</td><td>15</td><td>$9,011</td><td>$601</td><td><span class="tag tag-yellow">Returner</span></td><td>2023 Cult</td></tr>
-      <tr><td>14</td><td><span class="star">★★★★★</span></td><td>Tom Schaults</td><td>2</td><td>16</td><td>$8,952</td><td>$559</td><td><span class="tag tag-yellow">Returner</span></td><td>2023 Cult</td></tr>
-      <tr><td>15</td><td><span class="star">★★★★★</span></td><td>Jim Steiger</td><td>1</td><td>12</td><td>$7,951</td><td>$663</td><td><span class="tag tag-blue">Multi-cabin</span></td><td>New</td></tr>
-      <tr><td>16</td><td><span class="star">★★★★★</span></td><td>Kerry Keen</td><td>2</td><td>13</td><td>$7,433</td><td>$572</td><td><span class="tag tag-yellow">Returner</span></td><td>2023 Cult</td></tr>
-      <tr><td>17</td><td><span class="star">★★★★★</span></td><td>Beth Moser</td><td>1</td><td>2</td><td>$6,339</td><td>$3,170</td><td><span class="tag tag-green">Premium</span></td><td>New</td></tr>
-      <tr><td>18</td><td><span class="star">★★★★★</span></td><td>Wendy Sammons</td><td>2</td><td>10</td><td>$6,173</td><td>$617</td><td><span class="tag tag-yellow">Returner</span></td><td>2023 Cult</td></tr>
-      <tr><td>19</td><td><span class="star">★★★★★</span></td><td>Katie Sheehy</td><td>2</td><td>13</td><td>$6,039</td><td>$465</td><td><span class="tag tag-yellow">Returner</span></td><td>2023 Cult</td></tr>
-      <tr><td>20</td><td><span class="star">★★★★★</span></td><td>Jay Maibach</td><td>1</td><td>9</td><td>$5,653</td><td>$628</td><td><span class="tag tag-blue">Multi-cabin</span></td><td>New</td></tr>
-    </tbody>
-  </table>
-</div>
-
-<!-- ===== SECTION 7: STRATEGIC INSIGHTS ===== -->
-<div class="section-title">Strategic Insights</div>
-
-<div class="grid-2">
-  <div class="card">
-    <h3 style="color:var(--green)">What's Working</h3>
-    <div style="margin-top:8px">
-      <p style="padding:10px 0;border-bottom:1px solid var(--card-border)"><strong style="color:var(--green)">1.</strong> Revenue trajectory: $199K &rarr; $279K &rarr; $277K+ already booked. Trajectory toward $400K+ in 2026.</p>
-      <p style="padding:10px 0;border-bottom:1px solid var(--card-border)"><strong style="color:var(--green)">2.</strong> ADR snap-back to $477 on 2026 forward bookings. New PMS pricing discipline is working.</p>
-      <p style="padding:10px 0;border-bottom:1px solid var(--card-border)"><strong style="color:var(--green)">3.</strong> The cult is real: 13.5% return rate from 2023 despite a foreclosure sale disruption. Returners drove ~$63K.</p>
-      <p style="padding:10px 0"><strong style="color:var(--green)">4.</strong> Extended-stay emerged organically: 23 customers, 10+ nights, including monthly rentals. Unmarketed revenue stream.</p>
-    </div>
-  </div>
-  <div class="card">
-    <h3 style="color:var(--red)">Critical Actions</h3>
-    <div style="margin-top:8px">
-      <p style="padding:10px 0;border-bottom:1px solid var(--card-border)"><strong style="color:var(--red)">1.</strong> Reactivate the 141 lost 2023 customers. Highest-ROI growth target: known names, $0 acquisition cost.</p>
-      <p style="padding:10px 0;border-bottom:1px solid var(--card-border)"><strong style="color:var(--red)">2.</strong> Reunion product is 3% of business — reposition homepage away from "rent them all" messaging.</p>
-      <p style="padding:10px 0;border-bottom:1px solid var(--card-border)"><strong style="color:var(--red)">3.</strong> Protect top 25 customers (42% of revenue). Any churn here is materially expensive.</p>
-      <p style="padding:10px 0"><strong style="color:var(--red)">4.</strong> Optimize for 14-day lead time reality: SEO, paid search, "this weekend" content &gt; seasonal campaigns.</p>
+      <div class="seg-card" style="grid-column:span 2">
+        <div class="seg-num">7</div>
+        <div class="seg-label">Frequent Bookers (3+ trips)</div>
+      </div>
     </div>
   </div>
 </div>
 
+<div class="insight">
+  <span class="insight-icon">🎉</span>
+  <strong>Multi-cabin bookings dropped from 11% to 3.4% of parties.</strong> The reunion product is 3% of the
+  business — it should be a page, not the homepage. <strong>Lead with the weekend escape.</strong>
+</div>
+
+<!-- ===== SECTION 6: TOP 20 CUSTOMERS ===== -->
+<div class="section-title"><span class="num">06</span> Top 20 Customers</div>
+
+<div class="card card-full">
+  <h3>Ranked by Total Spend (2023–2026)</h3>
+  <div class="table-wrap">
+    <table class="data-table" id="top20Table">
+      <thead>
+        <tr>
+          <th onclick="sortTable('top20Table',0)">#</th>
+          <th onclick="sortTable('top20Table',1)">Grade</th>
+          <th onclick="sortTable('top20Table',2)">Name</th>
+          <th onclick="sortTable('top20Table',3)">Bookings</th>
+          <th onclick="sortTable('top20Table',4)">Nights</th>
+          <th onclick="sortTable('top20Table',5)">Total Spend</th>
+          <th onclick="sortTable('top20Table',6)">Avg/Night</th>
+          <th onclick="sortTable('top20Table',7)">Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="rank-badge rank-1">1</span></td><td><span class="star">★★★★★</span></td><td><strong>Kris Harvey</strong></td><td class="num">5</td><td class="num">100</td><td class="num"><strong>$23,123</strong></td><td class="num">$231</td><td><span class="tag tag-blue">Extended Stay</span></td></tr>
+        <tr><td><span class="rank-badge rank-2">2</span></td><td><span class="star">★★★★★</span></td><td><strong>Annalee Albrecht</strong></td><td class="num">1</td><td class="num">24</td><td class="num"><strong>$19,621</strong></td><td class="num">$818</td><td><span class="tag tag-purple">Multi-Cabin</span></td></tr>
+        <tr><td><span class="rank-badge rank-3">3</span></td><td><span class="star">★★★★★</span></td><td><strong>Katie Soeffing</strong></td><td class="num">1</td><td class="num">4</td><td class="num"><strong>$14,827</strong></td><td class="num">$3,707</td><td><span class="tag tag-yellow">Premium</span></td></tr>
+        <tr><td><span class="rank-badge">4</span></td><td><span class="star">★★★★★</span></td><td><strong>Kay Thenhaus</strong></td><td class="num">1</td><td class="num">28</td><td class="num"><strong>$14,109</strong></td><td class="num">$504</td><td><span class="tag tag-purple">Multi-Cabin</span></td></tr>
+        <tr><td><span class="rank-badge">5</span></td><td><span class="star">★★★★★</span></td><td><strong>Kristin Nelson</strong></td><td class="num">1</td><td class="num">36</td><td class="num"><strong>$13,628</strong></td><td class="num">$379</td><td><span class="tag tag-beige">Buyout</span></td></tr>
+        <tr><td><span class="rank-badge">6</span></td><td><span class="star">★★★★★</span></td><td><strong>Viet Nguyen</strong></td><td class="num">1</td><td class="num">27</td><td class="num"><strong>$11,485</strong></td><td class="num">$425</td><td><span class="tag tag-beige">Buyout</span></td></tr>
+        <tr><td><span class="rank-badge">7</span></td><td><span class="star">★★★★★</span></td><td><strong>Courtney Ross</strong></td><td class="num">1</td><td class="num">3</td><td class="num"><strong>$10,640</strong></td><td class="num">$3,547</td><td><span class="tag tag-yellow">Premium</span></td></tr>
+        <tr><td><span class="rank-badge">8</span></td><td><span class="star">★★★★★</span></td><td><strong>Kristina Sinks</strong></td><td class="num">2</td><td class="num">4</td><td class="num"><strong>$10,274</strong></td><td class="num">$2,568</td><td><span class="tag tag-yellow">Premium</span></td></tr>
+        <tr><td><span class="rank-badge">9</span></td><td><span class="star">★★★★★</span></td><td><strong>Hailey Flynn</strong></td><td class="num">2</td><td class="num">27</td><td class="num"><strong>$10,144</strong></td><td class="num">$376</td><td><span class="tag tag-beige">Buyout</span></td></tr>
+        <tr><td><span class="rank-badge">10</span></td><td><span class="star">★★★★★</span></td><td><strong>Janelle Kloske</strong></td><td class="num">1</td><td class="num">3</td><td class="num"><strong>$10,000</strong></td><td class="num">$3,333</td><td><span class="tag tag-yellow">Premium</span></td></tr>
+        <tr><td><span class="rank-badge">11</span></td><td><span class="star">★★★★★</span></td><td><strong>Sue Powers</strong></td><td class="num">1</td><td class="num">16</td><td class="num"><strong>$9,874</strong></td><td class="num">$617</td><td><span class="tag tag-purple">Multi-Cabin</span></td></tr>
+        <tr><td><span class="rank-badge">12</span></td><td><span class="star">★★★★★</span></td><td><strong>Katherine Scherer</strong></td><td class="num">2</td><td class="num">28</td><td class="num"><strong>$9,205</strong></td><td class="num">$329</td><td><span class="tag tag-green">2023 Returner</span></td></tr>
+        <tr><td><span class="rank-badge">13</span></td><td><span class="star">★★★★★</span></td><td><strong>Rita Kienzler</strong></td><td class="num">1</td><td class="num">15</td><td class="num"><strong>$9,011</strong></td><td class="num">$601</td><td><span class="tag tag-green">2023 Returner</span></td></tr>
+        <tr><td><span class="rank-badge">14</span></td><td><span class="star">★★★★★</span></td><td><strong>Tom Schaults</strong></td><td class="num">2</td><td class="num">16</td><td class="num"><strong>$8,952</strong></td><td class="num">$559</td><td><span class="tag tag-green">2023 Returner</span></td></tr>
+        <tr><td><span class="rank-badge">15</span></td><td><span class="star">★★★★★</span></td><td><strong>Jim Steiger</strong></td><td class="num">1</td><td class="num">12</td><td class="num"><strong>$7,951</strong></td><td class="num">$663</td><td><span class="tag tag-purple">Multi-Cabin</span></td></tr>
+        <tr><td><span class="rank-badge">16</span></td><td><span class="star">★★★★★</span></td><td><strong>Kerry Keen</strong></td><td class="num">2</td><td class="num">13</td><td class="num"><strong>$7,433</strong></td><td class="num">$572</td><td><span class="tag tag-green">2023 Returner</span></td></tr>
+        <tr><td><span class="rank-badge">17</span></td><td><span class="star">★★★★★</span></td><td><strong>Beth Moser</strong></td><td class="num">1</td><td class="num">2</td><td class="num"><strong>$6,339</strong></td><td class="num">$3,170</td><td><span class="tag tag-yellow">Premium</span></td></tr>
+        <tr><td><span class="rank-badge">18</span></td><td><span class="star">★★★★★</span></td><td><strong>Wendy Sammons</strong></td><td class="num">2</td><td class="num">10</td><td class="num"><strong>$6,173</strong></td><td class="num">$617</td><td><span class="tag tag-green">2023 Returner</span></td></tr>
+        <tr><td><span class="rank-badge">19</span></td><td><span class="star">★★★★★</span></td><td><strong>Katie Sheehy</strong></td><td class="num">2</td><td class="num">13</td><td class="num"><strong>$6,039</strong></td><td class="num">$465</td><td><span class="tag tag-green">2023 Returner</span></td></tr>
+        <tr><td><span class="rank-badge">20</span></td><td><span class="star">★★★★★</span></td><td><strong>Jay Maibach</strong></td><td class="num">1</td><td class="num">9</td><td class="num"><strong>$5,653</strong></td><td class="num">$628</td><td><span class="tag tag-purple">Multi-Cabin</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</div><!-- end .main -->
+
+<div class="footer">
+  <strong>DollyBrook Resort · Fennville, Michigan</strong> &bull;
+  Operational Intelligence Dashboard &bull; Data through March 31, 2026 &bull;
+  Generated by Xavier (AI Marketing Agent) · Confidential — Internal Use Only
+</div>
+
+<!-- ===== TABLE SORTING ===== -->
 <script>
-const COLORS = {
-  amber: '#f59e0b', green: '#22c55e', red: '#ef4444', blue: '#3b82f6',
-  purple: '#a855f7', pink: '#ec4899', cyan: '#06b6d4', orange: '#f97316',
-  gray: '#6b7280'
+var sortStates = {};
+function sortTable(tableId, colIndex) {
+  var table = document.getElementById(tableId);
+  var thead = table.querySelector('thead');
+  var tbody = table.querySelector('tbody');
+  var rows = Array.from(tbody.querySelectorAll('tr'));
+  var ths = thead.querySelectorAll('th');
+
+  var key = tableId + '_' + colIndex;
+  var asc = sortStates[key] !== true;
+  sortStates[key] = asc;
+
+  ths.forEach(function(th, i) {
+    th.classList.remove('sort-asc', 'sort-desc');
+    if (i === colIndex) th.classList.add(asc ? 'sort-asc' : 'sort-desc');
+  });
+
+  rows.sort(function(a, b) {
+    var aText = a.cells[colIndex].textContent.trim();
+    var bText = b.cells[colIndex].textContent.trim();
+    var aNum = parseFloat(aText.replace(/[^0-9.\-]/g, ''));
+    var bNum = parseFloat(bText.replace(/[^0-9.\-]/g, ''));
+    if (!isNaN(aNum) && !isNaN(bNum)) return asc ? aNum - bNum : bNum - aNum;
+    return asc ? aText.localeCompare(bText) : bText.localeCompare(aText);
+  });
+
+  rows.forEach(function(row) { tbody.appendChild(row); });
+}
+</script>
+
+<!-- ===== CHARTS ===== -->
+<script>
+// ---- Shared Colors ----
+var C = {
+  green: '#23372C',
+  beige: '#CEAA78',
+  eggshell: '#F1F0D9',
+  blue: '#23262D',
+  lightGreen: '#3a5a46',
+  paleGreen: '#d4e8db',
+  amber: '#d97706',
+  red: '#dc2626',
+  gray: '#9ca3af',
+  beigeLight: '#e8d9b8'
 };
 
-Chart.defaults.color = '#9ca3af';
-Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
-Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+Chart.defaults.font.family = "'Lato', sans-serif";
+Chart.defaults.color = '#6b7280';
+Chart.defaults.plugins.legend.labels.usePointStyle = true;
+Chart.defaults.plugins.legend.labels.padding = 16;
 
-// --- YoY Revenue ---
+// ---- Chart 1: Year-over-Year Revenue ----
 new Chart(document.getElementById('chartYoY'), {
   type: 'bar',
   data: {
-    labels: ['2024', '2025', '2026 (booked)'],
+    labels: ['2024', '2025', '2026 (Mar 31)'],
     datasets: [{
       label: 'Revenue',
-      data: [199215, 279538, 276711],
-      backgroundColor: [COLORS.gray, COLORS.blue, COLORS.amber],
+      data: [199215, 279538, 176199],
+      backgroundColor: [C.green, C.green, C.beige],
+      borderColor: [C.green, C.green, C.amber],
+      borderWidth: [0, 0, 2],
+      borderDash: [0, 0, 5],
       borderRadius: 6,
-      barThickness: 60,
     }]
   },
   options: {
+    responsive: true,
     plugins: {
       legend: { display: false },
-      tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y.toLocaleString() } }
-    },
-    scales: {
-      y: { ticks: { callback: v => '$' + (v/1000) + 'K' }, grid: { color: 'rgba(255,255,255,0.04)' } },
-      x: { grid: { display: false } }
-    }
-  }
-});
-
-// --- ADR ---
-new Chart(document.getElementById('chartADR'), {
-  type: 'line',
-  data: {
-    labels: ['2024', '2025', '2026 (fwd)'],
-    datasets: [{
-      label: 'ADR',
-      data: [303, 235, 477],
-      borderColor: COLORS.amber,
-      backgroundColor: 'rgba(245,158,11,0.1)',
-      fill: true,
-      tension: 0.3,
-      pointRadius: 6,
-      pointBackgroundColor: COLORS.amber,
-    }]
-  },
-  options: {
-    plugins: {
-      legend: { display: false },
-      tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y } }
-    },
-    scales: {
-      y: { ticks: { callback: v => '$' + v }, min: 100, grid: { color: 'rgba(255,255,255,0.04)' } },
-      x: { grid: { display: false } }
-    }
-  }
-});
-
-// --- Monthly Revenue + Occupancy ---
-new Chart(document.getElementById('chartMonthly'), {
-  type: 'bar',
-  data: {
-    labels: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    datasets: [
-      {
-        label: 'Revenue',
-        data: [401, 7534, 9609, 25294, 51889, 93432, 52797, 11509, 14350, 8517, 4206],
-        backgroundColor: COLORS.blue,
-        borderRadius: 4,
-        yAxisID: 'y',
-      },
-      {
-        label: 'Occupancy %',
-        data: [1, 12, 25, 44, 58, 92, 62, 28, 45, 40, 23],
-        type: 'line',
-        borderColor: COLORS.amber,
-        backgroundColor: 'transparent',
-        pointRadius: 4,
-        pointBackgroundColor: COLORS.amber,
-        tension: 0.3,
-        yAxisID: 'y1',
-      }
-    ]
-  },
-  options: {
-    plugins: {
       tooltip: {
         callbacks: {
-          label: ctx => ctx.dataset.label === 'Revenue'
-            ? 'Revenue: $' + ctx.parsed.y.toLocaleString()
-            : 'Occupancy: ' + ctx.parsed.y + '%'
+          label: function(ctx) {
+            return '$' + ctx.parsed.y.toLocaleString();
+          },
+          afterLabel: function(ctx) {
+            if (ctx.dataIndex === 2) return '⚠ Partial year (9 mo. remaining)';
+            return '';
+          }
         }
       }
     },
     scales: {
-      y: { ticks: { callback: v => '$' + (v/1000) + 'K' }, grid: { color: 'rgba(255,255,255,0.04)' } },
-      y1: { position: 'right', ticks: { callback: v => v + '%' }, max: 100, grid: { display: false } },
+      y: {
+        ticks: {
+          callback: function(v) { return '$' + (v/1000).toFixed(0) + 'K'; }
+        },
+        grid: { color: 'rgba(0,0,0,0.05)' }
+      },
       x: { grid: { display: false } }
     }
   }
 });
 
-// --- Star distribution ---
-new Chart(document.getElementById('chartStars'), {
-  type: 'doughnut',
+// ---- Chart 2: ADR Trend ----
+new Chart(document.getElementById('chartADR'), {
+  type: 'line',
   data: {
-    labels: ['1★ Lost', '2★ Light', '3★ Solid', '4★ Strong', '5★ Whale'],
+    labels: ['2024', '2025', '2026 (forward)'],
     datasets: [{
-      data: [145, 221, 145, 9, 23],
-      backgroundColor: [COLORS.gray, COLORS.blue, COLORS.amber, COLORS.green, COLORS.pink],
-      borderWidth: 0,
+      label: 'ADR',
+      data: [303, 235, 278],
+      borderColor: C.green,
+      backgroundColor: 'rgba(35,55,44,0.08)',
+      pointBackgroundColor: [C.green, C.red, C.amber],
+      pointRadius: 7,
+      pointHoverRadius: 9,
+      fill: true,
+      tension: 0.3,
+      borderWidth: 2.5
     }]
   },
   options: {
-    cutout: '55%',
+    responsive: true,
     plugins: {
-      legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyle: 'circle' } }
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) { return 'ADR: $' + ctx.parsed.y; }
+        }
+      }
+    },
+    scales: {
+      y: {
+        ticks: { callback: function(v) { return '$' + v; } },
+        grid: { color: 'rgba(0,0,0,0.05)' },
+        min: 180
+      },
+      x: { grid: { display: false } }
     }
   }
 });
 
-// --- Star revenue ---
-new Chart(document.getElementById('chartStarRev'), {
+// ---- Chart 3: 2025 Monthly Revenue + Occupancy ----
+var ctx3 = document.getElementById('chartMonthly2025');
+new Chart(ctx3, {
   type: 'bar',
   data: {
-    labels: ['1★ Lost', '2★ Light', '3★ Solid', '4★ Strong', '5★ Whale'],
+    labels: ['Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
     datasets: [
       {
+        type: 'bar',
         label: 'Revenue',
-        data: [0, 140585, 171446, 15861, 228357],
-        backgroundColor: [COLORS.gray, COLORS.blue, COLORS.amber, COLORS.green, COLORS.pink],
-        borderRadius: 6,
+        data: [401, 7534, 9609, 25294, 51889, 93432, 52797, 11509, 14350, 8517, 4206],
+        backgroundColor: C.green,
+        borderRadius: 4,
+        yAxisID: 'y',
+      },
+      {
+        type: 'line',
+        label: 'Occupancy %',
+        data: [1, 12, 25, 44, 58, 92, 62, 28, 45, 40, 23],
+        borderColor: C.beige,
+        backgroundColor: 'transparent',
+        pointBackgroundColor: C.beige,
+        pointRadius: 5,
+        borderWidth: 2.5,
+        yAxisID: 'y1',
+        tension: 0.3,
       }
     ]
   },
   options: {
-    indexAxis: 'y',
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
     plugins: {
-      legend: { display: false },
-      tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.x.toLocaleString() } }
+      legend: { display: true },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            if (ctx.datasetIndex === 0) return 'Revenue: $' + ctx.parsed.y.toLocaleString();
+            return 'Occupancy: ' + ctx.parsed.y + '%';
+          }
+        }
+      }
     },
     scales: {
-      x: { ticks: { callback: v => '$' + (v/1000) + 'K' }, grid: { color: 'rgba(255,255,255,0.04)' } },
-      y: { grid: { display: false } }
-    }
-  }
-});
-
-// --- Cohort ---
-new Chart(document.getElementById('chartCohort'), {
-  type: 'doughnut',
-  data: {
-    labels: ['New in 25/26 (380)', '2023 Lost (141)', '2023 Returners (22)'],
-    datasets: [{
-      data: [380, 141, 22],
-      backgroundColor: [COLORS.blue, COLORS.red, COLORS.green],
-      borderWidth: 0,
-    }]
-  },
-  options: {
-    cutout: '55%',
-    plugins: {
-      legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyle: 'circle' } }
-    }
-  }
-});
-
-// --- Spend distribution ---
-new Chart(document.getElementById('chartSpendDist'), {
-  type: 'bar',
-  data: {
-    labels: ['$0', '$1–499', '$500–999', '$1K–2K', '$2K–5K', '$5K–10K', '$10K+'],
-    datasets: [{
-      label: 'Customers',
-      data: [147, 153, 91, 101, 29, 12, 10],
-      backgroundColor: [COLORS.gray, COLORS.blue, COLORS.cyan, COLORS.green, COLORS.amber, COLORS.orange, COLORS.pink],
-      borderRadius: 4,
-    }]
-  },
-  options: {
-    plugins: { legend: { display: false } },
-    scales: {
-      y: { grid: { color: 'rgba(255,255,255,0.04)' } },
+      y: {
+        type: 'linear',
+        position: 'left',
+        ticks: { callback: function(v) { return '$' + (v/1000).toFixed(0) + 'K'; } },
+        grid: { color: 'rgba(0,0,0,0.05)' }
+      },
+      y1: {
+        type: 'linear',
+        position: 'right',
+        min: 0, max: 100,
+        ticks: { callback: function(v) { return v + '%'; } },
+        grid: { drawOnChartArea: false }
+      },
       x: { grid: { display: false } }
     }
   }
 });
 
-// --- Nights distribution ---
-new Chart(document.getElementById('chartNights'), {
+// ---- Chart 4: 2026 Monthly Revenue ----
+new Chart(document.getElementById('chartMonthly2026'), {
   type: 'bar',
   data: {
-    labels: ['0', '1–2', '3–4', '5–7', '8–14', '15–30', '31+'],
-    datasets: [{
-      label: 'Customers',
-      data: [141, 138, 186, 41, 23, 11, 3],
-      backgroundColor: COLORS.cyan,
-      borderRadius: 4,
-    }]
-  },
-  options: {
-    plugins: { legend: { display: false } },
-    scales: {
-      y: { grid: { color: 'rgba(255,255,255,0.04)' } },
-      x: { grid: { display: false } }
-    }
-  }
-});
-
-// --- Bookings per customer ---
-new Chart(document.getElementById('chartBookings'), {
-  type: 'bar',
-  data: {
-    labels: ['0', '1', '2', '3–4', '5+'],
-    datasets: [{
-      label: 'Customers',
-      data: [141, 374, 21, 6, 1],
-      backgroundColor: COLORS.purple,
-      borderRadius: 4,
-    }]
-  },
-  options: {
-    plugins: { legend: { display: false } },
-    scales: {
-      y: { grid: { color: 'rgba(255,255,255,0.04)' } },
-      x: { grid: { display: false } }
-    }
-  }
-});
-
-// --- Cabin Revenue ---
-new Chart(document.getElementById('chartCabinRev'), {
-  type: 'bar',
-  data: {
-    labels: ['Secret Garden', 'Sled Loft', "Captain's Lodge", 'Enchanted Forest', 'Dreamy Den', 'Bubblegum', 'Winter Wonder', 'Amber Glow', 'Sunshine Loft'],
-    datasets: [{
-      label: 'Revenue',
-      data: [49126, 41240, 32259, 31339, 28489, 25632, 24707, 23673, 23073],
-      backgroundColor: [COLORS.amber, COLORS.pink, COLORS.pink, COLORS.blue, COLORS.blue, COLORS.blue, COLORS.cyan, COLORS.cyan, COLORS.gray],
-      borderRadius: 4,
-    }]
-  },
-  options: {
-    indexAxis: 'y',
-    plugins: {
-      legend: { display: false },
-      tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.x.toLocaleString() } }
-    },
-    scales: {
-      x: { ticks: { callback: v => '$' + (v/1000) + 'K' }, grid: { color: 'rgba(255,255,255,0.04)' } },
-      y: { grid: { display: false } }
-    }
-  }
-});
-
-// --- Cabin ADR ---
-new Chart(document.getElementById('chartCabinADR'), {
-  type: 'bar',
-  data: {
-    labels: ['Sled Loft', "Captain's Lodge", 'Secret Garden', 'Bubblegum', 'Enchanted Forest', 'Amber Glow', 'Dreamy Den', 'Sunshine Loft', 'Winter Wonder'],
-    datasets: [{
-      label: 'ADR',
-      data: [327, 316, 238, 237, 230, 215, 202, 189, 179],
-      backgroundColor: [COLORS.pink, COLORS.pink, COLORS.amber, COLORS.amber, COLORS.blue, COLORS.blue, COLORS.blue, COLORS.gray, COLORS.gray],
-      borderRadius: 4,
-    }]
-  },
-  options: {
-    indexAxis: 'y',
-    plugins: {
-      legend: { display: false },
-      tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.x } }
-    },
-    scales: {
-      x: { ticks: { callback: v => '$' + v }, grid: { color: 'rgba(255,255,255,0.04)' } },
-      y: { grid: { display: false } }
-    }
-  }
-});
-
-// --- Multi-cabin ---
-new Chart(document.getElementById('chartMulti'), {
-  type: 'bar',
-  data: {
-    labels: ['1 (single)', '2 cabins', '3 cabins', '4 cabins', '6 cabins', '8 cabins', '9 (whole)'],
+    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
     datasets: [
-      { label: '2024', data: [124, 8, 4, 2, 1, 0, 0], backgroundColor: COLORS.gray, borderRadius: 4 },
-      { label: '2025', data: [285, 3, 2, 1, 0, 2, 2], backgroundColor: COLORS.blue, borderRadius: 4 },
+      {
+        type: 'bar',
+        label: '2026 Revenue (Booked)',
+        data: [4110, 3592, 4486, 3800, 4064, 19674, 87013, 26594, 18967, 3898, 0, 0],
+        backgroundColor: function(ctx) {
+          var v = ctx.dataset.data[ctx.dataIndex];
+          if (v >= 50000) return C.green;
+          if (v >= 10000) return C.lightGreen;
+          if (v > 0) return C.paleGreen;
+          return 'rgba(0,0,0,0.08)';
+        },
+        borderRadius: 4,
+        yAxisID: 'y',
+      },
+      {
+        type: 'line',
+        label: 'ADR',
+        data: [72, 73, 88, 81, 177, 323, 468, 369, 271, 217, null, null],
+        borderColor: C.beige,
+        backgroundColor: 'transparent',
+        pointBackgroundColor: C.beige,
+        pointRadius: 5,
+        borderWidth: 2.5,
+        yAxisID: 'y1',
+        tension: 0.3,
+        spanGaps: false,
+      }
     ]
   },
   options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
     plugins: {
-      legend: { position: 'top', labels: { usePointStyle: true, pointStyle: 'circle' } }
+      legend: { display: true },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            if (ctx.datasetIndex === 0) return 'Revenue: $' + ctx.parsed.y.toLocaleString();
+            return 'ADR: $' + ctx.parsed.y;
+          }
+        }
+      }
     },
     scales: {
-      y: { grid: { color: 'rgba(255,255,255,0.04)' } },
+      y: {
+        type: 'linear', position: 'left',
+        ticks: { callback: function(v) { return '$' + (v/1000).toFixed(0) + 'K'; } },
+        grid: { color: 'rgba(0,0,0,0.05)' }
+      },
+      y1: {
+        type: 'linear', position: 'right',
+        min: 0,
+        ticks: { callback: function(v) { return '$' + v; } },
+        grid: { drawOnChartArea: false }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// ---- Chart 5a: Customer Grade Distribution (Count) ----
+new Chart(document.getElementById('chartGradeCount'), {
+  type: 'doughnut',
+  data: {
+    labels: ['5★ Whale (23)', '4★ Strong (9)', '3★ Solid (145)', '2★ Light (221)', '1★ Lost 2023 (141)'],
+    datasets: [{
+      data: [23, 9, 145, 221, 141],
+      backgroundColor: [C.green, C.lightGreen, C.beige, C.beigeLight, '#e5e7eb'],
+      borderWidth: 2,
+      borderColor: '#fff'
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom', labels: { font: { size: 11 } } },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) { return ctx.label + ': ' + ctx.parsed + ' customers'; }
+        }
+      }
+    }
+  }
+});
+
+// ---- Chart 5b: Revenue by Customer Grade ----
+new Chart(document.getElementById('chartGradeRevenue'), {
+  type: 'bar',
+  data: {
+    labels: ['5★ Whale', '4★ Strong', '3★ Solid', '2★ Light', '1★ Lost 2023'],
+    datasets: [{
+      label: 'Revenue',
+      data: [228357, 15861, 171446, 140585, 0],
+      backgroundColor: [C.green, C.lightGreen, C.beige, C.beigeLight, '#e5e7eb'],
+      borderRadius: 6,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) { return '$' + ctx.parsed.x.toLocaleString(); }
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { callback: function(v) { return '$' + (v/1000).toFixed(0) + 'K'; } },
+        grid: { color: 'rgba(0,0,0,0.05)' }
+      },
+      y: { grid: { display: false } }
+    }
+  }
+});
+
+// ---- Chart 6: Revenue Concentration (Pareto) ----
+new Chart(document.getElementById('chartPareto'), {
+  type: 'bar',
+  data: {
+    labels: ['Top 10 (25%)', '#11–25 (18%)', '#26–50 (13%)', '#51–396 (45%)'],
+    datasets: [{
+      label: 'Revenue',
+      data: [137852, 97967, 70181, 250249],
+      backgroundColor: [C.green, C.lightGreen, C.beige, C.beigeLight],
+      borderRadius: 6,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) { return '$' + ctx.parsed.x.toLocaleString(); }
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { callback: function(v) { return '$' + (v/1000).toFixed(0) + 'K'; } },
+        grid: { color: 'rgba(0,0,0,0.05)' }
+      },
+      y: { grid: { display: false } }
+    }
+  }
+});
+
+// ---- Chart 7: Customer Lifecycle Cohorts ----
+new Chart(document.getElementById('chartLifecycle'), {
+  type: 'doughnut',
+  data: {
+    labels: ['New in 25/26 (380)', 'Lost 2023 — No Return (141)', '2023 Returners (22)'],
+    datasets: [{
+      data: [380, 141, 22],
+      backgroundColor: [C.green, '#e5e7eb', C.beige],
+      borderWidth: 2,
+      borderColor: '#fff'
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom', labels: { font: { size: 11 } } },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) { return ctx.label + ': ' + ctx.parsed + ' customers'; }
+        }
+      }
+    }
+  }
+});
+
+// ---- Chart 8: Spend Distribution ----
+new Chart(document.getElementById('chartSpend'), {
+  type: 'bar',
+  data: {
+    labels: ['<$200', '$200–499', '$500–999', '$1K–2K', '$2K–5K', '$5K–10K', '$10K+'],
+    datasets: [{
+      label: 'Customers',
+      data: [46, 107, 91, 101, 29, 12, 10],
+      backgroundColor: [C.beigeLight, C.beige, C.lightGreen, C.green, C.green, C.green, C.green],
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) { return ctx.parsed.y + ' customers'; }
+        }
+      }
+    },
+    scales: {
+      y: {
+        ticks: { stepSize: 20 },
+        grid: { color: 'rgba(0,0,0,0.05)' }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// ---- Chart 9: Stay Length Distribution ----
+new Chart(document.getElementById('chartStayLength'), {
+  type: 'bar',
+  data: {
+    labels: ['1–2 nights', '3–4 nights', '5–7 nights', '8–14 nights', '15–30 nights', '31+ nights'],
+    datasets: [{
+      label: 'Customers',
+      data: [136, 186, 39, 23, 11, 3],
+      backgroundColor: [C.beigeLight, C.green, C.lightGreen, C.beige, C.beige, C.beige],
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) { return ctx.parsed.y + ' customers'; }
+        }
+      }
+    },
+    scales: {
+      y: {
+        grid: { color: 'rgba(0,0,0,0.05)' }
+      },
+      x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+    }
+  }
+});
+
+// ---- Chart 10: Bookings per Customer ----
+new Chart(document.getElementById('chartRepeat'), {
+  type: 'bar',
+  data: {
+    labels: ['1 booking', '2 bookings', '3–4 bookings', '5+ bookings'],
+    datasets: [{
+      label: 'Customers',
+      data: [370, 21, 6, 1],
+      backgroundColor: [C.beigeLight, C.beige, C.lightGreen, C.green],
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) { return ctx.parsed.y + ' customers'; }
+        }
+      }
+    },
+    scales: {
+      y: {
+        grid: { color: 'rgba(0,0,0,0.05)' }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// ---- Chart 11: Cabin Revenue ----
+new Chart(document.getElementById('chartCabinRevenue'), {
+  type: 'bar',
+  data: {
+    labels: [
+      '#1 Option (Whole Property)',
+      'Sled Loft (#6)',
+      "Captain's Lodge (#9)",
+      'Secret Garden (#5)',
+      'Enchanted Forest (#2)',
+      'Bubblegum Bungalow (#4)',
+      'Dreamy Den (#1)',
+      'Amber Glow (#7)',
+      'Sunshine Loft (#8)',
+      'Winter Wonderland (#3)'
+    ],
+    datasets: [{
+      label: 'Revenue (2026 Booked)',
+      data: [30098, 28996, 19044, 17932, 16357, 16140, 14211, 12830, 11225, 9364],
+      backgroundColor: function(ctx) {
+        var vals = [30098, 28996, 19044, 17932, 16357, 16140, 14211, 12830, 11225, 9364];
+        var max = Math.max.apply(null, vals);
+        var v = vals[ctx.dataIndex];
+        var alpha = 0.4 + 0.6 * (v / max);
+        return 'rgba(35,55,44,' + alpha + ')';
+      },
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) { return 'Revenue: $' + ctx.parsed.x.toLocaleString(); }
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { callback: function(v) { return '$' + (v/1000).toFixed(0) + 'K'; } },
+        grid: { color: 'rgba(0,0,0,0.05)' }
+      },
+      y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+    }
+  }
+});
+
+// ---- Chart 12: Cabin ADR ----
+new Chart(document.getElementById('chartCabinADR'), {
+  type: 'bar',
+  data: {
+    labels: [
+      'Sled Loft',
+      "Captain's Lodge",
+      'Enchanted Forest',
+      '#1 Option (Whole)',
+      'Bubblegum Bungalow',
+      'Secret Garden',
+      'Sunshine Loft',
+      'Amber Glow',
+      'Dreamy Den',
+      'Winter Wonderland'
+    ],
+    datasets: [{
+      label: 'ADR',
+      data: [460, 405, 363, 279, 260, 256, 234, 233, 178, 167],
+      backgroundColor: [C.green, C.green, C.green, C.lightGreen, C.lightGreen, C.lightGreen, C.beige, C.beige, C.beigeLight, C.beigeLight],
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) { return 'ADR: $' + ctx.parsed.x; }
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { callback: function(v) { return '$' + v; } },
+        grid: { color: 'rgba(0,0,0,0.05)' }
+      },
+      y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+    }
+  }
+});
+
+// ---- Chart 13: Multi-Cabin Party Size ----
+new Chart(document.getElementById('chartMultiCabin'), {
+  type: 'bar',
+  data: {
+    labels: ['1 cabin (single)', '2 cabins', '3 cabins', '4 cabins', '6 cabins', '8 cabins', '9 (whole)'],
+    datasets: [
+      {
+        label: '2024',
+        data: [124, 8, 4, 2, 1, 0, 0],
+        backgroundColor: C.green,
+        borderRadius: 4,
+      },
+      {
+        label: '2025',
+        data: [285, 3, 2, 1, 0, 2, 2],
+        backgroundColor: C.beige,
+        borderRadius: 4,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: true },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) { return ctx.dataset.label + ': ' + ctx.parsed.y + ' parties'; }
+        }
+      }
+    },
+    scales: {
+      y: {
+        grid: { color: 'rgba(0,0,0,0.05)' }
+      },
       x: { grid: { display: false } }
     }
   }
