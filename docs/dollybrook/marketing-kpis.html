@@ -220,17 +220,17 @@ thead th:hover { opacity: 0.8; }
 <!-- NOTIFICATION QUALITY TRACKER -->
 <div class="kpi-grid">
   <div class="kpi-card">
-    <h3>Slack Notifications — Volume & Quality (Week of Apr 6-11)</h3>
+    <h3>Slack ISO Notifications — Volume & Quality (Week of Apr 6-11)</h3>
     <div class="chart-container"><canvas id="notifChart"></canvas></div>
   </div>
   <div class="kpi-card">
-    <h3>Notification Source Quality — Which Groups to Keep?</h3>
+    <h3>ISO Notification Source Quality — Which Groups to Keep?</h3>
     <div class="chart-container"><canvas id="notifSourceChart"></canvas></div>
   </div>
 </div>
 
 <div class="rank-table">
-  <h3>Group Notification Quality — Keep / Add / Drop Recommendations</h3>
+  <h3>ISO (Accommodation Request) Notification Quality — Keep / Add / Drop</h3>
   <table id="notifTable">
     <thead><tr><th>Group</th><th>Members</th><th>Notifications</th><th>Avg Score</th><th>Replied</th><th>Converted</th><th>Recommendation</th></tr></thead>
     <tbody>
@@ -419,12 +419,12 @@ new Chart(document.getElementById('groupChart'), {
 new Chart(document.getElementById('contentChart'), {
   type: 'bar',
   data: {
-    labels: ['Neighbor\nIntro','Community\nQuestion','Guest Guide\nSolicitation','ISO\nReply','Listing/\nPromo'],
+    labels: ['Neighbor\nIntro (1)','Community\nQuestion (4)','Guest Guide\n(6)','ISO\nReply (5)','Listing/\nPromo (13)'],
     datasets: [{ label: 'Avg Score', data: [301,52,26,0,1], backgroundColor: ['#CEAA78','#23372C','#28a745','#999','#dc3545'], borderRadius: 6 }]
   },
   options: {
     responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false } },
+    plugins: { legend: { display: false }, tooltip: { callbacks: { title: function(items) { return items[0].label.replace('\n',' '); } } } },
     scales: { x: { ticks: { font: { family: 'Lato', size: 9 } }, grid: { display: false } }, y: { ticks: { font: { family: 'Lato', size: 10 } }, grid: { color: 'rgba(206,170,120,0.2)' } } }
   }
 });
