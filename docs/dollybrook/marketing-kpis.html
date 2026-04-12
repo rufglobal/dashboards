@@ -80,6 +80,11 @@ tbody td { padding: 9px 12px; }
 .footer { background: var(--db-dark-green); color: rgba(241,240,217,0.6); text-align: center; padding: 16px; font-size: 0.75rem; font-style: italic; }
 .footer strong { color: var(--db-eggshell); font-style: normal; }
 .footer a { color: var(--db-beige); }
+
+thead th.sort-asc::after { content: ' \25B2'; font-size: 0.65rem; opacity: 0.8; }
+thead th.sort-desc::after { content: ' \25BC'; font-size: 0.65rem; opacity: 0.8; }
+thead th { cursor: pointer; }
+thead th:hover { opacity: 0.8; }
 </style>
 </head>
 <body>
@@ -97,8 +102,8 @@ tbody td { padding: 9px 12px; }
 <!-- BIG NUMBERS -->
 <div class="big-numbers">
   <div class="big-card">
-    <div class="number">4,712</div>
-    <div class="delta up">+63 since Apr 3</div>
+    <div class="number">4,713</div>
+    <div class="delta up">+64 since Apr 3</div>
     <div class="label">Page Followers</div>
   </div>
   <div class="big-card">
@@ -191,6 +196,23 @@ tbody td { padding: 9px 12px; }
     <div class="pillar-status">Pillar defined · No outreach yet</div>
     <div class="pillar-bar"><div class="pillar-fill" style="width:10%"></div></div>
   </div>
+</div>
+
+
+<!-- VIDEO / REEL TRACKER -->
+<div class="rank-table">
+  <h3>Video &amp; Reel Performance</h3>
+  <table id="videoTable">
+    <thead><tr><th>Date</th><th>Platform</th><th>Group</th><th>Type</th><th>Caption</th><th>Status</th><th>Views</th><th>Link</th></tr></thead>
+    <tbody>
+      <tr><td>Apr 10</td><td>Facebook</td><td>Chicago Pickleball (17.8K)</td><td>Reel</td><td>"Florida has the weather... I'll take the trees."</td><td style="color:#28a745;font-weight:700">LIVE</td><td>TBD</td><td><a href="https://www.facebook.com/reel/1576183313476875/" target="_blank" style="color:#23372C">View</a></td></tr>
+      <tr><td>Apr 10</td><td>Facebook</td><td>Michigan Pickleball (7.1K)</td><td>Video</td><td>"Outdoor season... Michigan courts surrounded by trees"</td><td style="color:#dc3545;font-weight:700">Declined</td><td>—</td><td>—</td></tr>
+      <tr><td>Apr 9</td><td>X</td><td>@DollybrookMI</td><td>Hard Cut</td><td>"Morning commute. Office. Slack. Repeat."</td><td style="color:#28a745;font-weight:700">LIVE</td><td>9</td><td><a href="https://twitter.com/DollybrookMI/status/2042214052558966787" target="_blank" style="color:#23372C">View</a></td></tr>
+      <tr><td>Apr 11</td><td>X</td><td>@DollybrookMI</td><td>Hard Cut</td><td>"This is what the other side of the week looks like."</td><td style="color:#28a745;font-weight:700">LIVE</td><td>TBD</td><td><a href="https://twitter.com/DollybrookMI/status/2042926587016859762" target="_blank" style="color:#23372C">View</a></td></tr>
+      <tr><td>Apr 7</td><td>X</td><td>@DollybrookMI</td><td>Aerial</td><td>"Oval Beach, Saugatuck. Still quiet enough to hear yourself think."</td><td style="color:#28a745;font-weight:700">LIVE</td><td>TBD</td><td><a href="https://twitter.com/DollybrookMI/status/2041387228790731105" target="_blank" style="color:#23372C">View</a></td></tr>
+      <tr><td>Apr 6</td><td>X</td><td>@DollybrookMI</td><td>Twilight</td><td>"This is what 9 PM in the Michigan woods sounds like."</td><td style="color:#28a745;font-weight:700">LIVE</td><td>32</td><td><a href="https://twitter.com/DollybrookMI/status/2041278677523091730" target="_blank" style="color:#23372C">View</a></td></tr>
+    </tbody>
+  </table>
 </div>
 
 <!-- LEADS -->
@@ -353,6 +375,36 @@ new Chart(document.getElementById('contentChart'), {
     plugins: { legend: { display: false } },
     scales: { x: { ticks: { font: { family: 'Lato', size: 9 } }, grid: { display: false } }, y: { ticks: { font: { family: 'Lato', size: 10 } }, grid: { color: 'rgba(206,170,120,0.2)' } } }
   }
+});
+</script>
+
+<script>
+// Make ALL tables sortable
+document.querySelectorAll('table').forEach(function(table) {
+  var headers = table.querySelectorAll('thead th');
+  var sortCol = -1, sortAsc = true;
+  headers.forEach(function(th, col) {
+    th.style.cursor = 'pointer';
+    th.addEventListener('click', function() {
+      if (sortCol === col) { sortAsc = !sortAsc; } else { sortCol = col; sortAsc = true; }
+      headers.forEach(function(h) { h.classList.remove('sort-asc', 'sort-desc'); });
+      th.classList.add(sortAsc ? 'sort-asc' : 'sort-desc');
+      var tbody = table.querySelector('tbody');
+      if (!tbody) return;
+      var rows = Array.from(tbody.querySelectorAll('tr'));
+      rows.sort(function(a, b) {
+        var aRaw = a.cells[col] ? a.cells[col].innerText.trim() : '';
+        var bRaw = b.cells[col] ? b.cells[col].innerText.trim() : '';
+        var aNum = parseFloat(aRaw.replace(/[^0-9.]/g, ''));
+        var bNum = parseFloat(bRaw.replace(/[^0-9.]/g, ''));
+        if (!isNaN(aNum) && !isNaN(bNum)) return sortAsc ? aNum - bNum : bNum - aNum;
+        if (aRaw.toLowerCase() < bRaw.toLowerCase()) return sortAsc ? -1 : 1;
+        if (aRaw.toLowerCase() > bRaw.toLowerCase()) return sortAsc ? 1 : -1;
+        return 0;
+      });
+      rows.forEach(function(r) { tbody.appendChild(r); });
+    });
+  });
 });
 </script>
 </body>
