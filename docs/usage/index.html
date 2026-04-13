@@ -56,7 +56,7 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
 </style></head><body>
 <div class="container">
   <h1>🔐 Claude Usage Dashboard</h1>
-  <p class="subtitle">Romanian United Foundation — Generated April 13, 2026 at 08:13 AM CST</p>
+  <p class="subtitle">Romanian United Foundation — Generated April 13, 2026 at 08:41 AM CST</p>
 
   <div class="nav-bar">
       <a href="2026-04-12.html" class="nav-btn">← 2026-04-12</a>
@@ -68,18 +68,18 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
   <div class="grid">
     <div class="stat-card" style="--value-color: var(--opus);">
       <div class="label">💰 Current Balance</div>
-      <div class="value" style="color: var(--opus);">$101.32</div>
+      <div class="value" style="color: var(--opus);">$0.00</div>
       <div class="sub">Available credits</div>
     </div>
     <div class="stat-card alert-ok">
       <div class="label">🟢 Today's Spend</div>
-      <div class="value">$88.46</div>
+      <div class="value">$88.19</div>
       <div class="sub">Under $100 daily limit</div>
     </div>
     <div class="stat-card">
       <div class="label">7-Day Total</div>
-      <div class="value">$2430.76</div>
-      <div class="sub">Avg $347.25/day</div>
+      <div class="value">$4745.64</div>
+      <div class="sub">Avg $677.95/day</div>
     </div>
     <div class="stat-card">
       <div class="label">Daily Limit</div>
@@ -88,7 +88,7 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
     </div>
     <div class="stat-card">
       <div class="label">Projected Monthly</div>
-      <div class="value">$10418</div>
+      <div class="value">$20338</div>
       <div class="sub">Based on 7-day avg</div>
     </div>
   </div>
@@ -108,25 +108,25 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
   <div class="card">
     <h2>📋 Today's Model Breakdown</h2>
     <table><thead><tr><th>Model</th><th>Tokens In</th><th>Tokens Out</th><th>Input</th><th>Cache Write</th><th>Cache Read</th><th>Output</th><th>Total</th></tr></thead>
-    <tbody><tr><td><strong>claude-sonnet-4-6</strong></td><td>285,354,732</td><td>165,703</td>
+    <tbody><tr><td><strong>Sonnet 4.6</strong></td><td>285,354,732</td><td>165,703</td>
         <td class="cost">$0.00</td><td class="cost">$0.00</td>
         <td class="cost">$85.61</td><td class="cost">$2.49</td>
-        <td class="cost total">$88.09</td></tr><tr><td><strong>claude-haiku-4-5-20251001</strong></td><td>1,013,722</td><td>3,773</td>
+        <td class="cost total">$88.09</td></tr><tr><td><strong>Haiku 4.5</strong></td><td>1,013,722</td><td>3,773</td>
         <td class="cost">$0.00</td><td class="cost">$0.00</td>
-        <td class="cost">$0.30</td><td class="cost">$0.06</td>
-        <td class="cost total">$0.36</td></tr></tbody></table>
+        <td class="cost">$0.08</td><td class="cost">$0.02</td>
+        <td class="cost total">$0.10</td></tr></tbody></table>
   </div>
 
   <div class="card">
     <h2>🤖 Estimated Agent Breakdown (Today)</h2>
     <table><thead><tr><th>Agent</th><th>Sessions</th><th>Activity Share</th><th>Est. Cost</th></tr></thead>
-    <tbody><tr><td><strong>Xavier</strong></td><td>7</td>
-        <td><div class="bar-container"><div class="bar" style="width:67.4157918934913%"></div><span>67.4%</span></div></td>
-        <td class="cost">$59.63</td></tr><tr><td><strong>Knox</strong></td><td>4</td>
-        <td><div class="bar-container"><div class="bar" style="width:31.189296690876883%"></div><span>31.2%</span></div></td>
-        <td class="cost">$27.59</td></tr><tr><td><strong>Alice</strong></td><td>2</td>
-        <td><div class="bar-container"><div class="bar" style="width:1.3949114156318159%"></div><span>1.4%</span></div></td>
-        <td class="cost">$1.23</td></tr></tbody></table>
+    <tbody><tr><td><strong>Xavier</strong></td><td>8</td>
+        <td><div class="bar-container"><div class="bar" style="width:67.86152646534207%"></div><span>67.9%</span></div></td>
+        <td class="cost">$59.85</td></tr><tr><td><strong>Knox</strong></td><td>4</td>
+        <td><div class="bar-container"><div class="bar" style="width:30.77277579284247%"></div><span>30.8%</span></div></td>
+        <td class="cost">$27.14</td></tr><tr><td><strong>Alice</strong></td><td>2</td>
+        <td><div class="bar-container"><div class="bar" style="width:1.3656977418154557%"></div><span>1.4%</span></div></td>
+        <td class="cost">$1.20</td></tr></tbody></table>
     <p style="color:var(--muted);font-size:10px;margin-top:10px;">* Estimates based on session transcript sizes. Actual per-agent costs not available from API.</p>
   </div>
 
@@ -138,8 +138,8 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const labels = ["04-07", "04-08", "04-09", "04-10", "04-11", "04-12", "04-13"];
-  const sonnetData = [134.66, 115.5, 208.47, 283.62, 63.85, 378.6, 88.46];
-  const opusData = [0, 0, 0, 297.97, 661.09, 198.53, 0];
+  const sonnetData = [134.66, 115.5, 208.47, 283.62, 63.85, 378.47, 88.19];
+  const opusData = [0, 0, 0, 894.0, 1983.27, 595.6, 0];
   new Chart(document.getElementById('usageChart'), {
     type: 'bar',
     data: {
