@@ -3,610 +3,282 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DollyBrook — Marketing Dashboard v2.0</title>
+<title>DollyBrook Marketing KPIs — April 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Arya:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-:root { --db-dark-green: #23372C; --db-eggshell: #F1F0D9; --db-beige: #CEAA78; --db-dark-blue: #23262D; --radius: 1rem; }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Lato', sans-serif; background: var(--db-eggshell); color: var(--db-dark-blue); }
-.hero { background: linear-gradient(135deg, var(--db-dark-green) 0%, #1a2a22 100%); color: var(--db-eggshell); padding: 32px 48px; display: flex; justify-content: space-between; align-items: flex-end; }
-.hero h1 { font-family: 'Arya', sans-serif; font-size: 1.8rem; font-weight: 700; }
-.hero p { font-size: 0.82rem; opacity: 0.65; margin-top: 4px; }
-.hero-badge { background: var(--db-beige); color: var(--db-dark-green); font-weight: 700; font-size: 0.72rem; padding: 6px 14px; border-radius: 2rem; text-transform: uppercase; letter-spacing: 0.05em; }
-.container { padding: 28px 48px; max-width: 1440px; margin: 0 auto; }
-@media (max-width: 768px) { .container { padding: 16px; } .hero { padding: 24px 16px; flex-direction: column; gap: 12px; } }
-
-/* BIG NUMBERS */
-.big-numbers { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 24px; }
-@media (max-width: 900px) { .big-numbers { grid-template-columns: repeat(3, 1fr); } }
-.big-card { background: white; border-radius: var(--radius); padding: 20px 16px; text-align: center; border: 1px solid var(--db-beige); }
-.big-card .number { font-family: 'Arya', sans-serif; font-size: 2.4rem; font-weight: 700; color: var(--db-dark-green); line-height: 1; }
-.big-card .delta { font-size: 0.8rem; font-weight: 700; margin-top: 3px; }
-.big-card .delta.up { color: #28a745; } .big-card .delta.down { color: #dc3545; } .big-card .delta.flat { color: #999; }
-.big-card .label { font-size: 0.72rem; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 6px; }
-
-/* CHARTS */
-.kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 24px; }
-@media (max-width: 900px) { .kpi-grid { grid-template-columns: 1fr; } }
-.kpi-card { background: white; border-radius: var(--radius); padding: 22px; border: 1px solid var(--db-beige); }
-.kpi-card h3 { font-family: 'Arya', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--db-dark-green); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--db-beige); }
-.chart-container { position: relative; height: 240px; }
-
-/* SECTION TITLES */
-.section-title { font-family: 'Arya', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--db-dark-green); margin: 24px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--db-beige); }
-
-/* INSIGHTS */
-.insights-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
-@media (max-width: 700px) { .insights-grid { grid-template-columns: 1fr; } }
-.insight-card { background: white; border-radius: var(--radius); padding: 18px; border: 1px solid var(--db-beige); }
-.insight-card h4 { font-family: 'Arya', sans-serif; font-size: 0.9rem; font-weight: 700; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--db-beige); }
-.insight-card.good h4 { color: #28a745; } .insight-card.bad h4 { color: #dc3545; }
-.insight-card ul { padding-left: 16px; font-size: 0.8rem; line-height: 1.75; color: #444; }
-
-/* LEADS */
-.leads-card { background: white; border-radius: var(--radius); padding: 18px 22px; border: 1px solid var(--db-beige); margin-bottom: 24px; }
-.leads-card h3 { font-family: 'Arya', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--db-dark-green); margin-bottom: 10px; }
-.lead-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(206,170,120,0.15); font-size: 0.8rem; gap: 12px; flex-wrap: wrap; }
-.lead-row:last-child { border: none; }
-.lead-name { font-weight: 700; color: var(--db-dark-green); min-width: 140px; }
-.lead-detail { color: #666; flex: 1; }
-.lead-status { font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; white-space: nowrap; }
-.lead-hot { background: #d4edda; color: #155724; } .lead-warm { background: #fff3cd; color: #856404; }
-
-/* GROUP RANKING */
-.rank-table { background: white; border-radius: var(--radius); border: 1px solid var(--db-beige); overflow: hidden; margin-bottom: 24px; }
-.rank-table h3 { font-family: 'Arya', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--db-dark-green); padding: 16px 22px 12px; border-bottom: 1px solid var(--db-beige); margin: 0; }
-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-thead tr { background: var(--db-dark-green); color: var(--db-eggshell); }
-thead th { padding: 9px 12px; text-align: left; font-weight: 600; font-size: 0.75rem; letter-spacing: 0.04em; }
-tbody tr { border-bottom: 1px solid rgba(206,170,120,0.2); }
-tbody tr:hover { background: rgba(206,170,120,0.06); }
-tbody td { padding: 9px 12px; }
-
-/* GA PLACEHOLDER */
-.ga-placeholder { background: white; border-radius: var(--radius); border: 2px dashed var(--db-beige); padding: 36px 24px; text-align: center; margin-bottom: 24px; }
-.ga-placeholder h3 { font-family: 'Arya', sans-serif; color: var(--db-dark-green); margin-bottom: 8px; }
-.ga-placeholder p { color: #999; font-size: 0.85rem; font-style: italic; }
-
-/* PILLAR PROGRESS */
-.pillar-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 24px; }
-.pillar-card { background: white; border-radius: var(--radius); padding: 14px 16px; border: 1px solid var(--db-beige); }
-.pillar-card .pillar-name { font-family: 'Arya', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--db-dark-green); }
-.pillar-card .pillar-status { font-size: 0.75rem; color: #666; margin-top: 4px; }
-.pillar-bar { height: 5px; background: rgba(206,170,120,0.2); border-radius: 3px; margin-top: 8px; }
-.pillar-fill { height: 100%; border-radius: 3px; background: var(--db-dark-green); }
-
-.footer { background: var(--db-dark-green); color: rgba(241,240,217,0.6); text-align: center; padding: 16px; font-size: 0.75rem; font-style: italic; }
-.footer strong { color: var(--db-eggshell); font-style: normal; }
-.footer a { color: var(--db-beige); }
-
-thead th.sort-asc::after { content: ' \25B2'; font-size: 0.65rem; opacity: 0.8; }
-thead th.sort-desc::after { content: ' \25BC'; font-size: 0.65rem; opacity: 0.8; }
-thead th { cursor: pointer; }
-thead th:hover { opacity: 0.8; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #F1F0D9; font-family: 'Lato', sans-serif; color: #23262D; }
+  .header { background: #23372C; color: #F1F0D9; padding: 32px 40px; }
+  .header h1 { font-family: 'Arya', sans-serif; font-size: 2rem; }
+  .header p { color: #CEAA78; margin-top: 6px; font-size: 0.95rem; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
+  .card { background: white; border-radius: 10px; padding: 20px; border-left: 4px solid #23372C; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .card .val { font-family: 'Arya', sans-serif; font-size: 2.2rem; color: #23372C; }
+  .card .lbl { font-size: 0.8rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }
+  .card .delta { font-size: 0.85rem; margin-top: 6px; color: #2a7a4b; font-weight: 700; }
+  .card.orange { border-left-color: #e67e22; } .card.orange .val { color: #e67e22; }
+  .card.red { border-left-color: #c0392b; } .card.red .val { color: #c0392b; }
+  .card.gold { border-left-color: #CEAA78; } .card.gold .val { color: #CEAA78; }
+  .charts { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 32px; }
+  .chart-box { background: white; border-radius: 10px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .chart-box h3 { font-family: 'Arya', sans-serif; color: #23372C; margin-bottom: 16px; font-size: 1.1rem; }
+  .section { background: white; border-radius: 10px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .section h2 { font-family: 'Arya', sans-serif; color: #23372C; font-size: 1.2rem; margin-bottom: 16px; border-bottom: 2px solid #CEAA78; padding-bottom: 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  th { background: #23372C; color: #F1F0D9; padding: 10px 12px; text-align: left; font-family: 'Arya', sans-serif; font-weight: 400; cursor: pointer; }
+  th:hover { background: #2d4a3a; }
+  td { padding: 10px 12px; border-bottom: 1px solid #eee; }
+  tr:hover { background: #f9f8f2; }
+  .badge { display: inline-block; padding: 3px 9px; border-radius: 4px; font-size: 0.78rem; font-weight: 700; }
+  .badge-green { background: #d4edda; color: #155724; }
+  .badge-orange { background: #fff3cd; color: #856404; }
+  .badge-red { background: #f8d7da; color: #721c24; }
+  .badge-blue { background: #cce5ff; color: #004085; }
+  .bar { height: 8px; background: #eee; border-radius: 4px; margin-top: 4px; }
+  .bar-fill { height: 100%; background: #23372C; border-radius: 4px; }
+  .footer { text-align: center; padding: 24px; color: #888; font-size: 0.8rem; }
+  @media(max-width:768px){ .charts { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
-
-<div class="hero">
-  <div>
-    <h1>DollyBrook Marketing Dashboard</h1>
-    <p>v2.0 · KPIs, what works, leads, pillars, and lessons · Updated April 16, 2026 · Day 16 of campaign</p>
-  </div>
-  <div class="hero-badge">Live Dashboard</div>
+<div class="header">
+  <h1>DollyBrook Marketing KPIs</h1>
+  <p>Facebook Groups Campaign · Updated April 18, 2026 · Xavier</p>
 </div>
-
 <div class="container">
 
-<!-- BIG NUMBERS -->
-<div class="big-numbers">
-  <div class="big-card">
-    <div class="number">4,794</div>
-    <div class="delta up">+145 since Apr 3</div>
-    <div class="label">Page Followers</div>
+<!-- STAT CARDS -->
+<div class="cards">
+  <div class="card">
+    <div class="val">4,884</div>
+    <div class="lbl">FB Page Followers</div>
+    <div class="delta">+235 since Mar 31 (+5.1%)</div>
   </div>
-  <div class="big-card">
-    <div class="number">360+</div>
-    <div class="delta up">across all live posts</div>
-    <div class="label">Total Reactions</div>
+  <div class="card">
+    <div class="val">37</div>
+    <div class="lbl">Live Posts</div>
+    <div class="delta">22 groups reached</div>
   </div>
-  <div class="big-card">
-    <div class="number">117+</div>
-    <div class="delta up">community threads active</div>
-    <div class="label">Total Comments</div>
+  <div class="card orange">
+    <div class="val">3</div>
+    <div class="lbl">Pending Approval</div>
   </div>
-  <div class="big-card">
-    <div class="number">5</div>
-    <div class="delta up">3 converted</div>
-    <div class="label">Booking Leads</div>
+  <div class="card red">
+    <div class="val">22</div>
+    <div class="lbl">Declined / Removed</div>
   </div>
-  <div class="big-card">
-    <div class="number">51</div>
-    <div class="delta up">+9 pickleball groups</div>
-    <div class="label">Groups Joined</div>
+  <div class="card">
+    <div class="val">4.8</div>
+    <div class="lbl">Google Rating ⭐</div>
+    <div class="delta">52 reviews total</div>
   </div>
-</div>
-
-<!-- KPI CHARTS ROW 1 -->
-<div class="kpi-grid">
-  <div class="kpi-card">
-    <h3>Follower Growth (daily)</h3>
-    <div class="chart-container"><canvas id="followersChart"></canvas></div>
-  </div>
-  <div class="kpi-card">
-    <h3>Engagement Score by Week (reactions + comments x3 + shares x5)</h3>
-    <div class="chart-container"><canvas id="engagementChart"></canvas></div>
+  <div class="card gold">
+    <div class="val">5</div>
+    <div class="lbl">Tracked Leads</div>
+    <div class="delta">From FB group replies</div>
   </div>
 </div>
 
-<!-- KPI CHARTS ROW 2 -->
-<div class="kpi-grid">
-  <div class="kpi-card">
-    <h3>What Works: Score by Group (higher = focus here)</h3>
-    <div class="chart-container"><canvas id="groupChart"></canvas></div>
+<!-- CHARTS -->
+<div class="charts">
+  <div class="chart-box">
+    <h3>Follower Growth (Mar 31 → Apr 18)</h3>
+    <canvas id="followerChart" height="120"></canvas>
   </div>
-  <div class="kpi-card">
-    <h3>What Works: Score by Content Type (avg per post)</h3>
-    <div class="chart-container"><canvas id="contentChart"></canvas></div>
-  </div>
-</div>
-
-<!-- GA PLACEHOLDER -->
-<div class="ga-placeholder">
-  <h3>Website Traffic from Social (Google Analytics)</h3>
-  <p>Coming soon — needs GA4 access or browser login. Will show dollybrook.com sessions from Facebook (utm_source=facebook), direct, and organic search. This is the metric that connects social activity to booking pipeline.</p>
-</div>
-
-<!-- PILLAR PROGRESS -->
-<div class="section-title">Marketing Pillars — Progress</div>
-<div class="pillar-grid">
-  <div class="pillar-card">
-    <div class="pillar-name">1. Community Guide</div>
-    <div class="pillar-status">10 suggestions · 4 groups posted · Guide live</div>
-    <div class="pillar-bar"><div class="pillar-fill" style="width:75%"></div></div>
-  </div>
-  <div class="pillar-card">
-    <div class="pillar-name">2. Pickleball</div>
-    <div class="pillar-status">11 groups joined · 2 video posts · Need court photos</div>
-    <div class="pillar-bar"><div class="pillar-fill" style="width:35%"></div></div>
-  </div>
-  <div class="pillar-card">
-    <div class="pillar-name">3. Pool Season</div>
-    <div class="pillar-status">Memorial Day countdown started · #1 content type</div>
-    <div class="pillar-bar"><div class="pillar-fill" style="width:40%"></div></div>
-  </div>
-  <div class="pillar-card">
-    <div class="pillar-name">4. Group Privacy</div>
-    <div class="pillar-status">Woven into ISO replies · 3 group leads</div>
-    <div class="pillar-bar"><div class="pillar-fill" style="width:50%"></div></div>
-  </div>
-  <div class="pillar-card">
-    <div class="pillar-name">5. 13-Year Story</div>
-    <div class="pillar-status">Neighbor tone in all posts · Authenticity angle</div>
-    <div class="pillar-bar"><div class="pillar-fill" style="width:60%"></div></div>
-  </div>
-  <div class="pillar-card">
-    <div class="pillar-name">6. Influencers / Girls' Trip</div>
-    <div class="pillar-status">3 photos saved · Strategy filed · First post drafted</div>
-    <div class="pillar-bar"><div class="pillar-fill" style="width:20%"></div></div>
-  </div>
-  <div class="pillar-card">
-    <div class="pillar-name">7. Corporate Retreats</div>
-    <div class="pillar-status">Pillar defined · No outreach yet</div>
-    <div class="pillar-bar"><div class="pillar-fill" style="width:10%"></div></div>
+  <div class="chart-box">
+    <h3>Posts by Week</h3>
+    <canvas id="weekChart" height="120"></canvas>
   </div>
 </div>
 
-
-<!-- VIDEO / REEL TRACKER -->
-<div class="rank-table">
-  <h3>Video &amp; Reel Performance</h3>
-  <table id="videoTable">
-    <thead><tr><th>Date</th><th>Platform</th><th>Group</th><th>Type</th><th>Caption</th><th>Status</th><th>Views</th><th>Link</th></tr></thead>
+<!-- TOP ENGAGEMENT POSTS -->
+<div class="section">
+  <h2>Top Posts by Engagement</h2>
+  <table id="engTable">
+    <thead><tr>
+      <th onclick="sortTable('engTable',0)">Post / Group</th>
+      <th onclick="sortTable('engTable',1)">Reactions</th>
+      <th onclick="sortTable('engTable',2)">Comments</th>
+      <th onclick="sortTable('engTable',3)">Shares</th>
+      <th onclick="sortTable('engTable',4)">Score</th>
+    </tr></thead>
     <tbody>
-      <tr><td>Apr 10</td><td>Facebook</td><td><a href="https://www.facebook.com/groups/1781983742045018/" target="_blank" style="color:#23372C">Chicago Pickleball (17.8K)</a></td><td>Reel</td><td>"Florida has the weather... I'll take the trees."</td><td style="color:#28a745;font-weight:700">LIVE</td><td>TBD</td><td><a href="https://www.facebook.com/reel/1576183313476875/" target="_blank" style="color:#23372C">View</a></td></tr>
-      <tr><td>Apr 10</td><td>Facebook</td><td><a href="https://www.facebook.com/groups/michiganpickleball/" target="_blank" style="color:#23372C">Michigan Pickleball (7.1K)</a></td><td>Video</td><td>"Outdoor season... Michigan courts surrounded by trees"</td><td style="color:#dc3545;font-weight:700">Declined</td><td>—</td><td>—</td></tr>
-      <tr><td>Apr 9</td><td>X</td><td>@DollybrookMI</td><td>Hard Cut</td><td>"Morning commute. Office. Slack. Repeat."</td><td style="color:#28a745;font-weight:700">LIVE</td><td>9</td><td><a href="https://twitter.com/DollybrookMI/status/2042214052558966787" target="_blank" style="color:#23372C">View</a></td></tr>
-      <tr><td>Apr 11</td><td>X</td><td>@DollybrookMI</td><td>Hard Cut</td><td>"This is what the other side of the week looks like."</td><td style="color:#28a745;font-weight:700">LIVE</td><td>TBD</td><td><a href="https://twitter.com/DollybrookMI/status/2042926587016859762" target="_blank" style="color:#23372C">View</a></td></tr>
-      <tr><td>Apr 7</td><td>X</td><td>@DollybrookMI</td><td>Aerial</td><td>"Oval Beach, Saugatuck. Still quiet enough to hear yourself think."</td><td style="color:#28a745;font-weight:700">LIVE</td><td>TBD</td><td><a href="https://twitter.com/DollybrookMI/status/2041387228790731105" target="_blank" style="color:#23372C">View</a></td></tr>
-      <tr><td>Apr 6</td><td>X</td><td>@DollybrookMI</td><td>Twilight</td><td>"This is what 9 PM in the Michigan woods sounds like."</td><td style="color:#28a745;font-weight:700">LIVE</td><td>32</td><td><a href="https://twitter.com/DollybrookMI/status/2041278677523091730" target="_blank" style="color:#23372C">View</a></td></tr>
+      <tr>
+        <td><strong>Downtown SH Chatline</strong><br><small style="color:#888">2026-03-31</small></td>
+        <td>196</td>
+        <td>35</td>
+        <td>30</td>
+        <td><strong>647</strong></td>
+      </tr>      <tr>
+        <td><strong>Fennville Informed</strong><br><small style="color:#888">2026-04-02</small></td>
+        <td>55</td>
+        <td>13</td>
+        <td>0</td>
+        <td><strong>149</strong></td>
+      </tr>      <tr>
+        <td><strong>Hamilton Happenings</strong><br><small style="color:#888">2026-04-02</small></td>
+        <td>40</td>
+        <td>2</td>
+        <td>4</td>
+        <td><strong>106</strong></td>
+      </tr>      <tr>
+        <td><strong>Holland Informed</strong><br><small style="color:#888">2026-04-02</small></td>
+        <td>21</td>
+        <td>1</td>
+        <td>2</td>
+        <td><strong>55</strong></td>
+      </tr>      <tr>
+        <td><strong>Sauglasville</strong><br><small style="color:#888">2026-03-31</small></td>
+        <td>17</td>
+        <td>28</td>
+        <td>0</td>
+        <td><strong>118</strong></td>
+      </tr>      <tr>
+        <td><strong>Fennville & Surrounding</strong><br><small style="color:#888">2026-04-08</small></td>
+        <td>13</td>
+        <td>11</td>
+        <td>1</td>
+        <td><strong>64</strong></td>
+      </tr>      <tr>
+        <td><strong>Holland Informed</strong><br><small style="color:#888">2026-04-09</small></td>
+        <td>8</td>
+        <td>0</td>
+        <td>0</td>
+        <td><strong>16</strong></td>
+      </tr>      <tr>
+        <td><strong>Sauglasville</strong><br><small style="color:#888">2026-04-04_guide</small></td>
+        <td>6</td>
+        <td>11</td>
+        <td>0</td>
+        <td><strong>45</strong></td>
+      </tr>
     </tbody>
   </table>
-</div>
-
-
-
-<!-- NOTIFICATION QUALITY TRACKER -->
-<div class="kpi-grid">
-  <div class="kpi-card">
-    <h3>Slack ISO Notifications — Volume & Quality (Week of Apr 6-11)</h3>
-    <div class="chart-container"><canvas id="notifChart"></canvas></div>
-  </div>
-  <div class="kpi-card">
-    <h3>ISO Notification Source Quality — Which Groups to Keep?</h3>
-    <div class="chart-container"><canvas id="notifSourceChart"></canvas></div>
-  </div>
-</div>
-
-<div class="rank-table">
-  <h3>ISO (Accommodation Request) Notification Quality — Keep / Add / Drop</h3>
-  <table id="notifTable">
-    <thead><tr><th>Group</th><th>Members</th><th>Notifications</th><th>Avg Score</th><th>Replied</th><th>Converted</th><th>Recommendation</th></tr></thead>
-    <tbody>
-      <tr><td><a href="https://www.facebook.com/groups/902669401133623/" target="_blank" style="color:#23372C;font-weight:700">Greater MI Vacation STR</a></td><td>40K</td><td>5</td><td style="color:#28a745;font-weight:700">7.2</td><td>3</td><td style="color:#28a745;font-weight:700">1</td><td style="color:#28a745;font-weight:700">🔴 KEEP — #1 lead source</td></tr>
-      <tr><td><a href="https://www.facebook.com/groups/276308850878370/" target="_blank" style="color:#23372C;font-weight:700">Michigan Cabin Rentals</a></td><td>52K</td><td>3</td><td style="color:#28a745">6.7</td><td>1</td><td>0</td><td style="color:#28a745;font-weight:700">🔴 KEEP — pure ISO group</td></tr>
-      <tr><td><a href="https://www.facebook.com/groups/michiganbucketlist/" target="_blank" style="color:#23372C;font-weight:700">Day Trips in Michigan</a></td><td>743K</td><td>2</td><td>5.5</td><td>1</td><td>0</td><td>🟡 KEEP — comment-only</td></tr>
-      <tr><td><a href="https://www.facebook.com/groups/691341305200368/" target="_blank" style="color:#23372C;font-weight:700">Vacation Rentals SW MI</a></td><td>4.5K</td><td>2</td><td>4.0</td><td>0</td><td>0</td><td>🟡 KEEP — lakefront skips</td></tr>
-      <tr><td><a href="https://www.facebook.com/groups/518397456396998/" target="_blank" style="color:#23372C;font-weight:700">Lake Michigan VR</a></td><td>26K</td><td>1</td><td style="color:#dc3545">3.0</td><td>0</td><td>0</td><td>🟡 Monitor — beachfront bias</td></tr>
-      <tr><td><a href="https://www.facebook.com/groups/southhavenmichigan/" target="_blank" style="color:#23372C;font-weight:700">South Haven MI</a></td><td>29K</td><td>1</td><td>4.0</td><td>0</td><td>0</td><td>🟡 KEEP — occasional ISOs</td></tr>
-      <tr><td><a href="https://www.facebook.com/groups/301913630886156/" target="_blank" style="color:#23372C;font-weight:700">Holland Informed</a></td><td>82K</td><td>1</td><td style="color:#dc3545">2.0</td><td>0</td><td>0</td><td>⚪ DROP from notifications (keep for posting)</td></tr>
-      <tr style="background:rgba(206,170,120,0.08)"><td colspan="7" style="font-style:italic;color:#888;padding:12px"><strong>Consider Adding:</strong> Michigan Short Term Rentals (~30K) · Fun Things to Do in MI (114K) · Michigan Everything (76K) · Upper MI Resorts (15K)</td></tr>
-    </tbody>
-  </table>
-</div>
-
-<!-- GROUP POINTS TRACKER -->
-<div class="rank-table">
-  <h3>Group Points — Comment Impact (Week of Apr 12)</h3>
-  <table id="pointsTable">
-    <thead><tr><th>Group</th><th>Members</th><th>Points</th><th>Trend</th><th>Strategy</th></tr></thead>
-    <tbody>
-      <tr><td><a href="https://www.facebook.com/groups/2630364940540577/" target="_blank" style="color:#23372C;font-weight:700">Sauglasville</a></td><td>11K</td><td style="font-weight:700;color:#28a745">522</td><td>Baseline</td><td>Community Q + Guide</td></tr>
-      <tr><td><a href="https://www.facebook.com/groups/1059200144109025/" target="_blank" style="color:#23372C;font-weight:700">Fennville Informed</a></td><td>8K</td><td style="font-weight:700;color:#28a745">109</td><td>Baseline</td><td>Neighbor + Pool</td></tr>
-      <tr><td><a href="https://www.facebook.com/groups/588030999323865/" target="_blank" style="color:#23372C;font-weight:700">Fennville & Surrounding</a></td><td>7.3K</td><td style="font-weight:700;color:#28a745">109</td><td>Baseline</td><td>Guide solicitation</td></tr>
-      <tr><td><a href="https://www.facebook.com/groups/301913630886156/" target="_blank" style="color:#23372C;font-weight:700">Holland Informed</a></td><td>82K</td><td style="font-weight:700">66</td><td>Baseline</td><td>Guide + value posts</td></tr>
-      <tr><td><a href="https://www.facebook.com/groups/703254738102778/" target="_blank" style="color:#23372C;font-weight:700">Hamilton Happenings</a></td><td>6.4K</td><td style="font-weight:700">64</td><td>Baseline</td><td>Community neighbor</td></tr>
-      <tr><td><a href="https://www.facebook.com/groups/902669401133623/" target="_blank" style="color:#23372C;font-weight:700">Greater MI Vacation STR</a></td><td>40K</td><td>35</td><td>Baseline</td><td>ISO replies</td></tr>
-      <tr><td><a href="https://www.facebook.com/groups/290777465557262/" target="_blank" style="color:#23372C;font-weight:700">Allegan County</a></td><td>58K</td><td>4</td><td>Baseline</td><td>Guide solicitation</td></tr>
-      <tr><td><a href="https://www.facebook.com/groups/1781983742045018/" target="_blank" style="color:#23372C;font-weight:700">Chicago Pickleball</a></td><td>17.8K</td><td>0</td><td>Day 1</td><td>Comment-only (7 days)</td></tr>
-      <tr><td><a href="https://www.facebook.com/groups/grpickleball/" target="_blank" style="color:#23372C;font-weight:700">GR Pickleball Club</a></td><td>11.6K</td><td>0</td><td>Day 1</td><td>Comment-only (7 days)</td></tr>
-      <tr><td><a href="https://www.facebook.com/groups/michiganpickleball/" target="_blank" style="color:#23372C;font-weight:700">Michigan Pickleball</a></td><td>7.1K</td><td>0</td><td>Day 1</td><td>Comment-only (7 days)</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.75rem;color:#888;padding:8px 22px;font-style:italic">Total: 909 points across all groups · Updated weekly (Monday 9 AM cron) · Points = Facebook's quality score for group contributions</p>
 </div>
 
 <!-- LEADS -->
-<div class="leads-card">
-  <h3>Booking Leads from Social (5 total)</h3>
-  <div class="lead-row">
-    <span class="lead-name">Cori Kay</span>
-    <span class="lead-detail">20 people · July 25-31 · Greater MI Vacation STR</span>
-    <span class="lead-status lead-hot">HOT</span>
-  </div>
-  <div class="lead-row">
-    <span class="lead-name">Mitchell P. Norton</span>
-    <span class="lead-detail">20 people · July 9-13 · Quote sent to norty5@gmail.com</span>
-    <span class="lead-status lead-hot">CONVERTED</span>
-  </div>
-  <div class="lead-row">
-    <span class="lead-name">Emili Villagomez</span>
-    <span class="lead-detail">2 guests · This weekend · Greater MI Vacation STR</span>
-    <span class="lead-status lead-warm">Replied</span>
-  </div>
-  <div class="lead-row">
-    <span class="lead-name">Miranda Dallas Campbell</span>
-    <span class="lead-detail">Family · Day Trips in Michigan (743K group)</span>
-    <span class="lead-status lead-warm">Replied</span>
-  </div>
-  <div class="lead-row">
-    <span class="lead-name">Michigan Cabin Rentals ISO</span>
-    <span class="lead-detail">2 guests · June 29-30 · Hot tub request</span>
-    <span class="lead-status lead-warm">Replied</span>
-  </div>
-</div>
-
-<!-- WHAT WORKS / DOESN'T -->
-<div class="section-title">What We've Learned — 10 Days of Data</div>
-<div class="insights-grid">
-  <div class="insight-card good">
-    <h4>What Drives Results</h4>
-    <ul>
-      <li><strong>Community question threads</strong> — avg score 52/post. Sauglasville (101 score) drove 34K page views</li>
-      <li><strong>Guest Guide solicitation</strong> — avg score 26/post. Businesses react to their own mentions</li>
-      <li><strong>Neighbor intro in local groups</strong> — SH Chatline: 196 reactions, 30 shares from one post</li>
-      <li><strong>Small groups 6-80K</strong> — 0.4-0.66% engagement rate vs 0% in 200K+ groups</li>
-      <li><strong>ISO reply pipeline</strong> — 5 leads in 4 days, 2 at #1 Most Relevant</li>
-      <li><strong>Pool + fire content</strong> — Pool avg score 32, firepit 26.6</li>
-      <li><strong>Real video over AI</strong> — pickleball reel with real footage posted to 2 groups tonight</li>
-    </ul>
-  </div>
-  <div class="insight-card bad">
-    <h4>What Doesn't Work</h4>
-    <ul>
-      <li><strong>Listing-style posts</strong> — avg score 1/post. Stop doing these in community groups</li>
-      <li><strong>Large groups 200K+</strong> — declined or zero engagement every time</li>
-      <li><strong>Links in post body</strong> — Facebook throttles reach. First comment only.</li>
-      <li><strong>Cold posts without prior comments</strong> — 100% decline rate</li>
-      <li><strong>X engagement via API</strong> — 403 blocked. Needs browser login.</li>
-      <li><strong>Stale CSV data</strong> — engagement logged at post time, not refreshed</li>
-      <li><strong>AI-generated video for pickleball</strong> — players on wrong sides, night scenes. Real footage wins.</li>
-    </ul>
-  </div>
-</div>
-
-<!-- GROUP RANKING -->
-<div class="rank-table">
-  <h3>Group Performance Ranking — Where to Double Down</h3>
-  <table>
-    <thead><tr><th>#</th><th>Group</th><th>Members</th><th>Posts</th><th>Score</th><th>Avg</th><th>Best Strategy</th></tr></thead>
+<div class="section">
+  <h2>ISO Leads Tracked</h2>
+  <table id="leadsTable">
+    <thead><tr>
+      <th onclick="sortTable('leadsTable',0)">Date</th>
+      <th onclick="sortTable('leadsTable',1)">Name</th>
+      <th onclick="sortTable('leadsTable',2)">Group</th>
+      <th onclick="sortTable('leadsTable',3)">Status</th>
+      <th onclick="sortTable('leadsTable',4)">Outcome</th>
+    </tr></thead>
     <tbody>
-      <tr><td>1</td><td><a href="https://www.facebook.com/groups/281193499185629/" target="_blank" style="color:#23372C;font-weight:700">Downtown SH Chatline</a></td><td>21K</td><td>1</td><td style="color:#28a745;font-weight:700">451</td><td>451</td><td>196R · 35C · 30S — neighbor intro, organic explosion</td></tr>
-      <tr><td>2</td><td><a href="https://www.facebook.com/groups/2630364940540577/" target="_blank" style="color:#23372C;font-weight:700">Sauglasville</a></td><td>11K</td><td>4</td><td style="color:#28a745;font-weight:700">200</td><td>50</td><td>30R · 55C · 1S — community questions + guest guide</td></tr>
-      <tr><td>3</td><td><a href="https://www.facebook.com/groups/1059200144109025/" target="_blank" style="color:#23372C;font-weight:700">Fennville Informed</a></td><td>8K</td><td>3</td><td>62</td><td>21</td><td>44R · 6C — neighbor tone, pool, tagged businesses</td></tr>
-      <tr><td>4</td><td><a href="https://www.facebook.com/groups/703254738102778/" target="_blank" style="color:#23372C;font-weight:700">Hamilton Happenings</a></td><td>6.4K</td><td>2</td><td>55</td><td>28</td><td>40R · 4C · 4S — guide post, community neighbor</td></tr>
-      <tr><td>5</td><td><a href="https://www.facebook.com/groups/588030999323865/" target="_blank" style="color:#23372C;font-weight:700">Fennville & Surrounding</a></td><td>7.3K</td><td>2</td><td>51</td><td>26</td><td>13R · 11C · 1S — guide solicitation, businesses reacting</td></tr>
-      <tr><td>6</td><td><a href="https://www.facebook.com/groups/301913630886156/" target="_blank" style="color:#23372C;font-weight:700">Holland Informed</a></td><td>82K</td><td>2</td><td>31</td><td>16</td><td>21R · 2S — guide + value posts</td></tr>
-      <tr><td>7</td><td><a href="https://www.facebook.com/groups/902669401133623/" target="_blank" style="color:#23372C;font-weight:700">Greater MI Vacation STR</a></td><td>40K</td><td>3</td><td>—</td><td>—</td><td>ISO pipeline — Mitchell Norton + Cori Kay + Emili converted</td></tr>
-      <tr><td>8</td><td><a href="https://www.facebook.com/groups/276308850878370/" target="_blank" style="color:#23372C;font-weight:700">Michigan Cabin Rentals</a></td><td>52K</td><td>2</td><td>—</td><td>—</td><td>ISO replies — June 29-30 hot tub lead</td></tr>
-      <tr><td>9</td><td><a href="https://www.facebook.com/groups/1781983742045018/" target="_blank" style="color:#23372C;font-weight:700">Chicago Pickleball</a></td><td>17.8K</td><td>1</td><td>—</td><td>—</td><td>Reel posted + charity tournament comment — building</td></tr>
-      <tr style="background: rgba(206,170,120,0.08)"><td colspan="7" style="font-style:italic;color:#888;text-align:center">Groups below scored 0 or were declined — deprioritized</td></tr>
+      <tr>
+        <td>2026-04-06</td>
+        <td>Michigan Cabin Rentals ISO</td>
+        <td>Michigan Cabin Rentals</td>
+        <td><span class="badge badge-green">replied</span></td>
+        <td>comment live</td>
+      </tr>      <tr>
+        <td>2026-04-07</td>
+        <td>Mitchell P. Norton</td>
+        <td>Greater MI Vacation STR</td>
+        <td><span class="badge badge-green">quote sent</span></td>
+        <td>converted - email to norty5@gmail.com</td>
+      </tr>      <tr>
+        <td>2026-04-07</td>
+        <td>Emili Villagomez</td>
+        <td>Greater MI Vacation STR</td>
+        <td><span class="badge badge-green">replied</span></td>
+        <td>#1 Most Relevant</td>
+      </tr>      <tr>
+        <td>2026-04-08</td>
+        <td>Cori Kay</td>
+        <td>Greater MI Vacation STR</td>
+        <td><span class="badge badge-green">replied</span></td>
+        <td>#1 Most Relevant - 20 people July 25-31</td>
+      </tr>      <tr>
+        <td>2026-04-07</td>
+        <td>Miranda Dallas Campbell</td>
+        <td>Day Trips in Michigan</td>
+        <td><span class="badge badge-green">replied</span></td>
+        <td>#1 Most Relevant - family cabin camping</td>
+      </tr>
     </tbody>
   </table>
 </div>
 
-<!-- GOOGLE REVIEWS -->
-<div class="rank-table">
-  <h3>Google Reviews Status</h3>
-  <table>
-    <thead><tr><th>Metric</th><th>Value</th></tr></thead>
-    <tbody>
-      <tr><td>Rating</td><td><strong>4.8 / 5</strong></td></tr>
-      <tr><td>Total reviews</td><td>52</td></tr>
-      <tr><td>Replied today (Apr 10)</td><td>12 replied — 10 remaining</td></tr>
-      <tr><td>Negative reviews (1-2 stars)</td><td>1 — Morgan Manza (1 star) — escalated to Mihai</td></tr>
-    </tbody>
-  </table>
+<!-- STRATEGY NOTES -->
+<div class="section">
+  <h2>Key Strategy Notes — April 2026</h2>
+  <ul style="line-height:2; padding-left:20px; font-size:0.9rem;">
+    <li><strong>Follower acquisition funnel:</strong> Post reaction → Mihai invites reactor → follower → future booking</li>
+    <li><strong>Booking lead time (2026):</strong> Median 58 days | Avg 132 days | Q3 215 days — content should run 2+ months ahead of target dates</li>
+    <li><strong>Top performing content:</strong> Pool/amenity announcements, local area questions, cabin personality posts</li>
+    <li><strong>New pillar — Place Before Product:</strong> Area-first content driving likes and brand recognition in Chicago, GR, and SW Michigan audiences</li>
+    <li><strong>Saturation rule:</strong> Max 1 post per group visible on profile page before posting again. CSV is not source of truth — check Facebook directly.</li>
+    <li><strong>X (@DollybrookMI):</strong> Paused until Apr 28 per Mihai directive</li>
+  </ul>
 </div>
 
 </div>
 
-
-<div class="section-title">Content Pillar Performance — Weekly Progression</div>
-<p style="font-size:0.82rem;color:#888;margin-bottom:16px">Metric: <strong>Median engagement score per post</strong> (reactions + comments×3 + shares×5). Median eliminates outlier distortion. Consistency % = posts scoring ≥10. Data refreshes every Monday.</p>
-
-<div class="kpi-grid" style="margin-bottom:20px">
-  <div class="kpi-card">
-    <h3>Median Score by Pillar — Week over Week</h3>
-    <div class="chart-container" style="height:280px"><canvas id="pillarTrendChart"></canvas></div>
-  </div>
-  <div class="kpi-card">
-    <h3>Consistency Rate (% posts scoring ≥10)</h3>
-    <div class="chart-container" style="height:280px"><canvas id="pillarConsistencyChart"></canvas></div>
-  </div>
-</div>
-
-<div class="rank-table" style="margin-bottom:24px">
-  <h3>Pillar Performance Detail — All Weeks</h3>
-  <table id="pillarTable">
-    <thead><tr><th>Pillar</th><th>Wk1 Median</th><th>Wk1 Posts</th><th>Wk1 Consistency</th><th>Wk2 Median</th><th>Wk2 Posts</th><th>Wk2 Consistency</th><th>Wk3+</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Story / Repeat / Neighbor</strong></td><td style="color:#28a745;font-weight:700">7</td><td>7</td><td style="color:#28a745">43%</td><td style="color:#CEAA78">53</td><td>1</td><td>100%</td><td style="color:#999;font-style:italic">Pending</td></tr>
-      <tr><td><strong>Pool Content</strong></td><td style="color:#CEAA78;font-weight:700">1</td><td>7</td><td>14%</td><td>0</td><td>2</td><td>0%</td><td style="color:#999;font-style:italic">Pending</td></tr>
-      <tr><td><strong>Community Guide</strong></td><td>39</td><td>1</td><td>100%</td><td>0</td><td>5</td><td>0%*</td><td style="color:#999;font-style:italic">Pending</td></tr>
-      <tr><td><strong>Group / Flex</strong></td><td>1</td><td>2</td><td>0%</td><td>0</td><td>1</td><td>0%*</td><td style="color:#999;font-style:italic">Pending</td></tr>
-      <tr><td><strong>Pickleball</strong></td><td>—</td><td>0</td><td>—</td><td>0</td><td>1</td><td>0%*</td><td style="color:#999;font-style:italic">Pending</td></tr>
-      <tr><td><strong>Influencers / Girls Trip</strong></td><td>—</td><td>0</td><td>—</td><td>—</td><td>0</td><td>—</td><td style="color:#999;font-style:italic">Pending</td></tr>
-      <tr style="background:rgba(206,170,120,0.06)"><td colspan="8" style="font-size:0.75rem;color:#888;font-style:italic;padding:10px">* Wk2 scores showing 0 = engagement data not yet refreshed. Monday cron updates these. True engagement is higher.</td></tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="footer">
-  <strong>DollyBrook Resort</strong> &nbsp;·&nbsp; Marketing Dashboard v2.0 &nbsp;·&nbsp; Agent Xavier &nbsp;·&nbsp; April 10, 2026 &nbsp;|&nbsp;
-  <a href="https://dollybrook.com">dollybrook.com</a> &nbsp;·&nbsp;
-  <a href="marketing-kpis-v1.html">Compare v1.0</a>
-</div>
+<div class="footer">DollyBrook Family Resort · dollybrook.com · Generated by Xavier · April 18, 2026</div>
 
 <script>
-new Chart(document.getElementById('followersChart'), {
+// Follower chart
+new Chart(document.getElementById('followerChart'), {
   type: 'line',
   data: {
-    labels: ['Mar 31','Apr 2','Apr 5','Apr 6','Apr 7','Apr 8','Apr 9','Apr 10','Apr 11','Apr 12','Apr 13','Apr 14','Apr 15','Apr 16'],
+    labels: ["2026-03-31", "2026-04-02", "2026-04-05", "2026-04-06", "2026-04-07", "2026-04-08", "2026-04-09", "2026-04-10", "2026-04-11", "2026-04-12", "2026-04-13", "2026-04-18"],
     datasets: [{
       label: 'Followers',
-      data: [4649,4649,4649,4649,4663,4682,4691,4703,4712,4721,4724,4737,4751,4794],
-      borderColor: '#23372C', backgroundColor: 'rgba(35,55,44,0.06)',
-      tension: 0.35, fill: true, pointBackgroundColor: '#23372C', pointRadius: 5, pointBorderColor: '#fff', pointBorderWidth: 2
+      data: [4649, 4649, 4649, 4649, 4663, 4682, 4691, 4703, 4712, 4721, 4724, 4884],
+      borderColor: '#23372C',
+      backgroundColor: 'rgba(35,55,44,0.1)',
+      tension: 0.3,
+      fill: true,
+      pointRadius: 4
     }]
   },
   options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(ctx) { return ctx.parsed.y.toLocaleString() + ' followers'; } } } },
-    scales: { y: { min: 4640, ticks: { font: { family: 'Lato', size: 11 } }, grid: { color: 'rgba(206,170,120,0.2)' } }, x: { ticks: { font: { family: 'Lato', size: 10 } }, grid: { color: 'rgba(206,170,120,0.15)' } } }
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { min: 4599, ticks: { precision: 0 } },
+      x: { ticks: { maxRotation: 45 } }
+    }
   }
 });
 
-new Chart(document.getElementById('engagementChart'), {
+// Weekly posts chart
+new Chart(document.getElementById('weekChart'), {
   type: 'bar',
   data: {
-    labels: ['Week 1\n(Mar 31-Apr 6)','Week 2\n(Apr 7-13)'],
+    labels: ["Apr 04", "Apr 10", "Apr 18"],
     datasets: [
-      { label: 'Reactions', data: [278,82], backgroundColor: '#23372C', borderRadius: 4 },
-      { label: 'Comments x3', data: [126,84], backgroundColor: '#CEAA78', borderRadius: 4 },
-      { label: 'Shares x5', data: [180,5], backgroundColor: 'rgba(35,55,44,0.25)', borderRadius: 4 }
+      { label: 'Total Posts', data: [30, 45, 22], backgroundColor: 'rgba(35,55,44,0.7)' },
+      { label: 'Live', data: [16, 12, 9], backgroundColor: 'rgba(206,170,120,0.9)' }
     ]
   },
   options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { position: 'bottom', labels: { font: { family: 'Lato', size: 10 } } } },
-    scales: { x: { stacked: true, ticks: { font: { family: 'Lato', size: 10 } }, grid: { display: false } }, y: { stacked: true, ticks: { font: { family: 'Lato', size: 10 } }, grid: { color: 'rgba(206,170,120,0.2)' } } }
+    plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } },
+    scales: { y: { ticks: { precision: 0 } } }
   }
 });
 
-new Chart(document.getElementById('groupChart'), {
-  type: 'bar',
-  data: {
-    labels: ['SH Chatline\n(21K)','Sauglasville\n(11K)','Fennville\nInformed (8K)','F&S Areas\n(7.3K)','Hamilton\n(6.4K)','Holland\n(82K)'],
-    datasets: [{ label: 'Total Score', data: [301,200,62,51,50,31], backgroundColor: ['#28a745','#23372C','#23372C','#CEAA78','#CEAA78','#CEAA78'], borderRadius: 6 }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false, indexAxis: 'y',
-    plugins: { legend: { display: false } },
-    scales: { x: { ticks: { font: { family: 'Lato', size: 10 } }, grid: { color: 'rgba(206,170,120,0.2)' } }, y: { ticks: { font: { family: 'Lato', size: 9 } }, grid: { display: false } } }
-  }
-});
-
-new Chart(document.getElementById('contentChart'), {
-  type: 'bar',
-  data: {
-    labels: ['Neighbor\nIntro (1)','Community\nQuestion (4)','Guest Guide\n(6)','ISO\nReply (5)','Listing/\nPromo (13)'],
-    datasets: [{ label: 'Avg Score', data: [301,52,26,0,1], backgroundColor: ['#CEAA78','#23372C','#28a745','#999','#dc3545'], borderRadius: 6 }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false }, tooltip: { callbacks: { title: function(items) { return items[0].label.replace('\n',' '); } } } },
-    scales: { x: { ticks: { font: { family: 'Lato', size: 9 } }, grid: { display: false } }, y: { ticks: { font: { family: 'Lato', size: 10 } }, grid: { color: 'rgba(206,170,120,0.2)' } } }
-  }
-});
-</script>
-
-<script>
-// Make ALL tables sortable
-document.querySelectorAll('table').forEach(function(table) {
-  var headers = table.querySelectorAll('thead th');
-  var sortCol = -1, sortAsc = true;
-  headers.forEach(function(th, col) {
-    th.style.cursor = 'pointer';
-    th.addEventListener('click', function() {
-      if (sortCol === col) { sortAsc = !sortAsc; } else { sortCol = col; sortAsc = true; }
-      headers.forEach(function(h) { h.classList.remove('sort-asc', 'sort-desc'); });
-      th.classList.add(sortAsc ? 'sort-asc' : 'sort-desc');
-      var tbody = table.querySelector('tbody');
-      if (!tbody) return;
-      var rows = Array.from(tbody.querySelectorAll('tr'));
-      rows.sort(function(a, b) {
-        var aRaw = a.cells[col] ? a.cells[col].innerText.trim() : '';
-        var bRaw = b.cells[col] ? b.cells[col].innerText.trim() : '';
-        var aNum = parseFloat(aRaw.replace(/[^0-9.]/g, ''));
-        var bNum = parseFloat(bRaw.replace(/[^0-9.]/g, ''));
-        if (!isNaN(aNum) && !isNaN(bNum)) return sortAsc ? aNum - bNum : bNum - aNum;
-        if (aRaw.toLowerCase() < bRaw.toLowerCase()) return sortAsc ? -1 : 1;
-        if (aRaw.toLowerCase() > bRaw.toLowerCase()) return sortAsc ? 1 : -1;
-        return 0;
-      });
-      rows.forEach(function(r) { tbody.appendChild(r); });
-    });
+// Sortable tables
+function sortTable(tableId, col) {
+  var tbl = document.getElementById(tableId).querySelector('tbody');
+  var rows = Array.from(tbl.querySelectorAll('tr'));
+  var asc = tbl.dataset.sortCol == col && tbl.dataset.sortDir == 'asc';
+  rows.sort((a,b) => {
+    var av = a.cells[col].innerText.trim();
+    var bv = b.cells[col].innerText.trim();
+    var an = parseFloat(av), bn = parseFloat(bv);
+    if (!isNaN(an) && !isNaN(bn)) return asc ? bn-an : an-bn;
+    return asc ? bv.localeCompare(av) : av.localeCompare(bv);
   });
-});
-
-// Notification Volume & Quality
-new Chart(document.getElementById('notifChart'), {
-  type: 'bar',
-  data: {
-    labels: ['Week Apr 6-11'],
-    datasets: [
-      { label: 'Total Notifications', data: [15], backgroundColor: '#23372C', borderRadius: 6 },
-      { label: 'Replied', data: [5], backgroundColor: '#28a745', borderRadius: 6 },
-      { label: 'Converted', data: [1], backgroundColor: '#CEAA78', borderRadius: 6 }
-    ]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { position: 'bottom', labels: { font: { family: 'Lato', size: 10 } } } },
-    scales: { y: { ticks: { font: { family: 'Lato', size: 10 } }, grid: { color: 'rgba(206,170,120,0.2)' } }, x: { grid: { display: false } } }
-  }
-});
-
-// Notification Source Quality
-new Chart(document.getElementById('notifSourceChart'), {
-  type: 'bar',
-  data: {
-    labels: ['Greater MI\nVacation STR', 'MI Cabin\nRentals', 'Day Trips\nMI', 'VR SW MI', 'Lake MI VR', 'South Haven', 'Holland\nInformed'],
-    datasets: [{ label: 'Avg Quality Score', data: [7.2, 6.7, 5.5, 4.0, 3.0, 4.0, 2.0], backgroundColor: ['#28a745','#28a745','#CEAA78','#CEAA78','#dc3545','#CEAA78','#dc3545'], borderRadius: 6 }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false, indexAxis: 'y',
-    plugins: { legend: { display: false } },
-    scales: { x: { min: 0, max: 10, ticks: { font: { family: 'Lato', size: 10 } }, grid: { color: 'rgba(206,170,120,0.2)' } }, y: { ticks: { font: { family: 'Lato', size: 9 } }, grid: { display: false } } }
-  }
-});
-
-// PILLAR TREND — Median score per post, week over week
-// Format: null = no data yet, number = median score
-// Weeks: W1 (Mar31-Apr6), W2 (Apr7-13), W3 (Apr14-20), W4 (Apr21-27), W5 (Apr28+)
-var weeks = ['W1\nMar31', 'W2\nApr7', 'W3\nApr14', 'W4\nApr21', 'W5\nApr28'];
-
-var pillarData = {
-  'Story/Neighbor': { color: '#23372C', data: [7, 53, null, null, null] },
-  'Community Guide': { color: '#28a745', data: [39, null, null, null, null] },
-  'Pool': { color: '#CEAA78', data: [1, null, null, null, null] },
-  'Group/Flex': { color: '#3b82f6', data: [1, null, null, null, null] },
-  'Pickleball': { color: '#a855f7', data: [null, null, null, null, null] },
-};
-
-new Chart(document.getElementById('pillarTrendChart'), {
-  type: 'line',
-  data: {
-    labels: weeks,
-    datasets: Object.entries(pillarData).map(function([name, d]) {
-      return {
-        label: name,
-        data: d.data,
-        borderColor: d.color,
-        backgroundColor: d.color + '20',
-        pointBackgroundColor: d.color,
-        pointRadius: 6,
-        pointBorderColor: '#fff',
-        pointBorderWidth: 2,
-        tension: 0.3,
-        spanGaps: false
-      };
-    })
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: {
-      legend: { position: 'bottom', labels: { font: { family: 'Lato', size: 10 }, usePointStyle: true } },
-      tooltip: { callbacks: { label: function(ctx) { return ctx.dataset.label + ': median score ' + (ctx.parsed.y || '—'); } } }
-    },
-    scales: {
-      y: { min: 0, ticks: { font: { family: 'Lato', size: 10 } }, grid: { color: 'rgba(206,170,120,0.2)' }, title: { display: true, text: 'Median score / post', font: { family: 'Lato', size: 10 } } },
-      x: { ticks: { font: { family: 'Lato', size: 9 } }, grid: { display: false } }
-    }
-  }
-});
-
-// CONSISTENCY — % posts scoring ≥10 per pillar per week
-var consistencyData = {
-  'Story/Neighbor': { color: '#23372C', data: [43, 100, null, null, null] },
-  'Community Guide': { color: '#28a745', data: [100, null, null, null, null] },
-  'Pool': { color: '#CEAA78', data: [14, null, null, null, null] },
-  'Group/Flex': { color: '#3b82f6', data: [0, null, null, null, null] },
-};
-
-new Chart(document.getElementById('pillarConsistencyChart'), {
-  type: 'line',
-  data: {
-    labels: weeks,
-    datasets: Object.entries(consistencyData).map(function([name, d]) {
-      return {
-        label: name,
-        data: d.data,
-        borderColor: d.color,
-        backgroundColor: d.color + '20',
-        pointBackgroundColor: d.color,
-        pointRadius: 6,
-        pointBorderColor: '#fff',
-        pointBorderWidth: 2,
-        tension: 0.3,
-        spanGaps: false
-      };
-    })
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: {
-      legend: { position: 'bottom', labels: { font: { family: 'Lato', size: 10 }, usePointStyle: true } },
-      tooltip: { callbacks: { label: function(ctx) { return ctx.dataset.label + ': ' + (ctx.parsed.y || '0') + '% posts worked'; } } }
-    },
-    scales: {
-      y: { min: 0, max: 100, ticks: { callback: function(v) { return v + '%'; }, font: { family: 'Lato', size: 10 } }, grid: { color: 'rgba(206,170,120,0.2)' }, title: { display: true, text: '% posts scoring ≥10', font: { family: 'Lato', size: 10 } } },
-      x: { ticks: { font: { family: 'Lato', size: 9 } }, grid: { display: false } }
-    }
-  }
-});
+  rows.forEach(r => tbl.appendChild(r));
+  tbl.dataset.sortCol = col;
+  tbl.dataset.sortDir = asc ? 'desc' : 'asc';
+}
 </script>
 </body>
 </html>
