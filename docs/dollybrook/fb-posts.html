@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DollyBrook — Facebook Posts Log</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --green: #23372C;
+    --eggshell: #F1F0D9;
+    --gold: #CEAA78;
+    --green-light: #2e4a3c;
+    --green-dark: #1a2920;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Lato', Arial, sans-serif; background: var(--eggshell); color: var(--green); }
+
+  header {
+    background: var(--green);
+    color: var(--eggshell);
+    padding: 32px 40px 24px;
+    border-bottom: 4px solid var(--gold);
+  }
+  header h1 { font-size: 28px; font-weight: 900; letter-spacing: 0.5px; }
+  header p.subtitle { font-size: 14px; color: var(--gold); margin-top: 6px; font-weight: 400; }
+  header p.updated { font-size: 12px; color: rgba(241,240,217,0.6); margin-top: 4px; }
+
+  .container { max-width: 1400px; margin: 0 auto; padding: 32px 24px; }
+
+  /* Stat Cards */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+  .stat-card {
+    background: var(--green);
+    color: var(--eggshell);
+    border-radius: 10px;
+    padding: 20px 16px;
+    text-align: center;
+    border-bottom: 3px solid var(--gold);
+  }
+  .stat-card .number { font-size: 32px; font-weight: 900; color: var(--gold); }
+  .stat-card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 6px; color: rgba(241,240,217,0.8); }
+
+  /* Section headers */
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--green);
+    margin: 36px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(35,55,44,0.1); }
+  table { width: 100%; border-collapse: collapse; background: #fff; }
+  thead tr { background: var(--green); color: var(--eggshell); }
+  thead th {
+    padding: 12px 14px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  thead th:hover { background: var(--green-light); }
+  thead th.sort-asc::after { content: ' ▲'; color: var(--gold); font-size: 10px; }
+  thead th.sort-desc::after { content: ' ▼'; color: var(--gold); font-size: 10px; }
+  tbody tr { border-bottom: 1px solid rgba(35,55,44,0.08); transition: background 0.15s; }
+  tbody tr:hover { background: rgba(206,170,120,0.1); }
+  tbody td { padding: 10px 14px; font-size: 13px; vertical-align: top; }
+  tbody td.date { white-space: nowrap; font-weight: 700; color: var(--green-light); }
+  tbody td.snippet { max-width: 280px; }
+  tbody td.notes { max-width: 220px; font-size: 12px; color: #555; }
+
+  /* Status badges */
+  .badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .badge-live { background: #d4edda; color: #155724; }
+  .badge-declined { background: #f8d7da; color: #721c24; }
+  .badge-pending { background: #fff3cd; color: #856404; }
+  .badge-comment { background: #d1ecf1; color: #0c5460; }
+  .badge-reply { background: #e2d9f3; color: #432e6d; }
+  .badge-lead { background: #23372C; color: #CEAA78; border: 1px solid var(--gold); }
+
+  /* Comment table smaller */
+  .comment-table tbody td { font-size: 12px; }
+
+  footer {
+    margin-top: 48px;
+    padding: 20px 24px;
+    text-align: center;
+    font-size: 11px;
+    color: rgba(35,55,44,0.45);
+    border-top: 1px solid rgba(35,55,44,0.1);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🌿 DollyBrook — Facebook Posts Log</h1>
+  <p class="subtitle">All posts, comments &amp; ISO replies across Facebook groups</p>
+  <p class="updated">Updated: April 22, 2026</p>
+</header>
+
+<div class="container">
+
+  <!-- Stat Cards -->
+  <div class="stats-grid">
+    <div class="stat-card"><div class="number">95</div><div class="label">Total Posts / Actions</div></div>
+    <div class="stat-card"><div class="number">42</div><div class="label">Live &amp; Approved</div></div>
+    <div class="stat-card"><div class="number">0</div><div class="label">Pending Approval</div></div>
+    <div class="stat-card"><div class="number">28</div><div class="label">Declined / Removed</div></div>
+    <div class="stat-card"><div class="number">25</div><div class="label">Comments Posted</div></div>
+    <div class="stat-card"><div class="number">4</div><div class="label">ISO Replies</div></div>
+    <div class="stat-card"><div class="number">5</div><div class="label">Leads Generated</div></div>
+  </div>
+
+  <!-- Main Posts Table -->
+  <div class="section-title">All Posts &amp; Actions</div>
+  <div class="table-wrap">
+    <table id="postsTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable('postsTable',0)">Date</th>
+          <th onclick="sortTable('postsTable',1)">Group</th>
+          <th onclick="sortTable('postsTable',2)">Type</th>
+          <th onclick="sortTable('postsTable',3)">Status</th>
+          <th onclick="sortTable('postsTable',4)">Snippet</th>
+          <th onclick="sortTable('postsTable',5)">Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="date">2026-03-31</td><td>Downtown South Haven MI Chatline</td><td>Post</td><td><span class="badge badge-live">Live ✅</span><br/><small>196 rxn, 35 comments, 30 shares</small></td><td class="snippet">Hey South Haven neighbors! Wanted to introduce ourselves</td><td class="notes">196 reactions — best early post</td></tr>
+        <tr><td class="date">2026-03-31</td><td>Southwest Michigan</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">Hey Southwest Michigan! We're DollyBrook Resort</td><td class="notes">Approved by admin</td></tr>
+        <tr><td class="date">2026-03-31</td><td>Vacation Rentals in SW Michigan</td><td>Post</td><td><span class="badge badge-live">Live ✅</span><br/><small>1 rxn</small></td><td class="snippet">DollyBrook Resort - Fennville MI. 9 private cabins</td><td class="notes">Direct rental pitch</td></tr>
+        <tr><td class="date">2026-03-31</td><td>Fennville Informed</td><td>Post</td><td><span class="badge badge-live">Live ✅</span><br/><small>44 rxn!</small></td><td class="snippet">Hey Fennville neighbors! We're right here in town</td><td class="notes">44 reactions — locals asked about pool</td></tr>
+        <tr><td class="date">2026-03-31</td><td>South Haven Michigan</td><td>Post</td><td><span class="badge badge-declined">Declined ❌</span></td><td class="snippet">Spring is almost here and we're getting the cabins ready</td><td class="notes">Not approved by admin</td></tr>
+        <tr><td class="date">2026-03-31</td><td>West Michigan Travel Ideas</td><td>Post</td><td><span class="badge badge-declined">Declined ❌</span></td><td class="snippet">Planning a West Michigan getaway this spring</td><td class="notes">Not approved</td></tr>
+        <tr><td class="date">2026-03-31</td><td>Things to do in Southwest MI</td><td>Post</td><td><span class="badge badge-declined">Declined ❌</span></td><td class="snippet">Looking for a home base while exploring SW Michigan</td><td class="notes">Removed after going live</td></tr>
+        <tr><td class="date">2026-03-31</td><td>Saugatuck Underground</td><td>Post</td><td><span class="badge badge-declined">Declined ❌</span></td><td class="snippet">Saugatuck has the art. We have the place to sleep it off</td><td class="notes">Not approved</td></tr>
+        <tr><td class="date">2026-03-31</td><td>South Haven Vacation Homes</td><td>Post</td><td><span class="badge badge-declined">Declined ❌</span></td><td class="snippet">Looking for a cabin getaway near South Haven</td><td class="notes">Not approved</td></tr>
+        <tr><td class="date">2026-03-31</td><td>Sauglasville</td><td>Post</td><td><span class="badge badge-live">Live ✅</span><br/><small>17 rxn, 28 comments</small></td><td class="snippet">Love seeing this group so active heading into spring</td><td class="notes">Sparked massive thread</td></tr>
+        <tr><td class="date">2026-04-02</td><td>Holland Informed</td><td>Post</td><td><span class="badge badge-live">Live ✅</span><br/><small>21 rxn, 2 shares</small></td><td class="snippet">Just wanted to pop in and say hi to the Holland community</td><td class="notes">Strong engagement</td></tr>
+        <tr><td class="date">2026-04-02</td><td>Allegan County Informed</td><td>Post</td><td><span class="badge badge-live">Live ✅</span><br/><small>1 rxn</small></td><td class="snippet">Hello Allegan County neighbors!</td><td class="notes">Community neighbor tone</td></tr>
+        <tr><td class="date">2026-04-02</td><td>Fennville Informed</td><td>Post</td><td><span class="badge badge-live">Live ✅</span><br/><small>44 rxn</small></td><td class="snippet">Fennville friends — happy spring from your neighbors</td><td class="notes">Best post — locals asking about pool</td></tr>
+        <tr><td class="date">2026-04-02</td><td>Fennville &amp; Surrounding Areas</td><td>Post</td><td><span class="badge badge-live">Live ✅</span><br/><small>6 rxn</small></td><td class="snippet">Spring greetings from DollyBrook Resort</td><td class="notes">Went live immediately</td></tr>
+        <tr><td class="date">2026-04-02</td><td>Michigan Properties &amp; Cabins</td><td>Post</td><td><span class="badge badge-pending">Pending ⏳</span></td><td class="snippet">Curious what other Michigan property owners think</td><td class="notes">Never approved</td></tr>
+        <tr><td class="date">2026-04-02</td><td>Hamilton Happenings</td><td>Post</td><td><span class="badge badge-live">Live ✅</span><br/><small>29 rxn, 2 comments, 3 shares</small></td><td class="snippet">Hey Hamilton neighbors — waving from just down the road</td><td class="notes">Strong engagement</td></tr>
+        <tr><td class="date">2026-04-03</td><td>Sauglasville</td><td>Post</td><td><span class="badge badge-live">Live ✅</span><br/><small>2 rxn</small></td><td class="snippet">Spring is here and we're ready for the season</td><td class="notes">Intro/listing post</td></tr>
+        <tr><td class="date">2026-04-04</td><td>Sauglasville</td><td>Post</td><td><span class="badge badge-live">Live ✅</span><br/><small>6 rxn, 11 comments</small></td><td class="snippet">The DollyBrook Guest Dining Guide — Built by Sauglasville</td><td class="notes">Community guide return</td></tr>
+        <tr><td class="date">2026-04-04</td><td>WHAT TO DO IN CHICAGO</td><td>Post</td><td><span class="badge badge-declined">Declined ❌</span></td><td class="snippet">If you haven't done a Michigan weekend trip yet</td><td class="notes">Chicago activities group</td></tr>
+        <tr><td class="date">2026-04-05</td><td>Growing Up in Chicago</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">Southwest Michigan has been Chicago's backyard getaway</td><td class="notes">Chicago nostalgia group</td></tr>
+        <tr><td class="date">2026-04-05</td><td>Abandoned Old and Interesting Places in MI</td><td>Post</td><td><span class="badge badge-declined">Declined ❌</span></td><td class="snippet">DollyBrook Resort has been here for 13 years</td><td class="notes">420K group — not approved</td></tr>
+        <tr><td class="date">2026-04-05</td><td>Michigan Cabin Rentals</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">DollyBrook Resort - Fennville MI (near Saugatuck)</td><td class="notes">52K listing group</td></tr>
+        <tr><td class="date">2026-04-06</td><td>Southwest Michigan Wedding Group</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">Calling all SW Michigan brides and wedding planners</td><td class="notes">Vendor post 8.5K group</td></tr>
+        <tr><td class="date">2026-04-06</td><td>Overheard in Michigan Ski Resorts</td><td>Post</td><td><span class="badge badge-declined">Declined ❌</span></td><td class="snippet">Spring pivot angle — ski season wrapping up</td><td class="notes">Not approved</td></tr>
+        <tr><td class="date">2026-04-06</td><td>Greater Michigan - Vacation STR</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">DollyBrook Resort - Fennville MI (near Saugatuck)</td><td class="notes">40K VR listing group</td></tr>
+        <tr><td class="date">2026-04-07</td><td>Event Planners Club</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">Looking for a unique Michigan venue</td><td class="notes">78K event planners group</td></tr>
+        <tr><td class="date">2026-04-07</td><td>Southwest Michigan</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">Pool season countdown is ON at DollyBrook</td><td class="notes">Pool countdown post</td></tr>
+        <tr><td class="date">2026-04-07</td><td>Sauglasville</td><td>Post</td><td><span class="badge badge-live">Live ✅</span><br/><small>5 rxn, 16 comments</small></td><td class="snippet">Spring evening question for the Sauglasville community</td><td class="notes">Community question post</td></tr>
+        <tr><td class="date">2026-04-07</td><td>Greater MI Vacation STR</td><td>ISO Reply</td><td><span class="badge badge-lead">LEAD CONVERTED 🏆</span></td><td class="snippet">Mitchell Norton reply — quote request</td><td class="notes">Quote sent to norty5@gmail.com</td></tr>
+        <tr><td class="date">2026-04-08</td><td>Hamilton Happenings</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">Something we have been working on for our guests</td><td class="notes">Guest guide post</td></tr>
+        <tr><td class="date">2026-04-08</td><td>Allegan County Informed</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">We put together a local area guide for our guests</td><td class="notes">Guide post</td></tr>
+        <tr><td class="date">2026-04-08</td><td>Fennville &amp; Surrounding Areas</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">Something we put together for our guests</td><td class="notes">Guide post</td></tr>
+        <tr><td class="date">2026-04-09</td><td>Holland Informed</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">Something we put together for our DollyBrook guests</td><td class="notes">Guest guide 82K group</td></tr>
+        <tr><td class="date">2026-04-10</td><td>Fennville Informed</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">Something we put together for our guests</td><td class="notes">Guest guide</td></tr>
+        <tr><td class="date">2026-04-10</td><td>Lake Michigan Vacation Rentals</td><td>ISO Reply</td><td><span class="badge badge-comment">Comment ✅</span></td><td class="snippet">Hi Alexandria! DollyBrook Resort in Fennville</td><td class="notes">4th of July lead</td></tr>
+        <tr><td class="date">2026-04-13</td><td>Sauglasville</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">Every spring we do a walkthrough of each cabin</td><td class="notes">Sled Loft spring story — confirmed live Apr 22</td></tr>
+        <tr><td class="date">2026-04-13</td><td>Vacation Rentals in SW Michigan</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">One of the things I track that nobody talks about</td><td class="notes">Repeat rate by cabin — confirmed live Apr 22</td></tr>
+        <tr><td class="date">2026-04-13</td><td>Southwest Michigan Wedding Group</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">For bachelorette planners in SW Michigan</td><td class="notes">Bachelorette angle — confirmed live Apr 22</td></tr>
+        <tr><td class="date">2026-04-15</td><td>Saugatuck Underground</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">Started as a single cabin in the woods in Fennville</td><td class="notes">13-year story pillar</td></tr>
+        <tr><td class="date">2026-04-15</td><td>Greater MI Vacation STR</td><td>ISO Reply</td><td><span class="badge badge-reply">Reply ✅</span></td><td class="snippet">If you are open to exploring a bit south...</td><td class="notes">4-bed request July 28-Aug 2</td></tr>
+        <tr><td class="date">2026-04-17</td><td>Hamilton Happenings</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">Spring is hitting different at The Sled Loft</td><td class="notes">Cabin story pillar</td></tr>
+        <tr><td class="date">2026-04-17</td><td>Holland Informed</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">Something a lot of Holland families do that I love</td><td class="notes">Family/small group angle</td></tr>
+        <tr><td class="date">2026-04-17</td><td>Allegan County Informed</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">Honest question for Allegan County folks</td><td class="notes">Family visit angle</td></tr>
+        <tr><td class="date">2026-04-18</td><td>Taste of West Michigan</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">One thing guests always ask when they check in</td><td class="notes">Awareness strategy</td></tr>
+        <tr><td class="date">2026-04-18</td><td>Sauglasville</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">Quick community question for the Sauglasville neighbors</td><td class="notes">Awareness strategy</td></tr>
+        <tr><td class="date">2026-04-18</td><td>Michigan Cabin Rentals</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">For anyone planning a summer cabin trip</td><td class="notes">Awareness strategy</td></tr>
+        <tr><td class="date">2026-04-19</td><td>WHAT TO DO IN CHICAGO</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">If you haven't done the West Michigan lake trip yet</td><td class="notes">Feeder city — Place Before Product</td></tr>
+        <tr><td class="date">2026-04-19</td><td>Lake Michigan Community</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">West Michigan in May is a different thing entirely</td><td class="notes">Place Before Product</td></tr>
+        <tr><td class="date">2026-04-19</td><td>Growing Up in Chicago</td><td>Post</td><td><span class="badge badge-live">Live ✅</span></td><td class="snippet">Chicago families have been driving to West Michigan</td><td class="notes">Feeder city</td></tr>
+        <tr><td class="date">2026-04-20</td><td>Things To Do In Chicago</td><td>Post</td><td><span class="badge badge-declined">Declined ❌</span></td><td class="snippet">If you haven't done a Michigan cabin weekend</td><td class="notes">Removed by Mihai — cold group</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Comment Log Table -->
+  <div class="section-title" style="margin-top:48px;">Comment Log</div>
+  <div class="table-wrap">
+    <table id="commentsTable" class="comment-table">
+      <thead>
+        <tr>
+          <th onclick="sortTable('commentsTable',0)">Date</th>
+          <th onclick="sortTable('commentsTable',1)">Group</th>
+          <th onclick="sortTable('commentsTable',2)">Type</th>
+          <th onclick="sortTable('commentsTable',3)">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="date">2026-04-05</td><td>South Haven MI</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-05</td><td>Things to do in SW MI</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-05</td><td>Sister Lakes</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-06</td><td>South Haven Michigan</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-06</td><td>Things to do in SW MI</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-06</td><td>Sister Lakes</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-07</td><td>South Haven Michigan</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-07</td><td>Things to do in SW MI</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-07</td><td>Sister Lakes</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-08</td><td>South Haven Michigan</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-08</td><td>Things to do in SW MI</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-08</td><td>Sister Lakes</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-10</td><td>South Haven Michigan</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-10</td><td>Sauglasville</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-10</td><td>Sauglasville</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-15</td><td>Downtown South Haven</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-15</td><td>Sister Lakes</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-15</td><td>White Lake West Michigan</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-15</td><td>Sauglasville</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-15</td><td>Michigan Cabin Rentals</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-15</td><td>WHAT TO DO IN CHICAGO</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-15</td><td>Growing Up in Chicago</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-21</td><td>West Michigan Travel Ideas</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+        <tr><td class="date">2026-04-21</td><td>Fun Things to Do in Michigan</td><td>Comment</td><td><span class="badge badge-comment">Posted</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<footer>DollyBrook Resort · Fennville, MI · Generated by Xavier · April 22, 2026</footer>
+
+<script>
+const sortState = {};
+
+function sortTable(tableId, colIdx) {
+  const table = document.getElementById(tableId);
+  const tbody = table.querySelector('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  const ths = table.querySelectorAll('thead th');
+
+  const key = tableId + '_' + colIdx;
+  const asc = sortState[key] !== true;
+  sortState[key] = asc;
+
+  ths.forEach((th, i) => {
+    th.classList.remove('sort-asc', 'sort-desc');
+    if (i === colIdx) th.classList.add(asc ? 'sort-asc' : 'sort-desc');
+  });
+
+  rows.sort((a, b) => {
+    const aText = a.cells[colIdx]?.textContent.trim() || '';
+    const bText = b.cells[colIdx]?.textContent.trim() || '';
+    return asc ? aText.localeCompare(bText) : bText.localeCompare(aText);
+  });
+
+  rows.forEach(r => tbody.appendChild(r));
+}
+</script>
+
+</body>
+</html>
