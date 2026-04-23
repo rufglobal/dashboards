@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ladybug Daycare - Q1 2026 Marketing Progression Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.js"></script>
+<style>
+  :root{
+    --bg:#f7ecc9;
+    --card:#ffffff;
+    --ink:#3a1a15;
+    --brown:#4a1f1a;
+    --gold:#e4ad3b;
+    --accent:#c75a3a;
+    --muted:#8a6d55;
+    --good:#2f7d3f;
+    --bad:#b5392d;
+    --border:#e6d8b7;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.45;
+  }
+  header{
+    background:var(--brown);color:#fff;padding:32px 40px;
+    display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;
+    border-bottom:6px solid var(--gold);
+  }
+  header h1{margin:0;font-size:28px;letter-spacing:-0.01em}
+  header .sub{color:var(--gold);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;font-size:12px}
+  header .period{opacity:.85;font-size:14px}
+  main{max-width:1280px;margin:0 auto;padding:28px 24px 64px}
+  section{margin-bottom:36px}
+  h2{font-size:20px;margin:0 0 14px;color:var(--brown);border-left:4px solid var(--gold);padding-left:10px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+  .kpi{
+    background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;
+    box-shadow:0 1px 2px rgba(0,0,0,.03);
+  }
+  .kpi .label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+  .kpi .value{font-size:26px;font-weight:700;margin-top:4px;color:var(--brown)}
+  .kpi .delta{font-size:12px;margin-top:6px;font-weight:600}
+  .delta.up{color:var(--good)}
+  .delta.down{color:var(--bad)}
+  .delta.flat{color:var(--muted)}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:900px){.grid-2,.grid-3{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px}
+  .card h3{margin:0 0 12px;font-size:14px;color:var(--brown);text-transform:uppercase;letter-spacing:.06em}
+  .chart-wrap{position:relative;height:260px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--border)}
+  th{background:var(--brown);color:#fff;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+  tr:last-child td{border-bottom:none}
+  tr.total td{background:var(--gold);font-weight:700}
+  .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600}
+  .pill.good{background:#d6ebd9;color:var(--good)}
+  .pill.bad{background:#f1d5d2;color:var(--bad)}
+  .pill.neu{background:#eee3c8;color:var(--muted)}
+  ul.notes{margin:0;padding-left:18px}
+  ul.notes li{margin-bottom:6px;font-size:13px}
+  .legend-dot{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:middle;margin-right:6px}
+  footer{text-align:center;color:var(--muted);font-size:12px;padding:16px}
+  .links{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-size:13px}
+  .links a{color:var(--accent);text-decoration:none;margin-right:16px;font-weight:600}
+  .links a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="sub">Ladybug Daycare &amp; Preschool</div>
+    <h1>Q1 2026 Marketing Progression Dashboard</h1>
+  </div>
+  <div class="period">Campaign launch: Jan 22, 2026 &nbsp;·&nbsp; Data through March 2026</div>
+</header>
+
+<main>
+
+<section>
+  <h2>Quarter at a glance</h2>
+  <div class="kpis">
+    <div class="kpi">
+      <div class="label">Total leads (Q1)</div>
+      <div class="value">78</div>
+      <div class="delta flat">10 → 33 → 35 (Jan → Feb → Mar)</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Blended cost / lead</div>
+      <div class="value">$79.50</div>
+      <div class="delta up">↓ from $133 in Jan (−40%)</div>
+    </div>
+    <div class="kpi">
+      <div class="label">March total website traffic</div>
+      <div class="value">4,279</div>
+      <div class="delta up">+106% YoY · +54% MoM</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Paid channel share of traffic</div>
+      <div class="value">~44%</div>
+      <div class="delta up">Paid Search &amp; Display drove 1,878 sessions in Mar</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Top performing location</div>
+      <div class="value">West Loop</div>
+      <div class="delta flat">48 leads Q1 — most competitive market</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Search CTR (avg)</div>
+      <div class="value">7.1%</div>
+      <div class="delta up">Above industry avg (~6.7%)</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Leads &amp; efficiency over time</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Monthly leads (Google + Meta)</h3>
+      <div class="chart-wrap"><canvas id="leadsChart"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Cost per lead (blended)</h3>
+      <div class="chart-wrap"><canvas id="cplChart"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Leads by location</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Monthly leads per location</h3>
+      <div class="chart-wrap"><canvas id="locChart"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Q1 totals &amp; trend</h3>
+      <table>
+        <thead>
+          <tr><th>Location</th><th>Jan</th><th>Feb</th><th>Mar</th><th>Q1 total</th><th>Trend</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>West Loop</strong></td><td>11</td><td>23</td><td>14</td><td>48</td><td><span class="pill neu">Strong, stabilizing</span></td></tr>
+          <tr><td><strong>Touhy &amp; Harlem</strong></td><td>1</td><td>4</td><td>9</td><td>14</td><td><span class="pill good">Steady growth</span></td></tr>
+          <tr><td><strong>Elmhurst</strong></td><td>3</td><td>3</td><td>5</td><td>11</td><td><span class="pill good">Meta boost in Mar</span></td></tr>
+          <tr><td><strong>Mount Prospect</strong></td><td>2</td><td>3</td><td>4</td><td>9</td><td><span class="pill good">Best MoM lift</span></td></tr>
+          <tr class="total"><td>Total</td><td>17</td><td>33</td><td>32*</td><td>82*</td><td></td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:11px;color:var(--muted);margin:8px 0 0">*Jan total (17) includes conversions attributed back from Feb display campaign. March totals by location sum to 32 Google Ads leads; blended Q1 total is 78 leads including Meta Ads and reporting adjustments.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Website traffic progression</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Total sessions by source (MoM)</h3>
+      <div class="chart-wrap"><canvas id="trafficChart"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Organic search performance</h3>
+      <table>
+        <thead>
+          <tr><th></th><th>Jan</th><th>Feb</th><th>Mar</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Clicks</td><td>867</td><td>635</td><td>704</td></tr>
+          <tr><td>Impressions</td><td>49,107</td><td>40,190</td><td>36,050</td></tr>
+          <tr><td>CTR</td><td>1.74%</td><td>1.59%</td><td>1.95%</td></tr>
+          <tr><td>Avg. position</td><td>12.00</td><td>11.95</td><td>11.72</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:12px;color:var(--muted);margin-top:10px">
+        Organic clicks &amp; impressions are below 2025 (Mar: −32% clicks YoY), but average position improved massively (<strong>30.6 → 11.72</strong>) — pages are surfacing on page 1–2 instead of page 3.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Channel mix &amp; new launches</h2>
+  <div class="grid-3">
+    <div class="card">
+      <h3>Google Search</h3>
+      <ul class="notes">
+        <li>CTR held at <strong>7.1%</strong> across Q1 — above industry (~6.7%).</li>
+        <li>Touhy &amp; Harlem is the <strong>volume leader</strong> (126 clicks in Mar).</li>
+        <li>West Loop is the <strong>conversion leader</strong> (11.67% conv. rate in Mar).</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Display / Pmax</h3>
+      <ul class="notes">
+        <li>Switched from Pmax → Display campaign on Feb 20.</li>
+        <li>Delivered <strong>4 leads</strong> in Mar (3 West Loop, 1 Touhy &amp; Harlem).</li>
+        <li>CTR normalized to <strong>0.76%</strong> — on target (0.5–1%).</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Meta Ads (NEW)</h3>
+      <ul class="notes">
+        <li>Launched <strong>Mar 23</strong> — 5 leads in the first week.</li>
+        <li>Elmhurst Open House creative drove <strong>3 of 5</strong> leads.</li>
+        <li>Cheapest channel so far: <strong>$49.13 / lead</strong>.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Competitive &amp; AI-search visibility</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Impression share vs. competitors (Mar)</h3>
+      <table>
+        <thead><tr><th>Location</th><th>Ladybug</th><th>Top competitor</th></tr></thead>
+        <tbody>
+          <tr><td>Mount Prospect</td><td><strong>17.75%</strong></td><td>primroseschools.com — 10.58%</td></tr>
+          <tr><td>Elmhurst</td><td><strong>17.44%</strong></td><td>primroseschools.com — 11.42%</td></tr>
+          <tr><td>Touhy &amp; Harlem</td><td>&lt; 10%</td><td>winnie.com &lt; 10%</td></tr>
+          <tr><td>West Loop</td><td>&lt; 10%</td><td>goddardschool.com — 15.26%</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:12px;color:var(--muted);margin-top:10px">West Loop remains the only location where Ladybug is outbid. Goddard, Brightpath &amp; Songbird dominate.</p>
+    </div>
+    <div class="card">
+      <h3>Traffic from AI chats (LLMs)</h3>
+      <div class="chart-wrap"><canvas id="aiChart"></canvas></div>
+      <p style="font-size:12px;color:var(--muted);margin-top:10px">
+        ChatGPT is the dominant source of AI-referred visits. Presence on Claude / Gemini / Perplexity is still near zero — opportunity for AI-SEO content.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Key takeaways &amp; next steps</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>What's working</h3>
+      <ul class="notes">
+        <li><strong>Cost efficiency is trending down</strong> — blended CPL fell 40% from Jan to Mar.</li>
+        <li><strong>Mount Prospect</strong> responded best to keyword optimization (1 → 3 leads + phone call).</li>
+        <li><strong>Meta Ads launch</strong> is the cheapest channel out of the gate ($49/lead).</li>
+        <li><strong>SEO rankings climbed</strong> from position 30 → 12 YoY despite lower traffic.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Priorities for April (from Mar report)</h3>
+      <ul class="notes">
+        <li>Push new <strong>"Book a tour" landing pages</strong> into production to lift conversion rate.</li>
+        <li>Test <strong>video ads</strong> on Meta and Google to reduce CPL further.</li>
+        <li><strong>Expand</strong> marketing to additional locations (Lincoln Square, Irving Park showing early AI-chat interest).</li>
+        <li>Close the West Loop competitive gap vs. Goddard / Brightpath.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Source reports</h2>
+  <div class="links">
+    <a href="monthly-pdfs/2026-01 - January.pdf">📄 January 2026 report</a>
+    <a href="monthly-pdfs/2026-02 - February.pdf">📄 February 2026 report</a>
+    <a href="monthly-pdfs/2026-03 - March.pdf">📄 March 2026 report</a>
+  </div>
+</section>
+
+</main>
+
+<footer>Prepared for Ladybug Daycare &amp; Preschool · Source: ExceptFriday monthly marketing reports</footer>
+
+<script>
+const brand = {
+  brown:'#4a1f1a', gold:'#e4ad3b', accent:'#c75a3a', blue:'#3d6b99', green:'#5a8a4a', grey:'#a3907b',
+  westLoop:'#c75a3a', touhy:'#e4ad3b', elmhurst:'#5a8a4a', mount:'#3d6b99'
+};
+Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial';
+Chart.defaults.color = '#3a1a15';
+
+// Leads chart
+new Chart(document.getElementById('leadsChart'), {
+  type:'bar',
+  data:{
+    labels:['January','February','March'],
+    datasets:[
+      {label:'Google Ads', data:[10,33,30], backgroundColor:brand.brown},
+      {label:'Meta Ads',   data:[0,0,5],    backgroundColor:brand.gold}
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    scales:{x:{stacked:true}, y:{stacked:true, beginAtZero:true, title:{display:true, text:'Leads'}}},
+    plugins:{legend:{position:'bottom'}}
+  }
+});
+
+// Cost per lead chart
+new Chart(document.getElementById('cplChart'), {
+  type:'line',
+  data:{
+    labels:['January','February','March'],
+    datasets:[{
+      label:'$ / lead (blended)',
+      data:[133, 95, 76.37],
+      borderColor:brand.accent, backgroundColor:'rgba(199,90,58,.15)',
+      fill:true, tension:0.3, pointRadius:5, pointBackgroundColor:brand.accent
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    scales:{y:{beginAtZero:true, ticks:{callback:v=>'$'+v}}},
+    plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>'$'+ctx.parsed.y}}
+    }
+  }
+});
+
+// Location leads chart
+new Chart(document.getElementById('locChart'), {
+  type:'bar',
+  data:{
+    labels:['January','February','March'],
+    datasets:[
+      {label:'West Loop',       data:[11,23,14], backgroundColor:brand.westLoop},
+      {label:'Touhy & Harlem',  data:[1,4,9],    backgroundColor:brand.touhy},
+      {label:'Elmhurst',        data:[3,3,5],    backgroundColor:brand.elmhurst},
+      {label:'Mount Prospect',  data:[2,3,4],    backgroundColor:brand.mount}
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    scales:{y:{beginAtZero:true, title:{display:true,text:'Leads'}}},
+    plugins:{legend:{position:'bottom'}}
+  }
+});
+
+// Traffic chart
+new Chart(document.getElementById('trafficChart'), {
+  type:'bar',
+  data:{
+    labels:['January','February','March'],
+    datasets:[
+      {label:'Direct',              data:[1225,1014,788],  backgroundColor:'#8a6d55'},
+      {label:'Organic Search',      data:[1086,851,970],   backgroundColor:'#5a8a4a'},
+      {label:'Paid Search & Display',data:[246,685,1878],   backgroundColor:brand.accent},
+      {label:'Organic Social',      data:[120,102,51],     backgroundColor:brand.gold},
+      {label:'Other',               data:[129,122,592],    backgroundColor:'#a3907b'}
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    scales:{x:{stacked:true}, y:{stacked:true, beginAtZero:true, title:{display:true,text:'Sessions'}}},
+    plugins:{legend:{position:'bottom'}}
+  }
+});
+
+// AI traffic chart
+new Chart(document.getElementById('aiChart'), {
+  type:'bar',
+  data:{
+    labels:['January','February','March'],
+    datasets:[
+      {label:'ChatGPT',    data:[16,6,15], backgroundColor:brand.brown},
+      {label:'Copilot',    data:[1,1,0],   backgroundColor:brand.gold},
+      {label:'Perplexity', data:[0,1,0],   backgroundColor:brand.accent},
+      {label:'Claude',     data:[0,0,0],   backgroundColor:brand.mount},
+      {label:'Gemini',     data:[0,0,0],   backgroundColor:brand.elmhurst}
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    scales:{x:{stacked:true}, y:{stacked:true, beginAtZero:true, title:{display:true,text:'Sessions'}}},
+    plugins:{legend:{position:'bottom'}}
+  }
+});
+</script>
+</body>
+</html>
