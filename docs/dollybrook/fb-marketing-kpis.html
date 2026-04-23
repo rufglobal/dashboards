@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DollyBrook — Facebook Marketing KPIs</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --green: #23372C;
+    --eggshell: #F1F0D9;
+    --gold: #CEAA78;
+    --green-light: #2e4a3c;
+    --green-dark: #1a2920;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Lato', Arial, sans-serif; background: var(--eggshell); color: var(--green); }
+
+  header {
+    background: var(--green);
+    color: var(--eggshell);
+    padding: 32px 40px 24px;
+    border-bottom: 4px solid var(--gold);
+  }
+  header h1 { font-size: 28px; font-weight: 900; letter-spacing: 0.5px; }
+  header p.subtitle { font-size: 14px; color: var(--gold); margin-top: 6px; }
+  header p.updated { font-size: 12px; color: rgba(241,240,217,0.6); margin-top: 4px; }
+
+  .container { max-width: 1400px; margin: 0 auto; padding: 32px 24px; }
+
+  /* KPI Cards */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .kpi-card {
+    background: var(--green);
+    color: var(--eggshell);
+    border-radius: 10px;
+    padding: 22px 16px;
+    text-align: center;
+    border-bottom: 3px solid var(--gold);
+    position: relative;
+  }
+  .kpi-card .number { font-size: 34px; font-weight: 900; color: var(--gold); line-height: 1; }
+  .kpi-card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 8px; color: rgba(241,240,217,0.8); }
+  .kpi-card .sublabel { font-size: 11px; color: rgba(241,240,217,0.5); margin-top: 4px; }
+  .kpi-card.highlight { border-color: #6abf69; }
+  .kpi-card.highlight .number { color: #6abf69; }
+
+  /* Section headers */
+  .section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--green);
+    margin: 40px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+
+  /* Two-col layout */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(35,55,44,0.1); }
+  table { width: 100%; border-collapse: collapse; background: #fff; }
+  thead tr { background: var(--green); color: var(--eggshell); }
+  thead th {
+    padding: 11px 14px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  thead th:hover { background: var(--green-light); }
+  thead th.sort-asc::after { content: ' ▲'; color: var(--gold); font-size: 10px; }
+  thead th.sort-desc::after { content: ' ▼'; color: var(--gold); font-size: 10px; }
+  tbody tr { border-bottom: 1px solid rgba(35,55,44,0.08); transition: background 0.15s; }
+  tbody tr:hover { background: rgba(206,170,120,0.1); }
+  tbody td { padding: 10px 14px; font-size: 13px; }
+  tbody td.num { text-align: right; font-weight: 700; }
+  tbody td.date { white-space: nowrap; font-weight: 700; color: var(--green-light); }
+  tbody tr.total-row td { background: var(--green); color: var(--eggshell); font-weight: 700; }
+  tbody tr.total-row td.num { color: var(--gold); }
+
+  /* Delta colors */
+  .delta-pos { color: #155724; font-weight: 700; }
+  .delta-big { color: #0a4d18; font-weight: 900; }
+  .delta-neutral { color: #666; }
+
+  /* Status badges */
+  .badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .badge-converted { background: #23372C; color: #CEAA78; border: 1px solid var(--gold); }
+  .badge-replied { background: #d1ecf1; color: #0c5460; }
+  .badge-untapped { background: #fff3cd; color: #856404; }
+  .badge-warming { background: #e2d9f3; color: #432e6d; }
+
+  /* Insights box */
+  .insights-box {
+    background: var(--green);
+    color: var(--eggshell);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-top: 40px;
+    border-left: 5px solid var(--gold);
+  }
+  .insights-box h3 { color: var(--gold); font-size: 14px; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; }
+  .insights-box ul { list-style: none; }
+  .insights-box li { padding: 6px 0; font-size: 13px; border-bottom: 1px solid rgba(241,240,217,0.1); }
+  .insights-box li:last-child { border-bottom: none; }
+  .insights-box li::before { content: '→ '; color: var(--gold); font-weight: 700; }
+
+  footer {
+    margin-top: 48px;
+    padding: 20px 24px;
+    text-align: center;
+    font-size: 11px;
+    color: rgba(35,55,44,0.45);
+    border-top: 1px solid rgba(35,55,44,0.1);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📊 DollyBrook — Facebook Marketing KPIs</h1>
+  <p class="subtitle">Campaign performance, follower growth, group reach &amp; engagement</p>
+  <p class="updated">Updated: April 22, 2026</p>
+</header>
+
+<div class="container">
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card highlight">
+      <div class="number">4,884</div>
+      <div class="label">FB Page Followers</div>
+      <div class="sublabel">+235 since Mar 31 (+5.1%)</div>
+    </div>
+    <div class="kpi-card">
+      <div class="number">128</div>
+      <div class="label">Groups Joined</div>
+    </div>
+    <div class="kpi-card">
+      <div class="number">42</div>
+      <div class="label">Groups Posted To</div>
+    </div>
+    <div class="kpi-card">
+      <div class="number">42</div>
+      <div class="label">Live / Approved Posts</div>
+    </div>
+    <div class="kpi-card">
+      <div class="number">60%</div>
+      <div class="label">Approval Rate</div>
+    </div>
+    <div class="kpi-card">
+      <div class="number">5</div>
+      <div class="label">Leads Generated</div>
+    </div>
+    <div class="kpi-card highlight">
+      <div class="number">1</div>
+      <div class="label">Confirmed Conversions</div>
+      <div class="sublabel">Mitchell Norton</div>
+    </div>
+    <div class="kpi-card">
+      <div class="number">25+</div>
+      <div class="label">Comments Posted</div>
+    </div>
+  </div>
+
+  <!-- Two-column: Follower Growth + Top Posts -->
+  <div class="two-col">
+
+    <div>
+      <div class="section-title">Follower Growth</div>
+      <div class="table-wrap">
+        <table id="followersTable">
+          <thead>
+            <tr>
+              <th onclick="sortTable('followersTable',0)">Date</th>
+              <th onclick="sortTable('followersTable',1)" style="text-align:right">Followers</th>
+              <th onclick="sortTable('followersTable',2)" style="text-align:right">Change</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="date">2026-03-31</td><td class="num">4,649</td><td class="num delta-neutral">—</td></tr>
+            <tr><td class="date">2026-04-07</td><td class="num">4,663</td><td class="num delta-pos">+14</td></tr>
+            <tr><td class="date">2026-04-08</td><td class="num">4,682</td><td class="num delta-pos">+19</td></tr>
+            <tr><td class="date">2026-04-09</td><td class="num">4,691</td><td class="num delta-pos">+9</td></tr>
+            <tr><td class="date">2026-04-10</td><td class="num">4,703</td><td class="num delta-pos">+12</td></tr>
+            <tr><td class="date">2026-04-11</td><td class="num">4,712</td><td class="num delta-pos">+9</td></tr>
+            <tr><td class="date">2026-04-12</td><td class="num">4,721</td><td class="num delta-pos">+9</td></tr>
+            <tr><td class="date">2026-04-13</td><td class="num">4,724</td><td class="num delta-pos">+3</td></tr>
+            <tr><td class="date">2026-04-18</td><td class="num">4,884</td><td class="num delta-big">+160 🔥</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-title">Top Performing Posts</div>
+      <div class="table-wrap">
+        <table id="topPostsTable">
+          <thead>
+            <tr>
+              <th onclick="sortTable('topPostsTable',0)">Post</th>
+              <th onclick="sortTable('topPostsTable',1)">Group</th>
+              <th onclick="sortTable('topPostsTable',2)">Date</th>
+              <th onclick="sortTable('topPostsTable',3)" style="text-align:right">Rxn</th>
+              <th onclick="sortTable('topPostsTable',4)" style="text-align:right">Cmts</th>
+              <th onclick="sortTable('topPostsTable',5)" style="text-align:right">Shares</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Hey South Haven neighbors!</td><td>Downtown SH Chatline</td><td class="date">Mar 31</td><td class="num delta-big">196</td><td class="num">35</td><td class="num">30</td></tr>
+            <tr><td>Fennville friends — happy spring</td><td>Fennville Informed</td><td class="date">Apr 2</td><td class="num delta-pos">44</td><td class="num">6</td><td class="num">0</td></tr>
+            <tr><td>Hey Hamilton neighbors</td><td>Hamilton Happenings</td><td class="date">Apr 2</td><td class="num delta-pos">29</td><td class="num">2</td><td class="num">3</td></tr>
+            <tr><td>Just wanted to pop in</td><td>Holland Informed</td><td class="date">Apr 2</td><td class="num delta-pos">21</td><td class="num">0</td><td class="num">2</td></tr>
+            <tr><td>Love seeing this group active</td><td>Sauglasville</td><td class="date">Mar 31</td><td class="num">17</td><td class="num delta-pos">28</td><td class="num">0</td></tr>
+            <tr><td>The DollyBrook Guest Dining Guide</td><td>Sauglasville</td><td class="date">Apr 4</td><td class="num">6</td><td class="num">11</td><td class="num">0</td></tr>
+            <tr><td>Spring evening question</td><td>Sauglasville</td><td class="date">Apr 7</td><td class="num">5</td><td class="num delta-pos">16</td><td class="num">0</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Occupancy Table -->
+  <div class="section-title">Occupancy 2026 vs 2025</div>
+  <div class="table-wrap">
+    <table id="occupancyTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable('occupancyTable',0)">Month</th>
+          <th onclick="sortTable('occupancyTable',1)" style="text-align:right">2026</th>
+          <th onclick="sortTable('occupancyTable',2)" style="text-align:right">2025</th>
+          <th onclick="sortTable('occupancyTable',3)" style="text-align:right">Delta</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>January</td><td class="num">25.9%</td><td class="num">4.3%</td><td class="num delta-big">+21.6pp</td></tr>
+        <tr><td>February</td><td class="num">20.8%</td><td class="num">13.9%</td><td class="num delta-pos">+6.9pp</td></tr>
+        <tr><td>March</td><td class="num">20.6%</td><td class="num">12.2%</td><td class="num delta-pos">+8.4pp</td></tr>
+        <tr><td>April</td><td class="num">40.2%</td><td class="num">20.7%</td><td class="num delta-big">+19.5pp</td></tr>
+        <tr><td>May</td><td class="num">26.2%</td><td class="num">24.9%</td><td class="num delta-pos">+1.3pp</td></tr>
+        <tr><td>June</td><td class="num">34.5%</td><td class="num">30.5%</td><td class="num delta-pos">+4.0pp</td></tr>
+        <tr><td>July</td><td class="num">61.2%</td><td class="num">59.4%</td><td class="num delta-pos">+1.8pp</td></tr>
+        <tr><td>August</td><td class="num">43.0%</td><td class="num">27.4%</td><td class="num delta-big">+15.6pp</td></tr>
+        <tr><td>September</td><td class="num">20.3%</td><td class="num">1.7%</td><td class="num delta-big">+18.6pp</td></tr>
+        <tr><td>October</td><td class="num">1.4%</td><td class="num">0.0%</td><td class="num delta-pos">+1.4pp</td></tr>
+        <tr><td>November</td><td class="num">0.0%</td><td class="num">0.0%</td><td class="num delta-neutral">—</td></tr>
+        <tr><td>December</td><td class="num">0.0%</td><td class="num">0.0%</td><td class="num delta-neutral">—</td></tr>
+        <tr class="total-row"><td><strong>YTD</strong></td><td class="num">23.7%</td><td class="num">16.4%</td><td class="num">+7.3pp</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Group Campaign Status -->
+  <div class="section-title">Group Campaign Status</div>
+  <div class="table-wrap">
+    <table id="groupsTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable('groupsTable',0)">Category</th>
+          <th onclick="sortTable('groupsTable',1)" style="text-align:right">Joined</th>
+          <th onclick="sortTable('groupsTable',2)" style="text-align:right">Posted</th>
+          <th onclick="sortTable('groupsTable',3)">Top Performer</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>SW Michigan / Local</td><td class="num">18</td><td class="num">14</td><td>Downtown SH Chatline <strong style="color:var(--green-light)">(196 rxn)</strong></td></tr>
+        <tr><td>Michigan Travel</td><td class="num">12</td><td class="num">8</td><td>Fennville Informed <strong style="color:var(--green-light)">(44 rxn)</strong></td></tr>
+        <tr><td>Chicago / Illinois</td><td class="num">8</td><td class="num">5</td><td>Growing Up in Chicago</td></tr>
+        <tr><td>Vacation Rentals / STR</td><td class="num">10</td><td class="num">7</td><td>Greater MI Vacation STR <strong style="color:var(--green-light)">(lead converted)</strong></td></tr>
+        <tr><td>Wedding / Venues</td><td class="num">8</td><td class="num">3</td><td>SW Michigan Wedding Group</td></tr>
+        <tr><td>Ohio / Indiana</td><td class="num">6</td><td class="num">2</td><td><span class="delta-neutral">—</span></td></tr>
+        <tr><td>Wisconsin</td><td class="num">5</td><td class="num">0</td><td><span class="badge badge-warming">Warming up</span></td></tr>
+        <tr><td>Family &amp; Parenting</td><td class="num">12</td><td class="num">0</td><td><span class="badge badge-untapped">Untapped</span></td></tr>
+        <tr><td>Wellness / Retreat</td><td class="num">6</td><td class="num">1</td><td><span class="delta-neutral">—</span></td></tr>
+        <tr><td>Warmup Groups</td><td class="num">10</td><td class="num">0</td><td>Week-1 likes phase</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Leads Table -->
+  <div class="section-title">Leads Pipeline</div>
+  <div class="table-wrap">
+    <table id="leadsTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable('leadsTable',0)">Date</th>
+          <th onclick="sortTable('leadsTable',1)">Name</th>
+          <th onclick="sortTable('leadsTable',2)">Group</th>
+          <th onclick="sortTable('leadsTable',3)">Status</th>
+          <th onclick="sortTable('leadsTable',4)">Outcome</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="date">Apr 7</td><td><strong>Mitchell Norton</strong></td><td>Greater MI Vacation STR</td><td><span class="badge badge-converted">Converted ✅</span></td><td>Quote sent — Jul 9-13, 20 people</td></tr>
+        <tr><td class="date">Apr 7</td><td>Emili Villagomez</td><td>Greater MI Vacation STR</td><td><span class="badge badge-replied">Replied</span></td><td>#1 Most Relevant</td></tr>
+        <tr><td class="date">Apr 8</td><td>Cori Kay</td><td>Greater MI Vacation STR</td><td><span class="badge badge-replied">Replied</span></td><td>20 people July 25-31</td></tr>
+        <tr><td class="date">Apr 7</td><td>Miranda Dallas Campbell</td><td>Day Trips in Michigan</td><td><span class="badge badge-replied">Replied</span></td><td>Family cabin camping</td></tr>
+        <tr><td class="date">Apr 10</td><td>Alexandria Boucher</td><td>Lake Michigan Vacation Rentals</td><td><span class="badge badge-replied">Replied</span></td><td>4th of July lead</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Key Insights -->
+  <div class="insights-box">
+    <h3>🔍 Key Insights</h3>
+    <ul>
+      <li>+160 followers Apr 13-18 — biggest single-week jump since launch. FB campaign is working.</li>
+      <li>Local/community posts outperform listing posts 10:1 (196 rxn vs ~2 rxn average).</li>
+      <li>Approval rate ~60% — community/value-first gets approved, pure promo gets declined.</li>
+      <li>STR groups = highest lead quality — 3 of 5 leads from Greater MI Vacation STR.</li>
+      <li>Occupancy YTD +7.3pp ahead of 2025 — Jan, Apr, Sep showing strongest YoY gains.</li>
+      <li>0 posts to Family/Parenting (12 groups joined) or Wisconsin (5 groups) — untapped opportunity.</li>
+    </ul>
+  </div>
+
+</div>
+
+<footer>DollyBrook Resort · Fennville, MI · Generated by Xavier · April 22, 2026</footer>
+
+<script>
+const sortState = {};
+
+function sortTable(tableId, colIdx) {
+  const table = document.getElementById(tableId);
+  const tbody = table.querySelector('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr:not(.total-row)'));
+  const totalRow = tbody.querySelector('tr.total-row');
+  const ths = table.querySelectorAll('thead th');
+
+  const key = tableId + '_' + colIdx;
+  const asc = sortState[key] !== true;
+  sortState[key] = asc;
+
+  ths.forEach((th, i) => {
+    th.classList.remove('sort-asc', 'sort-desc');
+    if (i === colIdx) th.classList.add(asc ? 'sort-asc' : 'sort-desc');
+  });
+
+  rows.sort((a, b) => {
+    const aText = a.cells[colIdx]?.textContent.trim() || '';
+    const bText = b.cells[colIdx]?.textContent.trim() || '';
+    // Try numeric sort
+    const aNum = parseFloat(aText.replace(/[^0-9.-]/g, ''));
+    const bNum = parseFloat(bText.replace(/[^0-9.-]/g, ''));
+    if (!isNaN(aNum) && !isNaN(bNum)) {
+      return asc ? aNum - bNum : bNum - aNum;
+    }
+    return asc ? aText.localeCompare(bText) : bText.localeCompare(aText);
+  });
+
+  rows.forEach(r => tbody.appendChild(r));
+  if (totalRow) tbody.appendChild(totalRow); // keep total row at bottom
+}
+</script>
+
+</body>
+</html>
