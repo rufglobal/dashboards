@@ -7,40 +7,34 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Inter', 'Open Sans', sans-serif; background: #F1F0D9; color: #23262D; }
-    header { background: #23372C; color: #F1F0D9; padding: 24px 36px; display: flex; align-items: center; justify-content: space-between; }
-    header h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; }
-    header p { font-size: 0.85rem; opacity: 0.7; margin-top: 4px; }
-    header .badge { background: #CEAA78; color: #23372C; padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; }
-    main { max-width: 1280px; margin: 32px auto; padding: 0 24px; }
-    section { margin-bottom: 36px; }
-    h2 { font-size: 1rem; font-weight: 700; color: #23372C; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 2px solid #CEAA78; }
-    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 24px; }
-    .kpi { background: #fff; border-radius: 10px; padding: 18px 20px; border-left: 4px solid #23372C; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-    .kpi .num { font-size: 2rem; font-weight: 800; color: #23372C; line-height: 1; }
-    .kpi .label { font-size: 0.78rem; color: #888; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
-    .kpi.accent { border-left-color: #CEAA78; }
-    .kpi.accent .num { color: #8B6914; }
-    .kpi.green { border-left-color: #2D7A4F; }
-    .kpi.green .num { color: #2D7A4F; }
-    .kpi.red { border-left-color: #C0392B; }
-    .kpi.red .num { color: #C0392B; }
-    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-    th { background: #23372C; color: #F1F0D9; padding: 11px 14px; text-align: left; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; user-select: none; white-space: nowrap; }
+    header { background: #23372C; color: #F1F0D9; padding: 22px 36px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    header h1 { font-size: 1.4rem; font-weight: 800; }
+    header p { font-size: 0.82rem; opacity: 0.65; margin-top: 3px; }
+    .hbadge { background: #CEAA78; color: #23372C; padding: 4px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; white-space: nowrap; }
+    main { max-width: 1320px; margin: 28px auto; padding: 0 20px; }
+    section { margin-bottom: 32px; }
+    h2 { font-size: 0.88rem; font-weight: 800; color: #23372C; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; padding-bottom: 5px; border-bottom: 2px solid #CEAA78; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 12px; }
+    .kpi { background: #fff; border-radius: 10px; padding: 16px 18px; border-left: 4px solid #23372C; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+    .kpi .num { font-size: 1.9rem; font-weight: 800; color: #23372C; line-height: 1; }
+    .kpi .label { font-size: 0.72rem; color: #888; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .kpi.accent { border-color: #CEAA78; } .kpi.accent .num { color: #8B6914; }
+    .kpi.green { border-color: #2D7A4F; } .kpi.green .num { color: #2D7A4F; }
+    .kpi.red { border-color: #C0392B; } .kpi.red .num { color: #C0392B; }
+    .kpi.amber { border-color: #d97706; } .kpi.amber .num { color: #92400e; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.06); font-size: 0.86rem; }
+    th { background: #23372C; color: #F1F0D9; padding: 10px 13px; text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; user-select: none; white-space: nowrap; }
     th:hover { background: #2f4a39; }
-    td { padding: 10px 14px; border-bottom: 1px solid #eee; font-size: 0.87rem; }
+    td { padding: 9px 13px; border-bottom: 1px solid #eee; }
     tr:last-child td { border-bottom: none; }
     tr:hover td { background: #fdf9f0; }
-    .pill { display: inline-block; padding: 2px 9px; border-radius: 12px; font-size: 0.73rem; font-weight: 600; }
-    .pill-green { background: #d4edda; color: #1a6632; }
-    .pill-amber { background: #fff3cd; color: #856404; }
-    .pill-red { background: #fde8e8; color: #8b1a1a; }
-    .pill-blue { background: #dbeafe; color: #1e40af; }
-    .pill-gray { background: #f0f0f0; color: #555; }
-    .bar-wrap { background: #eee; border-radius: 6px; height: 8px; min-width: 80px; }
-    .bar { background: #23372C; height: 8px; border-radius: 6px; }
-    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } .kpi-grid { grid-template-columns: 1fr 1fr; } }
-    footer { text-align: center; padding: 28px; color: #999; font-size: 0.78rem; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+    .note { font-size: 0.78rem; color: #999; margin-top: 8px; }
+    footer { text-align: center; padding: 24px; color: #999; font-size: 0.75rem; }
+    .filter-bar { margin-bottom: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-bar input, .filter-bar select { padding: 6px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.82rem; background: #fff; }
+    @media (max-width: 900px) { .two-col, .three-col { grid-template-columns: 1fr; } .kpi-grid { grid-template-columns: 1fr 1fr; } }
   </style>
 </head>
 <body>
@@ -49,171 +43,1780 @@
     <h1>DollyBrook — FB Marketing KPIs</h1>
     <p>Xavier Agent · Facebook Groups Campaign · Updated: April 29, 2026</p>
   </div>
-  <span class="badge">Live Dashboard</span>
+  <span class="hbadge">Live Dashboard</span>
 </header>
 
 <main>
 
-  <!-- TOP KPIs -->
-  <section>
-    <h2>Campaign Overview</h2>
-    <div class="kpi-grid">
-      <div class="kpi"><div class="num">116</div><div class="label">Total Groups</div></div>
-      <div class="kpi accent"><div class="num">107</div><div class="label">Page Allowed</div></div>
-      <div class="kpi green"><div class="num">12</div><div class="label">Trusted</div></div>
-      <div class="kpi accent"><div class="num">33</div><div class="label">Warming</div></div>
-      <div class="kpi"><div class="num">71</div><div class="label">Cold</div></div>
-      <div class="kpi green"><div class="num">62</div><div class="label">Posts Live (KB log)</div></div>
-      <div class="kpi amber"><div class="num">18</div><div class="label">Pending Approval</div></div>
-      <div class="kpi red"><div class="num">17</div><div class="label">Rejected</div></div>
-    </div>
-  </section>
-
-  <!-- POSTING PIPELINE -->
-  <section>
-    <h2>Posting Pipeline — Last 30 Days</h2>
-    <div class="kpi-grid">
-      <div class="kpi"><div class="num">131</div><div class="label">Total Actions</div></div>
-      <div class="kpi green"><div class="num">62</div><div class="label">Live Posts</div></div>
-      <div class="kpi amber"><div class="num">18</div><div class="label">Pending</div></div>
-      <div class="kpi red"><div class="num">17</div><div class="label">Rejected</div></div>
-      <div class="kpi accent"><div class="num">47%</div><div class="label">Approval Rate</div></div>
-      <div class="kpi"><div class="num">~6.7</div><div class="label">Posts / Day</div></div>
-    </div>
-  </section>
-
-  <!-- POSTS BY DATE -->
-  <section>
-    <h2>Daily Post Volume (Last 14 Days)</h2>
-    <table>
-      <thead><tr>
-        <th>Date</th>
-        <th>Posts</th>
-        <th>Volume</th>
-      </tr></thead>
-      <tbody>
-        <tr><td>2026-04-29</td><td>1</td><td><div class="bar-wrap"><div class="bar" style="width:7%"></div></div></td></tr>
-        <tr><td>2026-04-28</td><td>6</td><td><div class="bar-wrap"><div class="bar" style="width:46%"></div></div></td></tr>
-        <tr><td>2026-04-26</td><td>13</td><td><div class="bar-wrap"><div class="bar" style="width:100%"></div></div></td></tr>
-        <tr><td>2026-04-25</td><td>10</td><td><div class="bar-wrap"><div class="bar" style="width:77%"></div></div></td></tr>
-        <tr><td>2026-04-20</td><td>1</td><td><div class="bar-wrap"><div class="bar" style="width:7%"></div></div></td></tr>
-        <tr><td>2026-04-19</td><td>3</td><td><div class="bar-wrap"><div class="bar" style="width:23%"></div></div></td></tr>
-        <tr><td>2026-04-18</td><td>3</td><td><div class="bar-wrap"><div class="bar" style="width:23%"></div></div></td></tr>
-        <tr><td>2026-04-17</td><td>3</td><td><div class="bar-wrap"><div class="bar" style="width:23%"></div></div></td></tr>
-        <tr><td>2026-04-15</td><td>13</td><td><div class="bar-wrap"><div class="bar" style="width:100%"></div></div></td></tr>
-        <tr><td>2026-04-13</td><td>3</td><td><div class="bar-wrap"><div class="bar" style="width:23%"></div></div></td></tr>
-        <tr><td>2026-04-10</td><td>7</td><td><div class="bar-wrap"><div class="bar" style="width:54%"></div></div></td></tr>
-        <tr><td>2026-04-09</td><td>7</td><td><div class="bar-wrap"><div class="bar" style="width:54%"></div></div></td></tr>
-        <tr><td>2026-04-08</td><td>8</td><td><div class="bar-wrap"><div class="bar" style="width:62%"></div></div></td></tr>
-        <tr><td>2026-04-07</td><td>9</td><td><div class="bar-wrap"><div class="bar" style="width:69%"></div></div></td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <!-- GROUP TRUST + WARMUP -->
-  <div class="two-col">
-    <section>
-      <h2>Trust Stage Pipeline</h2>
-      <table>
-        <thead><tr><th>Stage</th><th>Groups</th><th>% of Total</th></tr></thead>
-        <tbody>
-          <tr><td><span class="pill pill-green">Trusted</span></td><td>12</td><td>10%</td></tr>
-          <tr><td><span class="pill pill-amber">Warming</span></td><td>33</td><td>28%</td></tr>
-          <tr><td><span class="pill pill-gray">Cold</span></td><td>71</td><td>61%</td></tr>
-          <tr><td><span class="pill pill-red">Blocked (Page NO)</span></td><td>9</td><td>8%</td></tr>
-        </tbody>
-      </table>
-    </section>
-
-    <section>
-      <h2>Warmup Activity</h2>
-      <table>
-        <thead><tr><th>Metric</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Groups in tracker</td><td>31</td></tr>
-          <tr><td>Total like sessions</td><td>58</td></tr>
-          <tr><td>Total comment sessions</td><td>31</td></tr>
-          <tr><td>Graduated today (cold→warming)</td><td>9</td></tr>
-          <tr><td>Warmup priority list size</td><td>76</td></tr>
-          <tr><td>Target per day</td><td>20 groups</td></tr>
-        </tbody>
-      </table>
-    </section>
+<section>
+  <h2>Campaign Overview</h2>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="num">116</div><div class="label">Total Groups</div></div>
+    <div class="kpi accent"><div class="num">107</div><div class="label">Page Allowed</div></div>
+    <div class="kpi green"><div class="num">12</div><div class="label">Trusted</div></div>
+    <div class="kpi accent"><div class="num">33</div><div class="label">Warming</div></div>
+    <div class="kpi"><div class="num">71</div><div class="label">Cold</div></div>
+    <div class="kpi green"><div class="num">64</div><div class="label">Posts Live</div></div>
+    <div class="kpi amber"><div class="num">18</div><div class="label">Pending</div></div>
+    <div class="kpi red"><div class="num">21</div><div class="label">Rejected / Removed</div></div>
+    <div class="kpi accent"><div class="num">75%</div><div class="label">Approval Rate</div></div>
   </div>
+</section>
 
-  <!-- GROUPS BY CATEGORY -->
-  <section style="margin-top:20px">
-    <h2>Groups by Category</h2>
+<div class="two-col">
+<section>
+  <h2>Daily Post Volume — Last 14 Days</h2>
+  <table id="date-table">
+    <thead><tr><th>Date</th><th>Posts</th><th>Volume</th></tr></thead>
+    <tbody><tr><td>2026-04-29</td><td><strong>1</strong></td><td style='min-width:120px'><div style="background:#eee;border-radius:6px;height:8px;min-width:60px"><div style="background:#23372C;height:8px;border-radius:6px;width:7%"></div></div></td></tr>
+<tr><td>2026-04-28</td><td><strong>6</strong></td><td style='min-width:120px'><div style="background:#eee;border-radius:6px;height:8px;min-width:60px"><div style="background:#23372C;height:8px;border-radius:6px;width:46%"></div></div></td></tr>
+<tr><td>2026-04-26</td><td><strong>13</strong></td><td style='min-width:120px'><div style="background:#eee;border-radius:6px;height:8px;min-width:60px"><div style="background:#23372C;height:8px;border-radius:6px;width:100%"></div></div></td></tr>
+<tr><td>2026-04-25</td><td><strong>10</strong></td><td style='min-width:120px'><div style="background:#eee;border-radius:6px;height:8px;min-width:60px"><div style="background:#23372C;height:8px;border-radius:6px;width:76%"></div></div></td></tr>
+<tr><td>2026-04-20</td><td><strong>1</strong></td><td style='min-width:120px'><div style="background:#eee;border-radius:6px;height:8px;min-width:60px"><div style="background:#23372C;height:8px;border-radius:6px;width:7%"></div></div></td></tr>
+<tr><td>2026-04-19</td><td><strong>3</strong></td><td style='min-width:120px'><div style="background:#eee;border-radius:6px;height:8px;min-width:60px"><div style="background:#23372C;height:8px;border-radius:6px;width:23%"></div></div></td></tr>
+<tr><td>2026-04-18</td><td><strong>3</strong></td><td style='min-width:120px'><div style="background:#eee;border-radius:6px;height:8px;min-width:60px"><div style="background:#23372C;height:8px;border-radius:6px;width:23%"></div></div></td></tr>
+<tr><td>2026-04-17</td><td><strong>3</strong></td><td style='min-width:120px'><div style="background:#eee;border-radius:6px;height:8px;min-width:60px"><div style="background:#23372C;height:8px;border-radius:6px;width:23%"></div></div></td></tr>
+<tr><td>2026-04-15</td><td><strong>13</strong></td><td style='min-width:120px'><div style="background:#eee;border-radius:6px;height:8px;min-width:60px"><div style="background:#23372C;height:8px;border-radius:6px;width:100%"></div></div></td></tr>
+</tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Content Pillars — Last 30 Days</h2>
+  <table>
+    <thead><tr><th>Pillar</th><th>Posts</th><th>Share</th></tr></thead>
+    <tbody><tr><td>PLACE</td><td>9</td><td><div style="background:#eee;border-radius:6px;height:8px;min-width:60px"><div style="background:#23372C;height:8px;border-radius:6px;width:45%"></div></div></td></tr>
+<tr><td>FAM</td><td>3</td><td><div style="background:#eee;border-radius:6px;height:8px;min-width:60px"><div style="background:#23372C;height:8px;border-radius:6px;width:15%"></div></div></td></tr>
+<tr><td>BACH</td><td>2</td><td><div style="background:#eee;border-radius:6px;height:8px;min-width:60px"><div style="background:#23372C;height:8px;border-radius:6px;width:10%"></div></div></td></tr>
+<tr><td>PLACE/FAM</td><td>1</td><td><div style="background:#eee;border-radius:6px;height:8px;min-width:60px"><div style="background:#23372C;height:8px;border-radius:6px;width:5%"></div></div></td></tr>
+<tr><td>ISO/CABIN</td><td>1</td><td><div style="background:#eee;border-radius:6px;height:8px;min-width:60px"><div style="background:#23372C;height:8px;border-radius:6px;width:5%"></div></div></td></tr>
+<tr><td>ISO</td><td>1</td><td><div style="background:#eee;border-radius:6px;height:8px;min-width:60px"><div style="background:#23372C;height:8px;border-radius:6px;width:5%"></div></div></td></tr>
+<tr><td>FIRE</td><td>1</td><td><div style="background:#eee;border-radius:6px;height:8px;min-width:60px"><div style="background:#23372C;height:8px;border-radius:6px;width:5%"></div></div></td></tr>
+<tr><td>CABIN</td><td>1</td><td><div style="background:#eee;border-radius:6px;height:8px;min-width:60px"><div style="background:#23372C;height:8px;border-radius:6px;width:5%"></div></div></td></tr>
+<tr><td>RETREAT</td><td>1</td><td><div style="background:#eee;border-radius:6px;height:8px;min-width:60px"><div style="background:#23372C;height:8px;border-radius:6px;width:5%"></div></div></td></tr>
+</tbody>
+  </table>
+</section>
+</div>
+
+<section>
+  <h2>Top Posts by Reactions (All Time)</h2>
+  <table>
+    <thead><tr><th>Group</th><th>Date</th><th>Reactions</th><th>Snippet</th></tr></thead>
+    <tbody><tr><td><a href="https://www.facebook.com/groups/281193499185629/" target="_blank" style="color:#23372C">Downtown South Haven Michigan Chatline</a></td><td>2026-03-31</td><td><strong>196</strong></td><td style='color:#666;font-size:0.82rem'>Hey South Haven neighbors! Wanted to introduce ourselves — we&#x27;re Dollybrook Resort tucked </td></tr>
+<tr><td><a href="https://www.facebook.com/groups/1059200144109025/posts/27335857936016554/" target="_blank" style="color:#23372C">Fennville Informed</a></td><td>2026-04-02</td><td><strong>44</strong></td><td style='color:#666;font-size:0.82rem'>Fennville friends — happy spring from your neighbors at DollyBrook! For anyone who&#x27;s drive</td></tr>
+<tr><td><a href="https://www.facebook.com/groups/703254738102778/posts/1530153618746215/" target="_blank" style="color:#23372C">Hamilton Happenings</a></td><td>2026-04-02</td><td><strong>29</strong></td><td style='color:#666;font-size:0.82rem'>Hey Hamilton neighbors — waving from just down the road in Fennville! We&#x27;re DollyBrook Res</td></tr>
+<tr><td><a href="https://www.facebook.com/groups/301913630886156/posts/1591826128561560/" target="_blank" style="color:#23372C">Holland Informed (the best one)</a></td><td>2026-04-02</td><td><strong>21</strong></td><td style='color:#666;font-size:0.82rem'>Just wanted to pop in and say hi to the Holland community from your West Michigan neighbor</td></tr>
+<tr><td><a href="https://www.facebook.com/groups/2630364940540577/posts/4474514892792230/" target="_blank" style="color:#23372C">Sauglasville</a></td><td>2026-03-31</td><td><strong>17</strong></td><td style='color:#666;font-size:0.82rem'>Love seeing this group so active heading into spring! Quick question for locals: has anyon</td></tr>
+<tr><td><a href="https://www.facebook.com/groups/588030999323865/posts/1274978980629060/" target="_blank" style="color:#23372C">Fennville &amp; Surrounding Areas Informed</a></td><td>2026-04-02</td><td><strong>6</strong></td><td style='color:#666;font-size:0.82rem'>Spring greetings from DollyBrook Resort. For anyone in the Fennville area — we&#x27;re your nei</td></tr>
+<tr><td><a href="https://www.facebook.com/groups/91850887444/posts/10164586218902445/" target="_blank" style="color:#23372C">Union Pier, Michigan</a></td><td>2026-04-03</td><td><strong>6</strong></td><td style='color:#666;font-size:0.82rem'>Harbor Country gets a lot of love but how far north do people explore? DollyBrook in Fennv</td></tr>
+<tr><td><a href="https://www.facebook.com/groups/2630364940540577/posts/4485756178334768/" target="_blank" style="color:#23372C">Sauglasville</a></td><td>2026-04-04</td><td><strong>6</strong></td><td style='color:#666;font-size:0.82rem'>The DollyBrook Guest Dining Guide — Built by Sauglasville. A few days ago we asked this gr</td></tr>
+<tr><td><a href="https://www.facebook.com/groups/2630364940540577/posts/4489912341252485/" target="_blank" style="color:#23372C">Sauglasville</a></td><td>2026-04-07</td><td><strong>5</strong></td><td style='color:#666;font-size:0.82rem'>Spring evening question for the Sauglasville community -- What does your perfect SW Michig</td></tr>
+<tr><td><a href="https://www.facebook.com/groups/626221328137060/posts/2155349588557552/" target="_blank" style="color:#23372C">THE NEW AND BETTER FENNVILLE INFORMED</a></td><td>2026-03-31</td><td><strong>2</strong></td><td style='color:#666;font-size:0.82rem'>Hey Fennville neighbors! We&#x27;re right here in town - 9 cabins in the woods. Send visitors o</td></tr>
+<tr><td><a href="https://www.facebook.com/groups/2630364940540577/posts/4482185262025193/" target="_blank" style="color:#23372C">Sauglasville</a></td><td>2026-04-04</td><td><strong>2</strong></td><td style='color:#666;font-size:0.82rem'>Spring is here and we&#x27;re ready for the season! We&#x27;re Dollybrook Resort right here in Fennv</td></tr>
+<tr><td><a href="https://www.facebook.com/groups/691341305200368/posts/1677511213250034/" target="_blank" style="color:#23372C">Vacation Rentals in Southwest Michigan</a></td><td>2026-03-31</td><td><strong>1</strong></td><td style='color:#666;font-size:0.82rem'>Dollybrook Resort - Fennville MI. 9 private cabins, fire pits, hot tubs, book direct. Minu</td></tr>
+<tr><td><a href="https://www.facebook.com/groups/290777465557262/posts/1592508105384185/" target="_blank" style="color:#23372C">Allegan County Informed</a></td><td>2026-04-02</td><td><strong>1</strong></td><td style='color:#666;font-size:0.82rem'>Hello Allegan County neighbors! Waving from Fennville. 9 wooded cabins right here in Alleg</td></tr>
+<tr><td><a href="https://www.facebook.com/groups/691341305200368/posts/1677511213250034/" target="_blank" style="color:#23372C">Vacation Rentals in Southwest Michigan</a></td><td>2026-04-03</td><td><strong>1</strong></td><td style='color:#666;font-size:0.82rem'>13 years hosting at DollyBrook — honest question for SW Michigan host community about cros</td></tr>
+</tbody>
+  </table>
+</section>
+
+<div class="two-col">
+<section>
+  <h2>Trust Stage Pipeline</h2>
+  <table>
+    <thead><tr><th>Stage</th><th>Groups</th><th>% Total</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#d4edda;color:#1a6632">trusted</span></td><td>12</td><td>10%</td><td style="font-size:0.8rem;color:#666">Post freely — 14-30d cooldown</td></tr>
+      <tr><td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td><td>33</td><td>28%</td><td style="font-size:0.8rem;color:#666">Post with care — check rules</td></tr>
+      <tr><td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td><td>71</td><td>61%</td><td style="font-size:0.8rem;color:#666">Warmup only — likes &amp; comments</td></tr>
+      <tr><td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fde8e8;color:#8b1a1a">Blocked</span></td><td>9</td><td>8%</td><td style="font-size:0.8rem;color:#666">Page not allowed</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Warmup Metrics</h2>
+  <table>
+    <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+    <tbody>
+      <tr><td>Groups in tracker</td><td><strong>31</strong></td></tr>
+      <tr><td>Total like sessions</td><td><strong>58</strong></td></tr>
+      <tr><td>Total comment sessions</td><td><strong>31</strong></td></tr>
+      <tr><td>Graduated today (cold→warming)</td><td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#d4edda;color:#1a6632">9 today</span></td></tr>
+      <tr><td>Warmup priority list</td><td><strong>76 groups</strong></td></tr>
+      <tr><td>Daily target</td><td><strong>20 groups/day</strong></td></tr>
+      <tr><td>Graduation rule</td><td style="font-size:0.8rem;color:#666">3 likes OR 1 comment</td></tr>
+    </tbody>
+  </table>
+</section>
+</div>
+
+<section>
+  <h2>Warmup Priority Queue — Next 20 Groups</h2>
+  <p class="note" style="margin-bottom:10px">Cron works this list top-to-bottom daily. Sorted by booking value. Groups already visited today are skipped.</p>
+  <table>
+    <thead><tr><th>#</th><th>Group</th><th>BV</th><th>Members</th><th>Category</th><th>Sessions</th><th>Last Visit</th></tr></thead>
+    <tbody><tr>
+      <td style="color:#888">1</td>
+      <td><a href="https://www.facebook.com/groups/844960442570710/" target="_blank" style="color:#23372C">Bachelorette Party Ideas &amp; Inspiration</a></td>
+      <td>8</td>
+      <td style="text-align:right">48,000</td>
+      <td style="font-size:0.82rem;color:#666">Girls Trip &amp; Bach</td>
+      <td>1L / 1C</td>
+      <td style="font-size:0.8rem;color:#888">2026-04-29</td>
+    </tr>
+<tr>
+      <td style="color:#888">2</td>
+      <td><a href="https://www.facebook.com/groups/518397456396998/" target="_blank" style="color:#23372C">Lake Michigan Vacation Rentals</a></td>
+      <td>8</td>
+      <td style="text-align:right">26,000</td>
+      <td style="font-size:0.82rem;color:#666">Vacation Rentals &amp; STR</td>
+      <td>1L / 1C</td>
+      <td style="font-size:0.8rem;color:#888">2026-04-27</td>
+    </tr>
+<tr>
+      <td style="color:#888">3</td>
+      <td><a href="https://www.facebook.com/groups/1288224219253004/" target="_blank" style="color:#23372C">Everything Chicago</a></td>
+      <td>6</td>
+      <td style="text-align:right">30,000</td>
+      <td style="font-size:0.82rem;color:#666">Chicago &amp; Illinois</td>
+      <td>1L / 1C</td>
+      <td style="font-size:0.8rem;color:#888">2026-04-29</td>
+    </tr>
+<tr>
+      <td style="color:#888">4</td>
+      <td><a href="https://www.facebook.com/groups/1087838588059232/" target="_blank" style="color:#23372C">Indy Weddings On A Budget</a></td>
+      <td>6</td>
+      <td style="text-align:right">25,000</td>
+      <td style="font-size:0.82rem;color:#666">Wedding &amp; Venues</td>
+      <td>1L / 1C</td>
+      <td style="font-size:0.8rem;color:#888">2026-04-29</td>
+    </tr>
+<tr>
+      <td style="color:#888">5</td>
+      <td><a href="https://www.facebook.com/groups/1432132451005579/" target="_blank" style="color:#23372C">I Love Milwaukee</a></td>
+      <td>5</td>
+      <td style="text-align:right">47,000</td>
+      <td style="font-size:0.82rem;color:#666">Wisconsin &amp; Great Lakes</td>
+      <td>1L / 1C</td>
+      <td style="font-size:0.8rem;color:#888">2026-04-29</td>
+    </tr>
+<tr>
+      <td style="color:#888">6</td>
+      <td><a href="https://www.facebook.com/groups/MIbridesandvendors/" target="_blank" style="color:#23372C">Michigan Brides &amp; Vendors Connect</a></td>
+      <td>4</td>
+      <td style="text-align:right">0</td>
+      <td style="font-size:0.82rem;color:#666">Wedding &amp; Venues</td>
+      <td>1L / 1C</td>
+      <td style="font-size:0.8rem;color:#888">2026-04-29</td>
+    </tr>
+<tr>
+      <td style="color:#888">7</td>
+      <td><a href="https://www.facebook.com/groups/1267666816922628/" target="_blank" style="color:#23372C">Brides 2025 2026 2027</a></td>
+      <td>2</td>
+      <td style="text-align:right">39,000</td>
+      <td style="font-size:0.82rem;color:#666">Wedding &amp; Venues</td>
+      <td>1L / 1C</td>
+      <td style="font-size:0.8rem;color:#888">2026-04-27</td>
+    </tr>
+<tr>
+      <td style="color:#888">8</td>
+      <td><a href="https://www.facebook.com/groups/2893611470895601/" target="_blank" style="color:#23372C">Retreats</a></td>
+      <td>1</td>
+      <td style="text-align:right">112,000</td>
+      <td style="font-size:0.82rem;color:#666">Wellness &amp; Retreat</td>
+      <td>2L / 2C</td>
+      <td style="font-size:0.8rem;color:#888">2026-04-29</td>
+    </tr>
+<tr>
+      <td style="color:#888">9</td>
+      <td><a href="https://www.facebook.com/groups/chicagowomen/" target="_blank" style="color:#23372C">30+ Chicago Women&#x27;s Community</a></td>
+      <td>9</td>
+      <td style="text-align:right">25,000</td>
+      <td style="font-size:0.82rem;color:#666">Girls Trip &amp; Bach</td>
+      <td>0L / 0C</td>
+      <td style="font-size:0.8rem;color:#888">never</td>
+    </tr>
+<tr>
+      <td style="color:#888">10</td>
+      <td><a href="https://www.facebook.com/groups/vrbos/" target="_blank" style="color:#23372C">Vacation Rentals by Owners - VRBO, AIRBNB, DIRECT</a></td>
+      <td>8</td>
+      <td style="text-align:right">24,000</td>
+      <td style="font-size:0.82rem;color:#666">Vacation Rentals &amp; STR</td>
+      <td>0L / 0C</td>
+      <td style="font-size:0.8rem;color:#888">never</td>
+    </tr>
+<tr>
+      <td style="color:#888">11</td>
+      <td><a href="https://www.facebook.com/groups/4802848776416331/" target="_blank" style="color:#23372C">Midwest Girls on the GO!</a></td>
+      <td>8</td>
+      <td style="text-align:right">15,000</td>
+      <td style="font-size:0.82rem;color:#666">Girls Trip &amp; Bach</td>
+      <td>0L / 0C</td>
+      <td style="font-size:0.8rem;color:#888">never</td>
+    </tr>
+<tr>
+      <td style="color:#888">12</td>
+      <td><a href="https://www.facebook.com/groups/3904343056305708/" target="_blank" style="color:#23372C">Michigan Short Term Rentals</a></td>
+      <td>8</td>
+      <td style="text-align:right">8,500</td>
+      <td style="font-size:0.82rem;color:#666">Vacation Rentals &amp; STR</td>
+      <td>0L / 0C</td>
+      <td style="font-size:0.8rem;color:#888">never</td>
+    </tr>
+<tr>
+      <td style="color:#888">13</td>
+      <td><a href="https://www.facebook.com/groups/421076932585300/" target="_blank" style="color:#23372C">U.P. Cottage, Cabin and Vacation Rentals</a></td>
+      <td>7</td>
+      <td style="text-align:right">33,000</td>
+      <td style="font-size:0.82rem;color:#666">Vacation Rentals &amp; STR</td>
+      <td>0L / 0C</td>
+      <td style="font-size:0.8rem;color:#888">never</td>
+    </tr>
+<tr>
+      <td style="color:#888">14</td>
+      <td><a href="https://www.facebook.com/groups/522338709344294/" target="_blank" style="color:#23372C">Chicago travel tips by local guides</a></td>
+      <td>7</td>
+      <td style="text-align:right">25,000</td>
+      <td style="font-size:0.82rem;color:#666">Chicago &amp; Illinois</td>
+      <td>0L / 0C</td>
+      <td style="font-size:0.8rem;color:#888">never</td>
+    </tr>
+<tr>
+      <td style="color:#888">15</td>
+      <td><a href="https://www.facebook.com/groups/576233979695585/" target="_blank" style="color:#23372C">Michigan Waterfront Homes for Sale and Rent</a></td>
+      <td>7</td>
+      <td style="text-align:right">20,800</td>
+      <td style="font-size:0.82rem;color:#666">Vacation Rentals &amp; STR</td>
+      <td>0L / 0C</td>
+      <td style="font-size:0.8rem;color:#888">never</td>
+    </tr>
+<tr>
+      <td style="color:#888">16</td>
+      <td><a href="https://www.facebook.com/groups/992814687536142/" target="_blank" style="color:#23372C">Chicago Moms</a></td>
+      <td>7</td>
+      <td style="text-align:right">12,000</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td>0L / 0C</td>
+      <td style="font-size:0.8rem;color:#888">never</td>
+    </tr>
+<tr>
+      <td style="color:#888">17</td>
+      <td><a href="https://www.facebook.com/groups/1453703481578492/" target="_blank" style="color:#23372C">Chicago Parents</a></td>
+      <td>7</td>
+      <td style="text-align:right">11,000</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td>0L / 0C</td>
+      <td style="font-size:0.8rem;color:#888">never</td>
+    </tr>
+<tr>
+      <td style="color:#888">18</td>
+      <td><a href="https://www.facebook.com/groups/264140341703504/" target="_blank" style="color:#23372C">Wisconsin Resorts, Cottages, and Cabins Rentals</a></td>
+      <td>6</td>
+      <td style="text-align:right">80,000</td>
+      <td style="font-size:0.82rem;color:#666">Wisconsin &amp; Great Lakes</td>
+      <td>0L / 0C</td>
+      <td style="font-size:0.8rem;color:#888">never</td>
+    </tr>
+<tr>
+      <td style="color:#888">19</td>
+      <td><a href="https://www.facebook.com/groups/1646175362276254/" target="_blank" style="color:#23372C">Things to Do in Cincinnati and NKY</a></td>
+      <td>6</td>
+      <td style="text-align:right">80,000</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td>0L / 0C</td>
+      <td style="font-size:0.8rem;color:#888">never</td>
+    </tr>
+<tr>
+      <td style="color:#888">20</td>
+      <td><a href="https://www.facebook.com/groups/209700616446286/" target="_blank" style="color:#23372C">Chicago Bucket List</a></td>
+      <td>6</td>
+      <td style="text-align:right">50,000</td>
+      <td style="font-size:0.82rem;color:#666">Chicago &amp; Illinois</td>
+      <td>0L / 0C</td>
+      <td style="font-size:0.8rem;color:#888">never</td>
+    </tr>
+</tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Cooldown Rules</h2>
+  <div class="two-col">
     <table>
-      <thead><tr><th>Category</th><th>Groups</th><th>Distribution</th></tr></thead>
+      <thead><tr><th>Category</th><th>Cooldown</th></tr></thead>
       <tbody>
-        <tr><td>Family &amp; Parenting</td><td>21</td><td><div class="bar-wrap"><div class="bar" style="width:100%"></div></div></td></tr>
-        <tr><td>Wedding &amp; Venues</td><td>15</td><td><div class="bar-wrap"><div class="bar" style="width:71%"></div></div></td></tr>
-        <tr><td>Vacation Rentals &amp; STR</td><td>15</td><td><div class="bar-wrap"><div class="bar" style="width:71%"></div></div></td></tr>
-        <tr><td>Chicago &amp; Illinois</td><td>11</td><td><div class="bar-wrap"><div class="bar" style="width:52%"></div></div></td></tr>
-        <tr><td>Michigan Travel &amp; Community</td><td>11</td><td><div class="bar-wrap"><div class="bar" style="width:52%"></div></div></td></tr>
-        <tr><td>Michigan Travel</td><td>8</td><td><div class="bar-wrap"><div class="bar" style="width:38%"></div></div></td></tr>
-        <tr><td>Wisconsin &amp; Great Lakes</td><td>7</td><td><div class="bar-wrap"><div class="bar" style="width:33%"></div></div></td></tr>
-        <tr><td>Ohio &amp; Indiana</td><td>5</td><td><div class="bar-wrap"><div class="bar" style="width:24%"></div></div></td></tr>
-        <tr><td>Promo-Friendly / Business</td><td>5</td><td><div class="bar-wrap"><div class="bar" style="width:24%"></div></div></td></tr>
-        <tr><td>Girls Trip &amp; Bach</td><td>4</td><td><div class="bar-wrap"><div class="bar" style="width:19%"></div></div></td></tr>
-        <tr><td>Wellness &amp; Retreat</td><td>4</td><td><div class="bar-wrap"><div class="bar" style="width:19%"></div></div></td></tr>
-        <tr><td>Local / Hyper-local</td><td>4</td><td><div class="bar-wrap"><div class="bar" style="width:19%"></div></div></td></tr>
-        <tr><td>Michigan Community</td><td>3</td><td><div class="bar-wrap"><div class="bar" style="width:14%"></div></div></td></tr>
-        <tr><td>LGBTQ+ Community</td><td>2</td><td><div class="bar-wrap"><div class="bar" style="width:10%"></div></div></td></tr>
-        <tr><td>SW Michigan Local</td><td>1</td><td><div class="bar-wrap"><div class="bar" style="width:5%"></div></div></td></tr>
+        <tr><td>SW Michigan Local / MI Travel / Community</td><td>14 days</td></tr>
+        <tr><td>Vacation Rentals &amp; STR</td><td>30 days</td></tr>
+        <tr><td>Wedding &amp; Venues</td><td>30 days</td></tr>
+        <tr><td>Girls Trip &amp; Bach</td><td>30 days</td></tr>
+        <tr><td>Ohio, Indiana, Wisconsin</td><td>30 days</td></tr>
+        <tr><td>Chicago &amp; Illinois</td><td>14 days</td></tr>
+        <tr><td>Family &amp; Parenting</td><td>14 days</td></tr>
+        <tr><td>200K+ member groups</td><td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fde8e8;color:#8b1a1a">BLOCKED — Famous Commenter only</span></td></tr>
+        <tr><td>Default (unlisted categories)</td><td>14 days</td></tr>
       </tbody>
     </table>
-  </section>
-
-  <!-- CURRENT ELIGIBLE GROUPS -->
-  <section>
-    <h2>Currently Eligible to Post (Cooldown Clear)</h2>
     <table>
-      <thead><tr>
-        <th>Group</th>
-        <th>Booking Value</th>
-        <th>Members</th>
-        <th>Trust Stage</th>
-        <th>Category</th>
-        <th>Cooldown</th>
-      </tr></thead>
+      <thead><tr><th>System Fix</th><th>Date</th><th>Status</th></tr></thead>
       <tbody>
-        <tr><td>Vacation Rentals By Owners</td><td>8</td><td>72,500</td><td><span class="pill pill-amber">warming</span></td><td>Vacation Rentals &amp; STR</td><td>30d</td></tr>
-        <tr><td>Vacation Rentals by Owners – VRBO AIRBNB DIRECT</td><td>8</td><td>25,800</td><td><span class="pill pill-amber">warming</span></td><td>Vacation Rentals &amp; STR</td><td>30d</td></tr>
-        <tr><td>Vacation Rental Owners and Travelers</td><td>7</td><td>21,700</td><td><span class="pill pill-amber">warming</span></td><td>Vacation Rentals &amp; STR</td><td>30d</td></tr>
-        <tr><td>AirBnB VRBO Direct Vacation Rentals WI MN MI</td><td>7</td><td>743</td><td><span class="pill pill-amber">warming</span></td><td>Vacation Rentals &amp; STR</td><td>30d</td></tr>
-        <tr><td>Ohio Wedding Vendors &amp; Bridal Network</td><td>6</td><td>10,000</td><td><span class="pill pill-amber">warming</span></td><td>Wedding &amp; Venues</td><td>30d</td></tr>
-        <tr><td>Things to Do in Chicago This Weekend</td><td>5</td><td>129,000</td><td><span class="pill pill-amber">warming</span></td><td>Chicago &amp; Illinois</td><td>14d</td></tr>
-        <tr><td>Brides of Chicago</td><td>5</td><td>35,000</td><td><span class="pill pill-amber">warming</span></td><td>Wedding &amp; Venues</td><td>30d</td></tr>
-        <tr><td>Illinois Wedding Venue &amp; Vendors Advise</td><td>4</td><td>28,000</td><td><span class="pill pill-amber">warming</span></td><td>Wedding &amp; Venues</td><td>30d</td></tr>
-        <tr><td>EVENT PLANNERS CLUB</td><td>2</td><td>78,000</td><td><span class="pill pill-green">trusted</span></td><td>Wedding &amp; Venues</td><td>14d</td></tr>
+        <tr><td>Priority warmup list (top-bv order)</td><td>Apr 29</td><td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#d4edda;color:#1a6632">Live</span></td></tr>
+        <tr><td>Tier-aware cooldowns</td><td>Apr 29</td><td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#d4edda;color:#1a6632">Live</span></td></tr>
+        <tr><td>Graduation auto-upgrade</td><td>Apr 29</td><td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#d4edda;color:#1a6632">Live</span></td></tr>
+        <tr><td>Dedup check — pending = blocked</td><td>Apr 29</td><td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#d4edda;color:#1a6632">Live</span></td></tr>
+        <tr><td>Post text + photo logged per group</td><td>Apr 28</td><td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#d4edda;color:#1a6632">Live</span></td></tr>
+        <tr><td>Stacked pending posts cleared</td><td>Apr 28</td><td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#d4edda;color:#1a6632">Fixed</span></td></tr>
+        <tr><td>7 mislabeled group URLs corrected</td><td>Apr 27</td><td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#d4edda;color:#1a6632">Fixed</span></td></tr>
       </tbody>
     </table>
-    <p style="margin-top:10px;font-size:0.8rem;color:#999;">9 of 116 groups eligible today. 80 in warmup queue. Cooldowns: VR/Wedding = 30d, MI Travel = 14d, Large groups (200K+) = blocked.</p>
-  </section>
+  </div>
+</section>
 
-  <!-- SYSTEM FIXES LOG -->
-  <section>
-    <h2>System Improvements — April 2026</h2>
-    <table>
-      <thead><tr><th>Date</th><th>Fix</th><th>Status</th></tr></thead>
-      <tbody>
-        <tr><td>Apr 29</td><td>Priority-based warmup — top 20 groups by booking value, no randomization</td><td><span class="pill pill-green">Live</span></td></tr>
-        <tr><td>Apr 29</td><td>Tier-aware cooldowns — VR/Wedding 30d, MI Travel 14d, 200K+ blocked</td><td><span class="pill pill-green">Live</span></td></tr>
-        <tr><td>Apr 29</td><td>Graduation logic — cold→warming auto-upgrade after 3 likes or 1 comment</td><td><span class="pill pill-green">Live</span></td></tr>
-        <tr><td>Apr 29</td><td>Dedup check reads both KB log + CSV log — pending posts block cooldown</td><td><span class="pill pill-green">Live</span></td></tr>
-        <tr><td>Apr 29</td><td>Post text + photo filename logged — prevents repeat copy/photo per group</td><td><span class="pill pill-green">Live</span></td></tr>
-        <tr><td>Apr 28</td><td>Stacked pending posts deleted — 6 groups had 2-4 duplicate pending posts</td><td><span class="pill pill-green">Fixed</span></td></tr>
-        <tr><td>Apr 27</td><td>CSV URL audit — 7 mislabeled group URLs corrected by Claude Code</td><td><span class="pill pill-green">Fixed</span></td></tr>
-      </tbody>
-    </table>
-  </section>
+<section>
+  <h2>All 116 Groups — Full Directory</h2>
+  <div class="filter-bar">
+    <input type="text" id="groupSearch" placeholder="Search group name..." oninput="filterGroups()" style="width:220px">
+    <select id="trustFilter" onchange="filterGroups()">
+      <option value="">All trust stages</option>
+      <option value="trusted">Trusted</option>
+      <option value="warming">Warming</option>
+      <option value="cold">Cold</option>
+    </select>
+    <select id="catFilter" onchange="filterGroups()">
+      <option value="">All categories</option>
+      <option>Vacation Rentals &amp; STR</option>
+      <option>Wedding &amp; Venues</option>
+      <option>Chicago &amp; Illinois</option>
+      <option>Michigan Travel &amp; Community</option>
+      <option>Michigan Travel</option>
+      <option>Family &amp; Parenting</option>
+      <option>Girls Trip &amp; Bach</option>
+      <option>Wisconsin &amp; Great Lakes</option>
+      <option>Ohio &amp; Indiana</option>
+      <option>Wellness &amp; Retreat</option>
+      <option>Promo-Friendly / Business</option>
+      <option>Local / Hyper-local</option>
+      <option>Michigan Community</option>
+      <option>LGBTQ+ Community</option>
+      <option>SW Michigan Local</option>
+    </select>
+  </div>
+  <table id="groupDir">
+    <thead><tr>
+      <th>#</th>
+      <th>Group</th>
+      <th>Trust</th>
+      <th>BV</th>
+      <th>Members</th>
+      <th>Category</th>
+      <th>Pillars</th>
+      <th>Last Posted</th>
+      <th>Warmup</th>
+      <th>Last Visit</th>
+    </tr></thead>
+    <tbody id="groupDirBody"><tr>
+      <td style="font-size:0.8rem;color:#888">1</td>
+      <td><a href="https://www.facebook.com/groups/exploremichigan/" target="_blank" style="color:#23372C;font-weight:600">Explore Michigan</a><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fde8e8;color:#8b1a1a">No</span></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#d4edda;color:#1a6632">trusted</span></td>
+      <td style="text-align:center"><strong>7</strong></td>
+      <td style="text-align:right">35,000</td>
+      <td style="font-size:0.82rem;color:#666">Michigan Travel</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|POOL</td>
+      <td style="font-size:0.8rem">2026-04-07</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">2</td>
+      <td><a href="https://www.facebook.com/groups/265738146921622/" target="_blank" style="color:#23372C;font-weight:600">Things to do in Southwest MI</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#d4edda;color:#1a6632">trusted</span></td>
+      <td style="text-align:center"><strong>7</strong></td>
+      <td style="text-align:right">14,500</td>
+      <td style="font-size:0.82rem;color:#666">Local / Hyper-local</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM|POOL</td>
+      <td style="font-size:0.8rem">2026-04-08 COMMENT</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">3</td>
+      <td><a href="https://www.facebook.com/groups/1953229231422322/" target="_blank" style="color:#23372C;font-weight:600">Indianapolis Chatter</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#d4edda;color:#1a6632">trusted</span></td>
+      <td style="text-align:center"><strong>7</strong></td>
+      <td style="text-align:right">59,000</td>
+      <td style="font-size:0.82rem;color:#666">Ohio &amp; Indiana</td>
+      <td style="font-size:0.78rem;color:#888">PLACE</td>
+      <td style="font-size:0.8rem">2026-04-25</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">4</td>
+      <td><a href="https://www.facebook.com/groups/705267386838674/" target="_blank" style="color:#23372C;font-weight:600">Upper Michigan Resorts, Cottages and Cabin Rentals</a><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fde8e8;color:#8b1a1a">No</span></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#d4edda;color:#1a6632">trusted</span></td>
+      <td style="text-align:center"><strong>7</strong></td>
+      <td style="text-align:right">28,000</td>
+      <td style="font-size:0.82rem;color:#666">Vacation Rentals &amp; STR</td>
+      <td style="font-size:0.78rem;color:#888">ISO|CABIN</td>
+      <td style="font-size:0.8rem">2026-04-13</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">5</td>
+      <td><a href="https://www.facebook.com/groups/651352386231094/" target="_blank" style="color:#23372C;font-weight:600">Southwest Michigan Wedding Group</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#d4edda;color:#1a6632">trusted</span></td>
+      <td style="text-align:center"><strong>6</strong></td>
+      <td style="text-align:right">8,500</td>
+      <td style="font-size:0.82rem;color:#666">Wedding &amp; Venues</td>
+      <td style="font-size:0.78rem;color:#888">BACH</td>
+      <td style="font-size:0.8rem">2026-04-13</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">6</td>
+      <td><a href="https://www.facebook.com/groups/WhatToDoInChicago/" target="_blank" style="color:#23372C;font-weight:600">WHAT TO DO IN CHICAGO</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#d4edda;color:#1a6632">trusted</span></td>
+      <td style="text-align:center"><strong>6</strong></td>
+      <td style="text-align:right">203,000</td>
+      <td style="font-size:0.82rem;color:#666">Chicago &amp; Illinois</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|BACH</td>
+      <td style="font-size:0.8rem">2026-04-15 COMMENT</td>
+      <td style="font-size:0.8rem;color:#666">3L / 3C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-29</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">7</td>
+      <td><a href="https://www.facebook.com/groups/southhavenmichigan/" target="_blank" style="color:#23372C;font-weight:600">Michigan Everything</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#d4edda;color:#1a6632">trusted</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">77,500</td>
+      <td style="font-size:0.82rem;color:#666">Michigan Travel</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM</td>
+      <td style="font-size:0.8rem">2026-04-10 COMMENT</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">8</td>
+      <td><a href="https://www.facebook.com/groups/1142032609238533/" target="_blank" style="color:#23372C;font-weight:600">Grand Rapids Michigan</a><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fde8e8;color:#8b1a1a">No</span></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#d4edda;color:#1a6632">trusted</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">42,000</td>
+      <td style="font-size:0.82rem;color:#666">Michigan Community</td>
+      <td style="font-size:0.78rem;color:#888">PLACE</td>
+      <td style="font-size:0.8rem">2026-04-25</td>
+      <td style="font-size:0.8rem;color:#666">2L / 0C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-26</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">9</td>
+      <td><a href="https://www.facebook.com/groups/626221328137060/" target="_blank" style="color:#23372C;font-weight:600">Grand Rapids Informed</a><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fde8e8;color:#8b1a1a">No</span></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#d4edda;color:#1a6632">trusted</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">51,000</td>
+      <td style="font-size:0.82rem;color:#666">Michigan Community</td>
+      <td style="font-size:0.78rem;color:#888">PLACE</td>
+      <td style="font-size:0.8rem">2026-03-31</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">10</td>
+      <td><a href="https://www.facebook.com/groups/301913630886156/" target="_blank" style="color:#23372C;font-weight:600">Holland Informed</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#d4edda;color:#1a6632">trusted</span></td>
+      <td style="text-align:center"><strong>3</strong></td>
+      <td style="text-align:right">44,000</td>
+      <td style="font-size:0.82rem;color:#666">Local / Hyper-local</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM|POOL|BACH</td>
+      <td style="font-size:0.8rem">2026-04-09</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">11</td>
+      <td><a href="https://www.facebook.com/groups/537102143143067/" target="_blank" style="color:#23372C;font-weight:600">EVENT PLANNERS CLUB</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#d4edda;color:#1a6632">trusted</span></td>
+      <td style="text-align:center"><strong>2</strong></td>
+      <td style="text-align:right">78,000</td>
+      <td style="font-size:0.82rem;color:#666">Wedding &amp; Venues</td>
+      <td style="font-size:0.78rem;color:#888">BACH|RETREAT</td>
+      <td style="font-size:0.8rem">2026-04-07</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">12</td>
+      <td><a href="https://www.facebook.com/groups/290777465557262/" target="_blank" style="color:#23372C;font-weight:600">Allegan County Informed</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#d4edda;color:#1a6632">trusted</span></td>
+      <td style="text-align:center"><strong>2</strong></td>
+      <td style="text-align:right">12,000</td>
+      <td style="font-size:0.82rem;color:#666">Local / Hyper-local</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM</td>
+      <td style="font-size:0.8rem">2026-04-08</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">13</td>
+      <td><a href="https://www.facebook.com/groups/michiganroadtrips/" target="_blank" style="color:#23372C;font-weight:600">Michigan Road Trips</a><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fde8e8;color:#8b1a1a">No</span></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>9</strong></td>
+      <td style="text-align:right">61,200</td>
+      <td style="font-size:0.82rem;color:#666">Michigan Travel</td>
+      <td style="font-size:0.78rem;color:#888">PLACE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">2L / 0C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-26</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">14</td>
+      <td><a href="https://www.facebook.com/groups/844960442570710/" target="_blank" style="color:#23372C;font-weight:600">Bachelorette Party Ideas &amp; Inspiration</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>8</strong></td>
+      <td style="text-align:right">48,000</td>
+      <td style="font-size:0.82rem;color:#666">Girls Trip &amp; Bach</td>
+      <td style="font-size:0.78rem;color:#888">BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">1L / 1C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-29</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">15</td>
+      <td><a href="https://www.facebook.com/groups/426883634084390/" target="_blank" style="color:#23372C;font-weight:600">Chicago Brides ISO Wedding Vendors</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>8</strong></td>
+      <td style="text-align:right">8,000</td>
+      <td style="font-size:0.82rem;color:#666">Wedding &amp; Venues</td>
+      <td style="font-size:0.78rem;color:#888">BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">1L / 0C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-27</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">16</td>
+      <td><a href="https://www.facebook.com/groups/583733510162047/" target="_blank" style="color:#23372C;font-weight:600">Michigan Best Day Trips</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>8</strong></td>
+      <td style="text-align:right">20,000</td>
+      <td style="font-size:0.82rem;color:#666">Michigan Travel</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">5L / 3C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-29</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">17</td>
+      <td><a href="https://www.facebook.com/groups/michiganbucketlist/" target="_blank" style="color:#23372C;font-weight:600">Day Trips in Michigan (small)</a><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fde8e8;color:#8b1a1a">No</span></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>8</strong></td>
+      <td style="text-align:right">12,000</td>
+      <td style="font-size:0.82rem;color:#666">Michigan Travel</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">1L / 1C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-26</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">18</td>
+      <td><a href="https://www.facebook.com/groups/1349475745674410/" target="_blank" style="color:#23372C;font-weight:600">Vacation Rentals by Owners - VRBO AIRBNB DIRECT</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>8</strong></td>
+      <td style="text-align:right">25,800</td>
+      <td style="font-size:0.82rem;color:#666">Vacation Rentals &amp; STR</td>
+      <td style="font-size:0.78rem;color:#888">ISO|CABIN|LONGTERM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">1L / 0C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-26</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">19</td>
+      <td><a href="https://www.facebook.com/groups/518397456396998/" target="_blank" style="color:#23372C;font-weight:600">Lake Michigan Vacation Rentals</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>8</strong></td>
+      <td style="text-align:right">26,000</td>
+      <td style="font-size:0.82rem;color:#666">Vacation Rentals &amp; STR</td>
+      <td style="font-size:0.78rem;color:#888">ISO|POOL|CABIN</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">1L / 1C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-27</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">20</td>
+      <td><a href="https://www.facebook.com/groups/1490611034371518/" target="_blank" style="color:#23372C;font-weight:600">Vacation Rentals By Owners</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>8</strong></td>
+      <td style="text-align:right">72,500</td>
+      <td style="font-size:0.82rem;color:#666">Vacation Rentals &amp; STR</td>
+      <td style="font-size:0.78rem;color:#888">ISO|CABIN|LONGTERM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">1L / 0C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-26</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">21</td>
+      <td><a href="https://www.facebook.com/groups/1084306731678746/" target="_blank" style="color:#23372C;font-weight:600">Southwest Michigan Rentals</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>8</strong></td>
+      <td style="text-align:right">59,400</td>
+      <td style="font-size:0.82rem;color:#666">Vacation Rentals &amp; STR</td>
+      <td style="font-size:0.78rem;color:#888">ISO|CABIN|POOL|LONGTERM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">22</td>
+      <td><a href="https://www.facebook.com/groups/185382639953512/" target="_blank" style="color:#23372C;font-weight:600">Day Trips in Michigan (750K)</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>7</strong></td>
+      <td style="text-align:right">750,500</td>
+      <td style="font-size:0.82rem;color:#666">Michigan Travel &amp; Community</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM|ISO</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">2L / 0C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-26</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">23</td>
+      <td><a href="https://www.facebook.com/groups/1581779598700378/" target="_blank" style="color:#23372C;font-weight:600">SW Michigan Lake Properties &amp; Rentals</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>7</strong></td>
+      <td style="text-align:right">2,800</td>
+      <td style="font-size:0.82rem;color:#666">Vacation Rentals &amp; STR</td>
+      <td style="font-size:0.78rem;color:#888">ISO|CABIN|POOL</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">1L / 1C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-26</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">24</td>
+      <td><a href="https://www.facebook.com/groups/156482587723934/" target="_blank" style="color:#23372C;font-weight:600">Vacation Rental Owners and Travelers</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>7</strong></td>
+      <td style="text-align:right">21,700</td>
+      <td style="font-size:0.82rem;color:#666">Vacation Rentals &amp; STR</td>
+      <td style="font-size:0.78rem;color:#888">ISO|CABIN|LONGTERM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">1L / 1C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-26</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">25</td>
+      <td><a href="https://www.facebook.com/groups/1102879901152464/" target="_blank" style="color:#23372C;font-weight:600">AirBnB VRBO Direct Vacation Rentals WI MN MI</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>7</strong></td>
+      <td style="text-align:right">743</td>
+      <td style="font-size:0.82rem;color:#666">Vacation Rentals &amp; STR</td>
+      <td style="font-size:0.78rem;color:#888">ISO|CABIN</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">1L / 1C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-26</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">26</td>
+      <td><a href="https://www.facebook.com/groups/691341305200368/" target="_blank" style="color:#23372C;font-weight:600">Vacation Rentals in Southwest Michigan</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>7</strong></td>
+      <td style="text-align:right">4,500</td>
+      <td style="font-size:0.82rem;color:#666">Vacation Rentals &amp; STR</td>
+      <td style="font-size:0.78rem;color:#888">ISO|CABIN|LONGTERM</td>
+      <td style="font-size:0.8rem">2026-04-26</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">27</td>
+      <td><a href="https://www.facebook.com/groups/1087838588059232/" target="_blank" style="color:#23372C;font-weight:600">Indy Weddings On A Budget</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>6</strong></td>
+      <td style="text-align:right">25,000</td>
+      <td style="font-size:0.82rem;color:#666">Wedding &amp; Venues</td>
+      <td style="font-size:0.78rem;color:#888">BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">1L / 1C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-29</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">28</td>
+      <td><a href="https://www.facebook.com/groups/1474373239460887/" target="_blank" style="color:#23372C;font-weight:600">Ohio Wedding Vendors &amp; Bridal Network</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>6</strong></td>
+      <td style="text-align:right">10,000</td>
+      <td style="font-size:0.82rem;color:#666">Wedding &amp; Venues</td>
+      <td style="font-size:0.78rem;color:#888">BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">1L / 1C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-26</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">29</td>
+      <td><a href="https://www.facebook.com/groups/1288224219253004/" target="_blank" style="color:#23372C;font-weight:600">Everything Chicago</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>6</strong></td>
+      <td style="text-align:right">30,000</td>
+      <td style="font-size:0.82rem;color:#666">Chicago &amp; Illinois</td>
+      <td style="font-size:0.78rem;color:#888">PLACE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">1L / 1C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-29</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">30</td>
+      <td><a href="https://www.facebook.com/groups/111050779414653/" target="_blank" style="color:#23372C;font-weight:600">Brides of Chicago</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">35,000</td>
+      <td style="font-size:0.82rem;color:#666">Wedding &amp; Venues</td>
+      <td style="font-size:0.78rem;color:#888">BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">1L / 0C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-26</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">31</td>
+      <td><a href="https://www.facebook.com/groups/1260737241531017/" target="_blank" style="color:#23372C;font-weight:600">Fun things to do in Michigan</a><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fde8e8;color:#8b1a1a">No</span></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">113,000</td>
+      <td style="font-size:0.82rem;color:#666">Michigan Travel</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM|POOL|FIRE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">1L / 1C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-21</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">32</td>
+      <td><a href="https://www.facebook.com/groups/1356640967822060/" target="_blank" style="color:#23372C;font-weight:600">Things to Do in Chicago This Weekend</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">129,000</td>
+      <td style="font-size:0.82rem;color:#666">Chicago &amp; Illinois</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">1L / 1C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-26</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">33</td>
+      <td><a href="https://www.facebook.com/groups/1432132451005579/" target="_blank" style="color:#23372C;font-weight:600">I Love Milwaukee</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">47,000</td>
+      <td style="font-size:0.82rem;color:#666">Wisconsin &amp; Great Lakes</td>
+      <td style="font-size:0.78rem;color:#888">PLACE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">1L / 1C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-29</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">34</td>
+      <td><a href="https://www.facebook.com/groups/westmichigantravelideas/" target="_blank" style="color:#23372C;font-weight:600">West Michigan Travel Ideas</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">21,400</td>
+      <td style="font-size:0.82rem;color:#666">Michigan Travel &amp; Community</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|POOL|FAM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">5L / 3C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-29</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">35</td>
+      <td><a href="https://www.facebook.com/groups/677745097616688/" target="_blank" style="color:#23372C;font-weight:600">Michigan Everything</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">77,500</td>
+      <td style="font-size:0.82rem;color:#666">Michigan Travel &amp; Community</td>
+      <td style="font-size:0.78rem;color:#888">ISO|PLACE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">36</td>
+      <td><a href="https://www.facebook.com/groups/1971747103169810/" target="_blank" style="color:#23372C;font-weight:600">I grew up in Michigan</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">413,300</td>
+      <td style="font-size:0.82rem;color:#666">Michigan Travel &amp; Community</td>
+      <td style="font-size:0.78rem;color:#888">ISO|PLACE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">37</td>
+      <td><a href="https://www.facebook.com/groups/1569917773284067/" target="_blank" style="color:#23372C;font-weight:600">Southwest Michigan</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">11,400</td>
+      <td style="font-size:0.82rem;color:#666">SW Michigan Local</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM</td>
+      <td style="font-size:0.8rem">2026-04-26</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">38</td>
+      <td><a href="https://www.facebook.com/groups/780066030367824/" target="_blank" style="color:#23372C;font-weight:600">Illinois Wedding Venue &amp; Vendors Advise</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">28,000</td>
+      <td style="font-size:0.82rem;color:#666">Wedding &amp; Venues</td>
+      <td style="font-size:0.78rem;color:#888">BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">1L / 0C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-26</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">39</td>
+      <td><a href="https://www.facebook.com/groups/997126832455430/" target="_blank" style="color:#23372C;font-weight:600">RetreatHub.com - Retreat Venues for Hire</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">8,000</td>
+      <td style="font-size:0.82rem;color:#666">Wellness &amp; Retreat</td>
+      <td style="font-size:0.78rem;color:#888">RETREAT</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">1L / 1C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-26</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">40</td>
+      <td><a href="https://www.facebook.com/groups/westmichigannetwork/" target="_blank" style="color:#23372C;font-weight:600">West Michigan Network - Support Local Business</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">15,600</td>
+      <td style="font-size:0.82rem;color:#666">Michigan Travel &amp; Community</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|RETREAT</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">6L / 1C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-26</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">41</td>
+      <td><a href="https://www.facebook.com/groups/230902953929099/" target="_blank" style="color:#23372C;font-weight:600">Taste Of West Michigan</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">21,200</td>
+      <td style="font-size:0.82rem;color:#666">Michigan Travel &amp; Community</td>
+      <td style="font-size:0.78rem;color:#888">PLACE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">8L / 2C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-29</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">42</td>
+      <td><a href="https://www.facebook.com/groups/MIbridesandvendors/" target="_blank" style="color:#23372C;font-weight:600">Michigan Brides &amp; Vendors Connect</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">0</td>
+      <td style="font-size:0.82rem;color:#666">Wedding &amp; Venues</td>
+      <td style="font-size:0.78rem;color:#888">BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">1L / 1C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-29</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">43</td>
+      <td><a href="https://www.facebook.com/groups/girlstriponabudget/" target="_blank" style="color:#23372C;font-weight:600">Girls Trips on a Budget (GTOAB)</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>3</strong></td>
+      <td style="text-align:right">793,000</td>
+      <td style="font-size:0.82rem;color:#666">Girls Trip &amp; Bach</td>
+      <td style="font-size:0.78rem;color:#888">BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">1L / 1C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-27</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">44</td>
+      <td><a href="https://www.facebook.com/groups/1267666816922628/" target="_blank" style="color:#23372C;font-weight:600">Brides 2025 2026 2027</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>2</strong></td>
+      <td style="text-align:right">39,000</td>
+      <td style="font-size:0.82rem;color:#666">Wedding &amp; Venues</td>
+      <td style="font-size:0.78rem;color:#888">BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">1L / 1C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-27</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">45</td>
+      <td><a href="https://www.facebook.com/groups/2893611470895601/" target="_blank" style="color:#23372C;font-weight:600">Retreats</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fff3cd;color:#856404">warming</span></td>
+      <td style="text-align:center"><strong>1</strong></td>
+      <td style="text-align:right">112,000</td>
+      <td style="font-size:0.82rem;color:#666">Wellness &amp; Retreat</td>
+      <td style="font-size:0.78rem;color:#888">RETREAT</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">2L / 2C</td>
+      <td style="font-size:0.78rem;color:#888">2026-04-29</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">46</td>
+      <td><a href="https://www.facebook.com/groups/chicagowomen/" target="_blank" style="color:#23372C;font-weight:600">30+ Chicago Women&#x27;s Community</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>9</strong></td>
+      <td style="text-align:right">25,000</td>
+      <td style="font-size:0.82rem;color:#666">Girls Trip &amp; Bach</td>
+      <td style="font-size:0.78rem;color:#888">BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">47</td>
+      <td><a href="https://www.facebook.com/groups/4802848776416331/" target="_blank" style="color:#23372C;font-weight:600">Midwest Girls on the GO!</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>8</strong></td>
+      <td style="text-align:right">15,000</td>
+      <td style="font-size:0.82rem;color:#666">Girls Trip &amp; Bach</td>
+      <td style="font-size:0.78rem;color:#888">BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">48</td>
+      <td><a href="https://www.facebook.com/groups/vrbos/" target="_blank" style="color:#23372C;font-weight:600">Vacation Rentals by Owners - VRBO, AIRBNB, DIRECT</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>8</strong></td>
+      <td style="text-align:right">24,000</td>
+      <td style="font-size:0.82rem;color:#666">Vacation Rentals &amp; STR</td>
+      <td style="font-size:0.78rem;color:#888">ISO|CABIN</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">49</td>
+      <td><a href="https://www.facebook.com/groups/3904343056305708/" target="_blank" style="color:#23372C;font-weight:600">Michigan Short Term Rentals</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>8</strong></td>
+      <td style="text-align:right">8,500</td>
+      <td style="font-size:0.82rem;color:#666">Vacation Rentals &amp; STR</td>
+      <td style="font-size:0.78rem;color:#888">ISO|CABIN</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">50</td>
+      <td><a href="https://www.facebook.com/groups/522338709344294/" target="_blank" style="color:#23372C;font-weight:600">Chicago travel tips by local guides</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>7</strong></td>
+      <td style="text-align:right">25,000</td>
+      <td style="font-size:0.82rem;color:#666">Chicago &amp; Illinois</td>
+      <td style="font-size:0.78rem;color:#888">PLACE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">51</td>
+      <td><a href="https://www.facebook.com/groups/421076932585300/" target="_blank" style="color:#23372C;font-weight:600">U.P. Cottage, Cabin and Vacation Rentals</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>7</strong></td>
+      <td style="text-align:right">33,000</td>
+      <td style="font-size:0.82rem;color:#666">Vacation Rentals &amp; STR</td>
+      <td style="font-size:0.78rem;color:#888">ISO|CABIN|POOL</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">52</td>
+      <td><a href="https://www.facebook.com/groups/992814687536142/" target="_blank" style="color:#23372C;font-weight:600">Chicago Moms</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>7</strong></td>
+      <td style="text-align:right">12,000</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td style="font-size:0.78rem;color:#888">FAM|POOL|BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">53</td>
+      <td><a href="https://www.facebook.com/groups/1453703481578492/" target="_blank" style="color:#23372C;font-weight:600">Chicago Parents</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>7</strong></td>
+      <td style="text-align:right">11,000</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td style="font-size:0.78rem;color:#888">FAM|POOL|BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">54</td>
+      <td><a href="https://www.facebook.com/groups/576233979695585/" target="_blank" style="color:#23372C;font-weight:600">Michigan Waterfront Homes for Sale and Rent</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>7</strong></td>
+      <td style="text-align:right">20,800</td>
+      <td style="font-size:0.82rem;color:#666">Vacation Rentals &amp; STR</td>
+      <td style="font-size:0.78rem;color:#888">ISO|CABIN|POOL</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">55</td>
+      <td><a href="https://www.facebook.com/groups/303228565353112/" target="_blank" style="color:#23372C;font-weight:600">OHIO wedding couples &amp; vendors</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>6</strong></td>
+      <td style="text-align:right">44,000</td>
+      <td style="font-size:0.82rem;color:#666">Wedding &amp; Venues</td>
+      <td style="font-size:0.78rem;color:#888">BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">56</td>
+      <td><a href="https://www.facebook.com/groups/209700616446286/" target="_blank" style="color:#23372C;font-weight:600">Chicago Bucket List</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>6</strong></td>
+      <td style="text-align:right">50,000</td>
+      <td style="font-size:0.82rem;color:#666">Chicago &amp; Illinois</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">57</td>
+      <td><a href="https://www.facebook.com/groups/197837046999473/" target="_blank" style="color:#23372C;font-weight:600">Cleveland Social Group</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>6</strong></td>
+      <td style="text-align:right">38,000</td>
+      <td style="font-size:0.82rem;color:#666">Ohio &amp; Indiana</td>
+      <td style="font-size:0.78rem;color:#888">PLACE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">58</td>
+      <td><a href="https://www.facebook.com/groups/264140341703504/" target="_blank" style="color:#23372C;font-weight:600">Wisconsin Resorts, Cottages, and Cabins Rentals</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>6</strong></td>
+      <td style="text-align:right">80,000</td>
+      <td style="font-size:0.82rem;color:#666">Wisconsin &amp; Great Lakes</td>
+      <td style="font-size:0.78rem;color:#888">ISO|CABIN|POOL</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">59</td>
+      <td><a href="https://www.facebook.com/groups/229975227756506/" target="_blank" style="color:#23372C;font-weight:600">Fun things to do in and around Detroit</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>6</strong></td>
+      <td style="text-align:right">18,000</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td style="font-size:0.78rem;color:#888">FAM|PLACE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">60</td>
+      <td><a href="https://www.facebook.com/groups/MetroDetroitMommy/" target="_blank" style="color:#23372C;font-weight:600">Metro Detroit Moms</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>6</strong></td>
+      <td style="text-align:right">2,300</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td style="font-size:0.78rem;color:#888">FAM|POOL</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">61</td>
+      <td><a href="https://www.facebook.com/groups/1646175362276254/" target="_blank" style="color:#23372C;font-weight:600">Things to Do in Cincinnati and NKY</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>6</strong></td>
+      <td style="text-align:right">80,000</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">62</td>
+      <td><a href="https://www.facebook.com/groups/1973410222893592/" target="_blank" style="color:#23372C;font-weight:600">Cincinnati Moms &amp; Friends</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>6</strong></td>
+      <td style="text-align:right">20,000</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td style="font-size:0.78rem;color:#888">FAM|POOL|BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">63</td>
+      <td><a href="https://www.facebook.com/groups/chicagotraveltips/" target="_blank" style="color:#23372C;font-weight:600">Chicago Travel Tips (Tours by Foot)</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>6</strong></td>
+      <td style="text-align:right">43,000</td>
+      <td style="font-size:0.82rem;color:#666">Chicago &amp; Illinois</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">64</td>
+      <td><a href="https://www.facebook.com/groups/1108800723293307/" target="_blank" style="color:#23372C;font-weight:600">Michigan Short-Term Rentals (MSTRA)</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>6</strong></td>
+      <td style="text-align:right">1,700</td>
+      <td style="font-size:0.82rem;color:#666">Vacation Rentals &amp; STR</td>
+      <td style="font-size:0.78rem;color:#888">ISO|CABIN</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">65</td>
+      <td><a href="https://www.facebook.com/groups/2163212073965086/" target="_blank" style="color:#23372C;font-weight:600">Bride 2 Bride West Michigan</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">12,000</td>
+      <td style="font-size:0.82rem;color:#666">Wedding &amp; Venues</td>
+      <td style="font-size:0.78rem;color:#888">BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">66</td>
+      <td><a href="https://www.facebook.com/groups/362030000571314/" target="_blank" style="color:#23372C;font-weight:600">Bride To Bride Chicagoland</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">7,000</td>
+      <td style="font-size:0.82rem;color:#666">Wedding &amp; Venues</td>
+      <td style="font-size:0.78rem;color:#888">BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">67</td>
+      <td><a href="https://www.facebook.com/groups/upperpeninsulatravel/" target="_blank" style="color:#23372C;font-weight:600">Upper Peninsula Travel</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">221,000</td>
+      <td style="font-size:0.82rem;color:#666">Michigan Travel</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|POOL|FAM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">68</td>
+      <td><a href="https://www.facebook.com/groups/1475613279148911/" target="_blank" style="color:#23372C;font-weight:600">Chicago Illinois</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">68,000</td>
+      <td style="font-size:0.82rem;color:#666">Chicago &amp; Illinois</td>
+      <td style="font-size:0.78rem;color:#888">PLACE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">69</td>
+      <td><a href="https://www.facebook.com/groups/667213787463409/" target="_blank" style="color:#23372C;font-weight:600">Door County Vacationers</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">49,000</td>
+      <td style="font-size:0.82rem;color:#666">Wisconsin &amp; Great Lakes</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM|POOL</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">70</td>
+      <td><a href="https://www.facebook.com/groups/570040816484617/" target="_blank" style="color:#23372C;font-weight:600">FREE (OR ALMOST FREE) THINGS TO DO IN METRO DETROIT</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">17,000</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td style="font-size:0.78rem;color:#888">FAM|PLACE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">71</td>
+      <td><a href="https://www.facebook.com/groups/1380523565452003/" target="_blank" style="color:#23372C;font-weight:600">Greater Cleveland, Ohio News and Discussion</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">12,000</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">72</td>
+      <td><a href="https://www.facebook.com/groups/clevelandohiocommunity/" target="_blank" style="color:#23372C;font-weight:600">Cleveland Ohio Community</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">8,900</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">73</td>
+      <td><a href="https://www.facebook.com/clewithkids/" target="_blank" style="color:#23372C;font-weight:600">Cleveland Activities for Kids</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">4,400</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td style="font-size:0.78rem;color:#888">FAM|POOL</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">74</td>
+      <td><a href="https://www.facebook.com/groups/ChicagoConnections/" target="_blank" style="color:#23372C;font-weight:600">Chicago Connections</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">36,000</td>
+      <td style="font-size:0.82rem;color:#666">Chicago &amp; Illinois</td>
+      <td style="font-size:0.78rem;color:#888">PLACE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">75</td>
+      <td><a href="https://www.facebook.com/groups/3928132383905536/" target="_blank" style="color:#23372C;font-weight:600">Chicago Memories</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">19,000</td>
+      <td style="font-size:0.82rem;color:#666">Chicago &amp; Illinois</td>
+      <td style="font-size:0.78rem;color:#888">PLACE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">76</td>
+      <td><a href="https://www.facebook.com/groups/chicagoeventsvenuesandstories/" target="_blank" style="color:#23372C;font-weight:600">Chicago Events, Venues, and Stories</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">11,000</td>
+      <td style="font-size:0.82rem;color:#666">Chicago &amp; Illinois</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">77</td>
+      <td><a href="https://www.facebook.com/groups/597110824381786/" target="_blank" style="color:#23372C;font-weight:600">FUTURE BRIDE CHICAGO</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>5</strong></td>
+      <td style="text-align:right">0</td>
+      <td style="font-size:0.82rem;color:#666">Wedding &amp; Venues</td>
+      <td style="font-size:0.78rem;color:#888">BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">78</td>
+      <td><a href="https://www.facebook.com/groups/1260887203995411/" target="_blank" style="color:#23372C;font-weight:600">Michigan Weddings - Bride to Bride</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">56,000</td>
+      <td style="font-size:0.82rem;color:#666">Wedding &amp; Venues</td>
+      <td style="font-size:0.78rem;color:#888">BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">79</td>
+      <td><a href="https://www.facebook.com/groups/377236292453497/" target="_blank" style="color:#23372C;font-weight:600">Yoga &amp; Self-Care Retreats</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">45,000</td>
+      <td style="font-size:0.82rem;color:#666">Wellness &amp; Retreat</td>
+      <td style="font-size:0.78rem;color:#888">RETREAT</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">80</td>
+      <td><a href="https://www.facebook.com/groups/421082072790417/" target="_blank" style="color:#23372C;font-weight:600">Women&#x27;s Wellness Retreats in the US</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">22,000</td>
+      <td style="font-size:0.82rem;color:#666">Wellness &amp; Retreat</td>
+      <td style="font-size:0.78rem;color:#888">RETREAT|BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">81</td>
+      <td><a href="https://www.facebook.com/groups/holidayshoppingfundraiser/" target="_blank" style="color:#23372C;font-weight:600">Metro Detroit Events</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">37,000</td>
+      <td style="font-size:0.82rem;color:#666">Michigan Community</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">82</td>
+      <td><a href="https://www.facebook.com/groups/115996515682471/" target="_blank" style="color:#23372C;font-weight:600">A Michigan Thing Group</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">30,000</td>
+      <td style="font-size:0.82rem;color:#666">Michigan Travel</td>
+      <td style="font-size:0.78rem;color:#888">PLACE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">83</td>
+      <td><a href="https://www.facebook.com/groups/168576596516125/" target="_blank" style="color:#23372C;font-weight:600">Chicago Free/Cheap Events</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">29,000</td>
+      <td style="font-size:0.82rem;color:#666">Chicago &amp; Illinois</td>
+      <td style="font-size:0.78rem;color:#888">PLACE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">84</td>
+      <td><a href="https://www.facebook.com/groups/northeastohiofun/" target="_blank" style="color:#23372C;font-weight:600">Northeast Ohio - Fun events &amp; things to do</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">160,000</td>
+      <td style="font-size:0.82rem;color:#666">Ohio &amp; Indiana</td>
+      <td style="font-size:0.78rem;color:#888">PLACE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">85</td>
+      <td><a href="https://www.facebook.com/groups/1628627130790184/" target="_blank" style="color:#23372C;font-weight:600">Things to do in Fort Wayne and Beyond!</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">40,000</td>
+      <td style="font-size:0.82rem;color:#666">Ohio &amp; Indiana</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">86</td>
+      <td><a href="https://www.facebook.com/groups/1467860460199593/" target="_blank" style="color:#23372C;font-weight:600">Things to do in Wisconsin</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">51,000</td>
+      <td style="font-size:0.82rem;color:#666">Wisconsin &amp; Great Lakes</td>
+      <td style="font-size:0.78rem;color:#888">PLACE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">87</td>
+      <td><a href="https://www.facebook.com/groups/770093650119927/" target="_blank" style="color:#23372C;font-weight:600">Milwaukee Foodie</a><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fde8e8;color:#8b1a1a">No</span></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">190,000</td>
+      <td style="font-size:0.82rem;color:#666">Wisconsin &amp; Great Lakes</td>
+      <td style="font-size:0.78rem;color:#888">PLACE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">88</td>
+      <td><a href="https://www.facebook.com/groups/1481532268843415/" target="_blank" style="color:#23372C;font-weight:600">Wisconsin In Pictures</a><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#fde8e8;color:#8b1a1a">No</span></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">147,000</td>
+      <td style="font-size:0.82rem;color:#666">Wisconsin &amp; Great Lakes</td>
+      <td style="font-size:0.78rem;color:#888">PLACE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">89</td>
+      <td><a href="https://www.facebook.com/groups/waukeshaeats/" target="_blank" style="color:#23372C;font-weight:600">Waukesha Eats</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">49,000</td>
+      <td style="font-size:0.82rem;color:#666">Wisconsin &amp; Great Lakes</td>
+      <td style="font-size:0.78rem;color:#888">PLACE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">90</td>
+      <td><a href="https://www.facebook.com/groups/212453655470845/" target="_blank" style="color:#23372C;font-weight:600">Fennville Area Online Yard Sale</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">21,000</td>
+      <td style="font-size:0.82rem;color:#666">Local / Hyper-local</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">91</td>
+      <td><a href="https://www.facebook.com/groups/lgbtmichiganandamerican/" target="_blank" style="color:#23372C;font-weight:600">LGBT Michigan &amp; American</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">14,000</td>
+      <td style="font-size:0.82rem;color:#666">LGBTQ+ Community</td>
+      <td style="font-size:0.78rem;color:#888">LGBTQ|BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">92</td>
+      <td><a href="https://www.facebook.com/groups/gaymichigan/" target="_blank" style="color:#23372C;font-weight:600">Gay Michigan</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">11,000</td>
+      <td style="font-size:0.82rem;color:#666">LGBTQ+ Community</td>
+      <td style="font-size:0.78rem;color:#888">LGBTQ|BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">93</td>
+      <td><a href="https://www.facebook.com/groups/promoteyourbusinessorpage/" target="_blank" style="color:#23372C;font-weight:600">Promote your business or page</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">57,000</td>
+      <td style="font-size:0.82rem;color:#666">Promo-Friendly / Business</td>
+      <td style="font-size:0.78rem;color:#888">CABIN|POOL</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">94</td>
+      <td><a href="https://www.facebook.com/groups/grmamasclub/" target="_blank" style="color:#23372C;font-weight:600">GR Mamas&#x27; Club</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">9,900</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td style="font-size:0.78rem;color:#888">FAM|POOL|BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">95</td>
+      <td><a href="https://www.facebook.com/groups/562184397457581/" target="_blank" style="color:#23372C;font-weight:600">Grand Rapids Moms, Dads, Kids &amp; Family Connection</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">7,300</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td style="font-size:0.78rem;color:#888">FAM|POOL</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">96</td>
+      <td><a href="https://www.facebook.com/groups/grandrapidsmoms/" target="_blank" style="color:#23372C;font-weight:600">Grand Rapids Moms</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">6,400</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td style="font-size:0.78rem;color:#888">FAM|POOL|BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">97</td>
+      <td><a href="https://www.facebook.com/groups/517livingcommunity/" target="_blank" style="color:#23372C;font-weight:600">517 Living Community — Greater Lansing, MI</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">88,000</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">98</td>
+      <td><a href="https://www.facebook.com/groups/565373763915912/" target="_blank" style="color:#23372C;font-weight:600">What&#x27;s Going On In Lansing Tonight</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">21,000</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">99</td>
+      <td><a href="https://www.facebook.com/groups/lifeincolumbusohio/" target="_blank" style="color:#23372C;font-weight:600">Columbus Ohio</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">21,000</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">100</td>
+      <td><a href="https://www.facebook.com/groups/columbusohcommunityhappenings/" target="_blank" style="color:#23372C;font-weight:600">Columbus, OH Community Happenings</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">10,000</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">101</td>
+      <td><a href="https://www.facebook.com/groups/1222880058081489/" target="_blank" style="color:#23372C;font-weight:600">614 Moms in the Know</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">6,000</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td style="font-size:0.78rem;color:#888">FAM|BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">102</td>
+      <td><a href="https://www.facebook.com/groups/420956196558150/" target="_blank" style="color:#23372C;font-weight:600">Family &amp; Kid friendly events in Fort Wayne and Surrounding area</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">4,700</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td style="font-size:0.78rem;color:#888">FAM|POOL</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">103</td>
+      <td><a href="https://www.facebook.com/groups/WHFtW/" target="_blank" style="color:#23372C;font-weight:600">What&#x27;s Happenin Fort Wayne?</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">5,300</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">104</td>
+      <td><a href="https://www.facebook.com/groups/800799157939522/" target="_blank" style="color:#23372C;font-weight:600">Nosey Neighbors of Fort Wayne, Indiana</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">6,700</td>
+      <td style="font-size:0.82rem;color:#666">Family &amp; Parenting</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">105</td>
+      <td><a href="https://www.facebook.com/groups/397023867386127/" target="_blank" style="color:#23372C;font-weight:600">West Michigan Informed</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">21,000</td>
+      <td style="font-size:0.82rem;color:#666">Michigan Travel &amp; Community</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">106</td>
+      <td><a href="https://www.facebook.com/LifeInMichigan" target="_blank" style="color:#23372C;font-weight:600">Michigan Life</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">21,000</td>
+      <td style="font-size:0.82rem;color:#666">Michigan Travel &amp; Community</td>
+      <td style="font-size:0.78rem;color:#888">PLACE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">107</td>
+      <td><a href="https://www.facebook.com/groups/everythingofmichigan/" target="_blank" style="color:#23372C;font-weight:600">Everything of Michigan</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">23,000</td>
+      <td style="font-size:0.82rem;color:#666">Michigan Travel &amp; Community</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|FAM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">108</td>
+      <td><a href="https://www.facebook.com/groups/lakemichigancommunity/" target="_blank" style="color:#23372C;font-weight:600">Lake Michigan Community</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">18,000</td>
+      <td style="font-size:0.82rem;color:#666">Michigan Travel &amp; Community</td>
+      <td style="font-size:0.78rem;color:#888">PLACE|POOL|FAM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">109</td>
+      <td><a href="https://www.facebook.com/groups/thestadeofmichigan/" target="_blank" style="color:#23372C;font-weight:600">The Stade of Michigan</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">27,000</td>
+      <td style="font-size:0.82rem;color:#666">Michigan Travel &amp; Community</td>
+      <td style="font-size:0.78rem;color:#888">PLACE</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">110</td>
+      <td><a href="https://www.facebook.com/groups/221415853897271/" target="_blank" style="color:#23372C;font-weight:600">Michigan Homes For Rent</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>4</strong></td>
+      <td style="text-align:right">19,700</td>
+      <td style="font-size:0.82rem;color:#666">Vacation Rentals &amp; STR</td>
+      <td style="font-size:0.78rem;color:#888">ISO|CABIN|LONGTERM</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">111</td>
+      <td><a href="https://www.facebook.com/groups/michiganweddingvendors/" target="_blank" style="color:#23372C;font-weight:600">Michigan Wedding Vendors</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>3</strong></td>
+      <td style="text-align:right">30,000</td>
+      <td style="font-size:0.82rem;color:#666">Wedding &amp; Venues</td>
+      <td style="font-size:0.78rem;color:#888">BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">112</td>
+      <td><a href="https://www.facebook.com/groups/weddingvenueownersandplanners/" target="_blank" style="color:#23372C;font-weight:600">Wedding &amp; Event Venue owners</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>3</strong></td>
+      <td style="text-align:right">5,600</td>
+      <td style="font-size:0.82rem;color:#666">Ohio &amp; Indiana</td>
+      <td style="font-size:0.78rem;color:#888">RETREAT|BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">113</td>
+      <td><a href="https://www.facebook.com/groups/michigansmallbusiness/" target="_blank" style="color:#23372C;font-weight:600">Michigan Small Business</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>2</strong></td>
+      <td style="text-align:right">50,000</td>
+      <td style="font-size:0.82rem;color:#666">Promo-Friendly / Business</td>
+      <td style="font-size:0.78rem;color:#888">RETREAT</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">114</td>
+      <td><a href="https://www.facebook.com/groups/michigansmallbiz/" target="_blank" style="color:#23372C;font-weight:600">Michigan Small Business (2nd group)</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>2</strong></td>
+      <td style="text-align:right">45,000</td>
+      <td style="font-size:0.82rem;color:#666">Promo-Friendly / Business</td>
+      <td style="font-size:0.78rem;color:#888">RETREAT</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">115</td>
+      <td><a href="https://www.facebook.com/groups/vendorswantedchicago/" target="_blank" style="color:#23372C;font-weight:600">Vendors Wanted - Chicago &amp; Surrounding Suburbs</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>2</strong></td>
+      <td style="text-align:right">23,000</td>
+      <td style="font-size:0.82rem;color:#666">Promo-Friendly / Business</td>
+      <td style="font-size:0.78rem;color:#888">RETREAT|BACH</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+<tr>
+      <td style="font-size:0.8rem;color:#888">116</td>
+      <td><a href="https://www.facebook.com/groups/mi.small.business.networking/" target="_blank" style="color:#23372C;font-weight:600">Michigan Small Business Networking</a></td>
+      <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.73rem;font-weight:600;background:#f0f0f0;color:#555">cold</span></td>
+      <td style="text-align:center"><strong>2</strong></td>
+      <td style="text-align:right">24,000</td>
+      <td style="font-size:0.82rem;color:#666">Promo-Friendly / Business</td>
+      <td style="font-size:0.78rem;color:#888">RETREAT</td>
+      <td style="font-size:0.8rem">—</td>
+      <td style="font-size:0.8rem;color:#666">—</td>
+      <td style="font-size:0.78rem;color:#888">—</td>
+    </tr>
+</tbody>
+  </table>
+  <p class="note" id="groupCount">Showing all 116 groups</p>
+</section>
 
 </main>
-<footer>DollyBrook Resort · Xavier Agent · rufglobal.github.io/dashboards/dollybrook/fb-marketing-kpis.html</footer>
+<footer>DollyBrook Resort · Xavier Agent · <a href="https://rufglobal.github.io/dashboards/dollybrook/fb-marketing-kpis.html" style="color:#CEAA78">rufglobal.github.io/dashboards/dollybrook/fb-marketing-kpis.html</a></footer>
 
 <script>
+// Sortable tables
 document.querySelectorAll('table').forEach(table => {
   table.querySelectorAll('th').forEach((th, colIndex) => {
     let asc = true;
@@ -236,6 +1839,26 @@ document.querySelectorAll('table').forEach(table => {
     });
   });
 });
+
+// Filter group directory
+function filterGroups() {
+  const search = document.getElementById('groupSearch').value.toLowerCase();
+  const trust = document.getElementById('trustFilter').value.toLowerCase();
+  const cat = document.getElementById('catFilter').value.toLowerCase();
+  const rows = document.querySelectorAll('#groupDirBody tr');
+  let visible = 0;
+  rows.forEach(row => {
+    const name = row.cells[1]?.textContent.toLowerCase() ?? '';
+    const trustCell = row.cells[2]?.textContent.toLowerCase() ?? '';
+    const catCell = row.cells[5]?.textContent.toLowerCase() ?? '';
+    const show = (!search || name.includes(search))
+              && (!trust || trustCell.includes(trust))
+              && (!cat || catCell.includes(cat));
+    row.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  document.getElementById('groupCount').textContent = `Showing ${visible} of 116 groups`;
+}
 </script>
 </body>
 </html>
