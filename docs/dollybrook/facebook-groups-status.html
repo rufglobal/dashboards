@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DollyBrook Resort — Facebook Groups Campaign Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Arya:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root { --db-dark-green: #23372C; --db-eggshell: #F1F0D9; --db-beige: #CEAA78; --db-dark-blue: #23262D; --radius: 1rem; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Lato', sans-serif; background: var(--db-eggshell); color: var(--db-dark-blue); }
+.header { background: linear-gradient(135deg, var(--db-dark-green) 0%, #1a2a22 100%); color: var(--db-eggshell); padding: 32px 40px; display: flex; align-items: flex-end; justify-content: space-between; }
+.header-left h1 { font-family: 'Arya', serif; font-size: 1.9rem; font-weight: 700; }
+.header-left p { font-size: 0.85rem; opacity: 0.7; margin-top: 6px; font-weight: 300; }
+.header-badge { background: var(--db-beige); color: var(--db-dark-green); font-weight: 700; font-size: 0.75rem; padding: 7px 16px; border-radius: 2rem; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+.stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; padding: 24px 40px 0; }
+.stat-card { background: white; border-radius: var(--radius); padding: 20px; text-align: center; border: 1px solid var(--db-beige); border-top: 4px solid var(--db-beige); }
+.stat-card.green { border-top-color: #28a745; } .stat-card.orange { border-top-color: #ffc107; } .stat-card.red { border-top-color: #dc3545; }
+.stat-number { font-family: 'Arya', serif; font-size: 2.2rem; font-weight: 700; color: var(--db-dark-green); }
+.stat-card.green .stat-number { color: #28a745; } .stat-card.orange .stat-number { color: #e6a800; } .stat-card.red .stat-number { color: #dc3545; }
+.stat-label { font-size: 0.75rem; color: #666; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; }
+.charts-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; padding: 24px 40px; }
+@media (max-width: 900px) { .charts-grid { grid-template-columns: 1fr; } }
+.chart-card { background: white; border-radius: var(--radius); padding: 24px; border: 1px solid var(--db-beige); }
+.chart-card h3 { font-family: 'Arya', serif; font-size: 1rem; font-weight: 600; color: var(--db-dark-green); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--db-beige); }
+.chart-container { position: relative; height: 220px; }
+.timeline-section { padding: 0 40px 24px; }
+.timeline-card { background: white; border-radius: var(--radius); padding: 24px; border: 1px solid var(--db-beige); }
+.timeline-card h3 { font-family: 'Arya', serif; font-size: 1rem; font-weight: 600; color: var(--db-dark-green); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--db-beige); }
+.timeline-date-group { margin-bottom: 20px; }
+.timeline-date-label { font-family: 'Lato', sans-serif; font-weight: 700; font-size: 0.82rem; color: var(--db-dark-green); background: rgba(206,170,120,0.2); display: inline-block; padding: 4px 12px; border-radius: 12px; margin-bottom: 10px; }
+.timeline-items { display: flex; flex-wrap: wrap; gap: 8px; }
+.timeline-item { padding: 6px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.timeline-item.live { background: #d4edda; color: #155724; } .timeline-item.pending { background: #fff3cd; color: #856404; } .timeline-item.removed { background: #f8d7da; color: #721c24; }
+.timeline-item .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.timeline-item.live .dot { background: #28a745; } .timeline-item.pending .dot { background: #ffc107; } .timeline-item.removed .dot { background: #dc3545; }
+.table-section { padding: 0 40px 40px; }
+.table-card { background: white; border-radius: var(--radius); padding: 24px; border: 1px solid var(--db-beige); overflow-x: auto; }
+.table-card h3 { font-family: 'Arya', serif; font-size: 1rem; font-weight: 600; color: var(--db-dark-green); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--db-beige); }
+table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+thead tr { background: var(--db-dark-green); color: var(--db-eggshell); }
+thead th { padding: 10px 12px; text-align: left; font-weight: 600; white-space: nowrap; cursor: pointer; user-select: none; font-size: 0.78rem; letter-spacing: 0.03em; }
+thead th:hover { background: rgba(255,255,255,0.1); }
+thead th.sort-asc::after { content: ' B2'; font-size: 0.65rem; opacity: 0.8; }
+thead th.sort-desc::after { content: ' BC'; font-size: 0.65rem; opacity: 0.8; }
+tbody tr { border-bottom: 1px solid rgba(206,170,120,0.25); } tbody tr:hover { background: rgba(206,170,120,0.1); }
+tbody td { padding: 10px 12px; vertical-align: top; }
+.badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.74rem; font-weight: 700; white-space: nowrap; }
+.badge-live { background: #d4edda; color: #155724; } .badge-pending { background: #fff3cd; color: #856404; } .badge-removed { background: #f8d7da; color: #721c24; }
+.badge-cat-mi { background: #cce5ff; color: #004085; } .badge-cat-sg { background: #e2d9f3; color: #4a1a8a; } .badge-cat-vr { background: #d1ecf1; color: #0c5460; } .badge-cat-fm { background: #ffeeba; color: #856404; }
+.members { font-weight: 600; color: var(--db-dark-green); } .snippet { color: #555; max-width: 220px; }
+.score-high { font-weight: 800; color: #28a745; font-size: 1rem; }
+.score-mid { font-weight: 700; color: #e6a800; }
+.score-low { color: #aaa; }
+.score-zero { color: #ddd; font-style: italic; font-size: 0.75rem; }
+a.group-link { color: var(--db-dark-green); text-decoration: none; font-weight: 600; } a.group-link:hover { text-decoration: underline; }
+.footer { background: var(--db-dark-green); color: rgba(241,240,217,0.65); text-align: center; padding: 18px; font-size: 0.78rem; font-style: italic; }
+.footer strong { color: var(--db-eggshell); font-style: normal; }
+.footer a { color: var(--db-beige); }
+.updated-tag { font-size: 0.75rem; color: #888; text-align: right; padding: 8px 40px 0; }
+.calendar-section { padding: 0 40px 32px; }
+.calendar-card { background: white; border-radius: var(--radius); border: 1px solid var(--db-beige); overflow: hidden; }
+.calendar-card h3 { font-family: 'Arya', serif; font-size: 1rem; font-weight: 600; color: var(--db-dark-green); padding: 18px 24px 14px; border-bottom: 1px solid var(--db-beige); margin: 0; }
+.cal-day { border-bottom: 1px solid rgba(206,170,120,0.2); }
+.cal-day:last-child { border-bottom: none; }
+.cal-date { background: rgba(35,55,44,0.04); padding: 7px 20px; font-family: 'Lato', sans-serif; font-weight: 700; font-size: 0.76rem; color: var(--db-dark-green); letter-spacing: 0.06em; text-transform: uppercase; }
+.cal-row { border-bottom: 1px solid rgba(206,170,120,0.12); }
+.cal-row:last-child { border-bottom: none; }
+.cal-row-summary { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; cursor: pointer; font-size: 0.82rem; transition: background 0.15s; }
+.cal-row-summary:hover { background: rgba(206,170,120,0.08); }
+.cal-row-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; color: var(--db-dark-blue); }
+.cal-row-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.cal-plat-tag { background: rgba(35,55,44,0.08); color: var(--db-dark-green); font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; white-space: nowrap; letter-spacing: 0.04em; text-transform: uppercase; }
+.cal-chevron { color: var(--db-beige); font-size: 0.65rem; }
+.cal-detail { padding: 12px 20px 16px; background: rgba(241,240,217,0.5); border-top: 1px solid rgba(206,170,120,0.2); }
+.cal-detail-text { font-size: 0.8rem; color: #444; line-height: 1.6; white-space: pre-wrap; max-height: 200px; overflow-y: auto; font-family: monospace; background: white; border: 1px solid rgba(206,170,120,0.3); border-radius: 6px; padding: 10px 12px; }
+details summary { list-style: none; }
+details summary::-webkit-details-marker { display: none; }
+details[open] .cal-chevron { transform: rotate(180deg); display: inline-block; }
+.status-draft { background: #e2e3e5; color: #383d41; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 700; display: inline-block; }
+.status-approved { background: #d4edda; color: #155724; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 700; display: inline-block; }
+.status-skip { background: #f8d7da; color: #721c24; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 700; display: inline-block; }
+.status-posted { background: var(--db-dark-green); color: var(--db-eggshell); padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 700; display: inline-block; }
+.status-revised { background: #fff3cd; color: #856404; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 700; display: inline-block; }
+.cal-empty { padding: 24px; text-align: center; color: #aaa; font-style: italic; font-size: 0.85rem; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-left">
+    <h1>DollyBrook Resort</h1>
+    <p>Facebook Groups Campaign · Posting status, reach, and timeline tracker · Agent Xavier</p>
+  </div>
+  <div class="header-badge">Campaign Dashboard</div>
+</div>
+<p class="updated-tag">Last updated: May 04, 2026 · 147 posts tracked across 112 groups</p>
+<div class="stats-row">
+  <div class="stat-card green"><div class="stat-number">36</div><div class="stat-label">Posts Live</div></div>
+  <div class="stat-card orange"><div class="stat-number">32</div><div class="stat-label">Pending Approval</div></div>
+  <div class="stat-card red"><div class="stat-number">25</div><div class="stat-label">Removed</div></div>
+  <div class="stat-card"><div class="stat-number">112</div><div class="stat-label">Groups Active</div></div>
+  <div class="stat-card"><div class="stat-number">5,084</div><div class="stat-label">Page Followers</div></div>
+  <div class="stat-card green"><div class="stat-number">196</div><div class="stat-label">Top Post Reactions</div></div>
+</div>
+<div class="charts-grid">
+  <div class="chart-card"><h3>📊 Post Status Breakdown</h3><div class="chart-container"><canvas id="statusChart"></canvas></div></div>
+  <div class="chart-card"><h3>📅 Posts by Date</h3><div class="chart-container"><canvas id="dateChart"></canvas></div></div>
+  <div class="chart-card"><h3>📣 Reach by Group (Members K)</h3><div class="chart-container"><canvas id="reachChart"></canvas></div></div>
+</div>
+
+<div class="calendar-section">
+  <div class="calendar-card">
+    <h3>Upcoming Content Calendar</h3>
+    <div class="cal-empty">No upcoming posts planned yet &mdash; 9 PM cron will pre-fill tonight.</div>
+  </div>
+</div>
+<div class="timeline-section">
+  <div class="timeline-card">
+    <h3>🕐 Posting Timeline</h3>
+    <div class="timeline">
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-03-31 — 10 posts</div>
+          <div class="timeline-items"><a href="https://www.facebook.com/groups/1670873796574851/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>South Haven Michigan</div></a>
+<a href="https://www.facebook.com/groups/281193499185629/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Downtown South Haven Michigan Chatline</div></a>
+<a href="https://www.facebook.com/groups/939670059525174/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>West Michigan Travel Ideas</div></a>
+<a href="https://www.facebook.com/groups/265738146921622/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>Things to do in Southwest MI</div></a>
+<a href="https://www.facebook.com/groups/1569917773284067/posts/4363630773912739/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Southwest Michigan</div></a>
+<a href="https://www.facebook.com/groups/431102449466134/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>Saugatuck Underground</div></a>
+<a href="https://www.facebook.com/groups/691341305200368/posts/1677511213250034/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Vacation Rentals in Southwest Michigan</div></a>
+<a href="https://www.facebook.com/groups/626221328137060/posts/2155349588557552/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>THE NEW AND BETTER FENNVILLE INFORMED</div></a>
+<a href="https://www.facebook.com/groups/892119510857517/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>South Haven Vacation Homes Group</div></a>
+<a href="https://www.facebook.com/groups/2630364940540577/posts/4474514892792230/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Sauglasville</div></a>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-02 — 6 posts</div>
+          <div class="timeline-items"><a href="https://www.facebook.com/groups/301913630886156/posts/1591826128561560/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Holland Informed (the best one)</div></a>
+<a href="https://www.facebook.com/groups/290777465557262/posts/1592508105384185/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Allegan County Informed</div></a>
+<a href="https://www.facebook.com/groups/1059200144109025/posts/27335857936016554/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Fennville Informed</div></a>
+<a href="https://www.facebook.com/groups/588030999323865/posts/1274978980629060/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Fennville & Surrounding Areas Informed</div></a>
+<a href="https://www.facebook.com/groups/807611214069117/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Michigan Properties & Cabins</div></a>
+<a href="https://www.facebook.com/groups/703254738102778/posts/1530153618746215/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Hamilton Happenings</div></a>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-03 — 11 posts</div>
+          <div class="timeline-items"><a href="https://www.facebook.com/groups/77860661428/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>Sister Lakes in Dowagiac Michigan</div></a>
+<a href="https://www.facebook.com/groups/774022029429430/posts/3510834652414807/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>White Lake West Michigan/Muskegon County</div></a>
+<a href="https://www.facebook.com/groups/452195737554349/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>South Haven, Michigan</div></a>
+<a href="https://www.facebook.com/groups/91850887444/posts/10164586218902445/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Union Pier, Michigan</div></a>
+<a href="https://www.facebook.com/groups/691341305200368/posts/1677511213250034/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Vacation Rentals in Southwest Michigan</div></a>
+<a href="https://www.facebook.com/groups/southhavenmichigan/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>South Haven Michigan</div></a>
+<a href="https://www.facebook.com/groups/westmichigantravelideas/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>West Michigan Travel Ideas</div></a>
+<a href="https://www.facebook.com/groups/892119510857517/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>South Haven Vacation Homes Group</div></a>
+<a href="https://www.facebook.com/groups/77860661428/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>Sister Lakes in Dowagiac Michigan</div></a>
+<a href="https://www.facebook.com/groups/452195737554349/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>South Haven, Michigan (smaller)</div></a>
+<a href="https://www.facebook.com/groups/1059200144109025/posts/27335857936016554/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item other"><div class="dot"></div>Fennville Informed</div></a>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-04 — 3 posts</div>
+          <div class="timeline-items"><a href="https://www.facebook.com/groups/WhatToDoInChicago/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>WHAT TO DO IN CHICAGO</div></a>
+<a href="https://www.facebook.com/groups/2630364940540577/posts/4482185262025193/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Sauglasville</div></a>
+<a href="https://www.facebook.com/groups/2630364940540577/posts/4485756178334768/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Sauglasville</div></a>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-05 — 4 posts</div>
+          <div class="timeline-items"><a href="https://www.facebook.com/groups/731525285826948/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Growing Up in Chicago</div></a>
+<a href="https://www.facebook.com/groups/157059191540681/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>Abandoned Old and Interesting Places in Michigan</div></a>
+<a href="https://www.facebook.com/groups/157059191540681/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>Abandoned Old and Interesting Places in Michigan</div></a>
+<a href="https://www.facebook.com/groups/276308850878370/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Michigan Cabin Rentals</div></a>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-05 COMMENT — 4 posts</div>
+          <div class="timeline-items"><div class="timeline-item other"><div class="dot"></div>South Haven Michigan</div>
+<div class="timeline-item other"><div class="dot"></div>Things to do in SW MI</div>
+<div class="timeline-item other"><div class="dot"></div>Sister Lakes</div>
+<div class="timeline-item removed"><div class="dot"></div>West MI Travel Ideas</div>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-05 SKIP — 1 post</div>
+          <div class="timeline-items"><div class="timeline-item other"><div class="dot"></div>South Haven Vacation Homes Group</div>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-06 — 3 posts</div>
+          <div class="timeline-items"><a href="https://www.facebook.com/groups/651352386231094/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Southwest Michigan Wedding Group</div></a>
+<a href="https://www.facebook.com/groups/1485307128340098/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>Overheard in Michigan Ski Resorts</div></a>
+<a href="https://www.facebook.com/groups/902669401133623/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Greater Michigan - Vacation Short Term Rentals</div></a>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-06 COMMENT — 3 posts</div>
+          <div class="timeline-items"><div class="timeline-item other"><div class="dot"></div>South Haven Michigan</div>
+<div class="timeline-item other"><div class="dot"></div>Things to do in SW MI</div>
+<div class="timeline-item other"><div class="dot"></div>Sister Lakes</div>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-06 SKIP — 2 posts</div>
+          <div class="timeline-items"><div class="timeline-item other"><div class="dot"></div>West Michigan Travel Ideas</div>
+<div class="timeline-item other"><div class="dot"></div>South Haven Vacation Homes Group</div>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-07 — 3 posts</div>
+          <div class="timeline-items"><a href="https://www.facebook.com/groups/537102143143067/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Event Planners Club</div></a>
+<a href="https://www.facebook.com/groups/1569917773284067/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Southwest Michigan</div></a>
+<a href="https://www.facebook.com/groups/2630364940540577/posts/4489912341252485/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Sauglasville</div></a>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-07 COMMENT — 3 posts</div>
+          <div class="timeline-items"><div class="timeline-item other"><div class="dot"></div>South Haven Michigan</div>
+<div class="timeline-item other"><div class="dot"></div>Things to do in SW MI</div>
+<div class="timeline-item other"><div class="dot"></div>Sister Lakes</div>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-07 REPLY — 1 post</div>
+          <div class="timeline-items"><a href="https://www.facebook.com/groups/902669401133623/posts/2045501226850429/?comment_id=2045700136830538&reply_comment_id=2047100300023855" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item other"><div class="dot"></div>Greater Michigan - Vacation Short Term Rentals</div></a>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-07 SKIP — 2 posts</div>
+          <div class="timeline-items"><div class="timeline-item other"><div class="dot"></div>West Michigan Travel Ideas</div>
+<div class="timeline-item other"><div class="dot"></div>South Haven Vacation Homes Group</div>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-08 — 3 posts</div>
+          <div class="timeline-items"><a href="https://www.facebook.com/groups/703254738102778/my_pending_content/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Hamilton Happenings</div></a>
+<a href="https://www.facebook.com/groups/290777465557262/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Allegan County Informed</div></a>
+<a href="https://www.facebook.com/groups/588030999323865/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Fennville & Surrounding Areas Informed</div></a>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-08 COMMENT — 3 posts</div>
+          <div class="timeline-items"><div class="timeline-item other"><div class="dot"></div>South Haven Michigan</div>
+<div class="timeline-item other"><div class="dot"></div>Things to do in SW MI</div>
+<div class="timeline-item other"><div class="dot"></div>Sister Lakes</div>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-08 SKIP — 2 posts</div>
+          <div class="timeline-items"><div class="timeline-item other"><div class="dot"></div>West Michigan Travel Ideas</div>
+<div class="timeline-item other"><div class="dot"></div>South Haven Vacation Homes Group</div>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-09 — 1 post</div>
+          <div class="timeline-items"><a href="https://www.facebook.com/groups/301913630886156/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Holland Informed</div></a>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-09 SKIP — 6 posts</div>
+          <div class="timeline-items"><div class="timeline-item live"><div class="dot"></div>Sauglasville</div>
+<div class="timeline-item other"><div class="dot"></div>Southwest Michigan</div>
+<div class="timeline-item other"><div class="dot"></div>South Haven Michigan</div>
+<div class="timeline-item other"><div class="dot"></div>Things to do in SW MI</div>
+<div class="timeline-item other"><div class="dot"></div>Sister Lakes</div>
+<div class="timeline-item other"><div class="dot"></div>West Michigan Travel Ideas</div>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-10 — 4 posts</div>
+          <div class="timeline-items"><a href="https://www.facebook.com/groups/1059200144109025/my_pending_content/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Fennville Informed</div></a>
+<a href="https://m.facebook.com/groups/518397456396998/permalink/1513465756890158/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item other"><div class="dot"></div>Lake Michigan Vacation Rentals</div></a>
+<a href="https://www.facebook.com/reel/1576183313476875/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>Chicago Pickleball</div></a>
+<a href="https://www.facebook.com/groups/michiganpickleball/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>Michigan Pickleball</div></a>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-10 COMMENT — 3 posts</div>
+          <div class="timeline-items"><a href="https://www.facebook.com/groups/southhavenmichigan/posts/4429519224043614/?comment_id=4430544393941097" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item other"><div class="dot"></div>South Haven Michigan</div></a>
+<a href="https://www.facebook.com/groups/2630364940540577/permalink/4489912341252485/?comment_id=4490526627857723&reply_comment_id=4492577090986010" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item other"><div class="dot"></div>Sauglasville (reply Keely Frye)</div></a>
+<a href="https://www.facebook.com/groups/2630364940540577/posts/4489912341252485/?comment_id=4490017134575339" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item other"><div class="dot"></div>Sauglasville (reply Ren Ridlington)</div></a>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-13 — 3 posts</div>
+          <div class="timeline-items"><a href="https://www.facebook.com/groups/2630364940540577/posts/4495755857334800/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Sauglasville</div></a>
+<a href="https://www.facebook.com/groups/691341305200368/posts/1684953049172517/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Vacation Rentals in SW Michigan</div></a>
+<a href="https://www.facebook.com/groups/651352386231094/posts/1732428361456819/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Southwest Michigan Wedding Group</div></a>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-15 — 5 posts</div>
+          <div class="timeline-items"><a href="https://www.facebook.com/groups/431102449466134/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Saugatuck Underground</div></a>
+<a href="https://www.facebook.com/groups/vacationrentalsmarketing/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>Book Direct Vacation Rentals</div></a>
+<a href="https://www.facebook.com/groups/southwestmichiganrentals/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>Southwest Michigan Rentals</div></a>
+<a href="https://www.facebook.com/groups/519776988423708/posts/2652355498499169/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>Book Direct Vacation Rentals</div></a>
+<a href="https://www.facebook.com/groups/1084306731678746/posts/26065776413105099/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>Southwest Michigan Rentals</div></a>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-15 COMMENT — 8 posts</div>
+          <div class="timeline-items"><div class="timeline-item other"><div class="dot"></div>Downtown South Haven MI Chatline</div>
+<div class="timeline-item other"><div class="dot"></div>Sister Lakes Dowagiac MI</div>
+<div class="timeline-item other"><div class="dot"></div>White Lake West Michigan</div>
+<div class="timeline-item other"><div class="dot"></div>Sauglasville</div>
+<div class="timeline-item other"><div class="dot"></div>Michigan Cabin Rentals</div>
+<div class="timeline-item removed"><div class="dot"></div>Day Trips in Michigan</div>
+<div class="timeline-item other"><div class="dot"></div>WHAT TO DO IN CHICAGO</div>
+<div class="timeline-item other"><div class="dot"></div>Growing Up in Chicago</div>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-15 GOOGLE — 1 post</div>
+          <div class="timeline-items"><div class="timeline-item other"><div class="dot"></div>Google Reviews</div>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-15 ISO REPLY — 1 post</div>
+          <div class="timeline-items"><div class="timeline-item other"><div class="dot"></div>Greater MI Vacation STR</div>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-17 — 3 posts</div>
+          <div class="timeline-items"><a href="https://www.facebook.com/groups/703254738102778/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Hamilton Happenings</div></a>
+<a href="https://www.facebook.com/groups/301913630886156/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item other"><div class="dot"></div>Holland Informed</div></a>
+<a href="https://www.facebook.com/groups/290777465557262/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item other"><div class="dot"></div>Allegan County Informed</div></a>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-18 — 3 posts</div>
+          <div class="timeline-items"><a href="https://www.facebook.com/groups/230902953929099/posts/2765077520511617/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item other"><div class="dot"></div>Taste of West Michigan</div></a>
+<a href="https://www.facebook.com/groups/2630364940540577/posts/4496950993881953/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item other"><div class="dot"></div>Sauglasville</div></a>
+<a href="https://www.facebook.com/groups/276308850878370/posts/1494392545736655/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item other"><div class="dot"></div>Michigan Cabin Rentals</div></a>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-19 — 3 posts</div>
+          <div class="timeline-items"><a href="https://www.facebook.com/groups/WhatToDoInChicago/posts/4399951956957227/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item other"><div class="dot"></div>WHAT TO DO IN CHICAGO</div></a>
+<a href="https://www.facebook.com/groups/2744020862432163/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item other"><div class="dot"></div>Lake Michigan Community</div></a>
+<a href="https://www.facebook.com/groups/731525285826948/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item other"><div class="dot"></div>Growing Up in Chicago</div></a>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-20 — 1 post</div>
+          <div class="timeline-items"><a href="https://www.facebook.com/groups/1356640967822060/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item removed"><div class="dot"></div>Things To Do In Chicago</div></a>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-25 — 10 posts</div>
+          <div class="timeline-items"><a href="https://www.facebook.com/groups/westmichigantravelideas/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>West Michigan Travel Ideas</div></a>
+<a href="https://www.facebook.com/groups/1142032609238533/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Grand Rapids Informed</div></a>
+<a href="https://www.facebook.com/groups/583733510162047/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Michigan Best Day Trips</div></a>
+<a href="SKIPPED" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item other"><div class="dot"></div>Michigan Road Trips</div></a>
+<a href="https://www.facebook.com/groups/1953229231422322/posts/26600357506282819/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item live"><div class="dot"></div>Indianapolis Chatter</div></a>
+<a href="https://www.facebook.com/groups/1971747103169810/my_pending_content/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>I Grew Up in Michigan</div></a>
+<a href="https://www.facebook.com/groups/1084306731678746/my_pending_content/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Southwest Michigan Rentals</div></a>
+<a href="https://www.facebook.com/groups/677745097616688/my_pending_content/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Michigan Everything</div></a>
+<a href="https://www.facebook.com/groups/185382639953512/my_pending_content/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Day Trips in Michigan (750K)</div></a>
+<a href="https://www.facebook.com/groups/230902953929099/my_pending_content/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Taste Of West Michigan</div></a>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-04-26 — 6 posts</div>
+          <div class="timeline-items"><a href="https://www.facebook.com/groups/WhatToDoInChicago/my_pending_content/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>WHAT TO DO IN CHICAGO</div></a>
+<a href="https://www.facebook.com/groups/1569917773284067/my_pending_content/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Southwest Michigan</div></a>
+<a href="https://www.facebook.com/groups/265738146921622/my_pending_content/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Things to do in Southwest MI</div></a>
+<a href="https://www.facebook.com/groups/677745097616688/my_pending_content/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Michigan Everything</div></a>
+<a href="https://www.facebook.com/groups/583733510162047/my_pending_content/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Michigan Best Day Trips</div></a>
+<a href="https://www.facebook.com/groups/691341305200368/my_pending_content/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Vacation Rentals in SW Michigan</div></a>
+</div>
+        </div>
+        <div class="timeline-date-group">
+          <div class="timeline-date-label">2026-05-03 — 25 posts</div>
+          <div class="timeline-items"><a href="https://www.facebook.com/groups/chicagowomen/posts/4288235388093249/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item other"><div class="dot"></div>30+ Chicago Women's Community</div></a>
+<a href="https://www.facebook.com/groups/chicagowomen/posts/4166000903650032/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item other"><div class="dot"></div>30+ Chicago Women's Community</div></a>
+<a href="https://www.facebook.com/groups/276308850878370/permalink/1507612604414649/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item other"><div class="dot"></div>Michigan Cabin Rentals</div></a>
+<a href="https://www.facebook.com/groups/SoutheastMichiganPickleballForum/posts/26808608852158907/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item other"><div class="dot"></div>Southeast Michigan Pickleball Forum</div></a>
+<a href="https://www.facebook.com/groups/SoutheastMichiganPickleballForum/posts/26753818004304659/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item other"><div class="dot"></div>Southeast Michigan Pickleball Forum</div></a>
+<a href="https://www.facebook.com/dollybrookresort" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item other"><div class="dot"></div>DollyBrook Resort FB Page</div></a>
+<a href="https://www.facebook.com/groups/2893611470895601/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Conscious Retreats Worldwide</div></a>
+<a href="https://www.facebook.com/groups/1581779598700378/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>SW Michigan Lake Properties & Rentals</div></a>
+<a href="https://www.facebook.com/groups/1087838588059232/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Indy Weddings On A Budget</div></a>
+<a href="https://www.facebook.com/groups/MIbridesandvendors/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Michigan Brides & Vendors Connect</div></a>
+<a href="https://www.facebook.com/groups/303228565353112/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>OHIO Wedding Couples & Vendors</div></a>
+<a href="https://www.facebook.com/groups/1142032609238533/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Grand Rapids Michigan</div></a>
+<a href="https://www.facebook.com/groups/1490611034371518/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Vacation Rentals By Owners</div></a>
+<a href="https://www.facebook.com/groups/1102879901152464/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>AirBnB VRBO Direct Vacation Rentals WI MN MI</div></a>
+<a href="https://www.facebook.com/groups/1260737241531017/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Fun things to do in Michigan</div></a>
+<a href="https://www.facebook.com/groups/522338709344294/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Chicago travel tips by local guides</div></a>
+<a href="https://www.facebook.com/groups/chicgonetworking/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Chicago Small Business Referral Exchange & Network</div></a>
+<a href="https://www.facebook.com/groups/SoutheastMichiganPickleballForum/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>SE Michigan Pickleball Forum</div></a>
+<a href="https://www.facebook.com/groups/grpickleball/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>GR Pickleball Club</div></a>
+<a href="https://www.facebook.com/groups/197837046999473/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Cleveland Social Group</div></a>
+<a href="https://www.facebook.com/groups/chicagotraveltips/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Chicago Travel Tips (Tours by Foot)</div></a>
+<a href="https://www.facebook.com/groups/michiganpickleball/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Michigan Pickleball</div></a>
+<a href="https://www.facebook.com/groups/westmichigannetwork/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>West Michigan Network - Support Local Business</div></a>
+<a href="https://www.facebook.com/groups/2630364940540577/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Sauglasville</div></a>
+<a href="https://www.facebook.com/groups/688404128396373/user/100063247416933/" target="_blank" style="text-decoration:none;color:inherit"><div class="timeline-item pending"><div class="dot"></div>Michigan Weekend and Day Trippers</div></a>
+</div>
+        </div></div>
+  </div>
+</div>
+<div class="table-section">
+  <div class="table-card">
+    <h3>📋 All Posts — Full Detail</h3>
+    <table>
+      <thead><tr><th>Date</th><th>Group</th><th>Members</th><th>Cat</th><th>Status</th><th>Score</th><th>Snippet</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/chicagowomen/posts/4288235388093249/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-05-03 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/3374229402827190/" target="_blank">30+ Chicago Women's Community</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Hi Lilith! DollyBrook Resort in Fennville, MI checks every box...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/chicagowomen/posts/4166000903650032/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-05-03 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/3374229402827190/" target="_blank">30+ Chicago Women's Community</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Jazleen - if you ever want to do a self-guided wine tour, DollyBrook Resort in Fennville MI is liter...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/276308850878370/permalink/1507612604414649/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-05-03 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/276308850878370/" target="_blank">Michigan Cabin Rentals</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Not directly on the lake but DollyBrook Resort in Fennville might be worth a look...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/SoutheastMichiganPickleballForum/posts/26808608852158907/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-05-03 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/SoutheastMichiganPickleballForum/" target="_blank">Southeast Michigan Pickleball Forum</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Love seeing these grow year over year! For anyone traveling in from west of Saginaw...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/SoutheastMichiganPickleballForum/posts/26753818004304659/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-05-03 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/SoutheastMichiganPickleballForum/" target="_blank">Southeast Michigan Pickleball Forum</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Happy 65th Fred! 50+ people and 14 courts - that's a serious pickleball family...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/dollybrookresort" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-05-03 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/dollybrookresort" target="_blank">DollyBrook Resort FB Page</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Tulip Time ends this Sunday. Six million tulips in Holland Michigan...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2893611470895601/user/100063247416933/" target="_blank">2026-05-03</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2893611470895601/" target="_blank">Conscious Retreats Worldwide</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Tulip Time ends this Sunday - the last weekend of six million tulips in Holland Michigan...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1581779598700378/user/100063247416933/" target="_blank">2026-05-03</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1581779598700378/" target="_blank">SW Michigan Lake Properties & Rentals</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Tulip Time ends this Sunday - the last weekend of six million tulips in Holland Michigan...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1087838588059232/user/100063247416933/" target="_blank">2026-05-03</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1087838588059232/" target="_blank">Indy Weddings On A Budget</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Planning a Michigan wedding? This weekend is something special...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/MIbridesandvendors/user/100063247416933/" target="_blank">2026-05-03</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/MIbridesandvendors/" target="_blank">Michigan Brides & Vendors Connect</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Tulip Time ends this Sunday... For Michigan brides looking for a rehearsal dinner venue...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/303228565353112/user/100063247416933/" target="_blank">2026-05-03</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/303228565353112/" target="_blank">OHIO Wedding Couples & Vendors</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Tulip Time ends this Sunday... For Ohio couples looking at a Michigan venue...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1142032609238533/user/100063247416933/" target="_blank">2026-05-03</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1142032609238533/" target="_blank">Grand Rapids Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Tulip Time ends this Sunday... Grand Rapids folks - DollyBrook Resort 1 hour away...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1490611034371518/user/100063247416933/" target="_blank">2026-05-03</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1490611034371518/" target="_blank">Vacation Rentals By Owners</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Tulip Time ends this Sunday... DollyBrook Resort in Fennville is 15 min south...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1102879901152464/user/100063247416933/" target="_blank">2026-05-03</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1102879901152464/" target="_blank">AirBnB VRBO Direct Vacation Rentals WI MN MI</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Tulip Time ends this Sunday... If you're in WI MN or MI and looking for a Michigan cabin...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1260737241531017/user/100063247416933/" target="_blank">2026-05-03</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1260737241531017/" target="_blank">Fun things to do in Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Tulip Time ends this Sunday... Pair it with a DollyBrook weekend in Fennville...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/522338709344294/user/100063247416933/" target="_blank">2026-05-03</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/522338709344294/" target="_blank">Chicago travel tips by local guides</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">3 hours from Chicago this Sunday is the last weekend of Tulip Time in Holland...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/chicgonetworking/user/100063247416933/" target="_blank">2026-05-03</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/chicgonetworking/" target="_blank">Chicago Small Business Referral Exchange & Network</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Team getaway this weekend: Tulip Time ends Sunday in Holland Michigan...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/SoutheastMichiganPickleballForum/user/100063247416933/" target="_blank">2026-05-03</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/SoutheastMichiganPickleballForum/" target="_blank">SE Michigan Pickleball Forum</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Long weekend from SE Michigan - Tulip Time ends Sunday in Holland...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/grpickleball/user/100063247416933/" target="_blank">2026-05-03</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/grpickleball/" target="_blank">GR Pickleball Club</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">GR crew - DollyBrook Resort in Fennville is 1 hour away and this Sunday is Tulip Time finale...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/197837046999473/user/100063247416933/" target="_blank">2026-05-03</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/197837046999473/" target="_blank">Cleveland Social Group</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">3.5 hours from Cleveland: Tulip Time last weekend in Holland Michigan ends Sunday...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/chicagotraveltips/user/100063247416933/" target="_blank">2026-05-03</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/chicagotraveltips/" target="_blank">Chicago Travel Tips (Tours by Foot)</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Chicago travel tip for this weekend: Tulip Time ends Sunday in Holland Michigan...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/michiganpickleball/user/100063247416933/" target="_blank">2026-05-03</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/michiganpickleball/" target="_blank">Michigan Pickleball</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Tulip Time ends this Sunday in Holland - six million tulips 15 min from Fennville...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/westmichigannetwork/user/100063247416933/" target="_blank">2026-05-03</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/westmichigannetwork/" target="_blank">West Michigan Network - Support Local Business</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Tulip Time ends this Sunday in Holland - six million tulips...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2630364940540577/user/100063247416933/" target="_blank">2026-05-03</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2630364940540577/" target="_blank">Sauglasville</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Tulip Time ends this Sunday in Holland - six million tulips 15 min from Saugatuck...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/688404128396373/user/100063247416933/" target="_blank">2026-05-03</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/688404128396373/" target="_blank">Michigan Weekend and Day Trippers</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Tulip Time ends this Sunday in Holland - the last weekend of six million tulips...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/WhatToDoInChicago/my_pending_content/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-26 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/WhatToDoInChicago/" target="_blank">WHAT TO DO IN CHICAGO</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">3 hours from Chicago. Private fire pits, hot tubs, and 34 wooded acres...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1569917773284067/my_pending_content/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-26 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1569917773284067/" target="_blank">Southwest Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Michigan summers don't care that you've been busy all year...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/265738146921622/my_pending_content/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-26 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/265738146921622/" target="_blank">Things to do in Southwest MI</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Pool opens Memorial Day. Fire pits every night...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/677745097616688/my_pending_content/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-26 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/677745097616688/" target="_blank">Michigan Everything</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Heated pool opening Memorial Day. Fire pits every night...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/583733510162047/my_pending_content/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-26 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/583733510162047/" target="_blank">Michigan Best Day Trips</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">One stretch that belongs on every Michigan road tripper's list...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/691341305200368/my_pending_content/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-26 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/691341305200368/" target="_blank">Vacation Rentals in SW Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">DollyBrook Resort - 9 private cabins on 34 acres in Fennville...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/westmichigantravelideas/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-25 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/westmichigantravelideas/" target="_blank">West Michigan Travel Ideas</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Spring in Fennville is something else...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1142032609238533/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-25 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1142032609238533/" target="_blank">Grand Rapids Informed</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>Text-only post - photo upload skipped to maintain momentum - posted as DollyBrook Resort</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Waving from Fennville — about 45 minutes southwest of GR...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/583733510162047/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-25 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/583733510162047/" target="_blank">Michigan Best Day Trips</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">One underrated day trip from anywhere in Michigan: the Blue Star Highway...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="SKIPPED" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-25 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/michiganroadtrips/" target="_blank">Michigan Road Trips</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Road trip question: what's the stretch of Michigan you think is most underrated...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1953229231422322/posts/26600357506282819/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-25 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1953229231422322/" target="_blank">Indianapolis Chatter</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>Text-only - photo flagged for manual add (common-firepit-night.jpg)</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Friday night question for the Indy crew: what's your go-to Midwest weekend escape?</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1971747103169810/my_pending_content/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-25 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1971747103169810/" target="_blank">I Grew Up in Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">If you grew up in Michigan you already know: there's no off-season...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1084306731678746/my_pending_content/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-25 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1084306731678746/" target="_blank">Southwest Michigan Rentals</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Intro from a neighbor - we're DollyBrook Resort in Fennville...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/677745097616688/my_pending_content/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-25 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/677745097616688/" target="_blank">Michigan Everything</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Michigan question: is pickleball officially the sport of summer 2026...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/185382639953512/my_pending_content/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-25 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/185382639953512/" target="_blank">Day Trips in Michigan (750K)</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Day trip angle that doesn't get enough credit: Fennville MI...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/230902953929099/my_pending_content/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-25 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/230902953929099/" target="_blank">Taste Of West Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">West Michigan food question: what's the restaurant that locals swear by...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1356640967822060/user/100063247416933/" target="_blank">2026-04-20</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1356640967822060/" target="_blank">Things To Do In Chicago</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">If you haven't done a Michigan cabin weekend from Chicago, put it on the list this summer.</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/WhatToDoInChicago/posts/4399951956957227/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-19 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/WhatToDoInChicago/" target="_blank">WHAT TO DO IN CHICAGO</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">If you haven't done the West Michigan lake trip yet, this is the push.
+
+Two hour</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2744020862432163/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-19 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2744020862432163/" target="_blank">Lake Michigan Community</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">West Michigan in May is a different thing entirely.
+
+Before the crowds. Before t</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/731525285826948/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-19 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/731525285826948/" target="_blank">Growing Up in Chicago</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Chicago families have been driving to West Michigan for generations.
+
+Two hours </td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/230902953929099/posts/2765077520511617/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-18 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/230902953929099/" target="_blank">Taste of West Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">One thing guests always ask when they check in at DollyBrook in Fennville: where</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2630364940540577/posts/4496950993881953/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-18 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2630364940540577/" target="_blank">Sauglasville</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Quick community question for the Sauglasville neighbors.
+
+We have had a lot of g</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/276308850878370/posts/1494392545736655/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-18 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/276308850878370/" target="_blank">Michigan Cabin Rentals</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">For anyone planning a summer cabin trip for a larger group — one thing that surp</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/703254738102778/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-17 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/703254738102778/" target="_blank">Hamilton Happenings</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>rank88_eveningstringlightsfirepit.jpg - Sled Loft cabin story / spring opening ritual - community tone - no CTA</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Spring is hitting different at The Sled Loft right now.</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/301913630886156/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-17 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/301913630886156/" target="_blank">Holland Informed</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Something a lot of Holland families do that I love: they book DollyBrook for the shoulder weekend</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/290777465557262/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-17 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/290777465557262/" target="_blank">Allegan County Informed</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Honest question for Allegan County folks: what's the go-to move when out-of-town family comes to vis...</td>
+        </tr>
+        <tr>
+          <td>2026-04-15 ISO REPLY</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/902669401133623/" target="_blank">Greater MI Vacation STR</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Hi! If you are open to exploring a bit south DollyBrook Resort in Fennville has 9 private cabins.</td>
+        </tr>
+        <tr>
+          <td>2026-04-15 GOOGLE</td>
+          <td><a class="group-link" href="https://www.google.com/maps/place/DollyBrook+Family+Resort/" target="_blank">Google Reviews</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Reviewed 45 total reviews - found 2 unanswered (Morgan Manza 1-star + Ioana Savos 5-star)</td>
+        </tr>
+        <tr>
+          <td>2026-04-15 COMMENT</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/281193499185629/" target="_blank">Downtown South Haven MI Chatline</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Great opportunity right in the heart of downtown! Biggby is such a staple in South Haven</td>
+        </tr>
+        <tr>
+          <td>2026-04-15 COMMENT</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/77860661428/" target="_blank">Sister Lakes Dowagiac MI</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Farm stand open for the season — that is the best kind of spring news! Love seeing local producers</td>
+        </tr>
+        <tr>
+          <td>2026-04-15 COMMENT</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/774022029429430/" target="_blank">White Lake West Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Exciting news for the Muskegon area! Olde Heritage is such a great market.</td>
+        </tr>
+        <tr>
+          <td>2026-04-15 COMMENT</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2630364940540577/" target="_blank">Sauglasville</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Love a roadside flower cart — that is such a quintessential SW Michigan thing.</td>
+        </tr>
+        <tr>
+          <td>2026-04-15 COMMENT</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/276308850878370/" target="_blank">Michigan Cabin Rentals</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Beautiful lake views! Northern Michigan in the summer is hard to beat.</td>
+        </tr>
+        <tr>
+          <td>2026-04-15 COMMENT</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/michiganbucketlist/" target="_blank">Day Trips in Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-high">345</span><br><small style="color:#aaa;font-size:0.7rem">0R 115C 0S</small></td>
+          <td class="snippet">Potter Park is the better pick for 8 months pregnant! More compact layout easier to navigate.</td>
+        </tr>
+        <tr>
+          <td>2026-04-15 COMMENT</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/WhatToDoInChicago/" target="_blank">WHAT TO DO IN CHICAGO</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-high">810</span><br><small style="color:#aaa;font-size:0.7rem">0R 270C 0S</small></td>
+          <td class="snippet">Red line is totally fine for getting there! Rideshare home at night is always the smart move.</td>
+        </tr>
+        <tr>
+          <td>2026-04-15 COMMENT</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/731525285826948/" target="_blank">Growing Up in Chicago</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-high">480</span><br><small style="color:#aaa;font-size:0.7rem">0R 160C 0S</small></td>
+          <td class="snippet">The Berghoff! One of the few places that actually felt like old Chicago.</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/431102449466134/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-15 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/431102449466134/" target="_blank">Saugatuck Underground</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>13-year story pillar. Photo: Cabin 3 night shot. Posted by Xavier directly (test post). First comment with link pending.</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Started as a single cabin in the woods in Fennville. 13 years later: nine cabins 34 acres pickleball...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/vacationrentalsmarketing/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-15 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/vacationrentalsmarketing/" target="_blank">Book Direct Vacation Rentals</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">We just opened two regulation pickleball courts at DollyBrook this spring. Michigan. 34 acres. Nine ...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/southwestmichiganrentals/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-15 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/southwestmichiganrentals/" target="_blank">Southwest Michigan Rentals</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Our nine cabins at DollyBrook have personalities. The Bubblegum Bungalow is the one the kids fight o...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/519776988423708/posts/2652355498499169/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-15 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/vacationrentalsmarketing/" target="_blank">Book Direct Vacation Rentals</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">We just opened two regulation pickleball courts at DollyBrook this spring.</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1084306731678746/posts/26065776413105099/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-15 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/southwestmichiganrentals/" target="_blank">Southwest Michigan Rentals</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Our nine cabins at DollyBrook have personalities.</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2630364940540577/posts/4495755857334800/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-13 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2630364940540577/" target="_blank">Sauglasville</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>rank88_eveningstringlightsfirepit.jpg - Sled Loft cabin story / spring opening ritual - community tone - no CTA - no first comment needed</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Every spring we do a walkthrough of each cabin before the first guests arrive. The Sled Loft is alwa...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/691341305200368/posts/1684953049172517/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-13 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/691341305200368/" target="_blank">Vacation Rentals in SW Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>rank85_poolloungechairsgazebosummer.jpg - repeat rate by cabin - VR peer operational insight - FIRST COMMENT NEEDED (link) after approval</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">One of the things I track that nobody talks about: the return rate by cabin...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/651352386231094/posts/1732428361456819/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-13 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/651352386231094/" target="_blank">Southwest Michigan Wedding Group</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>rank88_cabinhottubgrillnature.jpg - bachelorette / venue listing - group stay angle - FIRST COMMENT NEEDED (link) after approval</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">For bachelorette planners in SW Michigan: summer 2026 dates are still open at DollyBrook...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/southhavenmichigan/posts/4429519224043614/?comment_id=4430544393941097" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-10 COMMENT ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/southhavenmichigan/" target="_blank">South Haven Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">The South Haven pier at golden hour. We send every guest who stays with us down to watch the sunset ...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2630364940540577/permalink/4489912341252485/?comment_id=4490526627857723&reply_comment_id=4492577090986010" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-10 COMMENT ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2630364940540577/" target="_blank">Sauglasville (reply Keely Frye)</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">That is the perfect combo -- pool day fire pit night good company. That is exactly the kind of day w...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2630364940540577/posts/4489912341252485/?comment_id=4490017134575339" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-10 COMMENT ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2630364940540577/" target="_blank">Sauglasville (reply Ren Ridlington)</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Fire pit blaze plus a beach sunset is the exact combination SW Michigan does better than anywhere. T...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1059200144109025/my_pending_content/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-10 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1059200144109025/" target="_blank">Fennville Informed</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>Guest Guide community post - guide-phone-lake.jpg via DOM.setFileInputFiles - no link in body - first comment with guide link pending approval</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Something we put together for our guests — and figured the Fennville community should see it too...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://m.facebook.com/groups/518397456396998/permalink/1513465756890158/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-10 ⚠️</a></td>
+          <td><a class="group-link" href="Alexandria Boucher" target="_blank">Lake Michigan Vacation Rentals</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Hi Alexandria! DollyBrook Resort in Fennville is about 20 minutes from South Haven - 9 cozy cabins w...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/reel/1576183313476875/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-10 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1781983742045018/" target="_blank">Chicago Pickleball</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Florida has the weather. Arizona has the resorts. The Midwest has this. I'll take the trees.</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/michiganpickleball/user/100063247416933/" target="_blank">2026-04-10</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/michiganpickleball/" target="_blank">Michigan Pickleball</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Outdoor season is almost here and Michigan courts surrounded by trees might be the most underrated s...</td>
+        </tr>
+        <tr>
+          <td>2026-04-09 SKIP</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2630364940540577/" target="_blank">Sauglasville</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet"></td>
+        </tr>
+        <tr>
+          <td>2026-04-09 SKIP</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1569917773284067/" target="_blank">Southwest Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet"></td>
+        </tr>
+        <tr>
+          <td>2026-04-09 SKIP</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/southhavenmichigan/" target="_blank">South Haven Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet"></td>
+        </tr>
+        <tr>
+          <td>2026-04-09 SKIP</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/265738146921622/" target="_blank">Things to do in SW MI</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet"></td>
+        </tr>
+        <tr>
+          <td>2026-04-09 SKIP</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/77860661428/" target="_blank">Sister Lakes</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet"></td>
+        </tr>
+        <tr>
+          <td>2026-04-09 SKIP</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/westmichigantravelideas/" target="_blank">West Michigan Travel Ideas</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet"></td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/301913630886156/user/100063247416933/" target="_blank">2026-04-09</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/301913630886156/" target="_blank">Holland Informed</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>Guest Guide community post - firepit photo via DOM.setFileInputFiles - link in first comment - posted to 82K group - soliciting Holland local gem suggestions</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Something we put together for our DollyBrook guests -- and figured the Holland community might enjoy...</td>
+        </tr>
+        <tr>
+          <td>2026-04-08 SKIP</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/westmichigantravelideas/" target="_blank">West Michigan Travel Ideas</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet"></td>
+        </tr>
+        <tr>
+          <td>2026-04-08 SKIP</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/892119510857517/" target="_blank">South Haven Vacation Homes Group</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet"></td>
+        </tr>
+        <tr>
+          <td>2026-04-08 COMMENT</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/southhavenmichigan/" target="_blank">South Haven Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Renting a kayak or paddleboard and exploring the Black River -- there is nothing better on a warm af...</td>
+        </tr>
+        <tr>
+          <td>2026-04-08 COMMENT</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/265738146921622/" target="_blank">Things to do in SW MI</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">All you can eat pancakes to support the fire department -- that is the definition of a perfect Sunda...</td>
+        </tr>
+        <tr>
+          <td>2026-04-08 COMMENT</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/77860661428/" target="_blank">Sister Lakes</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Love seeing the Elks keeping community events alive in Dowagiac -- great organization!</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/703254738102778/my_pending_content/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-08 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/703254738102778/" target="_blank">Hamilton Happenings</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>Guide post - soliciting Hamilton local recommendations - dollybrook-guest-guide.lovable.app link - guide hero screenshot attached via DOM.setFileInputFiles (first successful photo upload without OS picker)</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Something we have been working on for our guests -- and wanted to share with the Hamilton community ...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/290777465557262/user/100063247416933/" target="_blank">2026-04-08</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/290777465557262/" target="_blank">Allegan County Informed</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>Guide post - no link in body - link in first comment - Sauglasville favorites screenshot - DOM.setFileInputFiles photo upload - went live immediately</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">We put together a local area guide for our DollyBrook guests -- the spots we actually recommend... A...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/588030999323865/user/100063247416933/" target="_blank">2026-04-08</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/588030999323865/" target="_blank">Fennville & Surrounding Areas Informed</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>Guide post - phone/lake photo (new AI hero shot) - no link in body - link in first comment - went live immediately - DOM.setFileInputFiles photo upload</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Something we put together for our guests -- and figured the Fennville community should see it too. W...</td>
+        </tr>
+        <tr>
+          <td>2026-04-07 SKIP</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/westmichigantravelideas/" target="_blank">West Michigan Travel Ideas</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet"></td>
+        </tr>
+        <tr>
+          <td>2026-04-07 SKIP</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/892119510857517/" target="_blank">South Haven Vacation Homes Group</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet"></td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/902669401133623/posts/2045501226850429/?comment_id=2045700136830538&reply_comment_id=2047100300023855" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-07 REPLY ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/902669401133623/" target="_blank">Greater Michigan - Vacation Short Term Rentals</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Mitchell Norton reply: quote request to norty5@gmail.com - 20 people July 9-13</td>
+        </tr>
+        <tr>
+          <td>2026-04-07 COMMENT</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/southhavenmichigan/" target="_blank">South Haven Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">What a beautiful spot for Mother's Day! The Farm at Bloomingdale is such a gem -- the SW Michigan co...</td>
+        </tr>
+        <tr>
+          <td>2026-04-07 COMMENT</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/265738146921622/" target="_blank">Things to do in SW MI</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Great initiative! SW Michigan has so many incredible outdoor spaces for kids in the summer -- this i...</td>
+        </tr>
+        <tr>
+          <td>2026-04-07 COMMENT</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/77860661428/" target="_blank">Sister Lakes</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Great rates for the area! Tree work in spring before the season gets busy is always smart timing.</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/537102143143067/user/100063247416933/" target="_blank">2026-04-07</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/537102143143067/" target="_blank">Event Planners Club</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>78K event planners group - venue listing angle - wedding-venue photo upload - string lights/twilight photo attached</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Looking for a unique Michigan venue for your next corporate retreat, group celebration, or buyout ev...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1569917773284067/user/100063247416933/" target="_blank">2026-04-07</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1569917773284067/" target="_blank">Southwest Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>11K SW Michigan community - pool season countdown - dollybrook-pool.jpg - engagement question</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Southwest Michigan folks -- pool season countdown is ON at DollyBrook! We open our outdoor pool Memo...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2630364940540577/posts/4489912341252485/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-07 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2630364940540577/" target="_blank">Sauglasville</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>Community question post - fire pit evening angle - no link no promo - thread sparking well - replied to Keely Frye + Ren Ridlington Apr 10</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-high">53</span><br><small style="color:#aaa;font-size:0.7rem">5R 16C 0S</small></td>
+          <td class="snippet">Spring evening question for the Sauglasville community -- What does your perfect SW Michigan summer ...</td>
+        </tr>
+        <tr>
+          <td>2026-04-06 SKIP</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/westmichigantravelideas/" target="_blank">West Michigan Travel Ideas</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet"></td>
+        </tr>
+        <tr>
+          <td>2026-04-06 SKIP</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/892119510857517/" target="_blank">South Haven Vacation Homes Group</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet"></td>
+        </tr>
+        <tr>
+          <td>2026-04-06 COMMENT</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/southhavenmichigan/" target="_blank">South Haven Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">This looks wonderful! Love seeing wellness events like this in SW Michigan. A yoga and sound bath re...</td>
+        </tr>
+        <tr>
+          <td>2026-04-06 COMMENT</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/265738146921622/" target="_blank">Things to do in SW MI</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Spring refresh vibes! SW Michigan has such talented local stylists -- great to see the creativity in...</td>
+        </tr>
+        <tr>
+          <td>2026-04-06 COMMENT</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/77860661428/" target="_blank">Sister Lakes</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Great service to know about for the area! Spring is perfect time for tree work before the season get...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/651352386231094/user/100063247416933/" target="_blank">2026-04-06</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/651352386231094/" target="_blank">Southwest Michigan Wedding Group</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>8.5K wedding venue group - vendor post OK 1x/week - rank88_eveningstringlightsfirepit.jpg - venue listing + bachelorette angle - Monday post</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Calling all SW Michigan brides and wedding planners! DollyBrook Resort in Fennville is now booking 2...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1485307128340098/user/100063247416933/" target="_blank">2026-04-06</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1485307128340098/" target="_blank">Overheard in Michigan Ski Resorts</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Fennville, MI - 10% spring discount on May/June cabin bookings. Ski season wrapping up? Time to trad...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/902669401133623/user/100063247416933/" target="_blank">2026-04-06</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/902669401133623/" target="_blank">Greater Michigan - Vacation Short Term Rentals</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>40K VR listing group - firepit-pond photo - full amenity listing - dollybrook.com link - went live immediately</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">DollyBrook Resort - Fennville MI (near Saugatuck) - 9 private wooded cabins on 34 acres...</td>
+        </tr>
+        <tr>
+          <td>2026-04-05 SKIP</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/892119510857517/" target="_blank">South Haven Vacation Homes Group</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet"></td>
+        </tr>
+        <tr>
+          <td>2026-04-05 COMMENT</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/southhavenmichigan/" target="_blank">South Haven Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Easter comment on Wishbone Pet Rescue chipmunk post</td>
+        </tr>
+        <tr>
+          <td>2026-04-05 COMMENT</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/265738146921622/" target="_blank">Things to do in SW MI</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">London Fog comment on The Copper Pot drink post</td>
+        </tr>
+        <tr>
+          <td>2026-04-05 COMMENT</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/77860661428/" target="_blank">Sister Lakes</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">K9 graduation congrats comment on Cass County Sheriff post</td>
+        </tr>
+        <tr>
+          <td>2026-04-05 COMMENT</td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/westmichigantravelideas/" target="_blank">West MI Travel Ideas</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Railroad washout comment on CSX/Amtrak shutdown near Coloma</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/731525285826948/user/100063247416933/" target="_blank">2026-04-05</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/731525285826948/" target="_blank">Growing Up in Chicago</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>Chicago nostalgia group 68K - DollyBrook page joined - firepit photo - nostalgia angle - went live immediately</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Southwest Michigan has been Chicago's backyard getaway for generations. Saugatuck. Douglas. Fennvill...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/157059191540681/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-05 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/157059191540681/" target="_blank">Abandoned Old and Interesting Places in Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">DollyBrook Resort has been here for 13 years on 34 wooded acres in Fennville Michigan. Not abandoned...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/157059191540681/user/100063247416933/" target="_blank">2026-04-05</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/157059191540681/" target="_blank">Abandoned Old and Interesting Places in Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">DollyBrook Resort has been here for 13 years on 34 wooded acres in Fennville Michigan. Not abandoned...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/276308850878370/user/100063247416933/" target="_blank">2026-04-05</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/276308850878370/" target="_blank">Michigan Cabin Rentals</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>52K Michigan cabin listing group - pool photo - includes link per group rules</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">DollyBrook Resort - Fennville MI (near Saugatuck) - 9 unique private cabins on 34 wooded acres. Pool...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/WhatToDoInChicago/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-04 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/WhatToDoInChicago/" target="_blank">WHAT TO DO IN CHICAGO</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">If you haven't done a Michigan weekend trip yet - Saugatuck area is 2 hours from Chicago. 9 private ...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2630364940540577/posts/4482185262025193/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-04 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2630364940540577/" target="_blank">Sauglasville</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>Intro/listing post - low engagement vs community post. Has link in body which may have suppressed reach</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-low">7</span><br><small style="color:#aaa;font-size:0.7rem">2R 0C 1S</small></td>
+          <td class="snippet">Spring is here and we're ready for the season! We're Dollybrook Resort right here in Fennville...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2630364940540577/posts/4485756178334768/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-04 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2630364940540577/" target="_blank">Sauglasville</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>Guest Dining Guide post - returned community value, tagged restaurants who replied. Saugataco commented. PERFECT community post format.</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-high">39</span><br><small style="color:#aaa;font-size:0.7rem">6R 11C 0S</small></td>
+          <td class="snippet">The DollyBrook Guest Dining Guide — Built by Sauglasville. A few days ago we asked this group for re...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/77860661428/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-03 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/77860661428/" target="_blank">Sister Lakes in Dowagiac Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">The SW Michigan lake country stretch — Sister Lakes down through Dowagiac up to Saugatuck — might be...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/774022029429430/posts/3510834652414807/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-03 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/774022029429430/" target="_blank">White Lake West Michigan/Muskegon County</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>MI category - engagement question - lakeshore hidden gems - pool photo - went live immediately</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Spring question for the White Lake/West Michigan crew — where do you take first-time visitors...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/452195737554349/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-03 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/452195737554349/" target="_blank">South Haven, Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Waving from your neighbors up the road — we're DollyBrook Resort in Fennville 12 miles north of Sout...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/91850887444/posts/10164586218902445/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-03 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/91850887444/" target="_blank">Union Pier, Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>6 reactions - MI category - Harbor Country-to-Saugatuck run - BBB_4872 photo - agreed to group rules</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-low">6</span><br><small style="color:#aaa;font-size:0.7rem">6R 0C 0S</small></td>
+          <td class="snippet">Harbor Country gets a lot of love but how far north do people explore? DollyBrook in Fennville 40 mi...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/691341305200368/posts/1677511213250034/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-03 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/691341305200368/" target="_blank">Vacation Rentals in Southwest Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>1 reaction (own like) - VR category - peer networking/referrals - firepit photo</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-low">1</span><br><small style="color:#aaa;font-size:0.7rem">1R 0C 0S</small></td>
+          <td class="snippet">13 years hosting at DollyBrook — honest question for SW Michigan host community about cross-referral...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/southhavenmichigan/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-03 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/southhavenmichigan/" target="_blank">South Haven Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Spring has officially arrived at DollyBrook — we've been busy getting all 9 cabins ready for the sea...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/westmichigantravelideas/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-03 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/westmichigantravelideas/" target="_blank">West Michigan Travel Ideas</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Blue Star Highway local insider tips - Virtue Cider Fenn Valley Lavender Farm Saugatuck Dunes Oval B...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/892119510857517/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-03 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/892119510857517/" target="_blank">South Haven Vacation Homes Group</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Question for hosts and travelers — when a family or friend group of 15-20 people is looking for a SW...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/77860661428/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-03 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/77860661428/" target="_blank">Sister Lakes in Dowagiac Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">The SW Michigan lake country stretch — Sister Lakes down through Dowagiac to Saugatuck doesn't get n...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/452195737554349/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-03 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/452195737554349/" target="_blank">South Haven, Michigan (smaller)</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Waving from your neighbors up the road — DollyBrook Resort in Fennville 12 miles north on Blue Star ...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1059200144109025/posts/27335857936016554/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-03 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1059200144109025/posts/27335857936016554/" target="_blank">Fennville Informed</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-pending">⏳ Pending</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Pool comment reply + Deborah/Melinda replies</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/301913630886156/posts/1591826128561560/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-02 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/301913630886156/" target="_blank">Holland Informed (the best one)</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>18 reactions (15 likes + 3 loves) + 2 shares - SG category - community neighbor tone - firepit photo attached | Correct post URL recovered Apr 9 from profile page activity feed.</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-high">31</span><br><small style="color:#aaa;font-size:0.7rem">21R 0C 2S</small></td>
+          <td class="snippet">Just wanted to pop in and say hi to the Holland community from your West Michigan neighbors in Fennv...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/290777465557262/posts/1592508105384185/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-02 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/290777465557262/" target="_blank">Allegan County Informed</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>1 reaction - SG category - included phone number per rules - pool photo</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-low">1</span><br><small style="color:#aaa;font-size:0.7rem">1R 0C 0S</small></td>
+          <td class="snippet">Hello Allegan County neighbors! Waving from Fennville. 9 wooded cabins right here in Allegan County....</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1059200144109025/posts/27335857936016554/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-02 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1059200144109025/" target="_blank">Fennville Informed</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>44 reactions (38 likes + 5 loves) + 6 comments - BEST POST - locals asking about pool access - SG category - firepit photo</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-high">62</span><br><small style="color:#aaa;font-size:0.7rem">44R 6C 0S</small></td>
+          <td class="snippet">Fennville friends — happy spring from your neighbors at DollyBrook! For anyone who's driven by on 66...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/588030999323865/posts/1274978980629060/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-02 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/588030999323865/" target="_blank">Fennville & Surrounding Areas Informed</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>SG category - went live immediately - IMG_5583 photo</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-low">6</span><br><small style="color:#aaa;font-size:0.7rem">6R 0C 0S</small></td>
+          <td class="snippet">Spring greetings from DollyBrook Resort. For anyone in the Fennville area — we're your neighbors!...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/807611214069117/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-02 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/807611214069117/" target="_blank">Michigan Properties & Cabins</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>VR category - peer insight on positioning/identity - firepit photo - may need to retry</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Curious what other Michigan property owners think about this — After 13 years running DollyBrook Res...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/703254738102778/posts/1530153618746215/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-04-02 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/703254738102778/" target="_blank">Hamilton Happenings</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>29 reactions + 2 comments + 3 shares - SG category - asked about local spring events - pool photo - strong engagement</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-high">50</span><br><small style="color:#aaa;font-size:0.7rem">29R 2C 3S</small></td>
+          <td class="snippet">Hey Hamilton neighbors — waving from just down the road in Fennville! We're DollyBrook Resort...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1670873796574851/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-03-31 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/southhavenmichigan/" target="_blank">South Haven Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Spring is almost here and we're getting the cabins ready for another season! 9 cabins tucked in the ...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/281193499185629/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-03-31 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/281193499185629/" target="_blank">Downtown South Haven Michigan Chatline</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>Answered group rules question before posting</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-high">451</span><br><small style="color:#aaa;font-size:0.7rem">196R 35C 30S</small></td>
+          <td class="snippet">Hey South Haven neighbors! Wanted to introduce ourselves — we're Dollybrook Resort tucked in the tre...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/939670059525174/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-03-31 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/westmichigantravelideas/" target="_blank">West Michigan Travel Ideas</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Planning a West Michigan getaway this spring or summer? Saugatuck/Fennville area... 9 cabins, fire p...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/265738146921622/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-03-31 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/265738146921622/" target="_blank">Things to do in Southwest MI</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Looking for a home base while exploring Southwest Michigan? 9 cabins in Fennville, minutes from Saug...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1569917773284067/posts/4363630773912739/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-03-31 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/1569917773284067/" target="_blank">Southwest Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>Post visible - approved by admin - 0 external reactions as of 2026-04-03</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Hey Southwest Michigan! We're Dollybrook Resort in Fennville. 9 cabins, fire pits, hot tubs, proud t...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/431102449466134/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-03-31 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/431102449466134/" target="_blank">Saugatuck Underground</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Saugatuck has the art. We have the place to sleep it off. 9 cabins in Fennville, fire pits, hot tubs...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/691341305200368/posts/1677511213250034/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-03-31 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/691341305200368/" target="_blank">Vacation Rentals in Southwest Michigan</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>Direct rental pitch - rules agreed - 1 reaction (own like)</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-low">1</span><br><small style="color:#aaa;font-size:0.7rem">1R 0C 0S</small></td>
+          <td class="snippet">Dollybrook Resort - Fennville MI. 9 private cabins, fire pits, hot tubs, book direct. Minutes from S...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/626221328137060/posts/2155349588557552/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-03-31 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/626221328137060/" target="_blank">THE NEW AND BETTER FENNVILLE INFORMED</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>Private group - posted immediately no approval</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-low">2</span><br><small style="color:#aaa;font-size:0.7rem">2R 0C 0S</small></td>
+          <td class="snippet">Hey Fennville neighbors! We're right here in town - 9 cabins in the woods. Send visitors our way!</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/892119510857517/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-03-31 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/892119510857517/" target="_blank">South Haven Vacation Homes Group</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-removed">❌ Removed</span></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-zero">—</span></td>
+          <td class="snippet">Looking for a cabin getaway near South Haven? Dollybrook Resort in Fennville - just a short drive aw...</td>
+        </tr>
+        <tr>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2630364940540577/posts/4474514892792230/" target="_blank" title="⚠️ URL may not point to DollyBrook post — verify">2026-03-31 ⚠️</a></td>
+          <td><a class="group-link" href="https://www.facebook.com/groups/2630364940540577/" target="_blank">Sauglasville</a></td>
+          <td class="members">—</td>
+          <td>—</td>
+          <td><span class="badge badge-live">✅ Live</span><br><small>Community restaurant recs question - sparked massive thread - this is what drove 34K page views spike Apr 4</small></td>
+          <td style="text-align:center;white-space:nowrap"><span class="score-high">101</span><br><small style="color:#aaa;font-size:0.7rem">17R 28C 0S</small></td>
+          <td class="snippet">Love seeing this group so active heading into spring! Quick question for locals: has anyone tried th...</td>
+        </tr></tbody>
+    </table>
+  </div>
+</div>
+<div class="footer">
+  <strong>DollyBrook Resort</strong> &nbsp;·&nbsp; Facebook Groups Campaign Dashboard &nbsp;·&nbsp; Agent Xavier &nbsp;·&nbsp; Updated May 04, 2026 &nbsp;|&nbsp;
+  <a href="https://dollybrook.com">dollybrook.com</a>
+</div>
+<script>
+new Chart(document.getElementById('statusChart'), {
+  type: 'doughnut',
+  data: { labels: ['Live', 'Pending', 'Removed'], datasets: [{ data: [36, 32, 25], backgroundColor: ['#28a745','#CEAA78','#dc3545'], borderWidth: 2, borderColor: '#F1F0D9' }] },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { font: { size: 11, family: 'Lato' } } } }, cutout: '65%' }
+});
+new Chart(document.getElementById('dateChart'), {
+  type: 'bar',
+  data: { labels: ["2026-03-31", "2026-04-02", "2026-04-03", "2026-04-04", "2026-04-05", "2026-04-05 COMMENT", "2026-04-05 SKIP", "2026-04-06", "2026-04-06 COMMENT", "2026-04-06 SKIP", "2026-04-07", "2026-04-07 COMMENT", "2026-04-07 REPLY", "2026-04-07 SKIP", "2026-04-08", "2026-04-08 COMMENT", "2026-04-08 SKIP", "2026-04-09", "2026-04-09 SKIP", "2026-04-10", "2026-04-10 COMMENT", "2026-04-13", "2026-04-15", "2026-04-15 COMMENT", "2026-04-15 GOOGLE", "2026-04-15 ISO REPLY", "2026-04-17", "2026-04-18", "2026-04-19", "2026-04-20", "2026-04-25", "2026-04-26", "2026-05-03"], datasets: [
+    { label: 'Live', data: [5, 6, 3, 2, 2, 0, 0, 2, 0, 0, 3, 0, 0, 0, 3, 0, 0, 1, 1, 1, 0, 3, 1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0], backgroundColor: '#28a745' },
+    { label: 'Pending', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 6, 19], backgroundColor: '#CEAA78' },
+    { label: 'Removed', data: [5, 0, 7, 1, 2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 4, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0], backgroundColor: '#dc3545' }
+  ] },
+  options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true, ticks: { font: { family: 'Lato', size: 10 } }, grid: { color: 'rgba(206,170,120,0.2)' } }, y: { stacked: true, ticks: { stepSize: 1, font: { family: 'Lato', size: 10 } }, grid: { color: 'rgba(206,170,120,0.2)' } } }, plugins: { legend: { position: 'bottom', labels: { font: { size: 11, family: 'Lato' } } } } }
+});
+new Chart(document.getElementById('reachChart'), {
+  type: 'bar',
+  data: { labels: ["South Haven Michigan", "Downtown South Haven M", "West Michigan Travel I", "Things to do in Southw", "Southwest Michigan", "Saugatuck Underground", "Vacation Rentals in So", "THE NEW AND BETTER FEN"], datasets: [{ label: 'Members (K)', data: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], backgroundColor: ["#dc3545", "#28a745", "#dc3545", "#dc3545", "#28a745", "#dc3545", "#28a745", "#28a745"], borderRadius: 4 }] },
+  options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { grid: { color: 'rgba(206,170,120,0.2)' } }, y: { ticks: { font: { size: 10, family: 'Lato' } }, grid: { display: false } } }, plugins: { legend: { display: false } } }
+});
+</script>
+<script>
+(function() {
+  var table = document.querySelector('table');
+  if (!table) return;
+  var headers = table.querySelectorAll('thead th');
+  var sortCol = 0;
+  var sortAsc = false;
+  // Mark Date column as default sort descending
+  if (headers[0]) headers[0].classList.add('sort-desc');
+
+  headers.forEach(function(th, col) {
+    th.addEventListener('click', function() {
+      if (sortCol === col) {
+        sortAsc = !sortAsc;
+      } else {
+        sortCol = col;
+        sortAsc = true;
+      }
+      headers.forEach(function(h) { h.classList.remove('sort-asc', 'sort-desc'); });
+      th.classList.add(sortAsc ? 'sort-asc' : 'sort-desc');
+
+      var tbody = table.querySelector('tbody');
+      var rows = Array.from(tbody.querySelectorAll('tr'));
+      var numericCols = [2, 5]; // Members, Score
+      rows.sort(function(a, b) {
+        var aRaw = a.cells[col] ? a.cells[col].innerText.trim() : '';
+        var bRaw = b.cells[col] ? b.cells[col].innerText.trim() : '';
+        if (numericCols.indexOf(col) !== -1) {
+          var aNum = parseFloat(aRaw.replace(/[^0-9.]/g, '')) || 0;
+          var bNum = parseFloat(bRaw.replace(/[^0-9.]/g, '')) || 0;
+          return sortAsc ? aNum - bNum : bNum - aNum;
+        }
+        var aText = aRaw.toLowerCase();
+        var bText = bRaw.toLowerCase();
+        if (aText < bText) return sortAsc ? -1 : 1;
+        if (aText > bText) return sortAsc ? 1 : -1;
+        return 0;
+      });
+      rows.forEach(function(r) { tbody.appendChild(r); });
+    });
+  });
+})();
+</script>
+</body>
+</html>
