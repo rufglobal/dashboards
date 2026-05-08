@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Claude Usage — 2026-05-03</title>
+<title>Claude Usage — 2026-05-08</title>
 <style>
 :root { --bg:#0f1117;--card:#1a1d27;--border:#2a2d3a;--text:#e4e4e7;--muted:#8b8b9e;--accent:#6366f1;--green:#22c55e;--red:#ef4444;--opus:#f59e0b; }
 * { margin:0;padding:0;box-sizing:border-box; }
@@ -56,11 +56,11 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
 </style></head><body>
 <div class="container">
   <h1>🔐 Claude Usage Dashboard</h1>
-  <p class="subtitle">Romanian United Foundation — Generated May 03, 2026 at 09:33 AM CST</p>
+  <p class="subtitle">Romanian United Foundation — Generated May 08, 2026 at 10:30 AM CST</p>
 
   <div class="nav-bar">
-      <a href="2026-05-02.html" class="nav-btn">← 2026-05-02</a>
-      <span class="nav-date">📅 2026-05-03 (Today)</span>
+      <a href="2026-05-07.html" class="nav-btn">← 2026-05-07</a>
+      <span class="nav-date">📅 2026-05-08 (Today)</span>
       <span class="nav-btn disabled">Today</span>
       
     </div>
@@ -71,15 +71,15 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
       <div class="value" style="color: var(--opus);">$0.00</div>
       <div class="sub">Available credits</div>
     </div>
-    <div class="stat-card alert-ok">
-      <div class="label">🟢 Today's Spend</div>
-      <div class="value">$9.01</div>
-      <div class="sub">Under $100 daily limit</div>
+    <div class="stat-card alert-triggered">
+      <div class="label">🔴 Today's Spend</div>
+      <div class="value">$106.34</div>
+      <div class="sub">OVER $100 daily limit</div>
     </div>
     <div class="stat-card">
       <div class="label">7-Day Total</div>
-      <div class="value">$559.20</div>
-      <div class="sub">Avg $79.89/day</div>
+      <div class="value">$550.11</div>
+      <div class="sub">Avg $78.59/day</div>
     </div>
     <div class="stat-card">
       <div class="label">Daily Limit</div>
@@ -88,12 +88,12 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
     </div>
     <div class="stat-card">
       <div class="label">Projected Monthly</div>
-      <div class="value">$2397</div>
+      <div class="value">$2358</div>
       <div class="sub">Based on 7-day avg</div>
     </div>
   </div>
 
-  
+  <div class="spike-analysis"><h3>🔍 Spike Analysis — Top 3 Spenders</h3><div class="spike-agent"><div class="spike-header"><strong>Xavier</strong><span class="spike-meta">$42.91 · 40% of daily spend</span></div><div class="spike-activities"><strong>What happened:</strong> No memory log for this day.</div><div class="spike-why"><strong>💰 Why it cost $42.91:</strong> Unable to determine — no activity log available.</div><div class="spike-expand" onclick="document.getElementById('recs-0').classList.toggle('show')"><span class="expand-icon">💡</span> <span class="expand-text">Read more — How to reduce this cost</span><span class="expand-arrow">▸</span></div><div id="recs-0" class="spike-recommendations"><strong>🛠️ Recommendations:</strong><br>Ensure this agent logs daily activities to memory files for cost attribution.</div></div><div class="spike-agent"><div class="spike-header"><strong>Emma</strong><span class="spike-meta">$39.39 · 37% of daily spend</span></div><div class="spike-activities"><strong>What happened:</strong> Angels Chat Post (Madi Bucheru request); Key Learnings; STOP Directive</div><div class="spike-why"><strong>💰 Why it cost $39.39:</strong> Standard operational activity across 2 sessions. Cost is proportional to session count and context window sizes loaded per session.</div><div class="spike-expand" onclick="document.getElementById('recs-1').classList.toggle('show')"><span class="expand-icon">💡</span> <span class="expand-text">Read more — How to reduce this cost</span><span class="expand-arrow">▸</span></div><div id="recs-1" class="spike-recommendations"><strong>🛠️ Recommendations:</strong><br>Reduce costs: Check if you're running too many sessions.</div></div><div class="spike-agent"><div class="spike-header"><strong>Fbpost</strong><span class="spike-meta">$9.60 · 9% of daily spend</span></div><div class="spike-activities"><strong>What happened:</strong> No memory log for this day.</div><div class="spike-why"><strong>💰 Why it cost $9.60:</strong> Unable to determine — no activity log available.</div><div class="spike-expand" onclick="document.getElementById('recs-2').classList.toggle('show')"><span class="expand-icon">💡</span> <span class="expand-text">Read more — How to reduce this cost</span><span class="expand-arrow">▸</span></div><div id="recs-2" class="spike-recommendations"><strong>🛠️ Recommendations:</strong><br>Ensure this agent logs daily activities to memory files for cost attribution.</div></div></div>
 
   <div class="card">
     <h2>📊 7-Day Usage Trend</h2>
@@ -109,22 +109,30 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
   <div class="card">
     <h2>📋 Today's Model Breakdown</h2>
     <table><thead><tr><th>Model</th><th>Tokens In</th><th>Tokens Out</th><th>Input</th><th>Cache Write</th><th>Cache Read</th><th>Output</th><th>Total</th></tr></thead>
-    <tbody><tr><td><strong>Sonnet 4.6</strong></td><td>27,081,786</td><td>58,742</td>
-        <td class="cost">$0.00</td><td class="cost">$0.00</td>
-        <td class="cost">$8.12</td><td class="cost">$0.88</td>
-        <td class="cost total">$9.01</td></tr></tbody></table>
+    <tbody><tr><td><strong>Sonnet 4.6</strong></td><td>336,270,849</td><td>363,466</td>
+        <td class="cost">$0.01</td><td class="cost">$0.00</td>
+        <td class="cost">$100.88</td><td class="cost">$5.45</td>
+        <td class="cost total">$106.34</td></tr></tbody></table>
   </div>
 
   <div class="card">
     <h2>🤖 Estimated Agent Breakdown (Today)</h2>
     <table><thead><tr><th>Agent</th><th>Sessions</th><th>Activity Share</th><th>Est. Cost</th></tr></thead>
-    <tbody><tr><td><strong>Knox</strong></td><td>5</td>
-        <td><div class="bar-container"><div class="bar" style="width:52.88183603635542%"></div><span>52.9%</span></div></td>
-        <td class="cost">$4.76</td></tr><tr><td><strong>Fbpost</strong></td><td>1</td>
-        <td><div class="bar-container"><div class="bar" style="width:46.65362049065941%"></div><span>46.7%</span></div></td>
-        <td class="cost">$4.20</td></tr><tr><td><strong>Xavier</strong></td><td>1</td>
-        <td><div class="bar-container"><div class="bar" style="width:0.46454347298517695%"></div><span>0.5%</span></div></td>
-        <td class="cost">$0.04</td></tr></tbody></table>
+    <tbody><tr><td><strong>Xavier</strong></td><td>3</td>
+        <td><div class="bar-container"><div class="bar" style="width:40.351785288552946%"></div><span>40.4%</span></div></td>
+        <td class="cost">$42.91</td></tr><tr><td><strong>Emma</strong></td><td>2</td>
+        <td><div class="bar-container"><div class="bar" style="width:37.04483920998632%"></div><span>37.0%</span></div></td>
+        <td class="cost">$39.39</td></tr><tr><td><strong>Fbpost</strong></td><td>2</td>
+        <td><div class="bar-container"><div class="bar" style="width:9.023424759698845%"></div><span>9.0%</span></div></td>
+        <td class="cost">$9.60</td></tr><tr><td><strong>Alice</strong></td><td>10</td>
+        <td><div class="bar-container"><div class="bar" style="width:4.854687800556344%"></div><span>4.9%</span></div></td>
+        <td class="cost">$5.16</td></tr><tr><td><strong>Knox</strong></td><td>3</td>
+        <td><div class="bar-container"><div class="bar" style="width:3.460255247955696%"></div><span>3.5%</span></div></td>
+        <td class="cost">$3.68</td></tr><tr><td><strong>Nickybot</strong></td><td>2</td>
+        <td><div class="bar-container"><div class="bar" style="width:3.245060627890676%"></div><span>3.2%</span></div></td>
+        <td class="cost">$3.45</td></tr><tr><td><strong>Ana</strong></td><td>1</td>
+        <td><div class="bar-container"><div class="bar" style="width:2.0199470653591747%"></div><span>2.0%</span></div></td>
+        <td class="cost">$2.15</td></tr></tbody></table>
     <p style="color:var(--muted);font-size:10px;margin-top:10px;">* Estimates based on session transcript sizes. Actual per-agent costs not available from API.</p>
   </div>
 
@@ -135,10 +143,10 @@ td { padding:8px 10px;border-bottom:1px solid var(--border); }
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0/dist/chartjs-plugin-annotation.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const labels = ["04-27", "04-28", "04-29", "04-30", "05-01", "05-02", "05-03"];
-  const sonnetData = [170.25, 44.06, 120.49, 115.69, 38.22, 55.0, 9.01];
+  const labels = ["05-02", "05-03", "05-04", "05-05", "05-06", "05-07", "05-08"];
+  const sonnetData = [55.0, 134.48, 111.55, 34.92, 56.78, 47.01, 106.34];
   const opusData = [0, 0, 0, 0, 0, 0, 0];
-  const haikuData = [0, 0, 0.01, 2.4, 0.09, 3.99, 0];
+  const haikuData = [3.99, 0, 0.04, 0, 0, 0, 0];
   new Chart(document.getElementById('usageChart'), {
     type: 'bar',
     data: {
