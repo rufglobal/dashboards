@@ -85,6 +85,7 @@
   .b-declined { background: #fee2e2; color: #991b1b; }
   .b-removed { background: #f3e8ff; color: #6b21a8; }
   .b-skipped { background: #f3f4f6; color: #6b7280; }
+  .b-reset { background: #e0f2fe; color: #0369a1; }
   .b-days-old { background: #fee2e2; color: #991b1b; }
   .b-days-mid { background: #fef3c7; color: #92400e; }
   .b-days-new { background: #d1fae5; color: #065f46; }
@@ -116,9 +117,9 @@
       <div class="kpi-sub">Posts, comments, replies</div>
     </div>
     <div class="kpi-card live">
-      <div class="kpi-number">81</div>
+      <div class="kpi-number">83</div>
       <div class="kpi-label">Live / Published</div>
-      <div class="kpi-sub">54% of total</div>
+      <div class="kpi-sub">55% of total</div>
     </div>
     <div class="kpi-card pending">
       <div class="kpi-number">12</div>
@@ -126,12 +127,12 @@
       <div class="kpi-sub">Awaiting admin approval</div>
     </div>
     <div class="kpi-card declined">
-      <div class="kpi-number">26</div>
-      <div class="kpi-label">Declined</div>
-      <div class="kpi-sub">Not approved by admin</div>
+      <div class="kpi-number">22</div>
+      <div class="kpi-label">Reset</div>
+      <div class="kpi-sub">Deleted · Ready Mon May 11</div>
     </div>
     <div class="kpi-card removed">
-      <div class="kpi-number">7</div>
+      <div class="kpi-number">9</div>
       <div class="kpi-label">Removed</div>
       <div class="kpi-sub">Post removed after live</div>
     </div>
@@ -239,14 +240,14 @@
 
   <!-- Full Tracker -->
   <div class="section">
-    <div class="section-title">📋 Full Campaign Tracker</div>
+    <div class="section-title">📋 Full Campaign Tracker <span style="font-size:0.75rem;font-weight:400;color:#0369a1;background:#e0f2fe;padding:2px 8px;border-radius:6px;margin-left:8px">🔵 Reset = deleted by Mihai, cleared to repost Mon May 11</span></div>
     <div class="table-controls">
       <input type="text" id="searchInput" placeholder="Search group, snippet, notes…" oninput="filterTable()">
       <select id="statusFilter" onchange="filterTable()">
         <option value="">All Statuses</option>
         <option value="Live">Live / Published</option>
         <option value="Pending">Pending</option>
-        <option value="Declined">Declined</option>
+        <option value="Reset">Declined</option>
         <option value="Removed">Removed</option>
         <option value="Skipped">Skipped</option>
       </select>
@@ -276,34 +277,34 @@
 // ── DATA ─────────────────────────────────────────────────────────────────────
 // [date, group name, group url, snippet, status, post url]
 const ROWS = [
-  ["Mar 31","South Haven Michigan","https://www.facebook.com/groups/southhavenmichigan/","Spring is almost here and we're getting cabins ready...","Declined",""],
+  ["Mar 31","South Haven Michigan","https://www.facebook.com/groups/southhavenmichigan/","Spring is almost here and we're getting cabins ready...","Reset",""],
   ["Mar 31","Downtown South Haven MI Chatline","https://www.facebook.com/groups/281193499185629/","Hey South Haven neighbors! Wanted to introduce ourselves...","Live","https://www.facebook.com/groups/281193499185629/"],
-  ["Mar 31","West Michigan Travel Ideas","https://www.facebook.com/groups/westmichigantravelideas/","Planning a West Michigan getaway this spring or summer?...","Declined",""],
+  ["Mar 31","West Michigan Travel Ideas","https://www.facebook.com/groups/westmichigantravelideas/","Planning a West Michigan getaway this spring or summer?...","Reset",""],
   ["Mar 31","Things to do in Southwest MI","https://www.facebook.com/groups/265738146921622/","Looking for a home base while exploring Southwest Michigan?...","Removed",""],
   ["Mar 31","Southwest Michigan","https://www.facebook.com/groups/1569917773284067/","Hey Southwest Michigan! We're DollyBrook Resort in Fennville...","Live","https://www.facebook.com/groups/1569917773284067/posts/4363630773912739/"],
-  ["Mar 31","Saugatuck Underground","https://www.facebook.com/groups/431102449466134/","Saugatuck has the art. We have the place to sleep it off...","Declined",""],
+  ["Mar 31","Saugatuck Underground","https://www.facebook.com/groups/431102449466134/","Saugatuck has the art. We have the place to sleep it off...","Live","https://www.facebook.com/groups/431102449466134/"],
   ["Mar 31","Vacation Rentals in SW Michigan","https://www.facebook.com/groups/691341305200368/","DollyBrook Resort - Fennville MI. 9 private cabins...","Live","https://www.facebook.com/groups/691341305200368/posts/1677511213250034/"],
   ["Mar 31","Fennville Informed (NEW)","https://www.facebook.com/groups/626221328137060/","Hey Fennville neighbors! We're right here in town...","Live","https://www.facebook.com/groups/626221328137060/posts/2155349588557552/"],
-  ["Mar 31","South Haven Vacation Homes Group","https://www.facebook.com/groups/892119510857517/","Looking for a cabin getaway near South Haven?...","Declined",""],
+  ["Mar 31","South Haven Vacation Homes Group","https://www.facebook.com/groups/892119510857517/","Looking for a cabin getaway near South Haven?...","Reset",""],
   ["Mar 31","Sauglasville","https://www.facebook.com/groups/2630364940540577/","Love seeing this group so active heading into spring!...","Live","https://www.facebook.com/groups/2630364940540577/posts/4474514892792230/"],
   ["Apr 2","Holland Informed","https://www.facebook.com/groups/301913630886156/","Just wanted to pop in and say hi to the Holland community...","Live","https://www.facebook.com/groups/301913630886156/posts/1591826128561560/"],
   ["Apr 2","Allegan County Informed","https://www.facebook.com/groups/290777465557262/","Hello Allegan County neighbors! Waving from Fennville...","Live","https://www.facebook.com/groups/290777465557262/posts/1592508105384185/"],
   ["Apr 2","Fennville Informed","https://www.facebook.com/groups/1059200144109025/","Fennville friends — happy spring from your neighbors at DollyBrook!...","Live","https://www.facebook.com/groups/1059200144109025/posts/27335857936016554/"],
   ["Apr 2","Fennville & Surrounding Areas","https://www.facebook.com/groups/588030999323865/","Spring greetings from DollyBrook Resort...","Live","https://www.facebook.com/groups/588030999323865/posts/1274978980629060/"],
-  ["Apr 2","Michigan Properties & Cabins","https://www.facebook.com/groups/807611214069117/","Curious what other Michigan property owners think...","Declined",""],
+  ["Apr 2","Michigan Properties & Cabins","https://www.facebook.com/groups/807611214069117/","Curious what other Michigan property owners think...","Reset",""],
   ["Apr 2","Hamilton Happenings","https://www.facebook.com/groups/703254738102778/","Hey Hamilton neighbors — waving from just down the road...","Live","https://www.facebook.com/groups/703254738102778/posts/1530153618746215/"],
-  ["Apr 3","Sister Lakes in Dowagiac","https://www.facebook.com/groups/77860661428/","The SW Michigan lake country stretch...","Declined",""],
+  ["Apr 3","Sister Lakes in Dowagiac","https://www.facebook.com/groups/77860661428/","The SW Michigan lake country stretch...","Reset",""],
   ["Apr 3","White Lake West Michigan","https://www.facebook.com/groups/774022029429430/","Spring question for the White Lake/West Michigan crew...","Live","https://www.facebook.com/groups/774022029429430/posts/3510834652414807/"],
-  ["Apr 3","South Haven Michigan (retry)","https://www.facebook.com/groups/southhavenmichigan/","Spring has officially arrived at DollyBrook...","Declined",""],
+  ["Apr 3","South Haven Michigan (retry)","https://www.facebook.com/groups/southhavenmichigan/","Spring has officially arrived at DollyBrook...","Reset",""],
   ["Apr 3","Union Pier Michigan","https://www.facebook.com/groups/91850887444/","Harbor Country gets a lot of love but how far north...","Live","https://www.facebook.com/groups/91850887444/posts/10164586218902445/"],
   ["Apr 4","Sauglasville","https://www.facebook.com/groups/2630364940540577/","Spring is here and we're ready for the season!...","Live","https://www.facebook.com/groups/2630364940540577/posts/4482185262025193/"],
   ["Apr 4","Sauglasville","https://www.facebook.com/groups/2630364940540577/","The DollyBrook Guest Dining Guide — Built by Sauglasville...","Live","https://www.facebook.com/groups/2630364940540577/posts/4485756178334768/"],
-  ["Apr 4","WHAT TO DO IN CHICAGO","https://www.facebook.com/groups/WhatToDoInChicago/","If you haven't done a Michigan weekend trip yet...","Declined",""],
+  ["Apr 4","WHAT TO DO IN CHICAGO","https://www.facebook.com/groups/WhatToDoInChicago/","If you haven't done a Michigan weekend trip yet...","Live","https://www.facebook.com/groups/WhatToDoInChicago/"],
   ["Apr 5","Growing Up in Chicago","https://www.facebook.com/groups/731525285826948/","Southwest Michigan has been Chicago's backyard getaway...","Live","https://www.facebook.com/groups/731525285826948/user/100063247416933/"],
-  ["Apr 5","Abandoned Old/Interesting Places MI","https://www.facebook.com/groups/157059191540681/","DollyBrook Resort has been here for 13 years...","Declined",""],
+  ["Apr 5","Abandoned Old/Interesting Places MI","https://www.facebook.com/groups/157059191540681/","DollyBrook Resort has been here for 13 years...","Reset",""],
   ["Apr 5","Michigan Cabin Rentals","https://www.facebook.com/groups/276308850878370/","DollyBrook Resort - Fennville MI (near Saugatuck)...","Live","https://www.facebook.com/groups/276308850878370/user/100063247416933/"],
   ["Apr 6","SW Michigan Wedding Group","https://www.facebook.com/groups/651352386231094/","Calling all SW Michigan brides and wedding planners!...","Live","https://www.facebook.com/groups/651352386231094/user/100063247416933/"],
-  ["Apr 6","Overheard in Michigan Ski Resorts","https://www.facebook.com/groups/1485307128340098/","Fennville MI - 10% spring discount on May/June...","Declined",""],
+  ["Apr 6","Overheard in Michigan Ski Resorts","https://www.facebook.com/groups/1485307128340098/","Fennville MI - 10% spring discount on May/June...","Reset",""],
   ["Apr 6","Greater Michigan - Vacation STR","https://www.facebook.com/groups/902669401133623/","DollyBrook Resort - 9 private wooded cabins on 34 acres...","Live","https://www.facebook.com/groups/902669401133623/user/100063247416933/"],
   ["Apr 7","Event Planners Club","https://www.facebook.com/groups/537102143143067/","Looking for a unique Michigan venue for your next corporate retreat?...","Live","https://www.facebook.com/groups/537102143143067/user/100063247416933/"],
   ["Apr 7","Southwest Michigan","https://www.facebook.com/groups/1569917773284067/","Southwest Michigan folks -- pool season countdown is ON...","Live","https://www.facebook.com/groups/1569917773284067/user/100063247416933/"],
@@ -332,9 +333,9 @@ const ROWS = [
   ["Apr 19","Lake Michigan Community","https://www.facebook.com/groups/2744020862432163/","West Michigan in May is a different thing entirely...","Live","https://www.facebook.com/groups/2744020862432163/"],
   ["Apr 19","Growing Up in Chicago","https://www.facebook.com/groups/731525285826948/","Chicago families have been driving to West Michigan for generations...","Live","https://www.facebook.com/groups/731525285826948/"],
   ["Apr 20","Things To Do In Chicago","https://www.facebook.com/groups/1356640967822060/","If you haven't done a Michigan cabin weekend from Chicago...","Removed",""],
-  ["Apr 25","West Michigan Travel Ideas","https://www.facebook.com/groups/westmichigantravelideas/","Spring in Fennville is something else...","Declined",""],
+  ["Apr 25","West Michigan Travel Ideas","https://www.facebook.com/groups/westmichigantravelideas/","Spring in Fennville is something else...","Reset",""],
   ["Apr 25","Grand Rapids Informed","https://www.facebook.com/groups/1142032609238533/","Waving from Fennville — about 45 minutes southwest of GR...","Live","https://www.facebook.com/groups/1142032609238533/"],
-  ["Apr 25","Michigan Best Day Trips","https://www.facebook.com/groups/583733510162047/","One underrated day trip from anywhere in Michigan...","Declined",""],
+  ["Apr 25","Michigan Best Day Trips","https://www.facebook.com/groups/583733510162047/","One underrated day trip from anywhere in Michigan...","Reset",""],
   ["Apr 25","Indianapolis Chatter","https://www.facebook.com/groups/1953229231422322/","Friday night question for the Indy crew...","Live","https://www.facebook.com/groups/1953229231422322/posts/26600357506282819/"],
   ["Apr 25","I Grew Up in Michigan","https://www.facebook.com/groups/1971747103169810/","If you grew up in Michigan you already know...","Pending",""],
   ["Apr 25","Southwest Michigan Rentals","https://www.facebook.com/groups/1084306731678746/","Intro from a neighbor - we're DollyBrook Resort in Fennville...","Pending",""],
@@ -345,7 +346,7 @@ const ROWS = [
   ["Apr 26","Southwest Michigan","https://www.facebook.com/groups/1569917773284067/","Michigan summers don't care that you've been busy all year...","Live",""],
   ["Apr 26","Things to do in SW MI","https://www.facebook.com/groups/265738146921622/","Pool opens Memorial Day. Fire pits every night...","Live",""],
   ["Apr 26","Michigan Everything","https://www.facebook.com/groups/677745097616688/","Heated pool opening Memorial Day. Fire pits every night...","Pending",""],
-  ["Apr 26","Michigan Best Day Trips","https://www.facebook.com/groups/583733510162047/","One stretch that belongs on every Michigan road tripper's list...","Declined",""],
+  ["Apr 26","Michigan Best Day Trips","https://www.facebook.com/groups/583733510162047/","One stretch that belongs on every Michigan road tripper's list...","Reset",""],
   ["Apr 26","Vacation Rentals in SW Michigan","https://www.facebook.com/groups/691341305200368/","DollyBrook Resort - 9 private cabins on 34 acres...","Pending",""],
   ["May 3","ISO → 30+ Chicago Women","https://www.facebook.com/groups/3374229402827190/","Hi Lilith! DollyBrook Resort in Fennville checks every box...","Live","https://www.facebook.com/groups/chicagowomen/posts/4288235388093249/"],
   ["May 3","ISO → 30+ Chicago Women","https://www.facebook.com/groups/3374229402827190/","Jazleen - wine tour — DollyBrook in Fennville MI...","Live","https://www.facebook.com/groups/chicagowomen/posts/4166000903650032/"],
@@ -359,24 +360,24 @@ const ROWS = [
   ["May 3","OHIO Wedding Couples & Vendors","https://www.facebook.com/groups/303228565353112/","Tulip Time ends this Sunday... For Ohio couples...","Pending",""],
   ["May 3","Grand Rapids Michigan","https://www.facebook.com/groups/1142032609238533/","Tulip Time ends this Sunday... Grand Rapids folks...","Pending",""],
   ["May 3","Vacation Rentals By Owners","https://www.facebook.com/groups/1490611034371518/","Tulip Time ends this Sunday... DollyBrook Resort 15 min south...","Live",""],
-  ["May 3","AirBnB VRBO Direct VR WI/MN/MI","https://www.facebook.com/groups/1102879901152464/","Tulip Time ends this Sunday... If you're in WI MN or MI...","Declined",""],
+  ["May 3","AirBnB VRBO Direct VR WI/MN/MI","https://www.facebook.com/groups/1102879901152464/","Tulip Time ends this Sunday... If you're in WI MN or MI...","Reset",""],
   ["May 3","Fun Things to Do in Michigan","https://www.facebook.com/groups/1260737241531017/","Tulip Time ends this Sunday... Pair it with a DollyBrook weekend...","Live",""],
   ["May 3","Chicago Travel Tips by Local Guides","https://www.facebook.com/groups/522338709344294/","3 hours from Chicago this Sunday is the last weekend of Tulip Time...","Removed",""],
   ["May 3","Chicago Small Business Referral Exchange","https://www.facebook.com/groups/chicgonetworking/","Team getaway this weekend: Tulip Time ends Sunday...","Pending",""],
   ["May 3","SE Michigan Pickleball Forum","https://www.facebook.com/groups/SoutheastMichiganPickleballForum/","Long weekend from SE Michigan - Tulip Time ends Sunday...","Pending",""],
   ["May 3","GR Pickleball Club","https://www.facebook.com/groups/grpickleball/","GR crew - DollyBrook Resort Tulip Time finale...","Removed",""],
-  ["May 3","Cleveland Social Group","https://www.facebook.com/groups/197837046999473/","3.5 hours from Cleveland: Tulip Time last weekend...","Declined",""],
+  ["May 3","Cleveland Social Group","https://www.facebook.com/groups/197837046999473/","3.5 hours from Cleveland: Tulip Time last weekend...","Reset",""],
   ["May 3","Chicago Travel Tips (Tours by Foot)","https://www.facebook.com/groups/chicagotraveltips/","Chicago travel tip for this weekend: Tulip Time ends Sunday...","Pending",""],
-  ["May 3","Michigan Pickleball","https://www.facebook.com/groups/michiganpickleball/","Tulip Time ends this Sunday in Holland...","Declined",""],
+  ["May 3","Michigan Pickleball","https://www.facebook.com/groups/michiganpickleball/","Tulip Time ends this Sunday in Holland...","Reset",""],
   ["May 3","West Michigan Network - Support Local Business","https://www.facebook.com/groups/westmichigannetwork/","Tulip Time ends this Sunday in Holland...","Live",""],
-  ["May 3","Sauglasville","https://www.facebook.com/groups/2630364940540577/","Tulip Time ends this Sunday in Holland...","Declined",""],
+  ["May 3","Sauglasville","https://www.facebook.com/groups/2630364940540577/","Tulip Time ends this Sunday in Holland...","Reset",""],
   ["May 3","Michigan Weekend and Day Trippers","https://www.facebook.com/groups/688404128396373/","Tulip Time ends this Sunday in Holland...","Removed",""],
   ["May 5","Greater Michigan - Vacation STR","https://www.facebook.com/groups/902669401133623/","Six of our nine cabins have private hot tubs. No time slots...","Live","https://www.facebook.com/groups/902669401133623/posts/2076940337039851/"],
   ["May 5","Book Direct Vacation Rentals","https://www.facebook.com/groups/vacationrentalsmarketing/","Six private hot tub cabins on 34 acres in Fennville...","Live","https://www.facebook.com/groups/vacationrentalsmarketing/posts/2670867593314626/"],
   ["May 5","Vacation Rentals By Owners","https://www.facebook.com/groups/1490611034371518/","Nine cabins, 34 wooded acres, Fennville MI. Six with private hot tubs...","Live","https://www.facebook.com/groups/1490611034371518/posts/26466190216386921/"],
 ];
 
-const STATUS_CLASS = { Live:'b-live', Pending:'b-pending', Declined:'b-declined', Removed:'b-removed', Skipped:'b-skipped' };
+const STATUS_CLASS = { Live:'b-live', Pending:'b-pending', Declined:'b-declined', Reset:'b-reset', Removed:'b-removed', Skipped:'b-skipped' };
 
 function buildTable(data) {
   const tbody = document.getElementById('mainTableBody');
@@ -417,8 +418,8 @@ buildTable(ROWS);
 new Chart(document.getElementById('donutChart').getContext('2d'), {
   type: 'doughnut',
   data: {
-    labels: ['Live / Published','Pending','Declined','Removed','Skipped'],
-    datasets: [{ data: [81,12,26,7,24], backgroundColor: ['#2d6a4f','#f59e0b','#ef4444','#a855f7','#9ca3af'], borderWidth: 2, borderColor: '#fff' }]
+    labels: ['Live / Published','Pending','Reset (Mon)','Removed','Skipped'],
+    datasets: [{ data: [83,12,22,9,24], backgroundColor: ['#2d6a4f','#f59e0b','#ef4444','#a855f7','#9ca3af'], borderWidth: 2, borderColor: '#fff' }]
   },
   options: { responsive:true, maintainAspectRatio:false, cutout:'60%',
     plugins: { legend: { position:'right', labels:{ font:{size:11}, padding:10 } },
@@ -430,9 +431,9 @@ new Chart(document.getElementById('barChart').getContext('2d'), {
   data: {
     labels: ['Mar 2026','Apr 2026','May 2026'],
     datasets: [
-      { label:'Live',     data:[10,55,16], backgroundColor:'#2d6a4f' },
+      { label:'Live',     data:[10,57,16], backgroundColor:'#2d6a4f' },
       { label:'Pending',  data:[0, 7, 5],  backgroundColor:'#f59e0b' },
-      { label:'Declined', data:[6, 15, 5], backgroundColor:'#ef4444' },
+      { label:'Reset',    data:[0,  0,  0], backgroundColor:'#ef4444' },
       { label:'Removed',  data:[1, 4, 2],  backgroundColor:'#a855f7' },
     ]
   },
