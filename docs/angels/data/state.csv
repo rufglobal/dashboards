@@ -1,0 +1,26 @@
+key,value
+lastUpdated,"May 13, 2026"
+weekNumber,1
+daysToJuly31,79
+deadlineLabel,"July 31, 2026"
+goal.target,200
+goal.cumulative,117
+goal.toGo,83
+goal.paceLinear,8
+kpi1.thisWeek,2
+kpi1.cumulative,2
+kpi1.weeklyTarget,4
+kpi1.statusText,WEEK 1
+kpi1.status,warn
+kpi2.count,4
+kpi2.avgDays,6
+kpi2.sla,14
+kpi2.target,2
+kpi2.statusText,WATCH
+kpi2.status,warn
+kpi3.count,7
+kpi3.totalAngels,117
+kpi3.targetByMidJune,58
+kpi3.statusText,STARTING
+kpi3.status,bad
+pledgedRecruiters,19
