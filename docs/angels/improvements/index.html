@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="description" content="200 Angels Campaign — Suggested Improvements tracker. Interactive priority board for the RUF core team."/>
+  <meta name="robots" content="noindex"/>
+  <title>Campaign Suggested Improvements - 200 Angels</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ruf-blue:      #00ACF0;
+      --ruf-blue-soft: #E6F7FE;
+      --ruf-blue-tint: rgba(0, 172, 240, 0.18);
+      --ruf-dark:      #113268;
+      --ruf-orange:    #EF7D00;
+      --ruf-white:     #FFFFFF;
+      --ruf-ink:       #0d2240;
+      --ruf-mute:      #6b7c93;
+      --ruf-bg:        #FAFCFE;
+      --ruf-line:      #E5ECF3;
+      --ok:            #1E9E5A;
+      --ok-soft:       #E5F5EC;
+      --warn:          #EF7D00;
+      --warn-soft:     #FDF1E2;
+      --bad:           #C8392E;
+      --shadow:        0 1px 2px rgba(17,50,104,.06), 0 4px 16px rgba(17,50,104,.05);
+      --radius:        14px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--ruf-bg);
+      color: var(--ruf-ink);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
+
+    /* ── BRAND HEADER ── */
+    header.brand {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 28px;
+      background: var(--ruf-white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+    .brand-lockup { display: flex; align-items: center; gap: 14px; }
+    .brand-mark {
+      width: 44px; height: 44px; flex-shrink: 0;
+      background: var(--ruf-dark);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 18px; color: var(--ruf-white);
+      letter-spacing: -1px;
+    }
+    .brand-words {
+      font-size: 13px; font-weight: 700; line-height: 1.3;
+      color: var(--ruf-dark); letter-spacing: .01em;
+    }
+    .brand-words span { display: block; font-weight: 400; color: var(--ruf-mute); font-size: 12px; margin-top: 1px; }
+    .brand-tag {
+      font-size: 12px; font-weight: 600;
+      color: var(--ruf-blue); background: var(--ruf-blue-soft);
+      border: 1px solid rgba(0,172,240,.25);
+      border-radius: 6px; padding: 4px 10px;
+    }
+    .brand-meta { font-size: 12px; color: var(--ruf-mute); }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--ruf-dark);
+      border-radius: var(--radius);
+      padding: 36px 40px;
+      margin-bottom: 24px;
+      color: var(--ruf-white);
+    }
+    .hero h1 {
+      font-size: 26px; font-weight: 800; line-height: 1.2;
+      margin-bottom: 10px; letter-spacing: -.02em;
+    }
+    .hero p {
+      font-size: 14px; color: rgba(255,255,255,.72);
+      max-width: 680px; line-height: 1.6; margin-bottom: 28px;
+    }
+    .hero-stats {
+      display: flex; gap: 32px; flex-wrap: wrap; margin-bottom: 24px;
+    }
+    .stat { display: flex; flex-direction: column; gap: 3px; }
+    .stat-num {
+      font-size: 34px; font-weight: 800; line-height: 1;
+      color: var(--ruf-white);
+    }
+    .stat-lbl { font-size: 12px; color: rgba(255,255,255,.6); font-weight: 500; }
+    .stat-num.blue { color: var(--ruf-blue); }
+    .stat-num.orange { color: var(--ruf-orange); }
+    .stat-num.green { color: #4dd98a; }
+
+    /* progress bar */
+    .progress-wrap { }
+    .progress-label {
+      font-size: 12px; color: rgba(255,255,255,.55); margin-bottom: 6px; font-weight: 500;
+    }
+    .progress-bar {
+      height: 8px; background: rgba(255,255,255,.14);
+      border-radius: 99px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: var(--ruf-blue);
+      border-radius: 99px; transition: width .4s ease;
+      width: 0%;
+    }
+
+    /* ── CONTROLS ── */
+    .controls {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+      margin-bottom: 20px;
+    }
+    .filter-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip {
+      font-size: 13px; font-weight: 600;
+      padding: 6px 14px; border-radius: 99px;
+      border: 1.5px solid var(--ruf-line);
+      background: var(--ruf-white); color: var(--ruf-mute);
+      cursor: pointer; transition: all .15s;
+      white-space: nowrap;
+    }
+    .chip:hover { border-color: var(--ruf-blue); color: var(--ruf-blue); }
+    .chip.active {
+      background: var(--ruf-blue); border-color: var(--ruf-blue);
+      color: var(--ruf-white);
+    }
+    .chip .count {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      background: rgba(255,255,255,.22); border-radius: 99px;
+      padding: 1px 6px; margin-left: 5px;
+    }
+    .chip:not(.active) .count {
+      background: var(--ruf-bg); color: var(--ruf-mute);
+    }
+    .action-btns { display: flex; gap: 8px; }
+    .btn {
+      font-size: 13px; font-weight: 600;
+      padding: 7px 16px; border-radius: 8px; border: none; cursor: pointer;
+      transition: all .15s; font-family: inherit;
+    }
+    .btn-ghost {
+      background: var(--ruf-white); color: var(--ruf-mute);
+      border: 1.5px solid var(--ruf-line);
+    }
+    .btn-ghost:hover { border-color: var(--ruf-blue); color: var(--ruf-blue); }
+    .btn-primary {
+      background: var(--ruf-blue); color: var(--ruf-white);
+    }
+    .btn-primary:hover { background: #0097d4; }
+
+    /* ── CARDS ── */
+    .cards { display: flex; flex-direction: column; gap: 12px; }
+
+    .card {
+      background: var(--ruf-white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 32px 1fr auto;
+      gap: 0;
+      overflow: hidden;
+      transition: box-shadow .15s;
+    }
+    .card:hover { box-shadow: 0 2px 4px rgba(17,50,104,.08), 0 8px 24px rgba(17,50,104,.09); }
+
+    /* reorder column */
+    .card-reorder {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; padding: 12px 0;
+      background: var(--ruf-bg);
+      border-right: 1px solid var(--ruf-line);
+    }
+    .reorder-btn {
+      width: 22px; height: 22px; border: none; background: transparent; cursor: pointer;
+      border-radius: 4px; display: flex; align-items: center; justify-content: center;
+      color: var(--ruf-mute); font-size: 13px; transition: all .12s;
+    }
+    .reorder-btn:hover { background: var(--ruf-blue-soft); color: var(--ruf-blue); }
+    .reorder-btn:disabled { opacity: .25; cursor: default; }
+
+    /* body */
+    .card-body { padding: 18px 20px; }
+    .card-title {
+      font-size: 15px; font-weight: 700; color: var(--ruf-ink);
+      margin-bottom: 6px; line-height: 1.3;
+    }
+    .card-desc {
+      font-size: 13px; color: var(--ruf-mute); line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    .card-badges { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .badge {
+      font-size: 11px; font-weight: 600;
+      padding: 2px 8px; border-radius: 5px;
+      border: 1px solid transparent;
+    }
+    /* category badges */
+    .badge.cat-stewardship { background: #E6F7FE; border-color: rgba(0,172,240,.3); color: #006fa8; }
+    .badge.cat-failure     { background: #FDF1E2; border-color: rgba(239,125,0,.3); color: #a85400; }
+    .badge.cat-benefits    { background: #E5F5EC; border-color: rgba(30,158,90,.3); color: #126336; }
+    /* effort / impact badges */
+    .badge.meta { background: var(--ruf-bg); border-color: var(--ruf-line); color: var(--ruf-mute); }
+    /* owner badge */
+    .badge.owner { background: var(--ruf-blue-tint); border-color: rgba(0,172,240,.2); color: var(--ruf-dark); }
+
+    /* status column */
+    .card-status {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 18px 18px;
+      border-left: 1px solid var(--ruf-line);
+      gap: 8px;
+    }
+    .status-pill {
+      font-size: 11px; font-weight: 700;
+      padding: 5px 12px; border-radius: 99px;
+      cursor: pointer; transition: all .15s; border: none; font-family: inherit;
+      white-space: nowrap;
+    }
+    .status-pill.unchecked { background: var(--ruf-bg); color: var(--ruf-mute); border: 1.5px solid var(--ruf-line); }
+    .status-pill.half      { background: var(--warn-soft); color: var(--warn); border: 1.5px solid rgba(239,125,0,.3); }
+    .status-pill.done      { background: var(--ok-soft); color: var(--ok); border: 1.5px solid rgba(30,158,90,.3); }
+    .status-pill:hover { filter: brightness(.95); transform: scale(1.04); }
+
+    /* error banner */
+    .error-banner {
+      background: #FDF1E2; border: 1px solid rgba(239,125,0,.4);
+      border-radius: var(--radius); padding: 20px 24px; margin-bottom: 20px;
+      display: none;
+    }
+    .error-banner h3 { color: var(--warn); font-size: 14px; margin-bottom: 6px; }
+    .error-banner p { font-size: 13px; color: var(--ruf-mute); }
+    .error-banner code {
+      background: var(--ruf-bg); padding: 2px 6px; border-radius: 4px; font-size: 12px;
+    }
+
+    /* ── FOOTER ── */
+    .foot {
+      margin-top: 48px; padding-top: 24px;
+      border-top: 1px solid var(--ruf-line);
+      display: flex; gap: 32px; flex-wrap: wrap;
+    }
+    .foot-section h4 { font-size: 12px; font-weight: 700; color: var(--ruf-dark); margin-bottom: 8px; letter-spacing: .04em; text-transform: uppercase; }
+    .foot-section p, .foot-section li { font-size: 12px; color: var(--ruf-mute); line-height: 1.7; }
+    .foot-section ul { padding-left: 14px; }
+    .legend-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 720px) {
+      .container { padding: 16px 12px 60px; }
+      .hero { padding: 24px 20px; }
+      .hero h1 { font-size: 20px; }
+      .hero-stats { gap: 20px; }
+      .stat-num { font-size: 26px; }
+      header.brand { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .card {
+        grid-template-columns: 28px 1fr;
+        grid-template-rows: auto auto;
+      }
+      .card-status {
+        grid-column: 1 / -1;
+        flex-direction: row; justify-content: flex-start;
+        border-left: none; border-top: 1px solid var(--ruf-line);
+        padding: 12px 16px;
+      }
+      .card-title { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header class="brand">
+    <div class="brand-lockup">
+      <div class="brand-mark">RUF</div>
+      <div class="brand-words">
+        Romanian United Foundation
+        <span>200 Angels Campaign</span>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <span class="brand-tag">Campaign Improvements</span>
+      <span class="brand-meta">Updated <span id="lastUpdated">—</span></span>
+    </div>
+  </header>
+
+  <!-- ERROR BANNER -->
+  <div class="error-banner" id="errorBanner">
+    <h3>⚠ Could not load improvements.csv</h3>
+    <p>This page fetches data from <code>data/improvements.csv</code> and cannot be opened via <code>file://</code>. Run a local server instead:</p>
+    <p style="margin-top:8px;"><code>cd campaign-improvements && python3 -m http.server 8000</code> then open <code>http://localhost:8000/</code></p>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Campaign Suggested Improvements</h1>
+    <p>Pre-mortem analysis and benefit-matrix expansion from the 2026-05-13 design session. Items span stewardship experience gaps, failure-mode mitigations, and benefits expansions. Reorder priorities and mark progress — your changes save in your browser.</p>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num" id="statTotal">—</span>
+        <span class="stat-lbl">Total items</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num orange" id="statHalf">—</span>
+        <span class="stat-lbl">In progress</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num green" id="statDone">—</span>
+        <span class="stat-lbl">Done</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num blue" id="statPct">—</span>
+        <span class="stat-lbl">Complete</span>
+      </div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-label">Overall progress</div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+  </section>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="filter-chips" id="filterChips"><!-- JS renders chips --></div>
+    <div class="action-btns">
+      <button class="btn btn-ghost" id="btnReset">Reset to saved</button>
+      <button class="btn btn-primary" id="btnExport">Export current state</button>
+    </div>
+  </div>
+
+  <!-- CARDS -->
+  <div id="cards" class="cards"><!-- JS renders cards --></div>
+
+  <!-- FOOTER -->
+  <footer class="foot">
+    <div class="foot-section">
+      <h4>Status legend</h4>
+      <div class="legend-row"><span class="status-pill unchecked">Not started</span></div>
+      <div class="legend-row"><span class="status-pill half">In progress</span></div>
+      <div class="legend-row"><span class="status-pill done">Done</span></div>
+      <p style="margin-top:10px;max-width:260px;">Click a pill to cycle status. Changes are personal until you Export and commit.</p>
+    </div>
+    <div class="foot-section">
+      <h4>Source of truth</h4>
+      <ul>
+        <li><code>data/improvements.csv</code> — canonical item list</li>
+        <li><code>../campaign-improvements.md</code> — human-readable KB</li>
+        <li><code>../stewardship-process.md</code> — the process this audits</li>
+      </ul>
+    </div>
+    <div class="foot-section">
+      <h4>How to share changes</h4>
+      <p>Make changes in your browser, then click <strong>Export current state</strong>. Replace <code>data/improvements.csv</code> with the downloaded file and push to git. Everyone sees your state on next load.</p>
+    </div>
+  </footer>
+
+</div><!-- /container -->
+
+<script>
+(function () {
+  'use strict';
+
+  const CSV_PATH    = 'data/improvements.csv';
+  const STORAGE_KEY = 'rufangels.improvements.v1';
+  const STATUS_CYCLE = ['unchecked', 'half', 'done'];
+  const STATUS_LABELS = { unchecked: 'Not started', half: 'In progress', done: 'Done' };
+
+  const CATEGORY_LABELS = {
+    'Stewardship UX':    { className: 'cat-stewardship' },
+    'Failure Mitigation':{ className: 'cat-failure' },
+    'Benefits Expansion':{ className: 'cat-benefits' },
+  };
+  const CATEGORY_ORDER = ['All', 'Stewardship UX', 'Failure Mitigation', 'Benefits Expansion'];
+
+  let allItems   = [];  // canonical from CSV, never mutated
+  let viewItems  = [];  // working copy with local overrides
+  let activeFilter = 'All';
+
+  // ── CSV PARSER ──────────────────────────────────────────────────────────────
+
+  function parseCSV(text) {
+    const lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+    const headers = splitCSVRow(lines[0]);
+    const rows = [];
+    for (let i = 1; i < lines.length; i++) {
+      const raw = lines[i].trim();
+      if (!raw) continue;
+      const cols = splitCSVRow(raw);
+      const obj = {};
+      headers.forEach((h, idx) => { obj[h.trim()] = (cols[idx] || '').trim(); });
+      if (obj.id) rows.push(obj);
+    }
+    return rows;
+  }
+
+  function splitCSVRow(line) {
+    const result = [];
+    let cur = '';
+    let inQuote = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (inQuote) {
+        if (ch === '"') {
+          if (line[i + 1] === '"') { cur += '"'; i++; }
+          else { inQuote = false; }
+        } else {
+          cur += ch;
+        }
+      } else {
+        if (ch === '"') { inQuote = true; }
+        else if (ch === ',') { result.push(cur); cur = ''; }
+        else { cur += ch; }
+      }
+    }
+    result.push(cur);
+    return result;
+  }
+
+  // ── LOCAL STORAGE ────────────────────────────────────────────────────────────
+
+  function loadLocalState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch (_) { return null; }
+  }
+
+  function persistViewState() {
+    const payload = {
+      version: 1,
+      updated: new Date().toISOString(),
+      items: viewItems.map(item => ({ id: item.id, status: item.status })),
+    };
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(payload)); } catch (_) {}
+  }
+
+  function clearLocalState() {
+    try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
+  }
+
+  // ── STATE MANAGEMENT ─────────────────────────────────────────────────────────
+
+  function applyLocalState() {
+    const local = loadLocalState();
+    // Start from CSV order
+    const base = allItems.map(item => ({ ...item }));
+
+    if (!local || !local.items || !local.items.length) {
+      viewItems = base;
+      return;
+    }
+
+    // Build a map from id → local entry
+    const localMap = {};
+    const localOrder = [];
+    local.items.forEach(li => {
+      localMap[li.id] = li;
+      localOrder.push(li.id);
+    });
+
+    // Items that appear in local order first, then remaining by CSV priority
+    const seen = new Set();
+    const ordered = [];
+    localOrder.forEach(id => {
+      const found = base.find(b => b.id === id);
+      if (found) {
+        found.status = localMap[id].status || found.status;
+        ordered.push(found);
+        seen.add(id);
+      }
+    });
+    base.forEach(b => {
+      if (!seen.has(b.id)) ordered.push(b);
+    });
+
+    viewItems = ordered;
+  }
+
+  // ── RENDER ───────────────────────────────────────────────────────────────────
+
+  function filteredItems() {
+    if (activeFilter === 'All') return viewItems;
+    return viewItems.filter(i => i.category === activeFilter);
+  }
+
+  function updateStats() {
+    const total = viewItems.length;
+    const half  = viewItems.filter(i => i.status === 'half').length;
+    const done  = viewItems.filter(i => i.status === 'done').length;
+    const pct   = total ? Math.round((done / total) * 100) : 0;
+
+    document.getElementById('statTotal').textContent = total;
+    document.getElementById('statHalf').textContent  = half;
+    document.getElementById('statDone').textContent  = done;
+    document.getElementById('statPct').textContent   = pct + '%';
+    document.getElementById('progressFill').style.width = pct + '%';
+  }
+
+  function renderFilters() {
+    const container = document.getElementById('filterChips');
+    const counts = {};
+    CATEGORY_ORDER.forEach(cat => { counts[cat] = 0; });
+    counts['All'] = viewItems.length;
+    viewItems.forEach(i => { if (counts[i.category] !== undefined) counts[i.category]++; });
+
+    container.innerHTML = CATEGORY_ORDER.map(cat => {
+      const active = cat === activeFilter ? ' active' : '';
+      return `<button class="chip${active}" data-cat="${cat}">${cat}<span class="count">${counts[cat]}</span></button>`;
+    }).join('');
+  }
+
+  function renderCards() {
+    const container = document.getElementById('cards');
+    const items = filteredItems();
+
+    if (!items.length) {
+      container.innerHTML = '<p style="color:var(--ruf-mute);font-size:14px;padding:20px 0;">No items in this category.</p>';
+      return;
+    }
+
+    container.innerHTML = items.map((item, idx) => {
+      const catInfo = CATEGORY_LABELS[item.category] || { className: '' };
+      const upDisabled  = idx === 0 ? ' disabled' : '';
+      const downDisabled = idx === items.length - 1 ? ' disabled' : '';
+
+      const effortBadge = item.effort ? `<span class="badge meta">Effort: ${item.effort}</span>` : '';
+      const impactBadge = item.impact ? `<span class="badge meta">Impact: ${item.impact}</span>` : '';
+      const ownerBadge  = item.owner ? `<span class="badge owner">${escapeHTML(item.owner)}</span>` : '';
+
+      return `
+        <div class="card" data-id="${item.id}">
+          <div class="card-reorder">
+            <button class="reorder-btn js-up" data-id="${item.id}" title="Move up"${upDisabled}>▲</button>
+            <button class="reorder-btn js-down" data-id="${item.id}" title="Move down"${downDisabled}>▼</button>
+          </div>
+          <div class="card-body">
+            <div class="card-title">${escapeHTML(item.title)}</div>
+            <div class="card-desc">${escapeHTML(item.description)}</div>
+            <div class="card-badges">
+              <span class="badge ${catInfo.className}">${escapeHTML(item.category)}</span>
+              ${ownerBadge}
+              ${effortBadge}
+              ${impactBadge}
+            </div>
+          </div>
+          <div class="card-status">
+            <button class="status-pill js-status ${item.status}" data-id="${item.id}">${STATUS_LABELS[item.status] || item.status}</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function render() {
+    updateStats();
+    renderFilters();
+    renderCards();
+    // Re-attach active class to filter chips
+    document.querySelectorAll('.chip').forEach(chip => {
+      chip.classList.toggle('active', chip.dataset.cat === activeFilter);
+    });
+  }
+
+  // ── REORDER HELPERS ──────────────────────────────────────────────────────────
+
+  function moveInView(id, direction) {
+    // Find in the current filtered subset to know the displayed neighbors
+    const filtered = filteredItems();
+    const filtIdx = filtered.findIndex(i => i.id === id);
+    if (filtIdx < 0) return;
+
+    // The swap partner in the filtered view
+    const swapFilterIdx = filtIdx + direction;
+    if (swapFilterIdx < 0 || swapFilterIdx >= filtered.length) return;
+
+    const idA = id;
+    const idB = filtered[swapFilterIdx].id;
+
+    // Swap in viewItems
+    const posA = viewItems.findIndex(i => i.id === idA);
+    const posB = viewItems.findIndex(i => i.id === idB);
+    if (posA < 0 || posB < 0) return;
+
+    const tmp = viewItems[posA];
+    viewItems[posA] = viewItems[posB];
+    viewItems[posB] = tmp;
+
+    persistViewState();
+    render();
+  }
+
+  // ── EXPORT ───────────────────────────────────────────────────────────────────
+
+  function exportCSV() {
+    const headers = ['id', 'title', 'description', 'category', 'priority', 'status', 'owner', 'effort', 'impact', 'source'];
+
+    function quoteField(val) {
+      val = val == null ? '' : String(val);
+      if (val.includes(',') || val.includes('"') || val.includes('\n')) {
+        return '"' + val.replace(/"/g, '""') + '"';
+      }
+      return val;
+    }
+
+    const rows = [headers.join(',')];
+    viewItems.forEach((item, idx) => {
+      const row = headers.map((h, i) => {
+        if (h === 'priority') return String(idx + 1);
+        return quoteField(item[h]);
+      });
+      rows.push(row.join(','));
+    });
+
+    const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = 'improvements.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  // ── EVENTS ───────────────────────────────────────────────────────────────────
+
+  function bindEvents() {
+    // Filter chips (delegated)
+    document.getElementById('filterChips').addEventListener('click', e => {
+      const chip = e.target.closest('.chip');
+      if (!chip) return;
+      activeFilter = chip.dataset.cat;
+      render();
+    });
+
+    // Cards: status + reorder (delegated to #cards)
+    document.getElementById('cards').addEventListener('click', e => {
+      // Status pill
+      const pill = e.target.closest('.js-status');
+      if (pill) {
+        const id = pill.dataset.id;
+        const item = viewItems.find(i => i.id === id);
+        if (!item) return;
+        const cur = STATUS_CYCLE.indexOf(item.status);
+        item.status = STATUS_CYCLE[(cur + 1) % STATUS_CYCLE.length];
+        persistViewState();
+        render();
+        return;
+      }
+      // Reorder up
+      const upBtn = e.target.closest('.js-up');
+      if (upBtn && !upBtn.disabled) { moveInView(upBtn.dataset.id, -1); return; }
+      // Reorder down
+      const downBtn = e.target.closest('.js-down');
+      if (downBtn && !downBtn.disabled) { moveInView(downBtn.dataset.id, +1); return; }
+    });
+
+    // Reset
+    document.getElementById('btnReset').addEventListener('click', () => {
+      if (!confirm('Reset to saved CSV order and statuses? Your local changes will be lost.')) return;
+      clearLocalState();
+      viewItems = allItems.map(i => ({ ...i }));
+      activeFilter = 'All';
+      render();
+    });
+
+    // Export
+    document.getElementById('btnExport').addEventListener('click', exportCSV);
+  }
+
+  // ── UTILITIES ────────────────────────────────────────────────────────────────
+
+  function escapeHTML(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function showLoadError() {
+    document.getElementById('errorBanner').style.display = 'block';
+    document.getElementById('cards').innerHTML =
+      '<p style="color:var(--ruf-mute);font-size:14px;padding:20px 0;">Could not load improvements. See the error banner above.</p>';
+  }
+
+  // ── BOOT ─────────────────────────────────────────────────────────────────────
+
+  async function boot() {
+    // Set last-updated date
+    document.getElementById('lastUpdated').textContent =
+      new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+    bindEvents();
+
+    try {
+      const resp = await fetch(CSV_PATH);
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      const text = await resp.text();
+      allItems = parseCSV(text);
+      // Sort by priority ascending as default
+      allItems.sort((a, b) => parseInt(a.priority, 10) - parseInt(b.priority, 10));
+      applyLocalState();
+      render();
+    } catch (err) {
+      console.error('Failed to load CSV:', err);
+      showLoadError();
+      updateStats();
+    }
+  }
+
+  boot();
+})();
+</script>
+
+</body>
+</html>
