@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dollybrook Resort - 2026 Reservation Dashboard</title>
+<style>
+:root{
+  --surface-1:#fcfcfb; --page:#f9f9f7;
+  --text-primary:#0b0b0b; --text-secondary:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --border:rgba(11,11,11,0.10);
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300;
+  --good:#0ca30c; --warning:#fab219; --serious:#ec835a; --critical:#d03b3b;
+  --up:#006300;
+  --seq100:#cde2fb;--seq150:#b7d3f6;--seq200:#9ec5f4;--seq250:#86b6ef;--seq300:#6da7ec;
+  --seq350:#5598e7;--seq400:#3987e5;--seq450:#2a78d6;--seq500:#256abf;--seq550:#1c5cab;
+  --seq600:#184f95;--seq650:#104281;--seq700:#0d366b;
+  --shadow:0 1px 2px rgba(11,11,11,.04),0 8px 24px rgba(11,11,11,.05);
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --surface-1:#1a1a19; --page:#0d0d0d;
+  --text-primary:#ffffff; --text-secondary:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,0.10);
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300;
+  --up:#0ca30c;
+  --seq100:#0d366b;--seq150:#104281;--seq200:#184f95;--seq250:#1c5cab;--seq300:#256abf;
+  --seq350:#2a78d6;--seq400:#3987e5;--seq450:#5598e7;--seq500:#6da7ec;--seq550:#86b6ef;
+  --seq600:#9ec5f4;--seq650:#b7d3f6;--seq700:#cde2fb;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--page); color:var(--text-primary);
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:14px; line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1240px;margin:0 auto;padding:28px 20px 80px}
+
+/* ---------- header ---------- */
+header.top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap;margin-bottom:28px}
+.brandline{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1{font-size:30px;line-height:1.15;margin:6px 0 6px;font-weight:640;letter-spacing:-.02em}
+.sub{color:var(--text-secondary);max-width:62ch;font-size:14px}
+.ctl{display:flex;gap:8px;align-items:center}
+button.tgl{
+  font:inherit;font-size:12.5px;font-weight:550;color:var(--text-secondary);
+  background:var(--surface-1);border:1px solid var(--border);border-radius:999px;
+  padding:7px 14px;cursor:pointer;white-space:nowrap
+}
+button.tgl:hover{color:var(--text-primary);border-color:var(--axis)}
+
+/* ---------- hero ---------- */
+.hero{
+  background:var(--surface-1);border:1px solid var(--border);border-radius:16px;
+  padding:26px 26px 22px;box-shadow:var(--shadow);margin-bottom:16px;
+  display:grid;grid-template-columns:minmax(240px,1fr) 2.1fr;gap:32px;align-items:center
+}
+.hero .lab{font-size:12.5px;color:var(--muted);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.hero .fig{font-size:56px;font-weight:660;letter-spacing:-.035em;line-height:1;margin:8px 0 6px}
+.hero .note{font-size:13px;color:var(--text-secondary)}
+.splitbar{display:flex;height:10px;border-radius:6px;overflow:hidden;gap:2px;margin-top:14px}
+.splitbar i{display:block;height:100%}
+.splitkey{display:flex;gap:18px;margin-top:9px;font-size:12.5px;color:var(--text-secondary);flex-wrap:wrap}
+.splitkey span{display:inline-flex;align-items:center;gap:6px}
+.dot{width:9px;height:9px;border-radius:50%;flex:none}
+
+/* ---------- tiles ---------- */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:32px}
+.tile{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:14px 15px 13px;box-shadow:var(--shadow)}
+.tile .l{font-size:12px;color:var(--muted);font-weight:550;line-height:1.3;min-height:2.6em}
+.tile .v{font-size:25px;font-weight:640;letter-spacing:-.025em;margin-top:5px;line-height:1.1}
+.tile .d{font-size:12px;color:var(--text-secondary);margin-top:3px}
+.tile .d .up{color:var(--up);font-weight:640}
+.tile .d .dn{color:var(--critical);font-weight:640}
+
+/* ---------- sections ---------- */
+section{margin:0 0 12px}
+.sechead{margin:36px 0 14px;padding-top:8px}
+.sechead .k{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--s1);font-weight:700}
+.sechead h2{font-size:21px;margin:5px 0 4px;font-weight:620;letter-spacing:-.015em}
+.sechead p{margin:0;color:var(--text-secondary);max-width:78ch;font-size:13.5px}
+
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:900px){ .g2,.g3{grid-template-columns:1fr} }
+.full{grid-template-columns:1fr}
+
+.card{background:var(--surface-1);border:1px solid var(--border);border-radius:14px;padding:18px 18px 14px;box-shadow:var(--shadow);min-width:0}
+.card h3{font-size:15px;margin:0 0 2px;font-weight:620;letter-spacing:-.01em}
+.card .cs{font-size:12.5px;color:var(--text-secondary);margin:0 0 12px;line-height:1.45}
+.card .foot{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.45}
+.cardtop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+button.tv{
+  font:inherit;font-size:11px;font-weight:600;letter-spacing:.03em;color:var(--muted);
+  background:none;border:1px solid var(--border);border-radius:6px;padding:3px 8px;cursor:pointer;flex:none
+}
+button.tv:hover{color:var(--text-primary);border-color:var(--axis)}
+
+/* ---------- legend ---------- */
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--text-secondary);margin:0 0 10px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:11px;height:11px;border-radius:3px;display:block;flex:none}
+.legend i.ln{height:3px;width:16px;border-radius:2px}
+
+/* ---------- svg ---------- */
+svg{display:block;width:100%;height:auto;overflow:visible}
+.gl{stroke:var(--grid);stroke-width:1;shape-rendering:crispEdges}
+.ax{stroke:var(--axis);stroke-width:1;shape-rendering:crispEdges}
+text{font-family:inherit}
+.tick{fill:var(--muted);font-size:11px;font-variant-numeric:tabular-nums}
+.cat{fill:var(--text-secondary);font-size:11.5px}
+.dl{fill:var(--text-primary);font-size:11.5px;font-weight:620}
+.dl2{fill:var(--text-secondary);font-size:11px}
+.hit{fill:transparent;cursor:pointer}
+
+/* ---------- tooltip ---------- */
+#tip{
+  position:fixed;pointer-events:none;z-index:99;opacity:0;transition:opacity .08s;
+  background:var(--surface-1);border:1px solid var(--border);border-radius:9px;
+  box-shadow:0 6px 22px rgba(0,0,0,.16);padding:9px 11px;font-size:12.5px;max-width:280px;
+  color:var(--text-primary)
+}
+#tip .tt{font-weight:640;margin-bottom:4px;font-size:13px}
+#tip .tr{display:flex;justify-content:space-between;gap:16px;color:var(--text-secondary);line-height:1.55}
+#tip .tr b{color:var(--text-primary);font-weight:620;font-variant-numeric:tabular-nums}
+
+/* ---------- tables ---------- */
+.tbl{display:none;margin-top:6px;overflow-x:auto}
+.tbl.on{display:block}
+table{border-collapse:collapse;width:100%;font-size:12.5px;font-variant-numeric:tabular-nums}
+th,td{text-align:right;padding:5px 8px;border-bottom:1px solid var(--grid);white-space:nowrap}
+th:first-child,td:first-child{text-align:left;font-variant-numeric:normal}
+thead th{color:var(--muted);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em}
+tbody tr:hover{background:var(--page)}
+tfoot td{font-weight:650;border-top:1px solid var(--axis);border-bottom:none}
+
+/* ---------- heatmap / calendar ---------- */
+.hmwrap{overflow-x:auto}
+.scale{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted);margin-top:10px}
+.scale .ramp{display:flex;height:9px;border-radius:5px;overflow:hidden;width:150px}
+.scale .ramp i{flex:1}
+
+/* ---------- callouts ---------- */
+.callout{background:var(--surface-1);border:1px solid var(--border);border-left:3px solid var(--s1);
+  border-radius:10px;padding:14px 16px;font-size:13.5px;color:var(--text-secondary);box-shadow:var(--shadow)}
+.callout b{color:var(--text-primary);font-weight:620}
+.callout.warn{border-left-color:var(--warning)}
+.callout.crit{border-left-color:var(--critical)}
+.bullets{margin:0;padding-left:18px}
+.bullets li{margin:5px 0}
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--border);font-size:12px;color:var(--muted);line-height:1.6}
+@media print{ .ctl,button.tv{display:none} .tbl{display:block} }
+@media (max-width:720px){ .hero{grid-template-columns:1fr;gap:20px} .hero .fig{font-size:44px} h1{font-size:24px} }
+</style>
+</head>
+<body>
+<div id="tip" role="status" aria-live="polite"></div>
+<div class="wrap">
+<header class="top">
+  <div>
+    <div class="brandline">Dollybrook Resort · Saugatuck, MI</div>
+    <h1>2026 Reservations &amp; Revenue Dashboard</h1>
+    <p class="sub">Every confirmed, revenue-generating reservation with a 2026 arrival date - realised
+      stays plus what is already on the books. Nine cabins, 46 beds. Data as of <b>2 Aug 2026</b>.</p>
+  </div>
+  <div class="ctl">
+    <button class="tgl" id="themeBtn" type="button">Dark mode</button>
+    <button class="tgl" id="allTablesBtn" type="button">Show all data tables</button>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<div class="hero">
+  <div>
+    <div class="lab">Room revenue, arrivals in 2026</div>
+    <div class="fig" id="heroFig">-</div>
+    <div class="note" id="heroNote"></div>
+  </div>
+  <div>
+    <div class="lab">Where the year stands</div>
+    <div class="splitbar" id="heroSplit"></div>
+    <div class="splitkey" id="heroKey"></div>
+    <div class="note" style="margin-top:14px" id="heroNote2"></div>
+  </div>
+</div>
+
+<div class="tiles" id="tiles"></div>
+
+<!-- ============ 1. SEASON ============ -->
+<div class="sechead">
+  <div class="k">01 · Seasonality</div>
+  <h2>The year is eleven weeks long</h2>
+  <p>Revenue is attributed to the month of arrival, matching the operating spreadsheet. Occupancy, ADR
+     and RevPAR are computed night-by-night, so a stay straddling month-end is split correctly.</p>
+</div>
+<div class="grid full">
+  <div class="card">
+    <div class="cardtop"><div><h3>Room revenue by month - 2026 vs 2025</h3>
+      <p class="cs">2026 is ahead of 2025 by <b id="yoyTxt">-</b> across the months booked so far. July alone carries
+      roughly a third of the year.</p></div>
+      <button class="tv" onclick="tableView('t-rev')">Table</button></div>
+    <div class="legend" id="l-rev"></div>
+    <div id="c-rev"></div>
+    <div class="tbl" id="t-rev"></div>
+    <p class="foot">2025 figures are the prior-year actuals carried in the source workbook. Nov-Dec 2026 is
+      genuinely unsold, not missing - the winter book opens late.</p>
+  </div>
+</div>
+<div class="grid g2">
+  <div class="card">
+    <div class="cardtop"><div><h3>Occupancy by month</h3>
+      <p class="cs">Share of the 9 available cabin-nights that were sold, counted night by night.</p></div>
+      <button class="tv" onclick="tableView('t-occ')">Table</button></div>
+    <div id="c-occ"></div>
+    <div class="tbl" id="t-occ"></div>
+  </div>
+  <div class="card">
+    <div class="cardtop"><div><h3>RevPAR by month</h3>
+      <p class="cs">Revenue per available cabin-night - rate and occupancy in one number.</p></div>
+      <button class="tv" onclick="tableView('t-revpar')">Table</button></div>
+    <div id="c-revpar"></div>
+    <div class="tbl" id="t-revpar"></div>
+  </div>
+  <div class="card">
+    <div class="cardtop"><div><h3>ADR by month - 2026 vs 2025</h3>
+      <p class="cs">Average nightly rate achieved. July peaks near six times the January floor; the early-2025 line is thin-sample noise (Feb 2025 sold two nights).</p></div>
+      <button class="tv" onclick="tableView('t-adr')">Table</button></div>
+    <div class="legend" id="l-adr"></div>
+    <div id="c-adr"></div>
+    <div class="tbl" id="t-adr"></div>
+  </div>
+  <div class="card">
+    <div class="cardtop"><div><h3>Reservations &amp; guests by month</h3>
+      <p class="cs">Booking count against total heads booked, by arrival month.</p></div>
+      <button class="tv" onclick="tableView('t-bk')">Table</button></div>
+    <div class="legend" id="l-bk"></div>
+    <div id="c-bk"></div>
+    <div class="tbl" id="t-bk"></div>
+  </div>
+</div>
+<div class="grid full" style="margin-top:14px">
+  <div class="callout" id="seasonCall"></div>
+</div>
+
+<!-- ============ 2. CABIN ECONOMICS ============ -->
+<div class="sechead">
+  <div class="k">02 · Cabin economics</div>
+  <h2>Big cabins earn more per night, small cabins earn more per bed</h2>
+  <p>Cabins sleep between 4 and 8, so raw revenue rankings flatter the large units. The two capacity-adjusted
+     views below - RevPAR (per cabin-night) and revenue per available <em>bed</em>-night - tell opposite stories,
+     and both are true.</p>
+</div>
+<div class="grid g2">
+  <div class="card">
+    <div class="cardtop"><div><h3>Total room revenue by cabin</h3>
+      <p class="cs">Own bookings plus each cabin's share of the four whole-resort buyouts.</p></div>
+      <button class="tv" onclick="tableView('t-cabrev')">Table</button></div>
+    <div class="legend" id="l-cabrev"></div>
+    <div id="c-cabrev"></div>
+    <div class="tbl" id="t-cabrev"></div>
+  </div>
+  <div class="card">
+    <div class="cardtop"><div><h3>ADR by cabin</h3>
+      <p class="cs">Average rate per night sold. It tracks capacity almost perfectly.</p></div>
+      <button class="tv" onclick="tableView('t-cabadr')">Table</button></div>
+    <div id="c-cabadr"></div>
+    <div class="tbl" id="t-cabadr"></div>
+  </div>
+  <div class="card">
+    <div class="cardtop"><div><h3>RevPAR by cabin <span style="color:var(--muted);font-weight:500">· per cabin-night</span></h3>
+      <p class="cs">Revenue ÷ 365 available nights. This is the asset-level scoreboard.</p></div>
+      <button class="tv" onclick="tableView('t-cabrevpar')">Table</button></div>
+    <div id="c-cabrevpar"></div>
+    <div class="tbl" id="t-cabrevpar"></div>
+  </div>
+  <div class="card">
+    <div class="cardtop"><div><h3>Revenue per available bed-night <span style="color:var(--muted);font-weight:500">· RevPAB</span></h3>
+      <p class="cs">Revenue ÷ (365 × beds). Normalises for the fact that Sled Loft is twice the cabin.</p></div>
+      <button class="tv" onclick="tableView('t-cabbed')">Table</button></div>
+    <div id="c-cabbed"></div>
+    <div class="tbl" id="t-cabbed"></div>
+    <p class="foot">The ranking inverts: the 8-sleeper leads on RevPAR and finishes last per bed.</p>
+  </div>
+</div>
+<div class="grid g2" style="margin-top:14px">
+  <div class="card">
+    <div class="cardtop"><div><h3>Occupancy by cabin</h3>
+      <p class="cs">Nights sold ÷ 365. Small cabins sell more nights; large cabins sell fewer, dearer ones.</p></div>
+      <button class="tv" onclick="tableView('t-cabocc')">Table</button></div>
+    <div id="c-cabocc"></div>
+    <div class="tbl" id="t-cabocc"></div>
+  </div>
+  <div class="card">
+    <div class="cardtop"><div><h3>How full a cabin actually is when it sells</h3>
+      <p class="cs">Average party ÷ beds available. Empty beds are unpriced inventory.</p></div>
+      <button class="tv" onclick="tableView('t-fill')">Table</button></div>
+    <div id="c-fill"></div>
+    <div class="tbl" id="t-fill"></div>
+  </div>
+</div>
+<div class="grid full" style="margin-top:14px">
+  <div class="card">
+    <div class="cardtop"><div><h3>Capacity class: what each bed earns</h3>
+      <p class="cs">The nine cabins collapse into three classes. Each bubble is a class; area is total revenue.
+        Read left-to-right for size, bottom-to-top for yield per bed.</p></div>
+      <button class="tv" onclick="tableView('t-class')">Table</button></div>
+    <div class="legend" id="l-class"></div>
+    <div id="c-class"></div>
+    <div class="tbl on" id="t-class"></div>
+  </div>
+</div>
+<div class="grid full" style="margin-top:14px">
+  <div class="callout" id="cabinCall"></div>
+</div>
+
+<!-- ============ 3. OCCUPANCY DETAIL ============ -->
+<div class="sechead">
+  <div class="k">03 · Occupancy in detail</div>
+  <h2>Where the empty nights are</h2>
+  <p>Every night of 2026, by cabin and by calendar day. Dark means sold.</p>
+</div>
+<div class="grid full">
+  <div class="card">
+    <div class="cardtop"><div><h3>Occupancy heatmap - cabin × month</h3>
+      <p class="cs">Figures are percent of that month's nights sold. Hover any cell for nights and revenue.</p></div>
+      <button class="tv" onclick="tableView('t-hm')">Table</button></div>
+    <div class="hmwrap" id="c-hm"></div>
+    <div class="scale" id="s-hm"></div>
+    <div class="tbl" id="t-hm"></div>
+  </div>
+  <div class="card">
+    <div class="cardtop"><div><h3>Revenue heatmap - cabin × month</h3>
+      <p class="cs">Room revenue earned, spread across the nights actually stayed.</p></div>
+      <button class="tv" onclick="tableView('t-hmr')">Table</button></div>
+    <div class="hmwrap" id="c-hmr"></div>
+    <div class="scale" id="s-hmr"></div>
+    <div class="tbl" id="t-hmr"></div>
+  </div>
+  <div class="card">
+    <div class="cardtop"><div><h3>Every night of 2026</h3>
+      <p class="cs">One square per day; shade = how many of the 9 cabins were occupied.</p></div>
+      <button class="tv" onclick="tableView('t-cal')">Table</button></div>
+    <div class="hmwrap" id="c-cal"></div>
+    <div class="scale" id="s-cal"></div>
+    <div class="tbl" id="t-cal"></div>
+    <p class="foot" id="calFoot"></p>
+  </div>
+</div>
+<div class="grid g2" style="margin-top:14px">
+  <div class="card">
+    <div class="cardtop"><div><h3>Occupancy by night of the week</h3>
+      <p class="cs">Friday and Saturday sell; Tuesday and Wednesday do not.</p></div>
+      <button class="tv" onclick="tableView('t-dow')">Table</button></div>
+    <div id="c-dow"></div>
+    <div class="tbl" id="t-dow"></div>
+  </div>
+  <div class="card">
+    <div class="cardtop"><div><h3>RevPAR by night of the week</h3>
+      <p class="cs">Rate barely moves across the week - the whole weekend premium is occupancy.</p></div>
+      <button class="tv" onclick="tableView('t-dowr')">Table</button></div>
+    <div id="c-dowr"></div>
+    <div class="tbl" id="t-dowr"></div>
+  </div>
+</div>
+<div class="grid full" style="margin-top:14px">
+  <div class="callout" id="occCall"></div>
+</div>
+
+<!-- ============ 4. BOOKING BEHAVIOUR ============ -->
+<div class="sechead">
+  <div class="k">04 · Booking behaviour</div>
+  <h2>How far ahead people book - and what it costs them</h2>
+  <p>Lead time is the single strongest predictor of rate in this dataset.</p>
+</div>
+<div class="grid g2">
+  <div class="card">
+    <div class="cardtop"><div><h3>Lead time - number of reservations</h3>
+      <p class="cs">Days between booking and arrival. Median is <b id="leadMed">-</b>.</p></div>
+      <button class="tv" onclick="tableView('t-lead')">Table</button></div>
+    <div id="c-lead"></div>
+    <div class="tbl" id="t-lead"></div>
+  </div>
+  <div class="card">
+    <div class="cardtop"><div><h3>ADR by lead time</h3>
+      <p class="cs">Rate rises monotonically with lead time - early bookers buy the peak dates.</p></div>
+      <button class="tv" onclick="tableView('t-leadadr')">Table</button></div>
+    <div id="c-leadadr"></div>
+    <div class="tbl" id="t-leadadr"></div>
+  </div>
+  <div class="card">
+    <div class="cardtop"><div><h3>Length of stay</h3>
+      <p class="cs">Three nights is the modal stay; four nights earns the most.</p></div>
+      <button class="tv" onclick="tableView('t-los')">Table</button></div>
+    <div id="c-los"></div>
+    <div class="tbl" id="t-los"></div>
+  </div>
+  <div class="card">
+    <div class="cardtop"><div><h3>Party size</h3>
+      <p class="cs">Two-guest bookings dominate - including in the 6- and 8-bed cabins.</p></div>
+      <button class="tv" onclick="tableView('t-party')">Table</button></div>
+    <div id="c-party"></div>
+    <div class="tbl" id="t-party"></div>
+  </div>
+  <div class="card">
+    <div class="cardtop"><div><h3>Arrival day of week</h3>
+      <p class="cs">Friday and Thursday arrivals carry the book; Tuesday is nearly dead.</p></div>
+      <button class="tv" onclick="tableView('t-adow')">Table</button></div>
+    <div id="c-adow"></div>
+    <div class="tbl" id="t-adow"></div>
+  </div>
+  <div class="card">
+    <div class="cardtop"><div><h3>Booking pace - when the 2026 book was written</h3>
+      <p class="cs">Revenue by the month the reservation was <em>created</em>, not stayed.</p></div>
+      <button class="tv" onclick="tableView('t-pace')">Table</button></div>
+    <div id="c-pace"></div>
+    <div class="tbl" id="t-pace"></div>
+  </div>
+</div>
+<div class="grid full" style="margin-top:14px">
+  <div class="card">
+    <div class="cardtop"><div><h3>Every reservation: lead time against nightly rate</h3>
+      <p class="cs">One dot per reservation, coloured by cabin capacity class. Dot size is total booking value.
+        The upward drift is the pricing signal; the cluster bottom-left is discounted last-minute winter inventory.</p></div>
+      <button class="tv" onclick="tableView('t-sc')">Table</button></div>
+    <div class="legend" id="l-sc"></div>
+    <div id="c-sc"></div>
+    <div class="tbl" id="t-sc"></div>
+  </div>
+</div>
+<div class="grid full" style="margin-top:14px">
+  <div class="callout" id="bookCall"></div>
+</div>
+
+<!-- ============ 5. CHANNELS & GUESTS ============ -->
+<div class="sechead">
+  <div class="k">05 · Channels &amp; guests</div>
+  <h2>Direct is the business; the OTAs are a rounding error</h2>
+  <p>Channel is read from the reservation type code: Jaqua direct, VRBO, Airbnb, Booking.com.</p>
+</div>
+<div class="grid g2">
+  <div class="card">
+    <div class="cardtop"><div><h3>Revenue by channel</h3>
+      <p class="cs">Share of the 2026 room-revenue book.</p></div>
+      <button class="tv" onclick="tableView('t-chan')">Table</button></div>
+    <div id="c-chan"></div>
+    <div class="tbl" id="t-chan"></div>
+  </div>
+  <div class="card">
+    <div class="cardtop"><div><h3>ADR by channel</h3>
+      <p class="cs">What a night actually fetches through each door.</p></div>
+      <button class="tv" onclick="tableView('t-chanadr')">Table</button></div>
+    <div id="c-chanadr"></div>
+    <div class="tbl" id="t-chanadr"></div>
+  </div>
+  <div class="card">
+    <div class="cardtop"><div><h3>Booking route</h3>
+      <p class="cs">Self-serve online, entered by staff, or arriving through an OTA.</p></div>
+      <button class="tv" onclick="tableView('t-route')">Table</button></div>
+    <div id="c-route"></div>
+    <div class="tbl" id="t-route"></div>
+    <p class="foot" id="routeFoot"></p>
+  </div>
+  <div class="card">
+    <div class="cardtop"><div><h3>New vs repeat guests</h3>
+      <p class="cs">Repeat guests book earlier, stay longer and pay more per night.</p></div>
+      <button class="tv" onclick="tableView('t-rep')">Table</button></div>
+    <div id="c-rep"></div>
+    <div class="tbl" id="t-rep"></div>
+  </div>
+</div>
+<div class="grid g2" style="margin-top:14px">
+  <div class="card">
+    <div class="cardtop"><div><h3>Bookings per guest email</h3>
+      <p class="cs">How concentrated the guest base is within 2026 arrivals alone.</p></div>
+      <button class="tv" onclick="tableView('t-freq')">Table</button></div>
+    <div id="c-freq"></div>
+    <div class="tbl" id="t-freq"></div>
+    <p class="foot" id="freqFoot"></p>
+  </div>
+  <div class="card">
+    <div class="cardtop"><div><h3>Pet-friendly stays</h3>
+      <p class="cs">Pets travel with longer stays but at a slightly lower rate.</p></div>
+      <button class="tv" onclick="tableView('t-pets')">Table</button></div>
+    <div id="c-pets"></div>
+    <div class="tbl" id="t-pets"></div>
+  </div>
+</div>
+<div class="grid full" style="margin-top:14px">
+  <div class="callout" id="chanCall"></div>
+</div>
+
+<!-- ============ 6. CONCENTRATION & BUYOUTS ============ -->
+<div class="sechead">
+  <div class="k">06 · Concentration</div>
+  <h2>A tenth of the bookings pay a third of the bills</h2>
+</div>
+<div class="grid g2">
+  <div class="card">
+    <div class="cardtop"><div><h3>Revenue concentration</h3>
+      <p class="cs">Reservations ranked largest first; cumulative share of revenue.</p></div>
+      <button class="tv" onclick="tableView('t-conc')">Table</button></div>
+    <div id="c-conc"></div>
+    <div class="tbl" id="t-conc"></div>
+  </div>
+  <div class="card">
+    <div class="cardtop"><div><h3>Whole-resort buyouts</h3>
+      <p class="cs">Four group bookings take the entire property. Together they are the single most
+        valuable product line on the calendar.</p></div>
+      <button class="tv" onclick="tableView('t-byo')">Table</button></div>
+    <div id="c-byo"></div>
+    <div class="tbl on" id="t-byo"></div>
+    <p class="foot" id="byoFoot"></p>
+  </div>
+</div>
+
+<!-- ============ 7. NOTES ============ -->
+<div class="sechead">
+  <div class="k">07 · Method &amp; data quality</div>
+  <h2>What is counted, and what was left out</h2>
+</div>
+<div class="grid g2">
+  <div class="card"><h3>Definitions</h3>
+    <ul class="bullets" style="color:var(--text-secondary);font-size:13px;margin-top:10px">
+      <li><b>Room revenue</b> - the <em>Total Nightly</em> field: accommodation only, before cleaning, fees and tax.
+        Gross booking value including all of those is <b id="defGross">-</b>.</li>
+      <li><b>Room-night</b> - one cabin occupied for one night. A whole-resort buyout consumes nine per night.</li>
+      <li><b>ADR</b> - room revenue ÷ room-nights sold. <b>RevPAR</b> - room revenue ÷ 3,285 available cabin-nights.
+        <b>RevPAB</b> - room revenue ÷ 16,790 available bed-nights.</li>
+      <li><b>Occupancy</b> - room-nights sold ÷ available, counted night by night so month-end stays split correctly.</li>
+    </ul>
+  </div>
+  <div class="card"><h3>Exclusions &amp; flags</h3>
+    <ul class="bullets" style="color:var(--text-secondary);font-size:13px;margin-top:10px" id="qualList"></ul>
+  </div>
+</div>
+<div class="grid full" style="margin-top:14px">
+  <div class="callout warn" id="qualCall"></div>
+</div>
+
+<footer>
+  <div><b>Source</b> - MAIN_ DB_ Revenue &amp; Occupancy Analysis Dollybrook, July 2026 export.
+    357 revenue-generating reservations with 2026 arrival dates.</div>
+  <div id="reconLine" style="margin-top:6px"></div>
+  <div style="margin-top:6px">Cabin capacities: Dreamy Den 4 · Enchanted Forest 6 · Winter Wonderland 4 · Bubblegum Bungalow 4 ·
+    Secret Garden 6 · Sled Loft 8 · Amber Glow 4 · Sunshine Loft 4 · Captain's Lodge 6 - 46 beds across 9 cabins.</div>
+</footer>
+</div>
+
+<script>
+const D={"meta": {"source": "MAIN_ DB_ Revenue & Occupancy Analysis Dollybrook \u2014 July26.csv", "asof": "2026-08-02", "year": 2026, "cabins": 9, "beds": 46, "reservations": 357, "excluded_rows": 158}, "kpi": {"revenue": 333452.81, "gross": 486147.9, "roomnights": 1231.0, "adr": 270.8796181965881, "occupancy": 0.37473363774733637, "revpar": 101.50770471841705, "revpab": 19.860203097081595, "bookings": 357, "avg_los": 3.179271708683473, "median_los": 3.0, "avg_lead": 87.26330532212886, "median_lead": 38.0, "avg_party": 3.3781512605042017, "repeat_share": 0.2184873949579832, "pet_share": 0.15966386554621848, "avg_booking_value": 934.0414845938375, "guests_total": 1206.0, "guest_nights": 3812.0, "bal_due": 9693.54, "onbooks_rev": 99204.64, "realized_rev": 234248.16999999998, "bed_utilization": 1206.0, "bed_fill_when_sold": 0.7586464759768181, "bed_nights_sold": 10698.0}, "monthly": [{"m": "Jan", "rev": 4110.3, "rn": 57.0, "bookings": 18, "guests": 46.0, "adr": 72.11052631578947, "occ": 0.20430107526881722, "revpar": 14.73225806451613, "los": 3.1666666666666665, "lead": 11.0, "rev2025": 0, "adr2025": 0}, {"m": "Feb", "rev": 3591.76, "rn": 49.0, "bookings": 18, "guests": 37.0, "adr": 73.30122448979593, "occ": 0.19444444444444445, "revpar": 14.253015873015874, "los": 2.7222222222222223, "lead": 21.0, "rev2025": 401, "adr2025": 200}, {"m": "Mar", "rev": 4486.37, "rn": 51.0, "bookings": 21, "guests": 71.0, "adr": 87.96803921568628, "occ": 0.1827956989247312, "revpar": 16.080179211469535, "los": 2.4285714285714284, "lead": 18.0, "rev2025": 7534, "adr2025": 222}, {"m": "Apr", "rev": 9602.02, "rn": 103.0, "bookings": 32, "guests": 84.0, "adr": 93.22349514563108, "occ": 0.3814814814814815, "revpar": 35.56303703703704, "los": 3.21875, "lead": 16.5, "rev2025": 9609, "adr2025": 141}, {"m": "May", "rev": 27863.92, "rn": 140.0, "bookings": 49, "guests": 131.0, "adr": 199.028, "occ": 0.5017921146953405, "revpar": 99.87068100358422, "los": 2.857142857142857, "lead": 24.0, "rev2025": 25294, "adr2025": 211}, {"m": "Jun", "rev": 50849.81, "rn": 188.0, "bookings": 51, "guests": 200.0, "adr": 270.47771276595745, "occ": 0.6962962962962963, "revpar": 188.33262962962962, "los": 3.0588235294117645, "lead": 28.0, "rev2025": 51889, "adr2025": 333}, {"m": "Jul", "rev": 120666.59, "rn": 282.0, "bookings": 81, "guests": 266.0, "adr": 427.89570921985813, "occ": 1.010752688172043, "revpar": 432.49673835125446, "los": 3.4814814814814814, "lead": 153.0, "rev2025": 93432, "adr2025": 362}, {"m": "Aug", "rev": 80233.09, "rn": 236.0, "bookings": 61, "guests": 172.0, "adr": 339.970720338983, "occ": 0.8458781362007168, "revpar": 287.57379928315413, "los": 3.8688524590163933, "lead": 91.0, "rev2025": 52797, "adr2025": 303}, {"m": "Sep", "rev": 22688.06, "rn": 87.0, "bookings": 18, "guests": 140.0, "adr": 260.7822988505747, "occ": 0.32222222222222224, "revpar": 84.02985185185186, "los": 2.1666666666666665, "lead": 191.0, "rev2025": 11510, "adr2025": 151}, {"m": "Oct", "rev": 7779.0599999999995, "rn": 31.0, "bookings": 6, "guests": 54.0, "adr": 250.93741935483868, "occ": 0.1111111111111111, "revpar": 27.881935483870965, "los": 2.5, "lead": 126.5, "rev2025": 14350, "adr2025": 115}, {"m": "Nov", "rev": 1581.83, "rn": 7.0, "bookings": 2, "guests": 5.0, "adr": 225.97571428571428, "occ": 0.025925925925925925, "revpar": 5.858629629629629, "los": 3.5, "lead": 112.0, "rev2025": 8517, "adr2025": 82}, {"m": "Dec", "rev": 0.0, "rn": 0.0, "bookings": 0, "guests": 0.0, "adr": 0, "occ": 0.0, "revpar": 0.0, "los": 0.0, "lead": 0.0, "rev2025": 4206, "adr2025": 75}], "cabins": [{"cabin": "1: Dreamy Den", "sleeps": 4, "rev": 31253.460000000003, "rn": 142.0, "bookings": 46, "buyout_rev": 2617.217391304348, "buyout_rn": 12.0, "tot_rev": 33870.67739130435, "tot_rn": 154.0, "adr": 219.9394635798984, "adr_own": 220.0947887323944, "occ": 0.42191780821917807, "revpar": 92.79637641453247, "rev_per_bed": 8467.669347826088, "revpab": 23.19909410363312, "adr_per_bed": 54.9848658949746, "avg_party": 2.1739130434782608, "fill": 0.5387323943661971, "los": 3.0869565217391304, "repeat": 0.13043478260869565, "pets": 0.1956521739130435}, {"cabin": "2: Enchanted Forest", "sleeps": 6, "rev": 32782.86, "rn": 106.0, "bookings": 31, "buyout_rev": 3925.8260869565215, "buyout_rn": 12.0, "tot_rev": 36708.68608695652, "tot_rn": 118.0, "adr": 311.09056005895354, "adr_own": 309.2722641509434, "occ": 0.3232876712328767, "revpar": 100.57174270399047, "rev_per_bed": 6118.1143478260865, "revpab": 16.761957117331743, "adr_per_bed": 51.84842667649226, "avg_party": 3.0, "fill": 0.47955974842767296, "los": 3.4193548387096775, "repeat": 0.12903225806451613, "pets": 0.12903225806451613}, {"cabin": "3: Winter Wonderland", "sleeps": 4, "rev": 27382.46, "rn": 141.0, "bookings": 48, "buyout_rev": 2617.217391304348, "buyout_rn": 12.0, "tot_rev": 29999.677391304347, "tot_rn": 153.0, "adr": 196.07632281898267, "adr_own": 194.2018439716312, "occ": 0.4191780821917808, "revpar": 82.19089696247767, "rev_per_bed": 7499.919347826087, "revpab": 20.547724240619416, "adr_per_bed": 49.01908070474567, "avg_party": 2.1666666666666665, "fill": 0.5283687943262412, "los": 2.9375, "repeat": 0.125, "pets": 0.1875}, {"cabin": "4: Bubblegum Bungalow", "sleeps": 4, "rev": 33195.02, "rn": 125.0, "bookings": 41, "buyout_rev": 2617.217391304348, "buyout_rn": 12.0, "tot_rev": 35812.23739130434, "tot_rn": 137.0, "adr": 261.403192637258, "adr_own": 265.56016, "occ": 0.37534246575342467, "revpar": 98.11571888028587, "rev_per_bed": 8953.059347826085, "revpab": 24.528929720071467, "adr_per_bed": 65.3507981593145, "avg_party": 2.926829268292683, "fill": 0.718, "los": 3.048780487804878, "repeat": 0.1951219512195122, "pets": 0.1951219512195122}, {"cabin": "5: Secret Garden", "sleeps": 6, "rev": 37104.03, "rn": 132.0, "bookings": 40, "buyout_rev": 3925.8260869565215, "buyout_rn": 12.0, "tot_rev": 41029.85608695652, "tot_rn": 144.0, "adr": 284.92955615942026, "adr_own": 281.09113636363634, "occ": 0.39452054794520547, "revpar": 112.41056462179868, "rev_per_bed": 6838.309347826086, "revpab": 18.735094103633113, "adr_per_bed": 47.488259359903374, "avg_party": 3.375, "fill": 0.5707070707070707, "los": 3.3, "repeat": 0.175, "pets": 0.1}, {"cabin": "6: Sled Loft", "sleeps": 8, "rev": 43555.49, "rn": 108.0, "bookings": 31, "buyout_rev": 5234.434782608696, "buyout_rn": 12.0, "tot_rev": 48789.924782608694, "tot_rn": 120.0, "adr": 406.5827065217391, "adr_own": 403.29157407407405, "occ": 0.3287671232876712, "revpar": 133.67102680166767, "rev_per_bed": 6098.740597826087, "revpab": 16.708878350208458, "adr_per_bed": 50.82283831521739, "avg_party": 4.806451612903226, "fill": 0.6053240740740741, "los": 3.4838709677419355, "repeat": 0.3225806451612903, "pets": 0.12903225806451613}, {"cabin": "7: Amber Glow", "sleeps": 4, "rev": 27280.92, "rn": 121.0, "bookings": 38, "buyout_rev": 2617.217391304348, "buyout_rn": 12.0, "tot_rev": 29898.137391304346, "tot_rn": 133.0, "adr": 224.79802549852892, "adr_own": 225.46214876033056, "occ": 0.3643835616438356, "revpar": 81.91270518165574, "rev_per_bed": 7474.534347826087, "revpab": 20.478176295413935, "adr_per_bed": 56.19950637463223, "avg_party": 2.5526315789473686, "fill": 0.6260330578512396, "los": 3.1842105263157894, "repeat": 0.34210526315789475, "pets": 0.13157894736842105}, {"cabin": "8: Sunshine Loft", "sleeps": 4, "rev": 30377.45, "rn": 143.0, "bookings": 44, "buyout_rev": 2617.217391304348, "buyout_rn": 12.0, "tot_rev": 32994.66739130435, "tot_rn": 155.0, "adr": 212.8688218793829, "adr_own": 212.42972027972027, "occ": 0.4246575342465753, "revpar": 90.39634901727219, "rev_per_bed": 8248.666847826087, "revpab": 22.599087254318047, "adr_per_bed": 53.21720546984572, "avg_party": 2.477272727272727, "fill": 0.5926573426573427, "los": 3.25, "repeat": 0.3409090909090909, "pets": 0.11363636363636363}, {"cabin": "9: Captain's Lodge", "sleeps": 6, "rev": 36311.0, "rn": 102.0, "bookings": 33, "buyout_rev": 3925.8260869565215, "buyout_rn": 12.0, "tot_rev": 40236.82608695652, "tot_rn": 114.0, "adr": 352.9546147978642, "adr_own": 355.9901960784314, "occ": 0.31232876712328766, "revpar": 110.23787969029183, "rev_per_bed": 6706.13768115942, "revpab": 18.37297994838197, "adr_per_bed": 58.82576913297737, "avg_party": 3.6666666666666665, "fill": 0.6258169934640523, "los": 3.090909090909091, "repeat": 0.2727272727272727, "pets": 0.24242424242424243}], "buyouts": {"n": 4, "rev": 30098.0, "nights": 12.0, "roomnights": 108.0, "adr": 278.68518518518516, "avg_party": 44.0, "list": [{"arrive": "Jun 25", "nts": 4, "party": 50, "rev": 11500.0}, {"arrive": "Sep 10", "nts": 3, "party": 40, "rev": 7600.0}, {"arrive": "Sep 17", "nts": 3, "party": 46, "rev": 7100.0}, {"arrive": "Oct 22", "nts": 2, "party": 40, "rev": 3898.0}]}, "heatmap": [{"cabin": "1: Dreamy Den", "sleeps": 4, "occ": [0.2903225806451613, 0.4642857142857143, 0.2903225806451613, 0.36666666666666664, 0.5483870967741935, 0.8666666666666667, 0.8709677419354839, 0.8387096774193549, 0.3333333333333333, 0.1935483870967742, 0.0, 0.0], "rn": [9.0, 13.0, 9.0, 11.0, 17.0, 26.0, 27.0, 26.0, 10.0, 6.0, 0.0, 0.0]}, {"cabin": "2: Enchanted Forest", "sleeps": 6, "occ": [0.0, 0.03571428571428571, 0.16129032258064516, 0.23333333333333334, 0.6451612903225806, 0.5333333333333333, 1.0, 0.9032258064516129, 0.26666666666666666, 0.06451612903225806, 0.0, 0.0], "rn": [0.0, 1.0, 5.0, 7.0, 20.0, 16.0, 31.0, 28.0, 8.0, 2.0, 0.0, 0.0]}, {"cabin": "3: Winter Wonderland", "sleeps": 4, "occ": [0.12903225806451613, 0.21428571428571427, 0.1935483870967742, 0.4666666666666667, 0.5806451612903226, 0.8666666666666667, 0.967741935483871, 0.967741935483871, 0.3333333333333333, 0.22580645161290322, 0.06666666666666667, 0.0], "rn": [4.0, 6.0, 6.0, 14.0, 18.0, 26.0, 30.0, 30.0, 10.0, 7.0, 2.0, 0.0]}, {"cabin": "4: Bubblegum Bungalow", "sleeps": 4, "occ": [0.3548387096774194, 0.17857142857142858, 0.1935483870967742, 0.23333333333333334, 0.41935483870967744, 0.9, 0.9032258064516129, 0.7741935483870968, 0.36666666666666664, 0.16129032258064516, 0.0, 0.0], "rn": [11.0, 5.0, 6.0, 7.0, 13.0, 27.0, 28.0, 24.0, 11.0, 5.0, 0.0, 0.0]}, {"cabin": "5: Secret Garden", "sleeps": 6, "occ": [0.3870967741935484, 0.14285714285714285, 0.25806451612903225, 0.26666666666666666, 0.5483870967741935, 0.5333333333333333, 0.967741935483871, 0.8387096774193549, 0.5333333333333333, 0.06451612903225806, 0.16666666666666666, 0.0], "rn": [12.0, 4.0, 8.0, 8.0, 17.0, 16.0, 30.0, 26.0, 16.0, 2.0, 5.0, 0.0]}, {"cabin": "6: Sled Loft", "sleeps": 8, "occ": [0.1935483870967742, 0.14285714285714285, 0.06451612903225806, 0.43333333333333335, 0.25806451612903225, 0.5333333333333333, 1.0, 0.8709677419354839, 0.3, 0.12903225806451613, 0.0, 0.0], "rn": [6.0, 4.0, 2.0, 13.0, 8.0, 16.0, 31.0, 27.0, 9.0, 4.0, 0.0, 0.0]}, {"cabin": "7: Amber Glow", "sleeps": 4, "occ": [0.0967741935483871, 0.21428571428571427, 0.12903225806451613, 0.5, 0.4838709677419355, 0.7, 0.9032258064516129, 0.9032258064516129, 0.36666666666666664, 0.06451612903225806, 0.0, 0.0], "rn": [3.0, 6.0, 4.0, 15.0, 15.0, 21.0, 28.0, 28.0, 11.0, 2.0, 0.0, 0.0]}, {"cabin": "8: Sunshine Loft", "sleeps": 4, "occ": [0.25806451612903225, 0.32142857142857145, 0.0967741935483871, 0.4, 0.8064516129032258, 0.8, 0.9354838709677419, 0.9354838709677419, 0.36666666666666664, 0.16129032258064516, 0.0, 0.0], "rn": [8.0, 9.0, 3.0, 12.0, 25.0, 24.0, 29.0, 29.0, 11.0, 5.0, 0.0, 0.0]}, {"cabin": "9: Captain's Lodge", "sleeps": 6, "occ": [0.12903225806451613, 0.0, 0.22580645161290322, 0.3, 0.3870967741935484, 0.4666666666666667, 0.9032258064516129, 0.8709677419354839, 0.36666666666666664, 0.06451612903225806, 0.0, 0.0], "rn": [4.0, 0.0, 7.0, 9.0, 12.0, 14.0, 28.0, 27.0, 11.0, 2.0, 0.0, 0.0]}], "heatmap_rev": [{"cabin": "1: Dreamy Den", "sleeps": 4, "rev": [641.4000000000001, 859.14, 941.4000000000001, 819.91, 3087.89, 5772.670000000001, 10403.669999999998, 8162.320000000001, 1996.8728695652171, 1185.4045217391304, 0.0, 0.0]}, {"cabin": "2: Enchanted Forest", "sleeps": 6, "rev": [0.0, 210.9, 378.33000000000004, 965.64, 4056.6000000000004, 4334.88, 14251.333333333334, 9583.17666666667, 2419.391304347826, 508.4347826086956, 0.0, 0.0]}, {"cabin": "3: Winter Wonderland", "sleeps": 4, "rev": [245.0, 383.72, 395.1, 929.9279999999999, 2388.6420000000003, 5360.669999999999, 8938.740000000002, 7448.231428571427, 2060.6894409937886, 1505.9565217391305, 343.0, 0.0]}, {"cabin": "4: Bubblegum Bungalow", "sleeps": 4, "rev": [678.9, 335.0, 438.54, 605.56, 2650.5000000000005, 6493.189999999999, 12596.359999999995, 8332.97, 2426.260869565217, 1254.9565217391305, 0.0, 0.0]}, {"cabin": "5: Secret Garden", "sleeps": 6, "rev": [880.0, 328.0, 719.9999999999999, 861.8966666666668, 4041.163333333333, 4537.07, 13885.38, 9358.19, 4670.891304347826, 508.4347826086956, 1238.83, 0.0]}, {"cabin": "6: Sled Loft", "sleeps": 8, "rev": [515.0, 430.0, 280.0, 1074.39, 2002.6, 6710.5, 18032.0, 14397.999999999995, 3562.5217391304345, 1784.913043478261, 0.0, 0.0]}, {"cabin": "7: Amber Glow", "sleeps": 4, "rev": [210.0, 390.0, 294.0, 1465.8200000000004, 2596.84, 4104.07, 10732.619999999997, 7598.07, 2167.760869565217, 338.95652173913044, 0.0, 0.0]}, {"cabin": "8: Sunshine Loft", "sleeps": 4, "rev": [540.0, 585.0, 210.0, 944.26, 4110.1399999999985, 5062.139999999999, 9878.61, 8514.240000000002, 2120.260869565217, 1030.0165217391304, 0.0, 0.0]}, {"cabin": "9: Captain's Lodge", "sleeps": 6, "rev": [400.0, 0.0, 755.0, 855.1600000000001, 3594.0, 4069.0, 14249.500000000004, 12411.339999999997, 3394.391304347826, 508.4347826086956, 0.0, 0.0]}], "monthly_true": [{"m": "Jan", "rn": 57.0, "rev": 4110.3, "occ": 0.20430107526881722, "adr": 72.11052631578947, "revpar": 14.73225806451613}, {"m": "Feb", "rn": 48.0, "rev": 3521.76, "occ": 0.19047619047619047, "adr": 73.37, "revpar": 13.975238095238096}, {"m": "Mar", "rn": 50.0, "rev": 4412.37, "occ": 0.17921146953405018, "adr": 88.2474, "revpar": 15.81494623655914}, {"m": "Apr", "rn": 96.0, "rev": 8522.564666666667, "occ": 0.35555555555555557, "adr": 88.77671527777778, "revpar": 31.565054320987656}, {"m": "May", "rn": 145.0, "rev": 28528.375333333333, "occ": 0.5197132616487455, "adr": 196.74741609195402, "revpar": 102.25224133811231}, {"m": "Jun", "rn": 189.0, "rev": 50556.31, "occ": 0.7, "adr": 267.4937037037037, "revpar": 187.24559259259257}, {"m": "Jul", "rn": 262.0, "rev": 112968.21333333332, "occ": 0.9390681003584229, "adr": 431.1763867684478, "revpar": 404.9039904420549}, {"m": "Aug", "rn": 245.0, "rev": 85806.5380952381, "occ": 0.8781362007168458, "adr": 350.23076773566567, "revpar": 307.55031575354155}, {"m": "Sep", "rn": 97.0, "rev": 24819.040571428566, "occ": 0.3592592592592593, "adr": 255.86639764359347, "revpar": 91.92237248677247}, {"m": "Oct", "rn": 35.0, "rev": 8625.508, "occ": 0.12544802867383512, "adr": 246.4430857142857, "revpar": 30.915799283154122}, {"m": "Nov", "rn": 7.0, "rev": 1581.83, "occ": 0.025925925925925925, "adr": 225.97571428571428, "revpar": 5.858629629629629}, {"m": "Dec", "rn": 0.0, "rev": 0.0, "occ": 0.0, "adr": 0, "revpar": 0.0}], "calendar": [{"d": "2026-01-01", "rn": 1, "rev": 70.0}, {"d": "2026-01-02", "rn": 2, "rev": 130.0}, {"d": "2026-01-03", "rn": 2, "rev": 130.0}, {"d": "2026-01-09", "rn": 1, "rev": 75.0}, {"d": "2026-01-10", "rn": 2, "rev": 140.0}, {"d": "2026-01-12", "rn": 2, "rev": 135.0}, {"d": "2026-01-13", "rn": 2, "rev": 135.0}, {"d": "2026-01-14", "rn": 2, "rev": 135.0}, {"d": "2026-01-15", "rn": 3, "rev": 201.0}, {"d": "2026-01-16", "rn": 4, "rev": 296.47}, {"d": "2026-01-17", "rn": 6, "rev": 468.97}, {"d": "2026-01-18", "rn": 6, "rev": 468.97}, {"d": "2026-01-19", "rn": 2, "rev": 131.0}, {"d": "2026-01-22", "rn": 1, "rev": 100.0}, {"d": "2026-01-23", "rn": 2, "rev": 160.0}, {"d": "2026-01-24", "rn": 3, "rev": 220.49}, {"d": "2026-01-25", "rn": 3, "rev": 220.49}, {"d": "2026-01-26", "rn": 1, "rev": 60.49}, {"d": "2026-01-27", "rn": 1, "rev": 60.49}, {"d": "2026-01-28", "rn": 1, "rev": 60.49}, {"d": "2026-01-29", "rn": 2, "rev": 120.49}, {"d": "2026-01-30", "rn": 4, "rev": 295.49}, {"d": "2026-01-31", "rn": 4, "rev": 295.49}, {"d": "2026-02-05", "rn": 1, "rev": 67.5}, {"d": "2026-02-06", "rn": 2, "rev": 142.5}, {"d": "2026-02-07", "rn": 3, "rev": 207.5}, {"d": "2026-02-08", "rn": 2, "rev": 132.5}, {"d": "2026-02-09", "rn": 1, "rev": 65.0}, {"d": "2026-02-10", "rn": 1, "rev": 65.0}, {"d": "2026-02-11", "rn": 1, "rev": 65.0}, {"d": "2026-02-12", "rn": 2, "rev": 172.5}, {"d": "2026-02-13", "rn": 4, "rev": 294.36}, {"d": "2026-02-14", "rn": 8, "rev": 693.83}, {"d": "2026-02-15", "rn": 5, "rev": 361.07}, {"d": "2026-02-16", "rn": 2, "rev": 115.0}, {"d": "2026-02-20", "rn": 2, "rev": 140.0}, {"d": "2026-02-21", "rn": 2, "rev": 140.0}, {"d": "2026-02-23", "rn": 1, "rev": 60.0}, {"d": "2026-02-24", "rn": 1, "rev": 60.0}, {"d": "2026-02-25", "rn": 1, "rev": 60.0}, {"d": "2026-02-26", "rn": 1, "rev": 60.0}, {"d": "2026-02-27", "rn": 4, "rev": 310.0}, {"d": "2026-02-28", "rn": 4, "rev": 310.0}, {"d": "2026-03-01", "rn": 1, "rev": 70.0}, {"d": "2026-03-05", "rn": 1, "rev": 70.0}, {"d": "2026-03-06", "rn": 4, "rev": 481.0}, {"d": "2026-03-07", "rn": 4, "rev": 481.0}, {"d": "2026-03-08", "rn": 2, "rev": 195.0}, {"d": "2026-03-13", "rn": 2, "rev": 151.7}, {"d": "2026-03-14", "rn": 2, "rev": 151.7}, {"d": "2026-03-20", "rn": 5, "rev": 529.16}, {"d": "2026-03-21", "rn": 6, "rev": 594.16}, {"d": "2026-03-22", "rn": 2, "rev": 125.0}, {"d": "2026-03-23", "rn": 2, "rev": 125.0}, {"d": "2026-03-24", "rn": 1, "rev": 60.0}, {"d": "2026-03-26", "rn": 1, "rev": 65.05}, {"d": "2026-03-27", "rn": 3, "rev": 238.41}, {"d": "2026-03-28", "rn": 5, "rev": 379.96}, {"d": "2026-03-29", "rn": 3, "rev": 228.22}, {"d": "2026-03-30", "rn": 3, "rev": 234.5}, {"d": "2026-03-31", "rn": 3, "rev": 232.5}, {"d": "2026-04-01", "rn": 2, "rev": 132.0}, {"d": "2026-04-02", "rn": 5, "rev": 419.0}, {"d": "2026-04-03", "rn": 4, "rev": 355.2}, {"d": "2026-04-04", "rn": 4, "rev": 305.2}, {"d": "2026-04-05", "rn": 3, "rev": 221.95}, {"d": "2026-04-06", "rn": 1, "rev": 79.1}, {"d": "2026-04-07", "rn": 1, "rev": 79.1}, {"d": "2026-04-08", "rn": 3, "rev": 227.43}, {"d": "2026-04-09", "rn": 2, "rev": 148.33}, {"d": "2026-04-10", "rn": 6, "rev": 515.15}, {"d": "2026-04-11", "rn": 5, "rev": 421.82}, {"d": "2026-04-12", "rn": 3, "rev": 236.75}, {"d": "2026-04-13", "rn": 3, "rev": 222.09}, {"d": "2026-04-14", "rn": 2, "rev": 167.09}, {"d": "2026-04-15", "rn": 1, "rev": 86.0}, {"d": "2026-04-16", "rn": 1, "rev": 117.21}, {"d": "2026-04-17", "rn": 3, "rev": 299.59}, {"d": "2026-04-18", "rn": 4, "rev": 392.92}, {"d": "2026-04-19", "rn": 2, "rev": 186.67}, {"d": "2026-04-20", "rn": 2, "rev": 186.67}, {"d": "2026-04-21", "rn": 2, "rev": 160.91}, {"d": "2026-04-22", "rn": 2, "rev": 160.91}, {"d": "2026-04-23", "rn": 5, "rev": 455.25}, {"d": "2026-04-24", "rn": 7, "rev": 628.25}, {"d": "2026-04-25", "rn": 8, "rev": 765.83}, {"d": "2026-04-26", "rn": 2, "rev": 205.15}, {"d": "2026-04-27", "rn": 3, "rev": 246.05}, {"d": "2026-04-28", "rn": 2, "rev": 178.48}, {"d": "2026-04-29", "rn": 3, "rev": 338.98}, {"d": "2026-04-30", "rn": 5, "rev": 583.47}, {"d": "2026-05-01", "rn": 6, "rev": 770.15}, {"d": "2026-05-02", "rn": 7, "rev": 1054.42}, {"d": "2026-05-03", "rn": 5, "rev": 905.58}, {"d": "2026-05-04", "rn": 6, "rev": 1060.83}, {"d": "2026-05-05", "rn": 4, "rev": 627.58}, {"d": "2026-05-06", "rn": 4, "rev": 519.08}, {"d": "2026-05-07", "rn": 3, "rev": 415.08}, {"d": "2026-05-08", "rn": 5, "rev": 960.47}, {"d": "2026-05-09", "rn": 6, "rev": 1136.53}, {"d": "2026-05-10", "rn": 3, "rev": 473.0}, {"d": "2026-05-11", "rn": 2, "rev": 265.34}, {"d": "2026-05-12", "rn": 2, "rev": 265.34}, {"d": "2026-05-13", "rn": 2, "rev": 217.24}, {"d": "2026-05-14", "rn": 3, "rev": 403.6}, {"d": "2026-05-15", "rn": 6, "rev": 981.1}, {"d": "2026-05-16", "rn": 7, "rev": 1279.09}, {"d": "2026-05-17", "rn": 3, "rev": 616.73}, {"d": "2026-05-18", "rn": 3, "rev": 573.0}, {"d": "2026-05-19", "rn": 3, "rev": 573.0}, {"d": "2026-05-20", "rn": 2, "rev": 406.98}, {"d": "2026-05-21", "rn": 4, "rev": 1061.68}, {"d": "2026-05-22", "rn": 9, "rev": 2510.98}, {"d": "2026-05-23", "rn": 9, "rev": 2556.27}, {"d": "2026-05-24", "rn": 9, "rev": 2497.27}, {"d": "2026-05-25", "rn": 4, "rev": 772.2}, {"d": "2026-05-26", "rn": 4, "rev": 762.7}, {"d": "2026-05-27", "rn": 3, "rev": 535.96}, {"d": "2026-05-28", "rn": 3, "rev": 540.12}, {"d": "2026-05-29", "rn": 8, "rev": 1731.06}, {"d": "2026-05-30", "rn": 7, "rev": 1512.06}, {"d": "2026-05-31", "rn": 3, "rev": 543.94}, {"d": "2026-06-01", "rn": 3, "rev": 516.5}, {"d": "2026-06-02", "rn": 3, "rev": 535.86}, {"d": "2026-06-03", "rn": 3, "rev": 535.86}, {"d": "2026-06-04", "rn": 8, "rev": 1818.71}, {"d": "2026-06-05", "rn": 8, "rev": 1926.46}, {"d": "2026-06-06", "rn": 8, "rev": 1888.31}, {"d": "2026-06-07", "rn": 8, "rev": 1661.44}, {"d": "2026-06-08", "rn": 8, "rev": 1661.44}, {"d": "2026-06-09", "rn": 7, "rev": 1385.57}, {"d": "2026-06-10", "rn": 4, "rev": 856.4}, {"d": "2026-06-11", "rn": 5, "rev": 2153.15}, {"d": "2026-06-12", "rn": 5, "rev": 2153.15}, {"d": "2026-06-13", "rn": 5, "rev": 2187.71}, {"d": "2026-06-14", "rn": 5, "rev": 1111.78}, {"d": "2026-06-15", "rn": 8, "rev": 1859.45}, {"d": "2026-06-16", "rn": 6, "rev": 1335.45}, {"d": "2026-06-17", "rn": 4, "rev": 945.12}, {"d": "2026-06-18", "rn": 3, "rev": 1146.32}, {"d": "2026-06-19", "rn": 4, "rev": 1451.85}, {"d": "2026-06-20", "rn": 4, "rev": 1451.85}, {"d": "2026-06-21", "rn": 7, "rev": 1963.51}, {"d": "2026-06-22", "rn": 8, "rev": 2009.26}, {"d": "2026-06-23", "rn": 7, "rev": 1480.86}, {"d": "2026-06-24", "rn": 6, "rev": 1326.86}, {"d": "2026-06-25", "rn": 9, "rev": 2875.0}, {"d": "2026-06-26", "rn": 9, "rev": 2875.0}, {"d": "2026-06-27", "rn": 9, "rev": 2875.0}, {"d": "2026-06-28", "rn": 9, "rev": 2875.0}, {"d": "2026-06-29", "rn": 8, "rev": 1846.72}, {"d": "2026-06-30", "rn": 8, "rev": 1846.72}, {"d": "2026-07-01", "rn": 9, "rev": 4883.77}, {"d": "2026-07-02", "rn": 8, "rev": 4651.77}, {"d": "2026-07-03", "rn": 9, "rev": 5085.27}, {"d": "2026-07-04", "rn": 9, "rev": 5035.5}, {"d": "2026-07-05", "rn": 7, "rev": 2798.6}, {"d": "2026-07-06", "rn": 9, "rev": 3525.85}, {"d": "2026-07-07", "rn": 8, "rev": 3032.1}, {"d": "2026-07-08", "rn": 8, "rev": 3002.1}, {"d": "2026-07-09", "rn": 9, "rev": 3937.77}, {"d": "2026-07-10", "rn": 9, "rev": 4358.93}, {"d": "2026-07-11", "rn": 9, "rev": 4358.93}, {"d": "2026-07-12", "rn": 9, "rev": 3512.97}, {"d": "2026-07-13", "rn": 8, "rev": 2997.9}, {"d": "2026-07-14", "rn": 9, "rev": 3317.43}, {"d": "2026-07-15", "rn": 9, "rev": 3492.63}, {"d": "2026-07-16", "rn": 9, "rev": 4114.44}, {"d": "2026-07-17", "rn": 9, "rev": 4164.68}, {"d": "2026-07-18", "rn": 9, "rev": 4110.43}, {"d": "2026-07-19", "rn": 7, "rev": 2684.55}, {"d": "2026-07-20", "rn": 9, "rev": 3562.01}, {"d": "2026-07-21", "rn": 9, "rev": 3562.01}, {"d": "2026-07-22", "rn": 9, "rev": 3562.01}, {"d": "2026-07-23", "rn": 6, "rev": 2605.07}, {"d": "2026-07-24", "rn": 8, "rev": 3873.13}, {"d": "2026-07-25", "rn": 8, "rev": 3873.13}, {"d": "2026-07-26", "rn": 7, "rev": 2880.46}, {"d": "2026-07-27", "rn": 9, "rev": 3418.21}, {"d": "2026-07-28", "rn": 9, "rev": 3418.21}, {"d": "2026-07-29", "rn": 8, "rev": 2919.74}, {"d": "2026-07-30", "rn": 8, "rev": 2858.24}, {"d": "2026-07-31", "rn": 9, "rev": 3370.38}, {"d": "2026-08-01", "rn": 9, "rev": 3370.38}, {"d": "2026-08-02", "rn": 9, "rev": 3302.19}, {"d": "2026-08-03", "rn": 9, "rev": 3302.19}, {"d": "2026-08-04", "rn": 8, "rev": 3312.77}, {"d": "2026-08-05", "rn": 7, "rev": 3060.19}, {"d": "2026-08-06", "rn": 9, "rev": 3845.71}, {"d": "2026-08-07", "rn": 9, "rev": 4105.99}, {"d": "2026-08-08", "rn": 8, "rev": 3771.24}, {"d": "2026-08-09", "rn": 9, "rev": 3518.23}, {"d": "2026-08-10", "rn": 9, "rev": 3207.81}, {"d": "2026-08-11", "rn": 9, "rev": 3165.06}, {"d": "2026-08-12", "rn": 9, "rev": 3165.06}, {"d": "2026-08-13", "rn": 9, "rev": 3349.5}, {"d": "2026-08-14", "rn": 9, "rev": 3504.67}, {"d": "2026-08-15", "rn": 8, "rev": 3132.83}, {"d": "2026-08-16", "rn": 8, "rev": 2099.3}, {"d": "2026-08-17", "rn": 8, "rev": 2206.16}, {"d": "2026-08-18", "rn": 7, "rev": 1931.16}, {"d": "2026-08-19", "rn": 8, "rev": 2307.91}, {"d": "2026-08-20", "rn": 8, "rev": 2967.02}, {"d": "2026-08-21", "rn": 8, "rev": 2967.02}, {"d": "2026-08-22", "rn": 8, "rev": 3065.02}, {"d": "2026-08-23", "rn": 5, "rev": 1595.41}, {"d": "2026-08-24", "rn": 8, "rev": 2302.5}, {"d": "2026-08-25", "rn": 7, "rev": 1808.69}, {"d": "2026-08-26", "rn": 7, "rev": 1852.36}, {"d": "2026-08-27", "rn": 7, "rev": 1906.93}, {"d": "2026-08-28", "rn": 5, "rev": 1375.74}, {"d": "2026-08-29", "rn": 7, "rev": 2194.4}, {"d": "2026-08-30", "rn": 6, "rev": 1942.07}, {"d": "2026-08-31", "rn": 8, "rev": 2171.05}, {"d": "2026-09-01", "rn": 5, "rev": 1058.71}, {"d": "2026-09-02", "rn": 6, "rev": 1282.71}, {"d": "2026-09-03", "rn": 5, "rev": 1084.0}, {"d": "2026-09-08", "rn": 1, "rev": 168.5}, {"d": "2026-09-09", "rn": 1, "rev": 168.5}, {"d": "2026-09-10", "rn": 9, "rev": 2533.33}, {"d": "2026-09-11", "rn": 9, "rev": 2533.33}, {"d": "2026-09-12", "rn": 9, "rev": 2533.33}, {"d": "2026-09-13", "rn": 3, "rev": 596.0}, {"d": "2026-09-17", "rn": 9, "rev": 2366.67}, {"d": "2026-09-18", "rn": 9, "rev": 2366.67}, {"d": "2026-09-19", "rn": 9, "rev": 2366.67}, {"d": "2026-09-20", "rn": 1, "rev": 308.0}, {"d": "2026-09-24", "rn": 8, "rev": 2133.5}, {"d": "2026-09-25", "rn": 8, "rev": 2133.5}, {"d": "2026-09-26", "rn": 1, "rev": 243.5}, {"d": "2026-09-27", "rn": 1, "rev": 243.5}, {"d": "2026-09-28", "rn": 1, "rev": 243.5}, {"d": "2026-09-29", "rn": 1, "rev": 243.5}, {"d": "2026-09-30", "rn": 1, "rev": 211.61}, {"d": "2026-10-01", "rn": 1, "rev": 211.61}, {"d": "2026-10-02", "rn": 1, "rev": 211.61}, {"d": "2026-10-03", "rn": 1, "rev": 211.61}, {"d": "2026-10-04", "rn": 1, "rev": 211.61}, {"d": "2026-10-08", "rn": 2, "rev": 619.33}, {"d": "2026-10-09", "rn": 4, "rev": 1403.19}, {"d": "2026-10-10", "rn": 4, "rev": 1403.19}, {"d": "2026-10-11", "rn": 1, "rev": 230.35}, {"d": "2026-10-22", "rn": 9, "rev": 1949.0}, {"d": "2026-10-23", "rn": 9, "rev": 1949.0}, {"d": "2026-10-28", "rn": 1, "rev": 112.5}, {"d": "2026-10-29", "rn": 1, "rev": 112.5}, {"d": "2026-11-04", "rn": 1, "rev": 247.77}, {"d": "2026-11-05", "rn": 1, "rev": 247.77}, {"d": "2026-11-06", "rn": 1, "rev": 247.77}, {"d": "2026-11-07", "rn": 1, "rev": 247.77}, {"d": "2026-11-08", "rn": 1, "rev": 247.77}, {"d": "2026-11-27", "rn": 1, "rev": 171.5}, {"d": "2026-11-28", "rn": 1, "rev": 171.5}], "quality": {"excluded_zero": 146, "excluded_test": 12, "unassigned_anomaly": [{"res": 23809, "arrive": "Jun 11, 2026", "nts": 3, "party": 2, "rev": 4112.12}], "sheet_revenue": 331845.93, "sheet_nights": 1249, "sheet_adr": 266, "sheet_occ": 0.38, "bal_due_bookings": 13, "missing_email": 0, "no_contract": 27, "cc_disabled": 32, "email_error": 8}, "channels": [{"name": "Jaqua (direct)", "rev": 285792.68, "rn": 995.0, "bookings": 278, "adr": 287.228824120603, "los": 3.2338129496402876, "lead": 50.0, "party": 3.4928057553956835, "share": 0.8570708400987834, "fee_load": 0.30846733029370565, "repeat": 0.27697841726618705}, {"name": "VRBO", "rev": 44563.31, "rn": 197.0, "bookings": 66, "adr": 226.20969543147206, "los": 2.984848484848485, "lead": 18.5, "party": 3.0454545454545454, "share": 0.13364202868765748, "fee_load": 0.3203769736542108, "repeat": 0.015151515151515152}, {"name": "Airbnb", "rev": 2488.4300000000003, "rn": 33.0, "bookings": 11, "adr": 75.40696969696971, "los": 3.0, "lead": 36.0, "party": 2.1818181818181817, "share": 0.007462615174842882, "fee_load": 0.5875705840138292, "repeat": 0.0}, {"name": "Booking.com", "rev": 608.39, "rn": 6.0, "bookings": 2, "adr": 101.39833333333333, "los": 3.0, "lead": 14.0, "party": 5.0, "share": 0.0018245160387162429, "fee_load": 0.5207187760954167, "repeat": 0.0}], "submake": [{"name": "Online self-serve", "rev": 197974.5, "bookings": 216, "adr": 261.18007915567284, "lead": 39.0, "los": 3.287037037037037, "share": 0.5937106962751341}, {"name": "Staff-booked", "rev": 87818.18, "bookings": 62, "adr": 370.5408438818565, "lead": 127.0, "los": 3.0483870967741935, "share": 0.26336014382364925}, {"name": "OTA", "rev": 47660.13, "bookings": 79, "adr": 201.9497033898305, "lead": 22.0, "los": 2.9873417721518987, "share": 0.1429291599012166}], "leadtime": [{"b": "Same day", "bookings": 6, "rev": 1408.0, "adr": 108.3076923076923}, {"b": "1-3 d", "bookings": 26, "rev": 7969.29, "adr": 122.60446153846154}, {"b": "4-7 d", "bookings": 21, "rev": 8706.06, "adr": 136.0321875}, {"b": "8-14 d", "bookings": 37, "rev": 16631.79, "adr": 166.3179}, {"b": "15-30 d", "bookings": 67, "rev": 34259.22, "adr": 181.2657142857143}, {"b": "31-60 d", "bookings": 59, "rev": 41522.52, "adr": 222.0455614973262}, {"b": "61-90 d", "bookings": 32, "rev": 38146.48, "adr": 340.59357142857147}, {"b": "91-180 d", "bookings": 51, "rev": 70230.35, "adr": 375.5633689839573}, {"b": "180+ d", "bookings": 58, "rev": 114579.1, "adr": 364.9015923566879}], "los": [{"n": "1", "bookings": 17, "rev": 3841.69, "adr": 225.98176470588237}, {"n": "2", "bookings": 102, "rev": 44589.2, "adr": 202.6781818181818}, {"n": "3", "bookings": 118, "rev": 106367.09, "adr": 264.5947512437811}, {"n": "4", "bookings": 78, "rev": 106092.81999999999, "adr": 308.40936046511627}, {"n": "5", "bookings": 21, "rev": 34318.7, "adr": 326.84476190476187}, {"n": "6", "bookings": 9, "rev": 13657.84, "adr": 252.92296296296297}, {"n": "7", "bookings": 8, "rev": 16882.57, "adr": 301.4744642857143}, {"n": "8+", "bookings": 4, "rev": 7702.9, "adr": 233.4212121212121}], "party": [{"n": "1", "bookings": 39, "rev": 34352.06, "adr": 248.92797101449273}, {"n": "2", "bookings": 156, "rev": 114971.18, "adr": 238.52941908713692}, {"n": "3", "bookings": 45, "rev": 38563.72, "adr": 265.9566896551724}, {"n": "4", "bookings": 68, "rev": 57204.41, "adr": 275.02120192307694}, {"n": "5", "bookings": 14, "rev": 18662.37, "adr": 358.8917307692308}, {"n": "6", "bookings": 22, "rev": 22832.47, "adr": 362.42015873015873}, {"n": "7", "bookings": 2, "rev": 7076.0, "adr": 544.3076923076923}, {"n": "8", "bookings": 7, "rev": 9692.6, "adr": 440.57272727272726}, {"n": "10+", "bookings": 4, "rev": 30098.0, "adr": 278.68518518518516}], "arrival_dow": [{"d": "Mon", "bookings": 54, "rev": 46515.29, "los": 3.425925925925926}, {"d": "Tue", "bookings": 17, "rev": 16543.72, "los": 3.2941176470588234}, {"d": "Wed", "bookings": 30, "rev": 35078.43, "los": 3.3333333333333335}, {"d": "Thu", "bookings": 71, "rev": 87638.68, "los": 3.0704225352112675}, {"d": "Fri", "bookings": 98, "rev": 74299.38, "los": 2.816326530612245}, {"d": "Sat", "bookings": 33, "rev": 20789.32, "los": 3.3636363636363638}, {"d": "Sun", "bookings": 54, "rev": 52587.99, "los": 3.5}], "nights": [{"d": "2026-01-01", "rn": 1, "rev": 70.0}, {"d": "2026-01-02", "rn": 2, "rev": 130.0}, {"d": "2026-01-03", "rn": 2, "rev": 130.0}, {"d": "2026-01-09", "rn": 1, "rev": 75.0}, {"d": "2026-01-10", "rn": 2, "rev": 140.0}, {"d": "2026-01-12", "rn": 2, "rev": 135.0}, {"d": "2026-01-13", "rn": 2, "rev": 135.0}, {"d": "2026-01-14", "rn": 2, "rev": 135.0}, {"d": "2026-01-15", "rn": 3, "rev": 201.0}, {"d": "2026-01-16", "rn": 4, "rev": 296.4666666666667}, {"d": "2026-01-17", "rn": 6, "rev": 468.9666666666667}, {"d": "2026-01-18", "rn": 6, "rev": 468.9666666666667}, {"d": "2026-01-19", "rn": 2, "rev": 131.0}, {"d": "2026-01-22", "rn": 1, "rev": 100.0}, {"d": "2026-01-23", "rn": 2, "rev": 160.0}, {"d": "2026-01-24", "rn": 3, "rev": 220.4875}, {"d": "2026-01-25", "rn": 3, "rev": 220.4875}, {"d": "2026-01-26", "rn": 1, "rev": 60.4875}, {"d": "2026-01-27", "rn": 1, "rev": 60.4875}, {"d": "2026-01-28", "rn": 1, "rev": 60.4875}, {"d": "2026-01-29", "rn": 2, "rev": 120.4875}, {"d": "2026-01-30", "rn": 4, "rev": 295.4875}, {"d": "2026-01-31", "rn": 4, "rev": 295.4875}, {"d": "2026-02-05", "rn": 1, "rev": 67.5}, {"d": "2026-02-06", "rn": 2, "rev": 142.5}, {"d": "2026-02-07", "rn": 3, "rev": 207.5}, {"d": "2026-02-08", "rn": 2, "rev": 132.5}, {"d": "2026-02-09", "rn": 1, "rev": 65.0}, {"d": "2026-02-10", "rn": 1, "rev": 65.0}, {"d": "2026-02-11", "rn": 1, "rev": 65.0}, {"d": "2026-02-12", "rn": 2, "rev": 172.5}, {"d": "2026-02-13", "rn": 4, "rev": 294.36}, {"d": "2026-02-14", "rn": 8, "rev": 693.83}, {"d": "2026-02-15", "rn": 5, "rev": 361.07}, {"d": "2026-02-16", "rn": 2, "rev": 115.0}, {"d": "2026-02-20", "rn": 2, "rev": 140.0}, {"d": "2026-02-21", "rn": 2, "rev": 140.0}, {"d": "2026-02-23", "rn": 1, "rev": 60.0}, {"d": "2026-02-24", "rn": 1, "rev": 60.0}, {"d": "2026-02-25", "rn": 1, "rev": 60.0}, {"d": "2026-02-26", "rn": 1, "rev": 60.0}, {"d": "2026-02-27", "rn": 4, "rev": 310.0}, {"d": "2026-02-28", "rn": 4, "rev": 310.0}, {"d": "2026-03-01", "rn": 1, "rev": 70.0}, {"d": "2026-03-05", "rn": 1, "rev": 70.0}, {"d": "2026-03-06", "rn": 4, "rev": 481.0}, {"d": "2026-03-07", "rn": 4, "rev": 481.0}, {"d": "2026-03-08", "rn": 2, "rev": 195.0}, {"d": "2026-03-13", "rn": 2, "rev": 151.7}, {"d": "2026-03-14", "rn": 2, "rev": 151.7}, {"d": "2026-03-20", "rn": 5, "rev": 529.165}, {"d": "2026-03-21", "rn": 6, "rev": 594.165}, {"d": "2026-03-22", "rn": 2, "rev": 125.0}, {"d": "2026-03-23", "rn": 2, "rev": 125.0}, {"d": "2026-03-24", "rn": 1, "rev": 60.0}, {"d": "2026-03-26", "rn": 1, "rev": 65.04666666666667}, {"d": "2026-03-27", "rn": 3, "rev": 238.41333333333336}, {"d": "2026-03-28", "rn": 5, "rev": 379.96333333333337}, {"d": "2026-03-29", "rn": 3, "rev": 228.21666666666667}, {"d": "2026-03-30", "rn": 3, "rev": 234.5}, {"d": "2026-03-31", "rn": 3, "rev": 232.5}, {"d": "2026-04-01", "rn": 2, "rev": 132.0}, {"d": "2026-04-02", "rn": 5, "rev": 419.0}, {"d": "2026-04-03", "rn": 4, "rev": 355.2033333333333}, {"d": "2026-04-04", "rn": 4, "rev": 305.2033333333333}, {"d": "2026-04-05", "rn": 3, "rev": 221.95333333333332}, {"d": "2026-04-06", "rn": 1, "rev": 79.10000000000001}, {"d": "2026-04-07", "rn": 1, "rev": 79.10000000000001}, {"d": "2026-04-08", "rn": 3, "rev": 227.43333333333334}, {"d": "2026-04-09", "rn": 2, "rev": 148.33333333333331}, {"d": "2026-04-10", "rn": 6, "rev": 515.15}, {"d": "2026-04-11", "rn": 5, "rev": 421.81666666666666}, {"d": "2026-04-12", "rn": 3, "rev": 236.75333333333333}, {"d": "2026-04-13", "rn": 3, "rev": 222.08666666666664}, {"d": "2026-04-14", "rn": 2, "rev": 167.08666666666664}, {"d": "2026-04-15", "rn": 1, "rev": 86.0}, {"d": "2026-04-16", "rn": 1, "rev": 117.21}, {"d": "2026-04-17", "rn": 3, "rev": 299.5883333333333}, {"d": "2026-04-18", "rn": 4, "rev": 392.9216666666666}, {"d": "2026-04-19", "rn": 2, "rev": 186.66666666666666}, {"d": "2026-04-20", "rn": 2, "rev": 186.66666666666666}, {"d": "2026-04-21", "rn": 2, "rev": 160.9061904761905}, {"d": "2026-04-22", "rn": 2, "rev": 160.9061904761905}, {"d": "2026-04-23", "rn": 5, "rev": 455.2528571428572}, {"d": "2026-04-24", "rn": 7, "rev": 628.2528571428572}, {"d": "2026-04-25", "rn": 8, "rev": 765.8328571428573}, {"d": "2026-04-26", "rn": 2, "rev": 205.15285714285716}, {"d": "2026-04-27", "rn": 3, "rev": 246.05485714285714}, {"d": "2026-04-28", "rn": 2, "rev": 178.482}, {"d": "2026-04-29", "rn": 3, "rev": 338.98199999999997}, {"d": "2026-04-30", "rn": 5, "rev": 583.4686666666666}, {"d": "2026-05-01", "rn": 6, "rev": 770.1536666666666}, {"d": "2026-05-02", "rn": 7, "rev": 1054.4216666666666}, {"d": "2026-05-03", "rn": 5, "rev": 905.5833333333334}, {"d": "2026-05-04", "rn": 6, "rev": 1060.8333333333335}, {"d": "2026-05-05", "rn": 4, "rev": 627.5833333333334}, {"d": "2026-05-06", "rn": 4, "rev": 519.0833333333334}, {"d": "2026-05-07", "rn": 3, "rev": 415.08333333333337}, {"d": "2026-05-08", "rn": 5, "rev": 960.4683333333334}, {"d": "2026-05-09", "rn": 6, "rev": 1136.5349999999999}, {"d": "2026-05-10", "rn": 3, "rev": 473.0}, {"d": "2026-05-11", "rn": 2, "rev": 265.34000000000003}, {"d": "2026-05-12", "rn": 2, "rev": 265.34000000000003}, {"d": "2026-05-13", "rn": 2, "rev": 217.24}, {"d": "2026-05-14", "rn": 3, "rev": 403.5966666666667}, {"d": "2026-05-15", "rn": 6, "rev": 981.0966666666667}, {"d": "2026-05-16", "rn": 7, "rev": 1279.0884523809525}, {"d": "2026-05-17", "rn": 3, "rev": 616.7317857142857}, {"d": "2026-05-18", "rn": 3, "rev": 572.9984523809524}, {"d": "2026-05-19", "rn": 3, "rev": 572.9984523809524}, {"d": "2026-05-20", "rn": 2, "rev": 406.98095238095243}, {"d": "2026-05-21", "rn": 4, "rev": 1061.6792857142855}, {"d": "2026-05-22", "rn": 9, "rev": 2510.9792857142857}, {"d": "2026-05-23", "rn": 9, "rev": 2556.2650000000003}, {"d": "2026-05-24", "rn": 9, "rev": 2497.2650000000003}, {"d": "2026-05-25", "rn": 4, "rev": 772.1966666666666}, {"d": "2026-05-26", "rn": 4, "rev": 762.6966666666666}, {"d": "2026-05-27", "rn": 3, "rev": 535.9566666666666}, {"d": "2026-05-28", "rn": 3, "rev": 540.1233333333333}, {"d": "2026-05-29", "rn": 8, "rev": 1731.0566666666666}, {"d": "2026-05-30", "rn": 7, "rev": 1512.0566666666666}, {"d": "2026-05-31", "rn": 3, "rev": 543.9433333333334}, {"d": "2026-06-01", "rn": 3, "rev": 516.5}, {"d": "2026-06-02", "rn": 3, "rev": 535.8566666666667}, {"d": "2026-06-03", "rn": 3, "rev": 535.8566666666667}, {"d": "2026-06-04", "rn": 8, "rev": 1818.7133333333334}, {"d": "2026-06-05", "rn": 8, "rev": 1926.4616666666666}, {"d": "2026-06-06", "rn": 8, "rev": 1888.3083333333334}, {"d": "2026-06-07", "rn": 8, "rev": 1661.44}, {"d": "2026-06-08", "rn": 8, "rev": 1661.44}, {"d": "2026-06-09", "rn": 7, "rev": 1385.5733333333333}, {"d": "2026-06-10", "rn": 4, "rev": 856.4033333333333}, {"d": "2026-06-11", "rn": 5, "rev": 2153.15}, {"d": "2026-06-12", "rn": 5, "rev": 2153.15}, {"d": "2026-06-13", "rn": 5, "rev": 2187.7066666666665}, {"d": "2026-06-14", "rn": 5, "rev": 1111.7833333333333}, {"d": "2026-06-15", "rn": 8, "rev": 1859.45}, {"d": "2026-06-16", "rn": 6, "rev": 1335.45}, {"d": "2026-06-17", "rn": 4, "rev": 945.1166666666668}, {"d": "2026-06-18", "rn": 3, "rev": 1146.3166666666666}, {"d": "2026-06-19", "rn": 4, "rev": 1451.8516666666667}, {"d": "2026-06-20", "rn": 4, "rev": 1451.8516666666667}, {"d": "2026-06-21", "rn": 7, "rev": 1963.5100000000002}, {"d": "2026-06-22", "rn": 8, "rev": 2009.2600000000002}, {"d": "2026-06-23", "rn": 7, "rev": 1480.86}, {"d": "2026-06-24", "rn": 6, "rev": 1326.86}, {"d": "2026-06-25", "rn": 9, "rev": 2875.0}, {"d": "2026-06-26", "rn": 9, "rev": 2875.0}, {"d": "2026-06-27", "rn": 9, "rev": 2875.0}, {"d": "2026-06-28", "rn": 9, "rev": 2875.0}, {"d": "2026-06-29", "rn": 8, "rev": 1846.72}, {"d": "2026-06-30", "rn": 8, "rev": 1846.72}, {"d": "2026-07-01", "rn": 9, "rev": 4883.77}, {"d": "2026-07-02", "rn": 8, "rev": 4651.77}, {"d": "2026-07-03", "rn": 9, "rev": 5085.27}, {"d": "2026-07-04", "rn": 9, "rev": 5035.5}, {"d": "2026-07-05", "rn": 7, "rev": 2798.6}, {"d": "2026-07-06", "rn": 9, "rev": 3525.85}, {"d": "2026-07-07", "rn": 8, "rev": 3032.1}, {"d": "2026-07-08", "rn": 8, "rev": 3002.1}, {"d": "2026-07-09", "rn": 9, "rev": 3937.7666666666664}, {"d": "2026-07-10", "rn": 9, "rev": 4358.928571428572}, {"d": "2026-07-11", "rn": 9, "rev": 4358.928571428572}, {"d": "2026-07-12", "rn": 9, "rev": 3512.974761904762}, {"d": "2026-07-13", "rn": 8, "rev": 2997.904761904762}, {"d": "2026-07-14", "rn": 9, "rev": 3317.434761904762}, {"d": "2026-07-15", "rn": 9, "rev": 3492.634761904762}, {"d": "2026-07-16", "rn": 9, "rev": 4114.438095238096}, {"d": "2026-07-17", "rn": 9, "rev": 4164.676190476191}, {"d": "2026-07-18", "rn": 9, "rev": 4110.426190476191}, {"d": "2026-07-19", "rn": 7, "rev": 2684.5466666666666}, {"d": "2026-07-20", "rn": 9, "rev": 3562.0133333333333}, {"d": "2026-07-21", "rn": 9, "rev": 3562.0133333333333}, {"d": "2026-07-22", "rn": 9, "rev": 3562.0133333333333}, {"d": "2026-07-23", "rn": 6, "rev": 2605.07}, {"d": "2026-07-24", "rn": 8, "rev": 3873.1266666666666}, {"d": "2026-07-25", "rn": 8, "rev": 3873.1266666666666}, {"d": "2026-07-26", "rn": 7, "rev": 2880.46}, {"d": "2026-07-27", "rn": 9, "rev": 3418.21}, {"d": "2026-07-28", "rn": 9, "rev": 3418.21}, {"d": "2026-07-29", "rn": 8, "rev": 2919.7366666666667}, {"d": "2026-07-30", "rn": 8, "rev": 2858.236666666666}, {"d": "2026-07-31", "rn": 9, "rev": 3370.3766666666666}, {"d": "2026-08-01", "rn": 9, "rev": 3370.3766666666666}, {"d": "2026-08-02", "rn": 9, "rev": 3302.19}, {"d": "2026-08-03", "rn": 9, "rev": 3302.19}, {"d": "2026-08-04", "rn": 8, "rev": 3312.77}, {"d": "2026-08-05", "rn": 7, "rev": 3060.19}, {"d": "2026-08-06", "rn": 9, "rev": 3845.7075}, {"d": "2026-08-07", "rn": 9, "rev": 4105.987499999999}, {"d": "2026-08-08", "rn": 8, "rev": 3771.2374999999997}, {"d": "2026-08-09", "rn": 9, "rev": 3518.227976190476}, {"d": "2026-08-10", "rn": 9, "rev": 3207.8061904761903}, {"d": "2026-08-11", "rn": 9, "rev": 3165.0561904761903}, {"d": "2026-08-12", "rn": 9, "rev": 3165.0561904761903}, {"d": "2026-08-13", "rn": 9, "rev": 3349.4961904761903}, {"d": "2026-08-14", "rn": 9, "rev": 3504.6661904761904}, {"d": "2026-08-15", "rn": 8, "rev": 3132.8328571428574}, {"d": "2026-08-16", "rn": 8, "rev": 2099.302380952381}, {"d": "2026-08-17", "rn": 8, "rev": 2206.1566666666668}, {"d": "2026-08-18", "rn": 7, "rev": 1931.1566666666668}, {"d": "2026-08-19", "rn": 8, "rev": 2307.9066666666668}, {"d": "2026-08-20", "rn": 8, "rev": 2967.0233333333335}, {"d": "2026-08-21", "rn": 8, "rev": 2967.0233333333335}, {"d": "2026-08-22", "rn": 8, "rev": 3065.023333333333}, {"d": "2026-08-23", "rn": 5, "rev": 1595.4116666666666}, {"d": "2026-08-24", "rn": 8, "rev": 2302.4950000000003}, {"d": "2026-08-25", "rn": 7, "rev": 1808.695}, {"d": "2026-08-26", "rn": 7, "rev": 1852.3616666666667}, {"d": "2026-08-27", "rn": 7, "rev": 1906.9309523809525}, {"d": "2026-08-28", "rn": 5, "rev": 1375.737619047619}, {"d": "2026-08-29", "rn": 7, "rev": 2194.404285714286}, {"d": "2026-08-30", "rn": 6, "rev": 1942.0709523809523}, {"d": "2026-08-31", "rn": 8, "rev": 2171.0476190476193}, {"d": "2026-09-01", "rn": 5, "rev": 1058.7142857142858}, {"d": "2026-09-02", "rn": 6, "rev": 1282.7142857142858}, {"d": "2026-09-03", "rn": 5, "rev": 1084.0}, {"d": "2026-09-08", "rn": 1, "rev": 168.5}, {"d": "2026-09-09", "rn": 1, "rev": 168.5}, {"d": "2026-09-10", "rn": 9, "rev": 2533.3333333333335}, {"d": "2026-09-11", "rn": 9, "rev": 2533.3333333333335}, {"d": "2026-09-12", "rn": 9, "rev": 2533.3333333333335}, {"d": "2026-09-13", "rn": 3, "rev": 596.0}, {"d": "2026-09-17", "rn": 9, "rev": 2366.6666666666665}, {"d": "2026-09-18", "rn": 9, "rev": 2366.6666666666665}, {"d": "2026-09-19", "rn": 9, "rev": 2366.6666666666665}, {"d": "2026-09-20", "rn": 1, "rev": 308.0}, {"d": "2026-09-24", "rn": 8, "rev": 2133.5}, {"d": "2026-09-25", "rn": 8, "rev": 2133.5}, {"d": "2026-09-26", "rn": 1, "rev": 243.5}, {"d": "2026-09-27", "rn": 1, "rev": 243.5}, {"d": "2026-09-28", "rn": 1, "rev": 243.5}, {"d": "2026-09-29", "rn": 1, "rev": 243.5}, {"d": "2026-09-30", "rn": 1, "rev": 211.612}, {"d": "2026-10-01", "rn": 1, "rev": 211.612}, {"d": "2026-10-02", "rn": 1, "rev": 211.612}, {"d": "2026-10-03", "rn": 1, "rev": 211.612}, {"d": "2026-10-04", "rn": 1, "rev": 211.612}, {"d": "2026-10-08", "rn": 2, "rev": 619.3333333333333}, {"d": "2026-10-09", "rn": 4, "rev": 1403.1866666666665}, {"d": "2026-10-10", "rn": 4, "rev": 1403.1866666666665}, {"d": "2026-10-11", "rn": 1, "rev": 230.35333333333332}, {"d": "2026-10-22", "rn": 9, "rev": 1949.0}, {"d": "2026-10-23", "rn": 9, "rev": 1949.0}, {"d": "2026-10-28", "rn": 1, "rev": 112.5}, {"d": "2026-10-29", "rn": 1, "rev": 112.5}, {"d": "2026-11-04", "rn": 1, "rev": 247.766}, {"d": "2026-11-05", "rn": 1, "rev": 247.766}, {"d": "2026-11-06", "rn": 1, "rev": 247.766}, {"d": "2026-11-07", "rn": 1, "rev": 247.766}, {"d": "2026-11-08", "rn": 1, "rev": 247.766}, {"d": "2026-11-27", "rn": 1, "rev": 171.5}, {"d": "2026-11-28", "rn": 1, "rev": 171.5}], "night_dow": [{"d": "Mon", "occ": 0.32264957264957267, "adr": 259.34971996215705, "revpar": 83.67907631257631}, {"d": "Tue", "occ": 0.2841880341880342, "adr": 263.38188757608305, "revpar": 74.84998087098086}, {"d": "Wed", "occ": 0.27350427350427353, "adr": 288.11068917410716, "revpar": 78.79950473137974}, {"d": "Thu", "occ": 0.3920335429769392, "adr": 291.75193786605547, "revpar": 114.37654587201756}, {"d": "Fri", "occ": 0.5042735042735043, "adr": 272.13924737691684, "revpar": 137.2326119251119}, {"d": "Sat", "occ": 0.5021367521367521, "adr": 264.3809732522796, "revpar": 132.75540323565323}, {"d": "Sun", "occ": 0.344017094017094, "adr": 257.5840965690624, "revpar": 88.61333236670737}], "pace": [{"m": "2025-06", "rev": 22133.7, "rn": 65.0, "bookings": 8}, {"m": "2025-07", "rev": 38056.0, "rn": 73.0, "bookings": 18}, {"m": "2025-08", "rev": 9606.0, "rn": 20.0, "bookings": 5}, {"m": "2025-09", "rev": 10796.0, "rn": 38.0, "bookings": 3}, {"m": "2025-10", "rev": 10998.0, "rn": 45.0, "bookings": 2}, {"m": "2025-11", "rev": 4382.0, "rn": 9.0, "bookings": 3}, {"m": "2025-12", "rev": 8172.4, "rn": 43.0, "bookings": 11}, {"m": "2026-01", "rev": 17785.96, "rn": 111.0, "bookings": 34}, {"m": "2026-02", "rev": 19403.23, "rn": 78.0, "bookings": 31}, {"m": "2026-03", "rev": 33347.29, "rn": 146.0, "bookings": 44}, {"m": "2026-04", "rev": 46253.86, "rn": 204.0, "bookings": 63}, {"m": "2026-05", "rev": 49066.46, "rn": 184.0, "bookings": 59}, {"m": "2026-06", "rev": 41887.71, "rn": 146.0, "bookings": 48}, {"m": "2026-07", "rev": 19957.2, "rn": 63.0, "bookings": 26}, {"m": "2026-08", "rev": 1607.0, "rn": 6.0, "bookings": 2}], "concentration": [{"pct_bookings": 0.0028011204481792717, "pct_rev": 0.034487638595698145}, {"pct_bookings": 0.0056022408963585435, "pct_rev": 0.0572794693198117}, {"pct_bookings": 0.008403361344537815, "pct_rev": 0.07857183749628621}, {"pct_bookings": 0.011204481792717087, "pct_rev": 0.0918690713687493}, {"pct_bookings": 0.014005602240896359, "pct_rev": 0.10420101123154428}, {"pct_bookings": 0.01680672268907563, "pct_rev": 0.11589082125293831}, {"pct_bookings": 0.0196078431372549, "pct_rev": 0.12615314292897997}, {"pct_bookings": 0.022408963585434174, "pct_rev": 0.13589065271334796}, {"pct_bookings": 0.025210084033613446, "pct_rev": 0.1450733613550895}, {"pct_bookings": 0.028011204481792718, "pct_rev": 0.1537552495059196}, {"pct_bookings": 0.03081232492997199, "pct_rev": 0.16236516345446303}, {"pct_bookings": 0.03361344537815126, "pct_rev": 0.17077115049652755}, {"pct_bookings": 0.036414565826330535, "pct_rev": 0.17869431059825228}, {"pct_bookings": 0.0392156862745098, "pct_rev": 0.18656948789845257}, {"pct_bookings": 0.04201680672268908, "pct_rev": 0.1943966823971284}, {"pct_bookings": 0.04481792717086835, "pct_rev": 0.20204394139008755}, {"pct_bookings": 0.047619047619047616, "pct_rev": 0.20960375172726836}, {"pct_bookings": 0.05042016806722689, "pct_rev": 0.2171190580160353}, {"pct_bookings": 0.05322128851540616, "pct_rev": 0.22457738472799194}, {"pct_bookings": 0.056022408963585436, "pct_rev": 0.23198173078823356}, {"pct_bookings": 0.058823529411764705, "pct_rev": 0.23920314241766322}, {"pct_bookings": 0.06162464985994398, "pct_rev": 0.24639156587104483}, {"pct_bookings": 0.06442577030812324, "pct_rev": 0.25355692759044374}, {"pct_bookings": 0.06722689075630252, "pct_rev": 0.26039747573277305}, {"pct_bookings": 0.0700280112044818, "pct_rev": 0.26708807762033854}, {"pct_bookings": 0.07282913165266107, "pct_rev": 0.2737216999310937}, {"pct_bookings": 0.07563025210084033, "pct_rev": 0.2803193351407055}, {"pct_bookings": 0.0784313725490196, "pct_rev": 0.2868959778746504}, {"pct_bookings": 0.08123249299719888, "pct_rev": 0.29340139613758237}, {"pct_bookings": 0.08403361344537816, "pct_rev": 0.29983708939204917}, {"pct_bookings": 0.08683473389355742, "pct_rev": 0.3062277987700868}, {"pct_bookings": 0.0896358543417367, "pct_rev": 0.3124505683427889}, {"pct_bookings": 0.09243697478991597, "pct_rev": 0.318523391660727}, {"pct_bookings": 0.09523809523809523, "pct_rev": 0.324476257974854}, {"pct_bookings": 0.09803921568627451, "pct_rev": 0.33017121673078714}, {"pct_bookings": 0.10084033613445378, "pct_rev": 0.33586617548672026}, {"pct_bookings": 0.10364145658263306, "pct_rev": 0.34154913854227226}, {"pct_bookings": 0.10644257703081232, "pct_rev": 0.3472087099820811}, {"pct_bookings": 0.1092436974789916, "pct_rev": 0.3528526870113945}, {"pct_bookings": 0.11204481792717087, "pct_rev": 0.35849666404070785}, {"pct_bookings": 0.11484593837535013, "pct_rev": 0.36402668191640064}, {"pct_bookings": 0.11764705882352941, "pct_rev": 0.36950271914037847}, {"pct_bookings": 0.12044817927170869, "pct_rev": 0.37484980258525935}, {"pct_bookings": 0.12324929971988796, "pct_rev": 0.3800739301012338}, {"pct_bookings": 0.12605042016806722, "pct_rev": 0.38524407696549323}, {"pct_bookings": 0.12885154061624648, "pct_rev": 0.3903692399533235}, {"pct_bookings": 0.13165266106442577, "pct_rev": 0.3954826171655293}, {"pct_bookings": 0.13445378151260504, "pct_rev": 0.4004128500221665}, {"pct_bookings": 0.13725490196078433, "pct_rev": 0.40512068259373785}, {"pct_bookings": 0.1400560224089636, "pct_rev": 0.4097990057423717}, {"pct_bookings": 0.14285714285714285, "pct_rev": 0.4144689319007388}, {"pct_bookings": 0.14565826330532214, "pct_rev": 0.4190932743976576}, {"pct_bookings": 0.1484593837535014, "pct_rev": 0.4236546394675756}, {"pct_bookings": 0.15126050420168066, "pct_rev": 0.4281740195861597}, {"pct_bookings": 0.15406162464985995, "pct_rev": 0.43267240722907685}, {"pct_bookings": 0.1568627450980392, "pct_rev": 0.4371258109955648}, {"pct_bookings": 0.15966386554621848, "pct_rev": 0.44154022873581417}, {"pct_bookings": 0.16246498599439776, "pct_rev": 0.44594864862587297}, {"pct_bookings": 0.16526610644257703, "pct_rev": 0.4503360760402649}, {"pct_bookings": 0.16806722689075632, "pct_rev": 0.4546455314021795}, {"pct_bookings": 0.17086834733893558, "pct_rev": 0.45889800718728385}, {"pct_bookings": 0.17366946778711484, "pct_rev": 0.4631414861971023}, {"pct_bookings": 0.17647058823529413, "pct_rev": 0.46737596843163504}, {"pct_bookings": 0.1792717086834734, "pct_rev": 0.4715954560406913}, {"pct_bookings": 0.18207282913165265, "pct_rev": 0.4757909522489854}, {"pct_bookings": 0.18487394957983194, "pct_rev": 0.4799624570565172}, {"pct_bookings": 0.1876750700280112, "pct_rev": 0.48413396186404906}, {"pct_bookings": 0.19047619047619047, "pct_rev": 0.4882772767756853}, {"pct_bookings": 0.19327731092436976, "pct_rev": 0.4923830151558777}, {"pct_bookings": 0.19607843137254902, "pct_rev": 0.4964720495232894}, {"pct_bookings": 0.19887955182072828, "pct_rev": 0.5005325941022959}, {"pct_bookings": 0.20168067226890757, "pct_rev": 0.5045721462056355}, {"pct_bookings": 0.20448179271708683, "pct_rev": 0.5085877069082129}, {"pct_bookings": 0.20728291316526612, "pct_rev": 0.5125882729853138}, {"pct_bookings": 0.21008403361344538, "pct_rev": 0.5165678465867479}, {"pct_bookings": 0.21288515406162464, "pct_rev": 0.5205174309372291}, {"pct_bookings": 0.21568627450980393, "pct_rev": 0.5244310281865671}, {"pct_bookings": 0.2184873949579832, "pct_rev": 0.528311637259857}, {"pct_bookings": 0.22128851540616246, "pct_rev": 0.5321804305682714}, {"pct_bookings": 0.22408963585434175, "pct_rev": 0.536004060064751}, {"pct_bookings": 0.226890756302521, "pct_rev": 0.5397737089095156}, {"pct_bookings": 0.22969187675070027, "pct_rev": 0.5434983738778509}, {"pct_bookings": 0.23249299719887956, "pct_rev": 0.547220039921091}, {"pct_bookings": 0.23529411764705882, "pct_rev": 0.5509351982968744}, {"pct_bookings": 0.23809523809523808, "pct_rev": 0.5545998847633042}, {"pct_bookings": 0.24089635854341737, "pct_rev": 0.5582585733795435}, {"pct_bookings": 0.24369747899159663, "pct_rev": 0.5618992684452111}, {"pct_bookings": 0.24649859943977592, "pct_rev": 0.5655159721101165}, {"pct_bookings": 0.24929971988795518, "pct_rev": 0.5691146822244503}, {"pct_bookings": 0.25210084033613445, "pct_rev": 0.5727103934136887}, {"pct_bookings": 0.2549019607843137, "pct_rev": 0.5762701175017838}, {"pct_bookings": 0.25770308123249297, "pct_rev": 0.5798238437396883}, {"pct_bookings": 0.2605042016806723, "pct_rev": 0.5833417628119553}, {"pct_bookings": 0.26330532212885155, "pct_rev": 0.5868295126977637}, {"pct_bookings": 0.2661064425770308, "pct_rev": 0.5902602830067618}, {"pct_bookings": 0.2689075630252101, "pct_rev": 0.5936880543906647}, {"pct_bookings": 0.27170868347338933, "pct_rev": 0.5970978322239959}, {"pct_bookings": 0.27450980392156865, "pct_rev": 0.6004866175816601}, {"pct_bookings": 0.2773109243697479, "pct_rev": 0.6038718941969629}, {"pct_bookings": 0.2801120448179272, "pct_rev": 0.6072546817044366}, {"pct_bookings": 0.28291316526610644, "pct_rev": 0.6106194756613387}, {"pct_bookings": 0.2857142857142857, "pct_rev": 0.6139422846669067}, {"pct_bookings": 0.28851540616246496, "pct_rev": 0.6172620947473796}, {"pct_bookings": 0.2913165266106443, "pct_rev": 0.6205814249998373}, {"pct_bookings": 0.29411764705882354, "pct_rev": 0.6238292608780234}, {"pct_bookings": 0.2969187675070028, "pct_rev": 0.627074307755871}, {"pct_bookings": 0.29971988795518206, "pct_rev": 0.6303161457838666}, {"pct_bookings": 0.3025210084033613, "pct_rev": 0.6335519859616717}, {"pct_bookings": 0.30532212885154064, "pct_rev": 0.6367848272143815}, {"pct_bookings": 0.3081232492997199, "pct_rev": 0.6399578699006914}, {"pct_bookings": 0.31092436974789917, "pct_rev": 0.6431067412507334}, {"pct_bookings": 0.3137254901960784, "pct_rev": 0.6462556126007755}, {"pct_bookings": 0.3165266106442577, "pct_rev": 0.6493714957747694}, {"pct_bookings": 0.31932773109243695, "pct_rev": 0.6524815910233295}, {"pct_bookings": 0.32212885154061627, "pct_rev": 0.6555524903208942}, {"pct_bookings": 0.32492997198879553, "pct_rev": 0.6586085749284883}, {"pct_bookings": 0.3277310924369748, "pct_rev": 0.6616614806754815}, {"pct_bookings": 0.33053221288515405, "pct_rev": 0.664708388572284}, {"pct_bookings": 0.3333333333333333, "pct_rev": 0.6677375128432715}, {"pct_bookings": 0.33613445378151263, "pct_rev": 0.670751432564026}, {"pct_bookings": 0.3389355742296919, "pct_rev": 0.67375935443459}, {"pct_bookings": 0.34173669467787116, "pct_rev": 0.6767600189064232}, {"pct_bookings": 0.3445378151260504, "pct_rev": 0.6797589440017013}, {"pct_bookings": 0.3473389355742297, "pct_rev": 0.6827548701718842}, {"pct_bookings": 0.35014005602240894, "pct_rev": 0.6857477974169718}, {"pct_bookings": 0.35294117647058826, "pct_rev": 0.6887287289616781}, {"pct_bookings": 0.3557422969187675, "pct_rev": 0.6917096605063846}, {"pct_bookings": 0.3585434173669468, "pct_rev": 0.6946848041256571}, {"pct_bookings": 0.36134453781512604, "pct_rev": 0.6976537399699825}, {"pct_bookings": 0.3641456582633053, "pct_rev": 0.7006004237901008}, {"pct_bookings": 0.36694677871148457, "pct_rev": 0.7035213768329017}, {"pct_bookings": 0.3697478991596639, "pct_rev": 0.7064171389049022}, {"pct_bookings": 0.37254901960784315, "pct_rev": 0.709305103771655}, {"pct_bookings": 0.3753501400560224, "pct_rev": 0.7121570815372645}, {"pct_bookings": 0.37815126050420167, "pct_rev": 0.7150060603777787}, {"pct_bookings": 0.38095238095238093, "pct_rev": 0.7178310478175307}, {"pct_bookings": 0.38375350140056025, "pct_rev": 0.7206530363321874}, {"pct_bookings": 0.3865546218487395, "pct_rev": 0.723442036670796}, {"pct_bookings": 0.38935574229691877, "pct_rev": 0.726192050983166}, {"pct_bookings": 0.39215686274509803, "pct_rev": 0.7289390663704407}, {"pct_bookings": 0.3949579831932773, "pct_rev": 0.7316830828326202}, {"pct_bookings": 0.39775910364145656, "pct_rev": 0.7344151035944185}, {"pct_bookings": 0.4005602240896359, "pct_rev": 0.7371141361801689}, {"pct_bookings": 0.40336134453781514, "pct_rev": 0.7398071709157286}, {"pct_bookings": 0.4061624649859944, "pct_rev": 0.7425002056512883}, {"pct_bookings": 0.40896358543417366, "pct_rev": 0.7451632511358953}, {"pct_bookings": 0.4117647058823529, "pct_rev": 0.7478202987703116}, {"pct_bookings": 0.41456582633053224, "pct_rev": 0.7504623517792517}, {"pct_bookings": 0.4173669467787115, "pct_rev": 0.7530894101627152}, {"pct_bookings": 0.42016806722689076, "pct_rev": 0.7557164685461789}, {"pct_bookings": 0.42296918767507, "pct_rev": 0.7583135376786897}, {"pct_bookings": 0.4257703081232493, "pct_rev": 0.7608836164853431}, {"pct_bookings": 0.42857142857142855, "pct_rev": 0.7634506963669011}, {"pct_bookings": 0.43137254901960786, "pct_rev": 0.766015976893402}, {"pct_bookings": 0.4341736694677871, "pct_rev": 0.768496687732216}, {"pct_bookings": 0.4369747899159664, "pct_rev": 0.7709410216096244}, {"pct_bookings": 0.43977591036414565, "pct_rev": 0.773373149861895}, {"pct_bookings": 0.4425770308123249, "pct_rev": 0.7758052781141654}, {"pct_bookings": 0.44537815126050423, "pct_rev": 0.7782314085162455}, {"pct_bookings": 0.4481792717086835, "pct_rev": 0.7806335475175632}, {"pct_bookings": 0.45098039215686275, "pct_rev": 0.7830326875937857}, {"pct_bookings": 0.453781512605042, "pct_rev": 0.7854318276700082}, {"pct_bookings": 0.4565826330532213, "pct_rev": 0.7878154633034881}, {"pct_bookings": 0.45938375350140054, "pct_rev": 0.7901786162785672}, {"pct_bookings": 0.46218487394957986, "pct_rev": 0.792538770328551}, {"pct_bookings": 0.4649859943977591, "pct_rev": 0.7948839297530585}, {"pct_bookings": 0.4677871148459384, "pct_rev": 0.797154116050184}, {"pct_bookings": 0.47058823529411764, "pct_rev": 0.7994159953247956}, {"pct_bookings": 0.4733893557422969, "pct_rev": 0.8016651891462542}, {"pct_bookings": 0.47619047619047616, "pct_rev": 0.8039143829677128}, {"pct_bookings": 0.4789915966386555, "pct_rev": 0.8061233312143927}, {"pct_bookings": 0.48179271708683474, "pct_rev": 0.8083305400845174}, {"pct_bookings": 0.484593837535014, "pct_rev": 0.810504760778594}, {"pct_bookings": 0.48739495798319327, "pct_rev": 0.8126669857722896}, {"pct_bookings": 0.49019607843137253, "pct_rev": 0.8148052193652229}, {"pct_bookings": 0.49299719887955185, "pct_rev": 0.8169281584401703}, {"pct_bookings": 0.4957983193277311, "pct_rev": 0.8190455794929423}, {"pct_bookings": 0.49859943977591037, "pct_rev": 0.8211388292094465}, {"pct_bookings": 0.5014005602240896, "pct_rev": 0.82322608107576}, {"pct_bookings": 0.5042016806722689, "pct_rev": 0.8252985182521029}, {"pct_bookings": 0.5070028011204482, "pct_rev": 0.8273677765678448}, {"pct_bookings": 0.5098039215686274, "pct_rev": 0.8294130434828244}, {"pct_bookings": 0.5126050420168067, "pct_rev": 0.8314420562237878}, {"pct_bookings": 0.5154061624649859, "pct_rev": 0.8334693295881958}, {"pct_bookings": 0.5182072829131653, "pct_rev": 0.8354756104769367}, {"pct_bookings": 0.5210084033613446, "pct_rev": 0.8374671066649582}, {"pct_bookings": 0.5238095238095238, "pct_rev": 0.8394523950780323}, {"pct_bookings": 0.5266106442577031, "pct_rev": 0.8413717071390102}, {"pct_bookings": 0.5294117647058824, "pct_rev": 0.8432882002103986}, {"pct_bookings": 0.5322128851540616, "pct_rev": 0.8451775230204238}, {"pct_bookings": 0.5350140056022409, "pct_rev": 0.8470398555045915}, {"pct_bookings": 0.5378151260504201, "pct_rev": 0.8488961901385687}, {"pct_bookings": 0.5406162464985994, "pct_rev": 0.8507393295021265}, {"pct_bookings": 0.5434173669467787, "pct_rev": 0.8525797698330987}, {"pct_bookings": 0.5462184873949579, "pct_rev": 0.8544123229910703}, {"pct_bookings": 0.5490196078431373, "pct_rev": 0.8562116780482372}, {"pct_bookings": 0.5518207282913166, "pct_rev": 0.8579872516293985}, {"pct_bookings": 0.5546218487394958, "pct_rev": 0.8597536185105173}, {"pct_bookings": 0.5574229691876751, "pct_rev": 0.8615169864665408}, {"pct_bookings": 0.5602240896358543, "pct_rev": 0.8632713576472785}, {"pct_bookings": 0.5630252100840336, "pct_rev": 0.865001737427254}, {"pct_bookings": 0.5658263305322129, "pct_rev": 0.8667261193570389}, {"pct_bookings": 0.5686274509803921, "pct_rev": 0.8684055174103946}, {"pct_bookings": 0.5714285714285714, "pct_rev": 0.8700849154637503}, {"pct_bookings": 0.5742296918767507, "pct_rev": 0.8717615245167675}, {"pct_bookings": 0.5770308123249299, "pct_rev": 0.8734184306319087}, {"pct_bookings": 0.5798319327731093, "pct_rev": 0.875007860932406}, {"pct_bookings": 0.5826330532212886, "pct_rev": 0.8765510777971853}, {"pct_bookings": 0.5854341736694678, "pct_rev": 0.8780835285208723}, {"pct_bookings": 0.5882352941176471, "pct_rev": 0.8796039835441783}, {"pct_bookings": 0.5910364145658263, "pct_rev": 0.881109443942008}, {"pct_bookings": 0.5938375350140056, "pct_rev": 0.8826089064896471}, {"pct_bookings": 0.5966386554621849, "pct_rev": 0.8840933744118097}, {"pct_bookings": 0.5994397759103641, "pct_rev": 0.8855445542654149}, {"pct_bookings": 0.6022408963585434, "pct_rev": 0.8869692536104287}, {"pct_bookings": 0.6050420168067226, "pct_rev": 0.888389124686039}, {"pct_bookings": 0.6078431372549019, "pct_rev": 0.8898076462453566}, {"pct_bookings": 0.6106442577030813, "pct_rev": 0.8912105733941786}, {"pct_bookings": 0.6134453781512605, "pct_rev": 0.8925990757132924}, {"pct_bookings": 0.6162464985994398, "pct_rev": 0.8939858086665998}, {"pct_bookings": 0.6190476190476191, "pct_rev": 0.8953713120606184}, {"pct_bookings": 0.6218487394957983, "pct_rev": 0.8967540264542982}, {"pct_bookings": 0.6246498599439776, "pct_rev": 0.8981337119336319}, {"pct_bookings": 0.6274509803921569, "pct_rev": 0.899504220702174}, {"pct_bookings": 0.6302521008403361, "pct_rev": 0.9008741296856969}, {"pct_bookings": 0.6330532212885154, "pct_rev": 0.9022328526786146}, {"pct_bookings": 0.6358543417366946, "pct_rev": 0.9035823689714898}, {"pct_bookings": 0.6386554621848739, "pct_rev": 0.904931885264365}, {"pct_bookings": 0.6414565826330533, "pct_rev": 0.9062754037070495}, {"pct_bookings": 0.6442577030812325, "pct_rev": 0.9075709393482096}, {"pct_bookings": 0.6470588235294118, "pct_rev": 0.9088604771391793}, {"pct_bookings": 0.6498599439775911, "pct_rev": 0.9101050310537196}, {"pct_bookings": 0.6526610644257703, "pct_rev": 0.91134958496826}, {"pct_bookings": 0.6554621848739496, "pct_rev": 0.9125905401726861}, {"pct_bookings": 0.6582633053221288, "pct_rev": 0.9137901102107974}, {"pct_bookings": 0.6610644257703081, "pct_rev": 0.91498689124857}, {"pct_bookings": 0.6638655462184874, "pct_rev": 0.9161776444469011}, {"pct_bookings": 0.6666666666666666, "pct_rev": 0.9173562220093454}, {"pct_bookings": 0.6694677871148459, "pct_rev": 0.9185320105714511}, {"pct_bookings": 0.6722689075630253, "pct_rev": 0.919698802358271}, {"pct_bookings": 0.6750700280112045, "pct_rev": 0.9208623852952389}, {"pct_bookings": 0.6778711484593838, "pct_rev": 0.9220199703820162}, {"pct_bookings": 0.680672268907563, "pct_rev": 0.9231745565436983}, {"pct_bookings": 0.6834733893557423, "pct_rev": 0.9242691642034748}, {"pct_bookings": 0.6862745098039216, "pct_rev": 0.9253547750879655}, {"pct_bookings": 0.6890756302521008, "pct_rev": 0.9264350778750374}, {"pct_bookings": 0.6918767507002801, "pct_rev": 0.927510612371208}, {"pct_bookings": 0.6946778711484594, "pct_rev": 0.928578229705127}, {"pct_bookings": 0.6974789915966386, "pct_rev": 0.9296327417363797}, {"pct_bookings": 0.7002801120448179, "pct_rev": 0.930682365519727}, {"pct_bookings": 0.7030812324929971, "pct_rev": 0.9317139957525027}, {"pct_bookings": 0.7058823529411765, "pct_rev": 0.9327426270601831}, {"pct_bookings": 0.7086834733893558, "pct_rev": 0.9337622615925776}, {"pct_bookings": 0.711484593837535, "pct_rev": 0.9347728993496863}, {"pct_bookings": 0.7142857142857143, "pct_rev": 0.9357625446311281}, {"pct_bookings": 0.7170868347338936, "pct_rev": 0.9367521899125699}, {"pct_bookings": 0.7198879551820728, "pct_rev": 0.9377268405685353}, {"pct_bookings": 0.7226890756302521, "pct_rev": 0.9387014912245006}, {"pct_bookings": 0.7254901960784313, "pct_rev": 0.9396731429553707}, {"pct_bookings": 0.7282913165266106, "pct_rev": 0.9406088075850976}, {"pct_bookings": 0.7310924369747899, "pct_rev": 0.941540213741189}, {"pct_bookings": 0.7338935574229691, "pct_rev": 0.9424638826705347}, {"pct_bookings": 0.7366946778711485, "pct_rev": 0.9433695580493087}, {"pct_bookings": 0.7394957983193278, "pct_rev": 0.9442752334280827}, {"pct_bookings": 0.742296918767507, "pct_rev": 0.9451749109566661}, {"pct_bookings": 0.7450980392156863, "pct_rev": 0.9460745884852495}, {"pct_bookings": 0.7478991596638656, "pct_rev": 0.9469515641508617}, {"pct_bookings": 0.7507002801120448, "pct_rev": 0.9478092567281112}, {"pct_bookings": 0.7535014005602241, "pct_rev": 0.9486639503802655}, {"pct_bookings": 0.7563025210084033, "pct_rev": 0.949503829342449}, {"pct_bookings": 0.7591036414565826, "pct_rev": 0.9503435283691269}, {"pct_bookings": 0.7619047619047619, "pct_rev": 0.9511832273958047}, {"pct_bookings": 0.7647058823529411, "pct_rev": 0.9520229264224827}, {"pct_bookings": 0.7675070028011205, "pct_rev": 0.9528566275989699}, {"pct_bookings": 0.7703081232492998, "pct_rev": 0.9536818118281866}, {"pct_bookings": 0.773109243697479, "pct_rev": 0.9544975194541022}, {"pct_bookings": 0.7759103641456583, "pct_rev": 0.9553072292298274}, {"pct_bookings": 0.7787114845938375, "pct_rev": 0.9560869497545996}, {"pct_bookings": 0.7815126050420168, "pct_rev": 0.956866670279372}, {"pct_bookings": 0.7843137254901961, "pct_rev": 0.9576463908041443}, {"pct_bookings": 0.7871148459383753, "pct_rev": 0.9584261113289165}, {"pct_bookings": 0.7899159663865546, "pct_rev": 0.9592028329285937}, {"pct_bookings": 0.7927170868347339, "pct_rev": 0.9599765556031753}, {"pct_bookings": 0.7955182072829131, "pct_rev": 0.9607444903523232}, {"pct_bookings": 0.7983193277310925, "pct_rev": 0.9615019588528886}, {"pct_bookings": 0.8011204481792717, "pct_rev": 0.9622516901267082}, {"pct_bookings": 0.803921568627451, "pct_rev": 0.9630006716692538}, {"pct_bookings": 0.8067226890756303, "pct_rev": 0.9637414061677876}, {"pct_bookings": 0.8095238095238095, "pct_rev": 0.9644709246864649}, {"pct_bookings": 0.8123249299719888, "pct_rev": 0.9651906667093316}, {"pct_bookings": 0.8151260504201681, "pct_rev": 0.9659104087321985}, {"pct_bookings": 0.8179271708683473, "pct_rev": 0.9666220536573079}, {"pct_bookings": 0.8207282913165266, "pct_rev": 0.9673300099045502}, {"pct_bookings": 0.8235294117647058, "pct_rev": 0.96802875945175}, {"pct_bookings": 0.8263305322128851, "pct_rev": 0.9687035175981875}, {"pct_bookings": 0.8291316526610645, "pct_rev": 0.9693782757446251}, {"pct_bookings": 0.8319327731092437, "pct_rev": 0.9700440371157769}, {"pct_bookings": 0.834733893557423, "pct_rev": 0.9707079991318716}, {"pct_bookings": 0.8375350140056023, "pct_rev": 0.9713557669524516}, {"pct_bookings": 0.8403361344537815, "pct_rev": 0.9720035347730317}, {"pct_bookings": 0.8431372549019608, "pct_rev": 0.9726483036685164}, {"pct_bookings": 0.84593837535014, "pct_rev": 0.9732810768636201}, {"pct_bookings": 0.8487394957983193, "pct_rev": 0.9739135501662144}, {"pct_bookings": 0.8515406162464986, "pct_rev": 0.9745433244362227}, {"pct_bookings": 0.8543417366946778, "pct_rev": 0.9751730987062311}, {"pct_bookings": 0.8571428571428571, "pct_rev": 0.9758028729762396}, {"pct_bookings": 0.8599439775910365, "pct_rev": 0.9764326472462479}, {"pct_bookings": 0.8627450980392157, "pct_rev": 0.9770564236660658}, {"pct_bookings": 0.865546218487395, "pct_rev": 0.9776700337298107}, {"pct_bookings": 0.8683473389355743, "pct_rev": 0.97827056848014}, {"pct_bookings": 0.8711484593837535, "pct_rev": 0.9788703534991957}, {"pct_bookings": 0.8739495798319328, "pct_rev": 0.9794701385182513}, {"pct_bookings": 0.876750700280112, "pct_rev": 0.9800699235373069}, {"pct_bookings": 0.8795518207282913, "pct_rev": 0.9806697085563625}, {"pct_bookings": 0.8823529411764706, "pct_rev": 0.981264485370509}, {"pct_bookings": 0.8851540616246498, "pct_rev": 0.9818496956136017}, {"pct_bookings": 0.8879551820728291, "pct_rev": 0.9824344860071809}, {"pct_bookings": 0.8907563025210085, "pct_rev": 0.9830192764007601}, {"pct_bookings": 0.8935574229691877, "pct_rev": 0.9836040667943394}, {"pct_bookings": 0.896358543417367, "pct_rev": 0.9841828593377281}, {"pct_bookings": 0.8991596638655462, "pct_rev": 0.9847573934074815}, {"pct_bookings": 0.9019607843137255, "pct_rev": 0.985324190250489}, {"pct_bookings": 0.9047619047619048, "pct_rev": 0.9858639967676391}, {"pct_bookings": 0.907563025210084, "pct_rev": 0.9864038032847892}, {"pct_bookings": 0.9103641456582633, "pct_rev": 0.9869436098019392}, {"pct_bookings": 0.9131652661064426, "pct_rev": 0.9874834163190893}, {"pct_bookings": 0.9159663865546218, "pct_rev": 0.9880174948893075}, {"pct_bookings": 0.9187675070028011, "pct_rev": 0.9885375085008287}, {"pct_bookings": 0.9215686274509803, "pct_rev": 0.98905752211235}, {"pct_bookings": 0.9243697478991597, "pct_rev": 0.9895673393785472}, {"pct_bookings": 0.927170868347339, "pct_rev": 0.9900503762436438}, {"pct_bookings": 0.9299719887955182, "pct_rev": 0.9905332031839835}, {"pct_bookings": 0.9327731092436975, "pct_rev": 0.9909830419482752}, {"pct_bookings": 0.9355742296918768, "pct_rev": 0.991432880712567}, {"pct_bookings": 0.938375350140056, "pct_rev": 0.9918827194768587}, {"pct_bookings": 0.9411764705882353, "pct_rev": 0.9923325582411504}, {"pct_bookings": 0.9439775910364145, "pct_rev": 0.9927823970054421}, {"pct_bookings": 0.9467787114845938, "pct_rev": 0.9932211397468812}, {"pct_bookings": 0.9495798319327731, "pct_rev": 0.9936598824883204}, {"pct_bookings": 0.9523809523809523, "pct_rev": 0.994086239669116}, {"pct_bookings": 0.9551820728291317, "pct_rev": 0.9945090881075502}, {"pct_bookings": 0.957983193277311, "pct_rev": 0.9949142428879223}, {"pct_bookings": 0.9607843137254902, "pct_rev": 0.9953041031503084}, {"pct_bookings": 0.9635854341736695, "pct_rev": 0.9956939634126946}, {"pct_bookings": 0.9663865546218487, "pct_rev": 0.9960838236750807}, {"pct_bookings": 0.969187675070028, "pct_rev": 0.9964736839374668}, {"pct_bookings": 0.9719887955182073, "pct_rev": 0.996863544199853}, {"pct_bookings": 0.9747899159663865, "pct_rev": 0.9972474066120486}, {"pct_bookings": 0.9775910364145658, "pct_rev": 0.9976184336248364}, {"pct_bookings": 0.9803921568627451, "pct_rev": 0.9979783046362697}, {"pct_bookings": 0.9831932773109243, "pct_rev": 0.9983381756477031}, {"pct_bookings": 0.9859943977591037, "pct_rev": 0.9986980466591364}, {"pct_bookings": 0.988795518207283, "pct_rev": 0.999055338594988}, {"pct_bookings": 0.9915966386554622, "pct_rev": 0.9993552311045157}, {"pct_bookings": 0.9943977591036415, "pct_rev": 0.9996551236140435}, {"pct_bookings": 0.9971988795518207, "pct_rev": 0.9998500537452366}, {"pct_bookings": 1.0, "pct_rev": 1.0000000000000004}], "top_stats": {"top10_share": 0.33017121673078714, "top20_share": 0.5005325941022959, "largest": 11500.0}, "repeat": [{"k": "New", "rev": 241640.84, "bookings": 279, "adr": 251.44728407908428, "los": 3.100358422939068, "lead": 31.0}, {"k": "Repeat", "rev": 91811.97, "bookings": 78, "adr": 340.0443333333333, "los": 3.4615384615384617, "lead": 126.0}], "pets": [{"k": "No pets", "rev": 277025.16, "bookings": 300, "adr": 275.6469253731343, "los": 3.11}, {"k": "Pet-friendly stay", "rev": 56427.65, "bookings": 57, "adr": 249.67986725663718, "los": 3.543859649122807}], "guest_freq": [{"k": "1", "guests": 294}, {"k": "2", "guests": 7}, {"k": "3", "guests": 5}, {"k": "4+", "guests": 7}], "guest_stats": {"unique": 313, "multi": 19, "multi_rev_share": 0.24720169549628324}, "size_class": [{"k": "Sleeps 4", "rev": 149489.31, "rn": 672.0, "bookings": 217, "adr": 222.45433035714285, "occ": 0.4602739726027397, "revpar": 102.38993835616438, "revpab": 25.597484589041095, "adr_per_bed": 55.61358258928571, "party": 2.442396313364055}, {"k": "Sleeps 6", "rev": 106197.89, "rn": 340.0, "bookings": 104, "adr": 312.34673529411765, "occ": 0.3105022831050228, "revpar": 96.98437442922375, "revpab": 16.164062404870624, "adr_per_bed": 52.05778921568628, "party": 3.355769230769231}, {"k": "Sleeps 8", "rev": 43555.49, "rn": 108.0, "bookings": 31, "adr": 403.29157407407405, "occ": 0.2958904109589041, "revpar": 119.33010958904109, "revpab": 14.916263698630136, "adr_per_bed": 50.411446759259256, "party": 4.806451612903226}], "scatter": [{"lead": 22, "adr": 70.0, "rev": 210.0, "nts": 3, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 1}, {"lead": 7, "adr": 60.0, "rev": 120.0, "nts": 2, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 1}, {"lead": 27, "adr": 75.0, "rev": 150.0, "nts": 2, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 1}, {"lead": 0, "adr": 65.0, "rev": 65.0, "nts": 1, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 1}, {"lead": 13, "adr": 75.0, "rev": 300.0, "nts": 4, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 1}, {"lead": 13, "adr": 60.0, "rev": 240.0, "nts": 4, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 1}, {"lead": 2, "adr": 66.0, "rev": 330.0, "nts": 5, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 1}, {"lead": 14, "adr": 70.0, "rev": 210.0, "nts": 3, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 1}, {"lead": 12, "adr": 86.66666666666667, "rev": 260.0, "nts": 3, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 1}, {"lead": 10, "adr": 73.8, "rev": 221.4, "nts": 3, "cabin": "1: Dreamy Den", "chan": "VRBO", "m": 1}, {"lead": 6, "adr": 107.5, "rev": 215.0, "nts": 2, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 1}, {"lead": 0, "adr": 65.0, "rev": 195.0, "nts": 3, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 1}, {"lead": 6, "adr": 100.0, "rev": 400.0, "nts": 4, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 1}, {"lead": 8, "adr": 60.0, "rev": 180.0, "nts": 3, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 1}, {"lead": 7, "adr": 60.4875, "rev": 483.9, "nts": 8, "cabin": "4: Bubblegum Bungalow", "chan": "VRBO", "m": 1}, {"lead": 14, "adr": 60.0, "rev": 180.0, "nts": 3, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 1}, {"lead": 19, "adr": 75.0, "rev": 150.0, "nts": 2, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 1}, {"lead": 15, "adr": 100.0, "rev": 200.0, "nts": 2, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 1}, {"lead": 1, "adr": 67.5, "rev": 270.0, "nts": 4, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 2}, {"lead": 28, "adr": 75.0, "rev": 150.0, "nts": 2, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 2}, {"lead": 15, "adr": 65.0, "rev": 585.0, "nts": 9, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 2}, {"lead": 21, "adr": 107.5, "rev": 430.0, "nts": 4, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 2}, {"lead": 37, "adr": 61.86, "rev": 123.72, "nts": 2, "cabin": "3: Winter Wonderland", "chan": "Airbnb", "m": 2}, {"lead": 14, "adr": 60.0, "rev": 120.0, "nts": 2, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 2}, {"lead": 38, "adr": 59.57, "rev": 119.14, "nts": 2, "cabin": "1: Dreamy Den", "chan": "Airbnb", "m": 2}, {"lead": 36, "adr": 64.0, "rev": 128.0, "nts": 2, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 2}, {"lead": 21, "adr": 65.0, "rev": 195.0, "nts": 3, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 2}, {"lead": 5, "adr": 210.9, "rev": 210.9, "nts": 1, "cabin": "2: Enchanted Forest", "chan": "VRBO", "m": 2}, {"lead": 31, "adr": 50.0, "rev": 50.0, "nts": 1, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 2}, {"lead": 17, "adr": 75.0, "rev": 150.0, "nts": 2, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 2}, {"lead": 3, "adr": 65.0, "rev": 130.0, "nts": 2, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 2}, {"lead": 38, "adr": 60.0, "rev": 240.0, "nts": 4, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 2}, {"lead": 36, "adr": 75.0, "rev": 150.0, "nts": 2, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 2}, {"lead": 31, "adr": 65.0, "rev": 130.0, "nts": 2, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 2}, {"lead": 8, "adr": 100.0, "rev": 200.0, "nts": 2, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 2}, {"lead": 2, "adr": 70.0, "rev": 210.0, "nts": 3, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 2}, {"lead": 7, "adr": 70.0, "rev": 210.0, "nts": 3, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 3}, {"lead": 51, "adr": 216.0, "rev": 432.0, "nts": 2, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 3}, {"lead": 6, "adr": 86.66666666666667, "rev": 260.0, "nts": 3, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 3}, {"lead": 0, "adr": 108.33333333333333, "rev": 325.0, "nts": 3, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 3}, {"lead": 17, "adr": 65.0, "rev": 130.0, "nts": 2, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 3}, {"lead": 2, "adr": 86.7, "rev": 173.4, "nts": 2, "cabin": "4: Bubblegum Bungalow", "chan": "VRBO", "m": 3}, {"lead": 36, "adr": 140.0, "rev": 280.0, "nts": 2, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 3}, {"lead": 31, "adr": 65.0, "rev": 130.0, "nts": 2, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 3}, {"lead": 26, "adr": 125.0, "rev": 250.0, "nts": 2, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 3}, {"lead": 25, "adr": 100.0, "rev": 200.0, "nts": 2, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 3}, {"lead": 24, "adr": 99.165, "rev": 198.33, "nts": 2, "cabin": "2: Enchanted Forest", "chan": "VRBO", "m": 3}, {"lead": 27, "adr": 65.0, "rev": 195.0, "nts": 3, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 3}, {"lead": 24, "adr": 60.0, "rev": 180.0, "nts": 3, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 3}, {"lead": 18, "adr": 65.04666666666667, "rev": 195.14, "nts": 3, "cabin": "4: Bubblegum Bungalow", "chan": "VRBO", "m": 3}, {"lead": 24, "adr": 86.66666666666667, "rev": 260.0, "nts": 3, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 3}, {"lead": 8, "adr": 86.7, "rev": 173.4, "nts": 2, "cabin": "1: Dreamy Den", "chan": "VRBO", "m": 3}, {"lead": 2, "adr": 67.55, "rev": 135.1, "nts": 2, "cabin": "3: Winter Wonderland", "chan": "VRBO", "m": 3}, {"lead": 1, "adr": 74.0, "rev": 222.0, "nts": 3, "cabin": "7: Amber Glow", "chan": "VRBO", "m": 3}, {"lead": 3, "adr": 90.0, "rev": 180.0, "nts": 2, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 3}, {"lead": 1, "adr": 70.5, "rev": 141.0, "nts": 2, "cabin": "1: Dreamy Den", "chan": "VRBO", "m": 3}, {"lead": 18, "adr": 72.0, "rev": 216.0, "nts": 3, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 3}, {"lead": 26, "adr": 60.0, "rev": 120.0, "nts": 2, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 4}, {"lead": 33, "adr": 100.0, "rev": 200.0, "nts": 2, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 4}, {"lead": 22, "adr": 83.25, "rev": 249.75, "nts": 3, "cabin": "6: Sled Loft", "chan": "Booking.com", "m": 4}, {"lead": 22, "adr": 103.75, "rev": 415.0, "nts": 4, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 4}, {"lead": 31, "adr": 68.20333333333333, "rev": 204.61, "nts": 3, "cabin": "1: Dreamy Den", "chan": "Airbnb", "m": 4}, {"lead": 3, "adr": 50.0, "rev": 100.0, "nts": 2, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 4}, {"lead": 12, "adr": 79.10000000000001, "rev": 237.3, "nts": 3, "cabin": "1: Dreamy Den", "chan": "VRBO", "m": 4}, {"lead": 37, "adr": 55.0, "rev": 330.0, "nts": 6, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 4}, {"lead": 2, "adr": 93.33333333333333, "rev": 280.0, "nts": 3, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 4}, {"lead": 36, "adr": 73.15, "rev": 146.3, "nts": 2, "cabin": "4: Bubblegum Bungalow", "chan": "Airbnb", "m": 4}, {"lead": 18, "adr": 100.66666666666667, "rev": 302.0, "nts": 3, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 4}, {"lead": 9, "adr": 50.0, "rev": 100.0, "nts": 2, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 4}, {"lead": 7, "adr": 143.0, "rev": 286.0, "nts": 2, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 4}, {"lead": 4, "adr": 81.08666666666666, "rev": 243.26, "nts": 3, "cabin": "4: Bubblegum Bungalow", "chan": "VRBO", "m": 4}, {"lead": 0, "adr": 86.0, "rev": 258.0, "nts": 3, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 4}, {"lead": 2, "adr": 117.21, "rev": 351.63, "nts": 3, "cabin": "6: Sled Loft", "chan": "VRBO", "m": 4}, {"lead": 15, "adr": 89.045, "rev": 178.09, "nts": 2, "cabin": "8: Sunshine Loft", "chan": "Airbnb", "m": 4}, {"lead": 2, "adr": 93.33333333333333, "rev": 560.0, "nts": 6, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 4}, {"lead": 22, "adr": 93.33333333333333, "rev": 280.0, "nts": 3, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 4}, {"lead": 43, "adr": 67.57285714285715, "rev": 473.01, "nts": 7, "cabin": "6: Sled Loft", "chan": "Airbnb", "m": 4}, {"lead": 22, "adr": 47.38999999999999, "rev": 142.17, "nts": 3, "cabin": "8: Sunshine Loft", "chan": "Airbnb", "m": 4}, {"lead": 20, "adr": 120.07666666666667, "rev": 360.23, "nts": 3, "cabin": "5: Secret Garden", "chan": "VRBO", "m": 4}, {"lead": 9, "adr": 100.66666666666667, "rev": 302.0, "nts": 3, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 4}, {"lead": 6, "adr": 119.54666666666667, "rev": 358.64, "nts": 3, "cabin": "2: Enchanted Forest", "chan": "Booking.com", "m": 4}, {"lead": 50, "adr": 65.0, "rev": 130.0, "nts": 2, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 4}, {"lead": 20, "adr": 108.0, "rev": 216.0, "nts": 2, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 4}, {"lead": 4, "adr": 137.58, "rev": 275.16, "nts": 2, "cabin": "9: Captain's Lodge", "chan": "VRBO", "m": 4}, {"lead": 7, "adr": 92.482, "rev": 462.41, "nts": 5, "cabin": "3: Winter Wonderland", "chan": "Airbnb", "m": 4}, {"lead": 7, "adr": 86.0, "rev": 344.0, "nts": 4, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 4}, {"lead": 48, "adr": 160.5, "rev": 963.0, "nts": 6, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 4}, {"lead": 53, "adr": 86.66666666666667, "rev": 260.0, "nts": 3, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 4}, {"lead": 3, "adr": 157.82, "rev": 473.46, "nts": 3, "cabin": "7: Amber Glow", "chan": "VRBO", "m": 4}, {"lead": 55, "adr": 73.15, "rev": 146.3, "nts": 2, "cabin": "4: Bubblegum Bungalow", "chan": "Airbnb", "m": 5}, {"lead": 5, "adr": 199.535, "rev": 399.07, "nts": 2, "cabin": "8: Sunshine Loft", "chan": "VRBO", "m": 5}, {"lead": 52, "adr": 66.75, "rev": 200.25, "nts": 3, "cabin": "3: Winter Wonderland", "chan": "Airbnb", "m": 5}, {"lead": 30, "adr": 310.0, "rev": 930.0, "nts": 3, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 5}, {"lead": 27, "adr": 230.0, "rev": 690.0, "nts": 3, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 5}, {"lead": 21, "adr": 138.33333333333334, "rev": 415.0, "nts": 3, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 5}, {"lead": 14, "adr": 155.25, "rev": 621.0, "nts": 4, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 5}, {"lead": 13, "adr": 104.0, "rev": 208.0, "nts": 2, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 5}, {"lead": 49, "adr": 154.33333333333334, "rev": 463.0, "nts": 3, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 5}, {"lead": 2, "adr": 105.5, "rev": 211.0, "nts": 2, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 5}, {"lead": 29, "adr": 294.5, "rev": 589.0, "nts": 2, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 5}, {"lead": 28, "adr": 142.5, "rev": 285.0, "nts": 2, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 5}, {"lead": 27, "adr": 142.6, "rev": 713.0, "nts": 5, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 5}, {"lead": 14, "adr": 226.535, "rev": 453.07, "nts": 2, "cabin": "4: Bubblegum Bungalow", "chan": "VRBO", "m": 5}, {"lead": 26, "adr": 206.9, "rev": 413.8, "nts": 2, "cabin": "2: Enchanted Forest", "chan": "VRBO", "m": 5}, {"lead": 3, "adr": 123.5, "rev": 247.0, "nts": 2, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 5}, {"lead": 32, "adr": 122.74000000000001, "rev": 613.7, "nts": 5, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 5}, {"lead": 12, "adr": 94.5, "rev": 189.0, "nts": 2, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 5}, {"lead": 8, "adr": 186.35666666666668, "rev": 559.07, "nts": 3, "cabin": "4: Bubblegum Bungalow", "chan": "VRBO", "m": 5}, {"lead": 32, "adr": 178.0, "rev": 356.0, "nts": 2, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 5}, {"lead": 25, "adr": 162.0, "rev": 324.0, "nts": 2, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 5}, {"lead": 18, "adr": 136.0, "rev": 272.0, "nts": 2, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 5}, {"lead": 14, "adr": 196.0, "rev": 588.0, "nts": 3, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 5}, {"lead": 24, "adr": 166.0175, "rev": 664.07, "nts": 4, "cabin": "1: Dreamy Den", "chan": "VRBO", "m": 5}, {"lead": 9, "adr": 254.71428571428572, "rev": 1783.0, "nts": 7, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 5}, {"lead": 8, "adr": 152.26666666666668, "rev": 456.8, "nts": 3, "cabin": "2: Enchanted Forest", "chan": "VRBO", "m": 5}, {"lead": 125, "adr": 345.4, "rev": 1381.6, "nts": 4, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 5}, {"lead": 125, "adr": 206.8, "rev": 827.2, "nts": 4, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 5}, {"lead": 17, "adr": 254.765, "rev": 1019.06, "nts": 4, "cabin": "1: Dreamy Den", "chan": "VRBO", "m": 5}, {"lead": 58, "adr": 235.96666666666667, "rev": 707.9, "nts": 3, "cabin": "3: Winter Wonderland", "chan": "VRBO", "m": 5}, {"lead": 47, "adr": 221.16666666666666, "rev": 1327.0, "nts": 6, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 5}, {"lead": 27, "adr": 305.0, "rev": 915.0, "nts": 3, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 5}, {"lead": 25, "adr": 399.6666666666667, "rev": 1199.0, "nts": 3, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 5}, {"lead": 15, "adr": 287.5, "rev": 575.0, "nts": 2, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 5}, {"lead": 3, "adr": 300.0, "rev": 600.0, "nts": 2, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 5}, {"lead": 10, "adr": 228.5, "rev": 457.0, "nts": 2, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 5}, {"lead": 23, "adr": 182.5, "rev": 365.0, "nts": 2, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 5}, {"lead": 3, "adr": 140.03, "rev": 280.06, "nts": 2, "cabin": "1: Dreamy Den", "chan": "VRBO", "m": 5}, {"lead": 4, "adr": 219.0, "rev": 876.0, "nts": 4, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 5}, {"lead": 11, "adr": 95.79, "rev": 191.58, "nts": 2, "cabin": "3: Winter Wonderland", "chan": "VRBO", "m": 5}, {"lead": 30, "adr": 225.33333333333334, "rev": 676.0, "nts": 3, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 5}, {"lead": 54, "adr": 255.5, "rev": 511.0, "nts": 2, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 5}, {"lead": 33, "adr": 196.035, "rev": 392.07, "nts": 2, "cabin": "8: Sunshine Loft", "chan": "VRBO", "m": 5}, {"lead": 25, "adr": 194.0, "rev": 388.0, "nts": 2, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 5}, {"lead": 24, "adr": 146.215, "rev": 292.43, "nts": 2, "cabin": "3: Winter Wonderland", "chan": "Airbnb", "m": 5}, {"lead": 17, "adr": 264.9433333333333, "rev": 794.83, "nts": 3, "cabin": "5: Secret Garden", "chan": "VRBO", "m": 5}, {"lead": 13, "adr": 230.03, "rev": 460.06, "nts": 2, "cabin": "4: Bubblegum Bungalow", "chan": "VRBO", "m": 5}, {"lead": 54, "adr": 139.0, "rev": 278.0, "nts": 2, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 5}, {"lead": 20, "adr": 140.0, "rev": 560.0, "nts": 4, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 5}, {"lead": 61, "adr": 237.5, "rev": 950.0, "nts": 4, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 6}, {"lead": 1, "adr": 158.35666666666665, "rev": 475.07, "nts": 3, "cabin": "2: Enchanted Forest", "chan": "VRBO", "m": 6}, {"lead": 91, "adr": 251.41, "rev": 754.23, "nts": 3, "cabin": "5: Secret Garden", "chan": "VRBO", "m": 6}, {"lead": 56, "adr": 171.53, "rev": 514.59, "nts": 3, "cabin": "3: Winter Wonderland", "chan": "VRBO", "m": 6}, {"lead": 40, "adr": 266.6666666666667, "rev": 800.0, "nts": 3, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 6}, {"lead": 4, "adr": 296.0, "rev": 888.0, "nts": 3, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 6}, {"lead": 3, "adr": 161.0, "rev": 161.0, "nts": 1, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 6}, {"lead": 2, "adr": 276.25, "rev": 552.5, "nts": 2, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 6}, {"lead": 57, "adr": 214.0, "rev": 856.0, "nts": 4, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 6}, {"lead": 5, "adr": 194.535, "rev": 389.07, "nts": 2, "cabin": "8: Sunshine Loft", "chan": "VRBO", "m": 6}, {"lead": 1, "adr": 256.07, "rev": 256.07, "nts": 1, "cabin": "4: Bubblegum Bungalow", "chan": "VRBO", "m": 6}, {"lead": 59, "adr": 224.5, "rev": 898.0, "nts": 4, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 6}, {"lead": 32, "adr": 269.6666666666667, "rev": 809.0, "nts": 3, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 6}, {"lead": 36, "adr": 229.25, "rev": 917.0, "nts": 4, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 6}, {"lead": 25, "adr": 270.3333333333333, "rev": 811.0, "nts": 3, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 6}, {"lead": 20, "adr": 150.0, "rev": 450.0, "nts": 3, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 6}, {"lead": 13, "adr": 153.69, "rev": 461.07, "nts": 3, "cabin": "7: Amber Glow", "chan": "VRBO", "m": 6}, {"lead": 2, "adr": 150.0, "rev": 450.0, "nts": 3, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 6}, {"lead": 11, "adr": 207.8, "rev": 1039.0, "nts": 5, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 6}, {"lead": 24, "adr": 235.35333333333332, "rev": 706.06, "nts": 3, "cabin": "4: Bubblegum Bungalow", "chan": "VRBO", "m": 6}, {"lead": 15, "adr": 184.0, "rev": 736.0, "nts": 4, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 6}, {"lead": 69, "adr": 1370.7066666666667, "rev": 4112.12, "nts": 3, "cabin": "Unassigned unit", "chan": "Jaqua (direct)", "m": 6}, {"lead": 10, "adr": 155.29, "rev": 310.58, "nts": 2, "cabin": "3: Winter Wonderland", "chan": "VRBO", "m": 6}, {"lead": 102, "adr": 199.6, "rev": 998.0, "nts": 5, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 6}, {"lead": 5, "adr": 225.6, "rev": 1128.0, "nts": 5, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 6}, {"lead": 59, "adr": 181.25, "rev": 725.0, "nts": 4, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 6}, {"lead": 28, "adr": 240.33333333333334, "rev": 721.0, "nts": 3, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 6}, {"lead": 2, "adr": 265.0, "rev": 530.0, "nts": 2, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 6}, {"lead": 63, "adr": 338.6666666666667, "rev": 1016.0, "nts": 3, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 6}, {"lead": 7, "adr": 259.0, "rev": 259.0, "nts": 1, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 6}, {"lead": 3, "adr": 150.0, "rev": 300.0, "nts": 2, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 6}, {"lead": 151, "adr": 329.25, "rev": 1317.0, "nts": 4, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 6}, {"lead": 109, "adr": 528.4, "rev": 2642.0, "nts": 5, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 6}, {"lead": 31, "adr": 288.6666666666667, "rev": 866.0, "nts": 3, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 6}, {"lead": 24, "adr": 305.535, "rev": 611.07, "nts": 2, "cabin": "8: Sunshine Loft", "chan": "VRBO", "m": 6}, {"lead": 285, "adr": 250.75, "rev": 1003.0, "nts": 4, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 6}, {"lead": 85, "adr": 270.75, "rev": 1083.0, "nts": 4, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 6}, {"lead": 68, "adr": 154.0, "rev": 462.0, "nts": 3, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 6}, {"lead": 48, "adr": 153.65, "rev": 614.6, "nts": 4, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 6}, {"lead": 38, "adr": 276.71, "rev": 1106.84, "nts": 4, "cabin": "5: Secret Garden", "chan": "VRBO", "m": 6}, {"lead": 28, "adr": 210.0, "rev": 630.0, "nts": 3, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 6}, {"lead": 18, "adr": 165.0, "rev": 495.0, "nts": 3, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 6}, {"lead": 367, "adr": 319.44444444444446, "rev": 11500.0, "nts": 4, "cabin": "Whole-resort buyout", "chan": "Jaqua (direct)", "m": 6}, {"lead": 57, "adr": 232.0, "rev": 696.0, "nts": 3, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 6}, {"lead": 47, "adr": 296.035, "rev": 592.07, "nts": 2, "cabin": "1: Dreamy Den", "chan": "VRBO", "m": 6}, {"lead": 34, "adr": 198.53, "rev": 397.06, "nts": 2, "cabin": "4: Bubblegum Bungalow", "chan": "VRBO", "m": 6}, {"lead": 23, "adr": 310.25, "rev": 1241.0, "nts": 4, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 6}, {"lead": 12, "adr": 156.0, "rev": 312.0, "nts": 2, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 6}, {"lead": 11, "adr": 250.0, "rev": 500.0, "nts": 2, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 6}, {"lead": 10, "adr": 233.905, "rev": 467.81, "nts": 2, "cabin": "2: Enchanted Forest", "chan": "VRBO", "m": 6}, {"lead": 0, "adr": 170.0, "rev": 340.0, "nts": 2, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 6}, {"lead": 351, "adr": 532.75, "rev": 2131.0, "nts": 4, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 7}, {"lead": 351, "adr": 652.5, "rev": 2610.0, "nts": 4, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 7}, {"lead": 351, "adr": 570.25, "rev": 2281.0, "nts": 4, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 7}, {"lead": 351, "adr": 626.5, "rev": 2506.0, "nts": 4, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 7}, {"lead": 351, "adr": 811.75, "rev": 3247.0, "nts": 4, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 7}, {"lead": 351, "adr": 717.75, "rev": 2871.0, "nts": 4, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 7}, {"lead": 28, "adr": 430.02, "rev": 1290.06, "nts": 3, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 7}, {"lead": 184, "adr": 353.75, "rev": 1415.0, "nts": 4, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 7}, {"lead": 84, "adr": 390.0, "rev": 1560.0, "nts": 4, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 7}, {"lead": 153, "adr": 380.25, "rev": 1521.0, "nts": 4, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 7}, {"lead": 358, "adr": 481.6, "rev": 2408.0, "nts": 5, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 7}, {"lead": 358, "adr": 397.0, "rev": 1985.0, "nts": 5, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 7}, {"lead": 67, "adr": 381.0, "rev": 1143.0, "nts": 3, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 7}, {"lead": 62, "adr": 415.0, "rev": 2075.0, "nts": 5, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 7}, {"lead": 185, "adr": 427.25, "rev": 1709.0, "nts": 4, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 7}, {"lead": 20, "adr": 300.0, "rev": 900.0, "nts": 3, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 7}, {"lead": 20, "adr": 250.0, "rev": 750.0, "nts": 3, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 7}, {"lead": 312, "adr": 506.25, "rev": 2025.0, "nts": 4, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 7}, {"lead": 0, "adr": 225.0, "rev": 225.0, "nts": 1, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 7}, {"lead": 227, "adr": 500.0, "rev": 1500.0, "nts": 3, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 7}, {"lead": 227, "adr": 470.6666666666667, "rev": 1412.0, "nts": 3, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 7}, {"lead": 227, "adr": 490.0, "rev": 1470.0, "nts": 3, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 7}, {"lead": 357, "adr": 554.25, "rev": 4434.0, "nts": 8, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 7}, {"lead": 357, "adr": 437.42857142857144, "rev": 3062.0, "nts": 7, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 7}, {"lead": 136, "adr": 406.6666666666667, "rev": 1220.0, "nts": 3, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 7}, {"lead": 136, "adr": 574.6666666666666, "rev": 1724.0, "nts": 3, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 7}, {"lead": 136, "adr": 419.0, "rev": 1257.0, "nts": 3, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 7}, {"lead": 61, "adr": 309.89285714285717, "rev": 2169.25, "nts": 7, "cabin": "1: Dreamy Den", "chan": "VRBO", "m": 7}, {"lead": 13, "adr": 300.0, "rev": 1200.0, "nts": 4, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 7}, {"lead": 11, "adr": 350.0, "rev": 1050.0, "nts": 3, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 7}, {"lead": 4, "adr": 161.07, "rev": 161.07, "nts": 1, "cabin": "8: Sunshine Loft", "chan": "VRBO", "m": 7}, {"lead": 91, "adr": 335.0, "rev": 1005.0, "nts": 3, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 7}, {"lead": 25, "adr": 449.0, "rev": 1347.0, "nts": 3, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 7}, {"lead": 14, "adr": 262.3333333333333, "rev": 787.0, "nts": 3, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 7}, {"lead": 19, "adr": 319.53, "rev": 639.06, "nts": 2, "cabin": "4: Bubblegum Bungalow", "chan": "VRBO", "m": 7}, {"lead": 129, "adr": 525.2, "rev": 2626.0, "nts": 5, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 7}, {"lead": 356, "adr": 333.0, "rev": 999.0, "nts": 3, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 7}, {"lead": 356, "adr": 466.3333333333333, "rev": 1399.0, "nts": 3, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 7}, {"lead": 356, "adr": 495.0, "rev": 1485.0, "nts": 3, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 7}, {"lead": 356, "adr": 360.3333333333333, "rev": 1081.0, "nts": 3, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 7}, {"lead": 356, "adr": 633.0, "rev": 1899.0, "nts": 3, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 7}, {"lead": 131, "adr": 487.6666666666667, "rev": 1463.0, "nts": 3, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 7}, {"lead": 8, "adr": 500.0, "rev": 1000.0, "nts": 2, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 7}, {"lead": 78, "adr": 259.2675, "rev": 1037.07, "nts": 4, "cabin": "8: Sunshine Loft", "chan": "VRBO", "m": 7}, {"lead": 38, "adr": 342.2675, "rev": 1369.07, "nts": 4, "cabin": "1: Dreamy Den", "chan": "VRBO", "m": 7}, {"lead": 16, "adr": 386.0, "rev": 386.0, "nts": 1, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 7}, {"lead": 5, "adr": 184.145, "rev": 736.58, "nts": 4, "cabin": "3: Winter Wonderland", "chan": "VRBO", "m": 7}, {"lead": 350, "adr": 368.0, "rev": 1472.0, "nts": 4, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 7}, {"lead": 350, "adr": 700.75, "rev": 2803.0, "nts": 4, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 7}, {"lead": 350, "adr": 351.75, "rev": 1407.0, "nts": 4, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 7}, {"lead": 350, "adr": 474.75, "rev": 1899.0, "nts": 4, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 7}, {"lead": 78, "adr": 407.3333333333333, "rev": 1222.0, "nts": 3, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 7}, {"lead": 62, "adr": 473.75, "rev": 1895.0, "nts": 4, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 7}, {"lead": 9, "adr": 236.07, "rev": 236.07, "nts": 1, "cabin": "8: Sunshine Loft", "chan": "VRBO", "m": 7}, {"lead": 175, "adr": 677.0, "rev": 1354.0, "nts": 2, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 7}, {"lead": 172, "adr": 539.5, "rev": 1079.0, "nts": 2, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 7}, {"lead": 169, "adr": 470.5, "rev": 941.0, "nts": 2, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 7}, {"lead": 169, "adr": 525.0, "rev": 1050.0, "nts": 2, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 7}, {"lead": 160, "adr": 429.2, "rev": 2146.0, "nts": 5, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 7}, {"lead": 135, "adr": 425.0, "rev": 2550.0, "nts": 6, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 7}, {"lead": 47, "adr": 479.4, "rev": 2397.0, "nts": 5, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 7}, {"lead": 38, "adr": 327.5266666666667, "rev": 982.58, "nts": 3, "cabin": "3: Winter Wonderland", "chan": "VRBO", "m": 7}, {"lead": 364, "adr": 514.0, "rev": 1542.0, "nts": 3, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 7}, {"lead": 363, "adr": 331.3333333333333, "rev": 994.0, "nts": 3, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 7}, {"lead": 362, "adr": 374.0, "rev": 1122.0, "nts": 3, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 7}, {"lead": 143, "adr": 321.8666666666667, "rev": 965.6, "nts": 3, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 7}, {"lead": 52, "adr": 293.265, "rev": 1173.06, "nts": 4, "cabin": "7: Amber Glow", "chan": "VRBO", "m": 7}, {"lead": 50, "adr": 250.145, "rev": 1000.58, "nts": 4, "cabin": "3: Winter Wonderland", "chan": "VRBO", "m": 7}, {"lead": 93, "adr": 392.46, "rev": 1569.84, "nts": 4, "cabin": "5: Secret Garden", "chan": "VRBO", "m": 7}, {"lead": 50, "adr": 512.0, "rev": 1024.0, "nts": 2, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 7}, {"lead": 16, "adr": 400.0, "rev": 800.0, "nts": 2, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 7}, {"lead": 9, "adr": 325.0, "rev": 325.0, "nts": 1, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 7}, {"lead": 408, "adr": 272.7, "rev": 1363.5, "nts": 5, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 7}, {"lead": 43, "adr": 387.6666666666667, "rev": 1163.0, "nts": 3, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 7}, {"lead": 2, "adr": 350.0, "rev": 350.0, "nts": 1, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 7}, {"lead": 409, "adr": 318.75, "rev": 1275.0, "nts": 4, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 7}, {"lead": 409, "adr": 389.3, "rev": 1557.2, "nts": 4, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 7}, {"lead": 409, "adr": 282.5, "rev": 1130.0, "nts": 4, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 7}, {"lead": 409, "adr": 553.0, "rev": 2212.0, "nts": 4, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 7}, {"lead": 409, "adr": 470.5, "rev": 1882.0, "nts": 4, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 7}, {"lead": 408, "adr": 303.5, "rev": 1214.0, "nts": 4, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 7}, {"lead": 91, "adr": 377.44, "rev": 1887.2, "nts": 5, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 8}, {"lead": 15, "adr": 334.5, "rev": 669.0, "nts": 2, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 8}, {"lead": 127, "adr": 463.6666666666667, "rev": 1391.0, "nts": 3, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 8}, {"lead": 127, "adr": 608.6666666666666, "rev": 1826.0, "nts": 3, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 8}, {"lead": 127, "adr": 395.6666666666667, "rev": 1187.0, "nts": 3, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 8}, {"lead": 127, "adr": 580.6666666666666, "rev": 1742.0, "nts": 3, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 8}, {"lead": 43, "adr": 334.75, "rev": 1339.0, "nts": 4, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 8}, {"lead": 38, "adr": 299.3333333333333, "rev": 898.0, "nts": 3, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 8}, {"lead": 11, "adr": 252.58, "rev": 252.58, "nts": 1, "cabin": "3: Winter Wonderland", "chan": "VRBO", "m": 8}, {"lead": 71, "adr": 426.2675, "rev": 1705.07, "nts": 4, "cabin": "4: Bubblegum Bungalow", "chan": "VRBO", "m": 8}, {"lead": 53, "adr": 359.25, "rev": 1437.0, "nts": 4, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 8}, {"lead": 173, "adr": 621.75, "rev": 2487.0, "nts": 4, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 8}, {"lead": 98, "adr": 592.5, "rev": 1185.0, "nts": 2, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 8}, {"lead": 97, "adr": 341.33, "rev": 2389.31, "nts": 7, "cabin": "2: Enchanted Forest", "chan": "VRBO", "m": 8}, {"lead": 74, "adr": 564.415, "rev": 1128.83, "nts": 2, "cabin": "5: Secret Garden", "chan": "VRBO", "m": 8}, {"lead": 67, "adr": 505.035, "rev": 1010.07, "nts": 2, "cabin": "8: Sunshine Loft", "chan": "VRBO", "m": 8}, {"lead": 28, "adr": 360.69, "rev": 1082.07, "nts": 3, "cabin": "1: Dreamy Den", "chan": "VRBO", "m": 8}, {"lead": 210, "adr": 237.75, "rev": 951.0, "nts": 4, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 8}, {"lead": 210, "adr": 488.85714285714283, "rev": 3422.0, "nts": 7, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 8}, {"lead": 123, "adr": 371.8333333333333, "rev": 2231.0, "nts": 6, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 8}, {"lead": 111, "adr": 310.5, "rev": 1242.0, "nts": 4, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 8}, {"lead": 331, "adr": 313.2857142857143, "rev": 2193.0, "nts": 7, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 8}, {"lead": 235, "adr": 275.0, "rev": 2200.0, "nts": 8, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 8}, {"lead": 73, "adr": 247.5, "rev": 990.0, "nts": 4, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 8}, {"lead": 162, "adr": 579.0, "rev": 2895.0, "nts": 5, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 8}, {"lead": 60, "adr": 330.69, "rev": 992.07, "nts": 3, "cabin": "7: Amber Glow", "chan": "VRBO", "m": 8}, {"lead": 32, "adr": 402.0, "rev": 1206.0, "nts": 3, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 8}, {"lead": 76, "adr": 455.5, "rev": 911.0, "nts": 2, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 8}, {"lead": 61, "adr": 288.5, "rev": 577.0, "nts": 2, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 8}, {"lead": 254, "adr": 213.85, "rev": 855.4, "nts": 4, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 8}, {"lead": 254, "adr": 219.0, "rev": 876.0, "nts": 4, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 8}, {"lead": 254, "adr": 197.0, "rev": 788.0, "nts": 4, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 8}, {"lead": 254, "adr": 254.5, "rev": 1018.0, "nts": 4, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 8}, {"lead": 118, "adr": 215.66666666666666, "rev": 1294.0, "nts": 6, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 8}, {"lead": 56, "adr": 411.0, "rev": 1644.0, "nts": 4, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 8}, {"lead": 120, "adr": 420.14000000000004, "rev": 2520.84, "nts": 6, "cabin": "9: Captain's Lodge", "chan": "VRBO", "m": 8}, {"lead": 97, "adr": 376.75, "rev": 1507.0, "nts": 4, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 8}, {"lead": 118, "adr": 493.8, "rev": 2469.0, "nts": 5, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 8}, {"lead": 107, "adr": 435.0, "rev": 1305.0, "nts": 3, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 8}, {"lead": 45, "adr": 444.6666666666667, "rev": 1334.0, "nts": 3, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 8}, {"lead": 32, "adr": 295.3333333333333, "rev": 886.0, "nts": 3, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 8}, {"lead": 19, "adr": 285.6666666666667, "rev": 857.0, "nts": 3, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 8}, {"lead": 157, "adr": 313.6666666666667, "rev": 1882.0, "nts": 6, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 8}, {"lead": 135, "adr": 169.145, "rev": 676.58, "nts": 4, "cabin": "3: Winter Wonderland", "chan": "VRBO", "m": 8}, {"lead": 40, "adr": 368.8, "rev": 1844.0, "nts": 5, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 8}, {"lead": 21, "adr": 250.0, "rev": 750.0, "nts": 3, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 8}, {"lead": 115, "adr": 284.25, "rev": 1137.0, "nts": 4, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 8}, {"lead": 115, "adr": 195.5, "rev": 782.0, "nts": 4, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 8}, {"lead": 62, "adr": 227.33333333333334, "rev": 682.0, "nts": 3, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 8}, {"lead": 223, "adr": 293.6666666666667, "rev": 881.0, "nts": 3, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 8}, {"lead": 130, "adr": 252.33333333333334, "rev": 757.0, "nts": 3, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 8}, {"lead": 78, "adr": 198.71428571428572, "rev": 1391.0, "nts": 7, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 8}, {"lead": 71, "adr": 271.69, "rev": 815.07, "nts": 3, "cabin": "8: Sunshine Loft", "chan": "VRBO", "m": 8}, {"lead": 63, "adr": 359.3333333333333, "rev": 1078.0, "nts": 3, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 8}, {"lead": 108, "adr": 270.3333333333333, "rev": 811.0, "nts": 3, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 8}, {"lead": 65, "adr": 472.6666666666667, "rev": 1418.0, "nts": 3, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 8}, {"lead": 33, "adr": 369.3333333333333, "rev": 1108.0, "nts": 3, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 8}, {"lead": 63, "adr": 248.5, "rev": 994.0, "nts": 4, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 8}, {"lead": 63, "adr": 160.0, "rev": 640.0, "nts": 4, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 8}, {"lead": 63, "adr": 286.0, "rev": 1144.0, "nts": 4, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 8}, {"lead": 63, "adr": 165.5, "rev": 662.0, "nts": 4, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 8}, {"lead": 54, "adr": 224.0, "rev": 448.0, "nts": 2, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 9}, {"lead": 62, "adr": 168.5, "rev": 337.0, "nts": 2, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 9}, {"lead": 368, "adr": 281.48148148148147, "rev": 7600.0, "nts": 3, "cabin": "Whole-resort buyout", "chan": "Jaqua (direct)", "m": 9}, {"lead": 117, "adr": 170.0, "rev": 170.0, "nts": 1, "cabin": "1: Dreamy Den", "chan": "Jaqua (direct)", "m": 9}, {"lead": 117, "adr": 193.0, "rev": 193.0, "nts": 1, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 9}, {"lead": 117, "adr": 233.0, "rev": 233.0, "nts": 1, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 9}, {"lead": 346, "adr": 262.962962962963, "rev": 7100.0, "nts": 3, "cabin": "Whole-resort buyout", "chan": "Jaqua (direct)", "m": 9}, {"lead": 96, "adr": 308.0, "rev": 308.0, "nts": 1, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 9}, {"lead": 212, "adr": 251.0, "rev": 502.0, "nts": 2, "cabin": "2: Enchanted Forest", "chan": "Jaqua (direct)", "m": 9}, {"lead": 212, "adr": 349.0, "rev": 698.0, "nts": 2, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 9}, {"lead": 212, "adr": 309.5, "rev": 619.0, "nts": 2, "cabin": "9: Captain's Lodge", "chan": "Jaqua (direct)", "m": 9}, {"lead": 212, "adr": 196.5, "rev": 393.0, "nts": 2, "cabin": "7: Amber Glow", "chan": "Jaqua (direct)", "m": 9}, {"lead": 211, "adr": 181.0, "rev": 362.0, "nts": 2, "cabin": "8: Sunshine Loft", "chan": "Jaqua (direct)", "m": 9}, {"lead": 200, "adr": 253.5, "rev": 507.0, "nts": 2, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 9}, {"lead": 193, "adr": 192.5, "rev": 385.0, "nts": 2, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 9}, {"lead": 189, "adr": 400.5, "rev": 801.0, "nts": 2, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 9}, {"lead": 64, "adr": 243.5, "rev": 974.0, "nts": 4, "cabin": "5: Secret Garden", "chan": "Jaqua (direct)", "m": 9}, {"lead": 116, "adr": 211.612, "rev": 1058.06, "nts": 5, "cabin": "1: Dreamy Den", "chan": "VRBO", "m": 9}, {"lead": 90, "adr": 314.0, "rev": 942.0, "nts": 3, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 10}, {"lead": 79, "adr": 305.3333333333333, "rev": 916.0, "nts": 3, "cabin": "4: Bubblegum Bungalow", "chan": "Jaqua (direct)", "m": 10}, {"lead": 163, "adr": 230.35333333333332, "rev": 691.06, "nts": 3, "cabin": "8: Sunshine Loft", "chan": "VRBO", "m": 10}, {"lead": 77, "adr": 553.5, "rev": 1107.0, "nts": 2, "cabin": "6: Sled Loft", "chan": "Jaqua (direct)", "m": 10}, {"lead": 373, "adr": 216.55555555555554, "rev": 3898.0, "nts": 2, "cabin": "Whole-resort buyout", "chan": "Jaqua (direct)", "m": 10}, {"lead": 202, "adr": 112.5, "rev": 225.0, "nts": 2, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 10}, {"lead": 97, "adr": 247.766, "rev": 1238.83, "nts": 5, "cabin": "5: Secret Garden", "chan": "VRBO", "m": 11}, {"lead": 127, "adr": 171.5, "rev": 343.0, "nts": 2, "cabin": "3: Winter Wonderland", "chan": "Jaqua (direct)", "m": 11}]};
+/* ============ Dollybrook dashboard — chart toolkit (vanilla SVG) ============ */
+const NS='http://www.w3.org/2000/svg';
+const $=(s,r)=>(r||document).querySelector(s);
+const CSSV=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+/* ---------- formatting ---------- */
+const fUSD =v=>'$'+Math.round(v).toLocaleString('en-US');
+const fUSD2=v=>'$'+v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fK   =v=>v>=1000000?'$'+(v/1e6).toFixed(2)+'M':v>=1000?'$'+(v/1000).toFixed(v>=10000?0:1)+'K':'$'+Math.round(v);
+const fN   =v=>Math.round(v).toLocaleString('en-US');
+const fN1  =v=>v.toFixed(1);
+const fPct =(v,d)=>(v*100).toFixed(d===undefined?0:d)+'%';
+
+/* ---------- svg helpers ---------- */
+function cw_(host){ const w=host.clientWidth||host.parentElement&&host.parentElement.clientWidth||720; return Math.max(300,Math.round(w)); }
+function el(tag,attrs,parent){
+  const n=document.createElementNS(NS,tag);
+  for(const k in attrs){ if(attrs[k]!==null&&attrs[k]!==undefined) n.setAttribute(k,attrs[k]); }
+  if(parent) parent.appendChild(n);
+  return n;
+}
+function svg(host,w,h){
+  host.innerHTML='';
+  const s=el('svg',{viewBox:`0 0 ${w} ${h}`,preserveAspectRatio:'xMidYMid meet',role:'img'},host);
+  return s;
+}
+/* rounded data-end bar: dir = 'up' | 'right' */
+function barPath(x,y,w,h,r,dir){
+  r=Math.max(0,Math.min(r, dir==='up'? Math.min(w/2,h) : Math.min(h/2,w)));
+  if(h<=0||w<=0) return '';
+  if(dir==='up')
+    return `M${x},${y+h} L${x},${y+r} Q${x},${y} ${x+r},${y} L${x+w-r},${y} Q${x+w},${y} ${x+w},${y+r} L${x+w},${y+h} Z`;
+  return `M${x},${y} L${x+w-r},${y} Q${x+w},${y} ${x+w},${y+r} L${x+w},${y+h-r} Q${x+w},${y+h} ${x+w-r},${y+h} L${x},${y+h} Z`;
+}
+function scaleFor(v,cands){
+  if(!(v>0)) return {max:1,n:1};
+  let best=null;
+  (cands||[4,5,6]).forEach(n=>{
+    const raw=v/n, mag=Math.pow(10,Math.floor(Math.log10(raw))), norm=raw/mag;
+    const step=(norm<=1?1:norm<=2?2:norm<=2.5?2.5:norm<=5?5:10)*mag;
+    const c=Math.ceil(v/step-1e-9), m=step*c;
+    if(c>=2&&c<=8&&(!best||m<best.max)) best={max:m,n:c};
+  });
+  return best||{max:v,n:4};
+}
+function niceMax(v,n){ return scaleFor(v).max; }
+function ticks(max,n){ const o=[]; for(let i=0;i<=n;i++) o.push(max*i/n); return o; }
+
+/* ---------- tooltip ---------- */
+const tip=document.getElementById('tip');
+function tipShow(e,title,rows,accent){
+  tip.innerHTML='<div class="tt">'+(accent?`<span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${accent};margin-right:6px"></span>`:'')+title+'</div>'+
+    rows.map(r=>`<div class="tr"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('');
+  tip.style.opacity=1; tipMove(e);
+}
+function tipMove(e){
+  const pad=14, w=tip.offsetWidth, h=tip.offsetHeight;
+  let x=e.clientX+pad, y=e.clientY+pad;
+  if(x+w>innerWidth-8) x=e.clientX-w-pad;
+  if(y+h>innerHeight-8) y=e.clientY-h-pad;
+  tip.style.left=x+'px'; tip.style.top=Math.max(8,y)+'px';
+}
+function tipHide(){ tip.style.opacity=0; }
+function bindTip(node,title,rows,accent){
+  node.addEventListener('mouseenter',e=>tipShow(e,title,rows(),accent));
+  node.addEventListener('mousemove',tipMove);
+  node.addEventListener('mouseleave',tipHide);
+  node.setAttribute('tabindex','0');
+  node.addEventListener('focus',e=>{
+    const r=node.getBoundingClientRect();
+    tipShow({clientX:r.left+r.width/2,clientY:r.top},title,rows(),accent);
+  });
+  node.addEventListener('blur',tipHide);
+}
+
+/* ============ COLUMN CHART (vertical, 1..n series grouped) ============ */
+function colChart(host,o){
+  const W=cw_(host), PL=o.padL||52, PR=o.padR||10, PT=o.padT||16, PB=o.padB||(o.rot?46:30);
+  const H=o.h||250, IW=W-PL-PR, IH=H-PT-PB;
+  const s=svg(host,W,H);
+  const series=o.series, cats=o.cats;
+  const SC=o.max?{max:o.max,n:o.maxN||4}:scaleFor(Math.max(...series.flatMap(se=>se.v)));
+  const maxV=SC.max;
+  const y=v=>PT+IH-(v/maxV)*IH;
+  ticks(maxV,SC.n).forEach(t=>{
+    el('line',{x1:PL,x2:W-PR,y1:y(t),y2:y(t),class:t===0?'ax':'gl'},s);
+    el('text',{x:PL-8,y:y(t)+4,'text-anchor':'end',class:'tick'},s).textContent=(o.fmtAxis||fN)(t);
+  });
+  const band=IW/cats.length, ns=series.length;
+  const gap=2, maxBW=o.maxBW||24;
+  let bw=Math.min(maxBW,(band*0.68-(ns-1)*gap)/ns);
+  const groupW=bw*ns+gap*(ns-1);
+  cats.forEach((c,i)=>{
+    const gx=PL+band*i+(band-groupW)/2;
+    series.forEach((se,j)=>{
+      const v=se.v[i]||0, bx=gx+j*(bw+gap), bh=Math.max(0,(v/maxV)*IH);
+      if(bh>0) el('path',{d:barPath(bx,y(v),bw,bh,4,'up'),fill:se.color},s);
+      const hit=el('rect',{x:bx-2,y:PT,width:bw+4,height:IH,class:'hit'},s);
+      bindTip(hit, (o.catLabel?o.catLabel(c,i):c),
+        ()=> series.map(x=>[x.name,(o.fmt||fN)(x.v[i]||0)]).concat(o.extra?o.extra(i):[]), se.color);
+    });
+    const tx=PL+band*i+band/2;
+    if(o.rot) el('text',{x:tx,y:PT+IH+14,'text-anchor':'end',class:'cat',transform:`rotate(-40 ${tx} ${PT+IH+14})`},s).textContent=c;
+    else el('text',{x:tx,y:PT+IH+16,'text-anchor':'middle',class:'cat'},s).textContent=c;
+  });
+  if(o.label) cats.forEach((c,i)=>{
+    const se=series[0], v=se.v[i]||0;
+    if(!o.label(v,i)) return;
+    const gx=PL+band*i+(band-groupW)/2;
+    el('text',{x:gx+groupW/2,y:y(Math.max(...series.map(x=>x.v[i]||0)))-7,'text-anchor':'middle',class:'dl'},s)
+      .textContent=o.label(v,i);
+  });
+  if(o.ref!==undefined&&o.ref<=maxV){
+    el('line',{x1:PL,x2:W-PR,y1:y(o.ref),y2:y(o.ref),stroke:CSSV('--critical'),'stroke-width':1.5,'stroke-dasharray':'0'},s);
+    el('text',{x:W-PR,y:y(o.ref)-6,'text-anchor':'end',class:'dl2',fill:CSSV('--critical')},s).textContent=o.refLabel||'';
+  }
+  if(o.axisLabel) el('text',{x:PL-8,y:PT-4,'text-anchor':'end',class:'tick'},s).textContent=o.axisLabel;
+  return s;
+}
+
+/* ============ HORIZONTAL BAR (single or stacked) ============ */
+function barChart(host,o){
+  const W=cw_(host), PL=o.padL||150, PR=o.padR||70, PT=8, PB=o.axis?26:6;
+  const rowH=o.rowH||30, H=PT+PB+o.rows.length*rowH;
+  const IW=W-PL-PR, IH=o.rows.length*rowH;
+  const s=svg(host,W,H);
+  const tot=r=>r.segs.reduce((a,b)=>a+b.v,0);
+  const SC=o.max?{max:o.max,n:o.maxN||4}:scaleFor(Math.max(...o.rows.map(tot)));
+  const maxV=SC.max;
+  const x=v=>(v/maxV)*IW;
+  if(o.axis) ticks(maxV,SC.n).forEach(t=>{
+    el('line',{x1:PL+x(t),x2:PL+x(t),y1:PT,y2:PT+IH,class:t===0?'ax':'gl'},s);
+    el('text',{x:PL+x(t),y:PT+IH+16,'text-anchor':'middle',class:'tick'},s).textContent=(o.fmtAxis||fN)(t);
+  });
+  else el('line',{x1:PL,x2:PL,y1:PT,y2:PT+IH,class:'ax'},s);
+  const bh=Math.min(22,rowH-9);
+  o.rows.forEach((r,i)=>{
+    const yy=PT+i*rowH+(rowH-bh)/2;
+    let cx=PL;
+    r.segs.forEach((sg,k)=>{
+      const w=x(sg.v); if(w<=0) return;
+      const last=k===r.segs.length-1;
+      const gapw = k>0?2:0;
+      const p=barPath(cx+gapw,yy,Math.max(0,w-gapw),bh,last?4:0,'right');
+      const node=el('path',{d:p,fill:sg.color},s);
+      bindTip(node,r.label,()=>r.tip||[[sg.name,(o.fmt||fN)(sg.v)]],sg.color);
+      cx+=w;
+    });
+    const hit=el('rect',{x:PL,y:PT+i*rowH,width:IW,height:rowH,class:'hit'},s);
+    bindTip(hit,r.label,()=>r.tip||r.segs.map(sg=>[sg.name,(o.fmt||fN)(sg.v)]),r.segs[0].color);
+    el('text',{x:PL-10,y:PT+i*rowH+rowH/2+4,'text-anchor':'end',class:'cat',fill:CSSV('--text-primary')},s).textContent=r.label;
+    if(r.sub) el('text',{x:PL-10,y:PT+i*rowH+rowH/2+15,'text-anchor':'end',class:'dl2'},s).textContent=r.sub;
+    el('text',{x:PL+x(tot(r))+8,y:PT+i*rowH+rowH/2+4,class:'dl'},s).textContent=r.value!==undefined?r.value:(o.fmt||fN)(tot(r));
+  });
+  return s;
+}
+
+/* ============ LINE CHART ============ */
+function lineChart(host,o){
+  const W=cw_(host), PL=o.padL||52, PR=o.padR||(o.endLabels?66:14), PT=16, PB=30;
+  const H=o.h||240, IW=W-PL-PR, IH=H-PT-PB;
+  const s=svg(host,W,H);
+  const cats=o.cats, series=o.series;
+  const allv=series.flatMap(se=>se.v.filter(v=>v!==null));
+  const maxV=o.max||niceMax(Math.max(...allv),4);
+  const minV=o.min||0;
+  const y=v=>PT+IH-((v-minV)/(maxV-minV))*IH;
+  const xs=i=>PL+(cats.length===1?IW/2:IW*i/(cats.length-1));
+  ticks(maxV-minV,4).forEach(t=>{
+    const v=minV+t;
+    el('line',{x1:PL,x2:W-PR,y1:y(v),y2:y(v),class:v===minV?'ax':'gl'},s);
+    el('text',{x:PL-8,y:y(v)+4,'text-anchor':'end',class:'tick'},s).textContent=(o.fmtAxis||fN)(v);
+  });
+  cats.forEach((c,i)=> el('text',{x:xs(i),y:PT+IH+17,'text-anchor':'middle',class:'cat'},s).textContent=c);
+  series.forEach(se=>{
+    let d='',open=false;
+    se.v.forEach((v,i)=>{ if(v===null){open=false;return;} d+=(open?'L':'M')+xs(i)+','+y(v); open=true; });
+    if(se.area){
+      const first=se.v.findIndex(v=>v!==null), last=se.v.length-1-[...se.v].reverse().findIndex(v=>v!==null);
+      el('path',{d:d+`L${xs(last)},${y(minV)} L${xs(first)},${y(minV)} Z`,fill:se.color,opacity:.10},s);
+    }
+    el('path',{d,fill:'none',stroke:se.color,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'},s);
+  });
+  series.forEach(se=>{
+    if(!o.nodots) se.v.forEach((v,i)=>{ if(v===null)return;
+      el('circle',{cx:xs(i),cy:y(v),r:4,fill:se.color,stroke:CSSV('--surface-1'),'stroke-width':2},s); });
+    if(o.endLabels){
+      const last=se.v.length-1-[...se.v].reverse().findIndex(v=>v!==null);
+      if(last>=0&&se.v[last]!==null)
+        el('text',{x:xs(last)+9,y:y(se.v[last])+4,class:'dl',fill:CSSV('--text-primary')},s).textContent=(o.fmt||fN)(se.v[last]);
+    }
+  });
+  const band=IW/Math.max(1,cats.length-1);
+  cats.forEach((c,i)=>{
+    const hit=el('rect',{x:xs(i)-band/2,y:PT,width:band,height:IH,class:'hit'},s);
+    hit.addEventListener('mouseenter',()=>{ cross.setAttribute('opacity',1); cross.setAttribute('x1',xs(i)); cross.setAttribute('x2',xs(i)); });
+    hit.addEventListener('mouseleave',()=>cross.setAttribute('opacity',0));
+    bindTip(hit,(o.catLabel?o.catLabel(c,i):c),
+      ()=>series.filter(se=>se.v[i]!==null).map(se=>[se.name,(o.fmt||fN)(se.v[i])]).concat(o.extra?o.extra(i):[]));
+  });
+  const cross=el('line',{y1:PT,y2:PT+IH,stroke:CSSV('--axis'),'stroke-width':1,opacity:0},s);
+  return s;
+}
+
+/* ============ HEATMAP ============ */
+const RAMP=['--seq100','--seq150','--seq200','--seq250','--seq300','--seq350','--seq400','--seq450','--seq500','--seq550','--seq600','--seq650','--seq700'];
+function rampColor(t){ // t 0..1
+  if(!(t>0)) return CSSV('--page');
+  const i=Math.min(RAMP.length-1,Math.max(0,Math.round(t*(RAMP.length-1))));
+  return CSSV(RAMP[i]);
+}
+function lum(hex){
+  const m=String(hex).trim().match(/^#?([0-9a-f]{6})$/i); if(!m) return 1;
+  const n=parseInt(m[1],16), c=[(n>>16)&255,(n>>8)&255,n&255].map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4);});
+  return .2126*c[0]+.7152*c[1]+.0722*c[2];
+}
+function inkOn(fill){ return lum(fill)>0.34?'#0b0b0b':'#ffffff'; }
+function heatmap(host,o){
+  const cw=o.cw||46, chh=o.chh||30, PL=o.padL||142, PT=26, PR=o.padR||62;
+  const cols=o.cols, rows=o.rows;
+  const W=PL+cols.length*cw+PR, H=PT+rows.length*chh+6;
+  const s=svg(host,W,H);
+  s.setAttribute('style','min-width:'+Math.min(760,W)+'px');
+  const max=o.max||Math.max(...rows.flatMap(r=>r.v));
+  cols.forEach((c,j)=> el('text',{x:PL+j*cw+cw/2,y:PT-9,'text-anchor':'middle',class:'cat'},s).textContent=c);
+  rows.forEach((r,i)=>{
+    el('text',{x:PL-10,y:PT+i*chh+chh/2+4,'text-anchor':'end',class:'cat',fill:CSSV('--text-primary')},s).textContent=r.label;
+    if(r.sub) el('text',{x:PL-10,y:PT+i*chh+chh/2+15,'text-anchor':'end',class:'dl2'},s).textContent=r.sub;
+    let tot=0;
+    r.v.forEach((v,j)=>{
+      tot+=v;
+      const t=max?v/max:0, fc=v>0?rampColor(t):null;
+      const cell=el('rect',{x:PL+j*cw+1,y:PT+i*chh+1,width:cw-2,height:chh-2,rx:4,
+        fill:fc||'none',stroke:v>0?'none':CSSV('--grid'),'stroke-width':1},s);
+      bindTip(cell,r.label+' · '+cols[j],()=>o.tip(r,j),fc);
+      if(o.cellText&&v>0){
+        const tx=o.cellText(v);
+        if(tx) el('text',{x:PL+j*cw+cw/2,y:PT+i*chh+chh/2+4,'text-anchor':'middle',
+          style:'font-size:10.5px;font-weight:600;font-variant-numeric:tabular-nums',fill:inkOn(fc)},s).textContent=tx;
+      }
+    });
+    el('text',{x:PL+cols.length*cw+10,y:PT+i*chh+chh/2+4,class:'dl'},s).textContent=(o.rowTotal||fN)(tot,r);
+  });
+  return s;
+}
+
+/* ============ CALENDAR (day cells) ============ */
+function calendar(host,o){
+  const cell=13, gap=2.4, PL=34, PT=18, mgap=10;
+  const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const days=['M','','W','','F','',''];
+  // build week columns per month
+  let x=PL, cols=[];
+  const map={}; o.data.forEach(d=>map[d.d]=d);
+  const monthX=[];
+  for(let m=0;m<12;m++){
+    const start=new Date(Date.UTC(2026,m,1)), dim=new Date(Date.UTC(2026,m+1,0)).getUTCDate();
+    monthX.push(x);
+    let col=[],wd0=(start.getUTCDay()+6)%7;
+    let cx=x, filled=wd0;
+    for(let d=1;d<=dim;d++){
+      const dt=new Date(Date.UTC(2026,m,d));
+      const wd=(dt.getUTCDay()+6)%7;
+      cols.push({x:cx,y:PT+wd*(cell+gap),date:dt,key:dt.toISOString().slice(0,10)});
+      if(wd===6) cx+=cell+gap;
+    }
+    x=cx+(cell+gap)+mgap;
+  }
+  const W=x+8, H=PT+7*(cell+gap)+8;
+  const s=svg(host,W,H);
+  s.setAttribute('style','min-width:'+Math.min(900,W)+'px');
+  MON.forEach((m,i)=> el('text',{x:monthX[i],y:PT-7,class:'cat'},s).textContent=m);
+  days.forEach((d,i)=>{ if(d) el('text',{x:PL-8,y:PT+i*(cell+gap)+cell-2,'text-anchor':'end',class:'tick'},s).textContent=d; });
+  cols.forEach(c=>{
+    const rec=map[c.key], v=rec?rec.rn:0, t=v/9;
+    const r=el('rect',{x:c.x,y:c.y,width:cell,height:cell,rx:3,
+      fill:v>0?rampColor(t):'none',stroke:v>0?'none':CSSV('--grid'),'stroke-width':1},s);
+    const hit=el('rect',{x:c.x-1,y:c.y-1,width:cell+2,height:cell+2,class:'hit'},s);
+    bindTip(hit,c.date.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',timeZone:'UTC'}),
+      ()=>[['Cabins occupied',v+' of 9'],['Occupancy',fPct(t)],['Room revenue',fUSD(rec?rec.rev:0)]],
+      v>0?rampColor(t):null);
+  });
+  return s;
+}
+
+/* ============ SCATTER ============ */
+function scatter(host,o){
+  const W=cw_(host),PL=o.padL||54,PR=16,PT=16,PB=40,H=o.h||300,IW=W-PL-PR,IH=H-PT-PB;
+  const s=svg(host,W,H);
+  const SCX=o.xmax?{max:o.xmax,n:o.xticks||5}:scaleFor(Math.max(...o.pts.map(p=>p.x)));
+  const SCY=o.ymax?{max:o.ymax,n:o.yticks||4}:scaleFor(Math.max(...o.pts.map(p=>p.y)));
+  const xmax=SCX.max, ymax=SCY.max;
+  const X=v=>PL+(v/xmax)*IW, Y=v=>PT+IH-(v/ymax)*IH;
+  ticks(ymax,SCY.n).forEach(t=>{
+    el('line',{x1:PL,x2:W-PR,y1:Y(t),y2:Y(t),class:t===0?'ax':'gl'},s);
+    el('text',{x:PL-8,y:Y(t)+4,'text-anchor':'end',class:'tick'},s).textContent=(o.fmtY||fN)(t);
+  });
+  ticks(xmax,SCX.n).forEach(t=>{
+    el('text',{x:X(t),y:PT+IH+17,'text-anchor':'middle',class:'tick'},s).textContent=(o.fmtX||fN)(t);
+  });
+  el('text',{x:PL+IW/2,y:H-4,'text-anchor':'middle',class:'cat'},s).textContent=o.xLabel;
+  if(o.trend){
+    el('path',{d:o.trend.map((p,i)=>(i?'L':'M')+X(p[0])+','+Y(p[1])).join(''),fill:'none',
+      stroke:CSSV('--text-secondary'),'stroke-width':2,'stroke-linecap':'round',opacity:.75},s);
+  }
+  o.pts.forEach(p=>{
+    const r=p.r||4.5;
+    const c=el('circle',{cx:X(Math.min(p.x,xmax)),cy:Y(Math.min(p.y,ymax)),r,fill:p.color,
+      stroke:CSSV('--surface-1'),'stroke-width':2,opacity:p.op||.82},s);
+    const hit=el('circle',{cx:X(Math.min(p.x,xmax)),cy:Y(Math.min(p.y,ymax)),r:Math.max(11,r+5),class:'hit'},s);
+    bindTip(hit,p.t,()=>p.rows,p.color);
+  });
+  return s;
+}
+
+/* ============ table view toggle ============ */
+function tableView(id){ const t=document.getElementById(id); if(t) t.classList.toggle('on'); }
+function mkTable(host,head,rows,foot){
+  let h='<table><thead><tr>'+head.map(x=>`<th>${x}</th>`).join('')+'</tr></thead><tbody>'+
+    rows.map(r=>'<tr>'+r.map(c=>`<td>${c}</td>`).join('')+'</tr>').join('')+'</tbody>';
+  if(foot) h+='<tfoot><tr>'+foot.map(c=>`<td>${c}</td>`).join('')+'</tr></tfoot>';
+  host.innerHTML=h+'</table>';
+}
+
+/* ===================== RENDER ===================== */
+const K=D.kpi, M=D.monthly, MT=D.monthly_true, C=D.cabins, Q=D.quality;
+const MON=M.map(r=>r.m);
+const S1=()=>CSSV('--s1'), S2=()=>CSSV('--s2'), S3=()=>CSSV('--s3'), S4=()=>CSSV('--s4');
+const MUT=()=>CSSV('--muted');
+const AVAIL=9*365, BEDNIGHTS=46*365;
+
+function legend(id,items){
+  const h=document.getElementById(id); if(!h)return;
+  h.innerHTML=items.map(i=>`<span><i class="${i.line?'ln':''}" style="background:${i.c}"></i>${i.n}</span>`).join('');
+}
+function key(items){ return items.map(i=>`<span><span class="dot" style="background:${i.c}"></span>${i.n}</span>`).join(''); }
+
+/* ---------- hero + tiles ---------- */
+function renderHero(){
+  $('#heroFig').textContent=fUSD(K.revenue);
+  const y25=M.reduce((a,r)=>a+r.rev2025,0);
+  const yoy=(K.revenue-y25)/y25;
+  $('#heroNote').innerHTML=`across <b>${K.bookings}</b> reservations and <b>${fN(K.roomnights)}</b> cabin-nights &nbsp;·&nbsp; `+
+    `<span style="color:var(--up);font-weight:640;white-space:nowrap">▲ ${fPct(yoy)} vs ${fUSD(y25)} in 2025</span>`;
+  $('#yoyTxt').textContent=fUSD(K.revenue-y25)+' ('+fPct(yoy)+')';
+  const parts=[{n:'Stayed / in house',v:K.realized_rev,c:S1()},{n:'Still on the books',v:K.onbooks_rev,c:S2()}];
+  $('#heroSplit').innerHTML=parts.map(p=>`<i style="flex:${p.v};background:${p.c}"></i>`).join('');
+  $('#heroKey').innerHTML=key(parts.map(p=>({n:`${p.n} - ${fUSD(p.v)} (${fPct(p.v/K.revenue)})`,c:p.c})));
+  $('#heroNote2').innerHTML=
+    `Of the ${fN(K.roomnights)} cabin-nights sold, <b>${fPct(K.occupancy,1)}</b> of the 3,285 available were filled, at an average of `+
+    `<b>${fUSD(K.adr)}</b> a night. Peak season (Jun-Aug) is <b>${fPct(M.slice(5,8).reduce((a,r)=>a+r.rev,0)/K.revenue)}</b> of the year's revenue in <b>25%</b> of the calendar.`;
+
+  const jul=M[6];
+  const n25=M.reduce((a,r)=>a+(r.adr2025?r.rev2025/r.adr2025:0),0);
+  const adr25=y25/n25, occ25=n25/AVAIL, revpar25=y25/AVAIL;
+  const dl=(a,b)=>{const d=(a-b)/b; return `<span class="${d>=0?'up':'dn'}">${d>=0?'▲':'▼'} ${fPct(Math.abs(d))}</span>`;};
+  const tiles=[
+    {l:'ADR · average nightly rate',v:fUSD(K.adr),d:`${dl(K.adr,adr25)} vs ${fUSD(adr25)} in 2025`},
+    {l:'Occupancy · cabin-nights sold',v:fPct(K.occupancy,1),d:`${dl(K.occupancy,occ25)} vs ${fPct(occ25,1)} in 2025`},
+    {l:'RevPAR · per available cabin-night',v:fUSD2(K.revpar),d:`${dl(K.revpar,revpar25)} vs ${fUSD2(revpar25)} in 2025`},
+    {l:'RevPAB · per available bed-night',v:fUSD2(K.revpab),d:'46 beds × 365 nights'},
+    {l:'Reservations',v:fN(K.bookings),d:`average value ${fUSD(K.avg_booking_value)}`},
+    {l:'Guests hosted / booked',v:fN(K.guests_total),d:`${fN(K.guest_nights)} guest-nights`},
+    {l:'Median lead time',v:Math.round(K.median_lead)+' days',d:`mean ${Math.round(K.avg_lead)} d, a long tail`},
+    {l:'Average length of stay',v:fN1(K.avg_los)+' nights',d:'median 3 nights'},
+    {l:'Repeat-guest share of bookings',v:fPct(K.repeat_share),d:`${fPct(D.repeat.find(r=>r.k==='Repeat').rev/K.revenue)} of revenue`},
+    {l:'Beds filled when a cabin sells',v:fPct(K.bed_fill_when_sold),d:`${fN(K.bed_nights_sold-K.guest_nights)} bed-nights sold empty`},
+    {l:'July revenue',v:fK(jul.rev),d:`${fPct(jul.rev/K.revenue)} of the year · ${fPct(MT[6].occ)} occupied`},
+    {l:'Balance still due',v:fUSD(K.bal_due),d:`across ${Q.bal_due_bookings} reservations`},
+  ];
+  $('#tiles').innerHTML=tiles.map(t=>`<div class="tile"><div class="l">${t.l}</div><div class="v">${t.v}</div><div class="d">${t.d}</div></div>`).join('');
+}
+
+/* ---------- 1. season ---------- */
+function renderSeason(){
+  legend('l-rev',[{n:'2026',c:S1()},{n:'2025',c:S2()}]);
+  colChart($('#c-rev'),{h:280,
+    cats:MON,
+    series:[{name:'2026',v:M.map(r=>r.rev),color:S1()},{name:'2025',v:M.map(r=>r.rev2025),color:S2()}],
+    fmt:fUSD, fmtAxis:v=>v>=1000?'$'+(v/1000)+'K':'$'+v,
+    label:(v,i)=>i===6?fK(v):null,
+    extra:i=>[['Δ vs 2025',(M[i].rev-M[i].rev2025>=0?'+':'')+fUSD(M[i].rev-M[i].rev2025)],
+              ['Cabin-nights',fN(MT[i].rn)],['ADR',MT[i].adr?fUSD(MT[i].adr):'-']]});
+  mkTable($('#t-rev'),['Month','2026 revenue','2025 revenue','Δ','Cabin-nights','ADR','Occupancy'],
+    M.map((r,i)=>[r.m,fUSD(r.rev),fUSD(r.rev2025),(r.rev-r.rev2025>=0?'+':'')+fUSD(r.rev-r.rev2025),
+      fN(MT[i].rn),MT[i].adr?fUSD(MT[i].adr):'-',fPct(MT[i].occ)]),
+    ['Total',fUSD(K.revenue),fUSD(M.reduce((a,r)=>a+r.rev2025,0)),
+      '+'+fUSD(K.revenue-M.reduce((a,r)=>a+r.rev2025,0)),fN(K.roomnights),fUSD(K.adr),fPct(K.occupancy,1)]);
+
+  colChart($('#c-occ'),{h:230,cats:MON,
+    series:[{name:'Occupancy',v:MT.map(r=>r.occ*100),color:S1()}],
+    max:100, fmt:v=>v.toFixed(0)+'%', fmtAxis:v=>v.toFixed(0)+'%',
+    label:(v,i)=>i===6?v.toFixed(0)+'%':null,
+    extra:i=>[['Cabin-nights sold',fN(MT[i].rn)],['Available',fN(MT[i].rn/(MT[i].occ||1))],['Revenue',fUSD(MT[i].rev)]]});
+  mkTable($('#t-occ'),['Month','Occupancy','Nights sold','Nights available'],
+    MT.map((r,i)=>[r.m,fPct(r.occ,1),fN(r.rn),fN(Math.round(r.rn/(r.occ||1))||9*new Date(2026,i+1,0).getDate())]));
+
+  colChart($('#c-revpar'),{h:230,cats:MON,
+    series:[{name:'RevPAR',v:MT.map(r=>r.revpar),color:S1()}],
+    fmt:fUSD2, fmtAxis:v=>'$'+Math.round(v),
+    label:(v,i)=>i===6?fUSD(v):null,
+    extra:i=>[['ADR',MT[i].adr?fUSD(MT[i].adr):'-'],['Occupancy',fPct(MT[i].occ)]]});
+  mkTable($('#t-revpar'),['Month','RevPAR','= ADR','× occupancy'],
+    MT.map(r=>[r.m,fUSD2(r.revpar),r.adr?fUSD(r.adr):'-',fPct(r.occ,1)]),
+    ['Year',fUSD2(K.revpar),fUSD(K.adr),fPct(K.occupancy,1)]);
+
+  legend('l-adr',[{n:'2026',c:S1(),line:1},{n:'2025',c:S2(),line:1}]);
+  lineChart($('#c-adr'),{h:230,cats:MON,
+    series:[{name:'2026',v:MT.map(r=>r.adr||null),color:S1()},{name:'2025',v:M.map(r=>r.adr2025||null),color:S2()}],
+    fmt:fUSD, fmtAxis:v=>'$'+Math.round(v),
+    extra:i=>[['Nights sold',fN(MT[i].rn)]]});
+  mkTable($('#t-adr'),['Month','ADR 2026','ADR 2025','Δ'],
+    MT.map((r,i)=>[r.m,r.adr?fUSD(r.adr):'-',M[i].adr2025?fUSD(M[i].adr2025):'-',
+      (r.adr&&M[i].adr2025)?((r.adr-M[i].adr2025>=0?'+':'')+fUSD(r.adr-M[i].adr2025)):'-']));
+
+  legend('l-bk',[{n:'Reservations',c:S1()},{n:'Guests booked',c:S3()}]);
+  colChart($('#c-bk'),{h:230,cats:MON,
+    series:[{name:'Reservations',v:M.map(r=>r.bookings),color:S1()},{name:'Guests booked',v:M.map(r=>r.guests),color:S3()}],
+    fmt:fN, extra:i=>[['Avg party',M[i].bookings?fN1(M[i].guests/M[i].bookings):'-'],['Avg stay',M[i].los?fN1(M[i].los)+' nights':'-']]});
+  mkTable($('#t-bk'),['Month','Reservations','Guests','Avg party','Avg stay','Median lead'],
+    M.map(r=>[r.m,fN(r.bookings),fN(r.guests),r.bookings?fN1(r.guests/r.bookings):'-',
+      r.los?fN1(r.los)+' n':'-',r.lead?Math.round(r.lead)+' d':'-']));
+
+  const n25=M.map(r=>r.adr2025?r.rev2025/r.adr2025:0), N25=n25.reduce((a,b)=>a+b,0);
+  const q3rev=M.slice(5,8).reduce((a,r)=>a+r.rev,0), q3rev25=M.slice(5,8).reduce((a,r)=>a+r.rev2025,0);
+  $('#seasonCall').innerHTML=
+    `<b>2026 is a summer story, and the summer got bigger.</b> June to August alone brought `+
+    `${fUSD(q3rev)} against ${fUSD(q3rev25)} in 2025, up ${fPct((q3rev-q3rev25)/q3rev25)} - that single swing is `+
+    `${fPct((q3rev-q3rev25)/(K.revenue-M.reduce((a,r)=>a+r.rev2025,0)))} of the whole year's gain. August is up `+
+    `${fPct((M[7].rev-M[7].rev2025)/M[7].rev2025)} and September ${fPct((M[8].rev-M[8].rev2025)/M[8].rev2025)}. `+
+    `July is now effectively sold out at ${fPct(MT[6].occ)} occupancy, so there is no volume left in it, only rate. `+
+    `<br><br>The other half of the picture is thinner: Jan-Mar sold ${fN(MT[0].rn+MT[1].rn+MT[2].rn)} nights at an ADR of `+
+    `$${Math.round((MT[0].rev+MT[1].rev+MT[2].rev)/(MT[0].rn+MT[1].rn+MT[2].rn))}, roughly a third of the summer rate, and `+
+    `Oct-Dec has ${fUSD(M[9].rev+M[10].rev+M[11].rev)} on the books against ${fUSD(M[9].rev2025+M[10].rev2025+M[11].rev2025)} `+
+    `taken in the same months of 2025. The whole year runs on eleven weeks; the other forty-one are close to free inventory.`;
+}
+
+/* ---------- 2. cabins ---------- */
+function renderCabins(){
+  const byRev=[...C].sort((a,b)=>b.tot_rev-a.tot_rev);
+  legend('l-cabrev',[{n:'Own bookings',c:S1()},{n:'Share of whole-resort buyouts',c:S2()}]);
+  barChart($('#c-cabrev'),{rowH:34,padL:172,padR:78,axis:1,fmt:fUSD,fmtAxis:v=>'$'+(v/1000)+'K',
+    rows:byRev.map(c=>({label:c.cabin,sub:`sleeps ${c.sleeps}`,
+      segs:[{name:'Own bookings',v:c.rev,color:S1()},{name:'Buyout share',v:c.buyout_rev,color:S2()}],
+      value:fUSD(c.tot_rev),
+      tip:[['Own bookings',fUSD(c.rev)],['Buyout share',fUSD(c.buyout_rev)],['Total',fUSD(c.tot_rev)],
+           ['Reservations',fN(c.bookings)],['Nights sold',fN(c.tot_rn)],['ADR',fUSD(c.adr)]]}))});
+  mkTable($('#t-cabrev'),['Cabin','Sleeps','Own bookings','Buyout share','Total','Reservations','Nights','ADR'],
+    byRev.map(c=>[c.cabin,c.sleeps,fUSD(c.rev),fUSD(c.buyout_rev),fUSD(c.tot_rev),fN(c.bookings),fN(c.tot_rn),fUSD(c.adr)]),
+    ['Total','46',fUSD(C.reduce((a,c)=>a+c.rev,0)),fUSD(D.buyouts.rev),fUSD(C.reduce((a,c)=>a+c.tot_rev,0)),
+     fN(C.reduce((a,c)=>a+c.bookings,0)),fN(C.reduce((a,c)=>a+c.tot_rn,0)),'']);
+
+  const byAdr=[...C].sort((a,b)=>b.adr-a.adr);
+  barChart($('#c-cabadr'),{rowH:32,padL:172,padR:66,axis:1,fmt:fUSD,fmtAxis:v=>'$'+Math.round(v),
+    rows:byAdr.map(c=>({label:c.cabin,sub:`sleeps ${c.sleeps}`,segs:[{name:'ADR',v:c.adr,color:S1()}],
+      value:fUSD(c.adr),
+      tip:[['ADR',fUSD(c.adr)],['ADR per bed',fUSD2(c.adr_per_bed)],['Nights sold',fN(c.tot_rn)],['Revenue',fUSD(c.tot_rev)]]}))});
+  mkTable($('#t-cabadr'),['Cabin','Sleeps','ADR','ADR per bed'],
+    byAdr.map(c=>[c.cabin,c.sleeps,fUSD(c.adr),fUSD2(c.adr_per_bed)]));
+
+  const byRP=[...C].sort((a,b)=>b.revpar-a.revpar);
+  barChart($('#c-cabrevpar'),{rowH:32,padL:172,padR:66,axis:1,fmt:fUSD2,fmtAxis:v=>'$'+Math.round(v),
+    rows:byRP.map(c=>({label:c.cabin,sub:`sleeps ${c.sleeps}`,segs:[{name:'RevPAR',v:c.revpar,color:S1()}],
+      value:fUSD2(c.revpar),
+      tip:[['RevPAR',fUSD2(c.revpar)],['= ADR',fUSD(c.adr)],['× occupancy',fPct(c.occ,1)],['Revenue',fUSD(c.tot_rev)]]}))});
+  mkTable($('#t-cabrevpar'),['Cabin','Sleeps','RevPAR','ADR','Occupancy'],
+    byRP.map(c=>[c.cabin,c.sleeps,fUSD2(c.revpar),fUSD(c.adr),fPct(c.occ,1)]));
+
+  const byBed=[...C].sort((a,b)=>b.revpab-a.revpab);
+  barChart($('#c-cabbed'),{rowH:32,padL:172,padR:66,axis:1,fmt:fUSD2,fmtAxis:v=>'$'+Math.round(v),
+    rows:byBed.map(c=>({label:c.cabin,sub:`sleeps ${c.sleeps}`,segs:[{name:'RevPAB',v:c.revpab,color:S1()}],
+      value:fUSD2(c.revpab),
+      tip:[['Revenue per available bed-night',fUSD2(c.revpab)],['Revenue per bed, year',fUSD(c.rev_per_bed)],
+           ['Beds',c.sleeps],['RevPAR',fUSD2(c.revpar)]]}))});
+  mkTable($('#t-cabbed'),['Cabin','Sleeps','RevPAB','Revenue per bed (year)','RevPAR'],
+    byBed.map(c=>[c.cabin,c.sleeps,fUSD2(c.revpab),fUSD(c.rev_per_bed),fUSD2(c.revpar)]));
+
+  const byOcc=[...C].sort((a,b)=>b.occ-a.occ);
+  barChart($('#c-cabocc'),{rowH:32,padL:172,padR:66,axis:1,max:0.5,maxN:5,fmt:v=>fPct(v,1),fmtAxis:v=>fPct(v,0),
+    rows:byOcc.map(c=>({label:c.cabin,sub:`sleeps ${c.sleeps}`,segs:[{name:'Occupancy',v:c.occ,color:S1()}],
+      value:fPct(c.occ,1),
+      tip:[['Occupancy',fPct(c.occ,1)],['Nights sold',fN(c.tot_rn)+' of 365'],['Reservations',fN(c.bookings)],
+           ['Avg stay',fN1(c.los)+' nights']]}))});
+  mkTable($('#t-cabocc'),['Cabin','Sleeps','Occupancy','Nights sold','Reservations','Avg stay'],
+    byOcc.map(c=>[c.cabin,c.sleeps,fPct(c.occ,1),fN(c.tot_rn),fN(c.bookings),fN1(c.los)+' n']));
+
+  const byFill=[...C].sort((a,b)=>b.fill-a.fill);
+  barChart($('#c-fill'),{rowH:32,padL:172,padR:78,axis:1,max:1,fmt:v=>fPct(v),fmtAxis:v=>fPct(v,0),
+    rows:byFill.map(c=>({label:c.cabin,sub:`sleeps ${c.sleeps}`,segs:[{name:'Beds filled',v:c.fill,color:S1()}],
+      value:fPct(c.fill)+' · '+fN1(c.avg_party)+'/'+c.sleeps,
+      tip:[['Beds filled when sold',fPct(c.fill)],['Average party',fN1(c.avg_party)+' guests'],
+           ['Capacity',c.sleeps+' beds'],['Empty beds per night sold',fN1(c.sleeps-c.avg_party)]]}))});
+  mkTable($('#t-fill'),['Cabin','Sleeps','Avg party','Beds filled','Empty beds/night'],
+    byFill.map(c=>[c.cabin,c.sleeps,fN1(c.avg_party),fPct(c.fill),fN1(c.sleeps-c.avg_party)]));
+
+  /* capacity class bubbles */
+  const SC=D.size_class, cols=[S1(),S2(),S3()];
+  legend('l-class',SC.map((s,i)=>({n:s.k+' - '+fUSD(s.rev),c:cols[i]})));
+  const maxRev=Math.max(...SC.map(s=>s.rev));
+  scatter($('#c-class'),{h:300,padL:56,xmax:10,xticks:5,ymax:30,yticks:6,
+    xLabel:'Beds per cabin', fmtX:v=>v.toFixed(0), fmtY:v=>'$'+v.toFixed(0),
+    pts:SC.map((s,i)=>({x:[4,6,8][i],y:s.revpab,r:14+30*Math.sqrt(s.rev/maxRev),color:cols[i],op:.55,
+      t:s.k+' - '+({0:'4 cabins',1:'3 cabins',2:'1 cabin'}[i]),
+      rows:[['Revenue per available bed-night',fUSD2(s.revpab)],['RevPAR',fUSD2(s.revpar)],['ADR',fUSD(s.adr)],
+            ['Occupancy',fPct(s.occ,1)],['Total revenue',fUSD(s.rev)],['Nights sold',fN(s.rn)],
+            ['Reservations',fN(s.bookings)],['Avg party',fN1(s.party)+' guests']]}))});
+  mkTable($('#t-class'),['Class','Cabins','Revenue','Nights sold','Occupancy','ADR','RevPAR','RevPAB','Avg party','Beds filled'],
+    SC.map((s,i)=>[s.k,[4,3,1][i],fUSD(s.rev),fN(s.rn),fPct(s.occ,1),fUSD(s.adr),fUSD2(s.revpar),fUSD2(s.revpab),
+      fN1(s.party),fPct(s.party/[4,6,8][i])]));
+
+  const top=byRP[0], low=byRP[byRP.length-1], bedTop=byBed[0], bedLow=byBed[byBed.length-1];
+  $('#cabinCall').innerHTML=
+    `<b>${top.cabin}</b> is the strongest asset per cabin-night - ${fUSD2(top.revpar)} RevPAR against ${fUSD2(low.revpar)} for `+
+    `${low.cabin}, a ${fPct(top.revpar/low.revpar-1,0)} spread. Per <em>bed</em>, the order flips: `+
+    `<b>${bedTop.cabin}</b> earns ${fUSD2(bedTop.revpab)} per available bed-night, ${fPct(bedTop.revpab/bedLow.revpab-1,0)} more than `+
+    `${bedLow.cabin}. The 4-sleepers run ${fPct(D.size_class[0].occ,0)} occupancy versus ${fPct(D.size_class[2].occ,0)} for the 8-sleeper, `+
+    `and across every cabin the average party fills only ${fPct(K.bed_fill_when_sold)} of the beds - `+
+    `${fN(K.bed_nights_sold-K.guest_nights)} bed-nights were sold empty this year. `+
+    `If large-cabin pricing assumes full occupancy of the beds, it is pricing a guest who mostly isn't showing up.`;
+}
+
+/* ---------- 3. occupancy detail ---------- */
+function renderOcc(){
+  const maxOcc=1;
+  heatmap($('#c-hm'),{cw:46,chh:32,padL:170,padR:66,cols:MON,max:maxOcc,
+    rows:D.heatmap.map(r=>({label:r.cabin,sub:`sleeps ${r.sleeps}`,v:r.occ})),
+    cellText:v=>v>0?Math.round(v*100):'',
+    tip:(r,j)=>{const i=D.heatmap.findIndex(x=>x.cabin===r.label);
+      return [['Occupancy',fPct(r.v[j],1)],['Nights sold',fN(D.heatmap[i].rn[j])],['Revenue',fUSD(D.heatmap_rev[i].rev[j])]];},
+    rowTotal:(t,r)=>{const i=D.heatmap.findIndex(x=>x.cabin===r.label);
+      return fPct(D.heatmap[i].rn.reduce((a,b)=>a+b,0)/365,0)+' yr';}});
+  $('#s-hm').innerHTML=`<span>0%</span><span class="ramp">${RAMP.map(v=>`<i style="background:${CSSV(v)}"></i>`).join('')}</span><span>100% occupied</span>`;
+  mkTable($('#t-hm'),['Cabin','Sleeps',...MON,'Year'],
+    D.heatmap.map(r=>[r.cabin,r.sleeps,...r.occ.map(v=>v?fPct(v,0):'-'),fPct(r.rn.reduce((a,b)=>a+b,0)/365,1)]));
+
+  const maxRev=Math.max(...D.heatmap_rev.flatMap(r=>r.rev));
+  heatmap($('#c-hmr'),{cw:46,chh:32,padL:170,padR:72,cols:MON,max:maxRev,
+    rows:D.heatmap_rev.map(r=>({label:r.cabin,sub:`sleeps ${r.sleeps}`,v:r.rev})),
+    cellText:v=>v>=1000?Math.round(v/1000)+'K':(v>0?Math.round(v/100)/10+'K':''),
+    tip:(r,j)=>{const i=D.heatmap_rev.findIndex(x=>x.cabin===r.label);
+      return [['Revenue',fUSD(r.v[j])],['Nights sold',fN(D.heatmap[i].rn[j])],['Occupancy',fPct(D.heatmap[i].occ[j],1)]];},
+    rowTotal:t=>fUSD(t)});
+  $('#s-hmr').innerHTML=`<span>$0</span><span class="ramp">${RAMP.map(v=>`<i style="background:${CSSV(v)}"></i>`).join('')}</span><span>${fK(maxRev)} in a month</span>`;
+  mkTable($('#t-hmr'),['Cabin','Sleeps',...MON,'Total'],
+    D.heatmap_rev.map(r=>[r.cabin,r.sleeps,...r.rev.map(v=>v?fUSD(v):'-'),fUSD(r.rev.reduce((a,b)=>a+b,0))]));
+
+  calendar($('#c-cal'),{data:D.calendar});
+  $('#s-cal').innerHTML=`<span>0 cabins</span><span class="ramp">${RAMP.map(v=>`<i style="background:${CSSV(v)}"></i>`).join('')}</span><span>all 9 occupied</span>`;
+  const full=D.calendar.filter(d=>d.rn===9).length, empty=365-D.calendar.filter(d=>d.rn>0).length;
+  const best=D.calendar.reduce((a,b)=>b.rev>a.rev?b:a);
+  const bestD=new Date(best.d+'T00:00:00Z').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',timeZone:'UTC'});
+  $('#calFoot').innerHTML=`<b>${full}</b> nights sold out all nine cabins · <b>${empty}</b> nights of 2026 sold nothing at all · `+
+    `the single richest night was <b>${bestD}</b> at ${fUSD(best.rev)} of room revenue.`;
+  mkTable($('#t-cal'),['Month','Sold-out nights','Nights with zero bookings','Avg cabins occupied'],
+    MON.map((m,i)=>{const ds=D.calendar.filter(d=>+d.d.slice(5,7)===i+1);
+      const dim=new Date(Date.UTC(2026,i+1,0)).getUTCDate();
+      return [m,fN(ds.filter(d=>d.rn===9).length),fN(dim-ds.filter(d=>d.rn>0).length),
+        fN1(ds.reduce((a,d)=>a+d.rn,0)/dim)];}));
+
+  colChart($('#c-dow'),{h:220,cats:D.night_dow.map(r=>r.d),
+    series:[{name:'Occupancy',v:D.night_dow.map(r=>r.occ*100),color:S1()}],
+    max:60,fmt:v=>v.toFixed(0)+'%',fmtAxis:v=>v.toFixed(0)+'%',
+    label:(v,i)=>(i===4||i===2)?v.toFixed(0)+'%':null,
+    extra:i=>[['ADR',fUSD(D.night_dow[i].adr)],['RevPAR',fUSD2(D.night_dow[i].revpar)]]});
+  mkTable($('#t-dow'),['Night','Occupancy','ADR','RevPAR'],
+    D.night_dow.map(r=>[r.d,fPct(r.occ,1),fUSD(r.adr),fUSD2(r.revpar)]));
+
+  colChart($('#c-dowr'),{h:220,cats:D.night_dow.map(r=>r.d),
+    series:[{name:'RevPAR',v:D.night_dow.map(r=>r.revpar),color:S1()}],
+    fmt:fUSD2,fmtAxis:v=>'$'+Math.round(v),
+    label:(v,i)=>(i===4||i===2)?fUSD(v):null,
+    extra:i=>[['ADR',fUSD(D.night_dow[i].adr)],['Occupancy',fPct(D.night_dow[i].occ,1)]]});
+  mkTable($('#t-dowr'),['Night','RevPAR','ADR','Occupancy'],
+    D.night_dow.map(r=>[r.d,fUSD2(r.revpar),fUSD(r.adr),fPct(r.occ,1)]));
+
+  const fri=D.night_dow[4], wed=D.night_dow[2];
+  $('#occCall').innerHTML=
+    `<b>The midweek gap is the biggest single block of unsold inventory.</b> Friday and Saturday run `+
+    `${fPct(fri.occ,0)} and ${fPct(D.night_dow[5].occ,0)} occupied; Tuesday and Wednesday sit at `+
+    `${fPct(D.night_dow[1].occ,0)} and ${fPct(wed.occ,0)}. Rate is almost flat across the week `+
+    `(${fUSD(wed.adr)} Wednesday vs ${fUSD(fri.adr)} Friday), so the weekend premium is coming entirely from occupancy, not pricing. `+
+    `Closing half the Tue/Wed gap at today's rates would be worth roughly `+
+    `${fUSD(((fri.occ-wed.occ)/2)*9*52*2*wed.adr)} a year.`;
+}
+
+/* ---------- 4. booking behaviour ---------- */
+function renderBooking(){
+  $('#leadMed').textContent=Math.round(K.median_lead)+' days';
+  const L=D.leadtime;
+  colChart($('#c-lead'),{h:230,cats:L.map(r=>r.b),rot:1,padB:56,
+    series:[{name:'Reservations',v:L.map(r=>r.bookings),color:S1()}],
+    fmt:fN, extra:i=>[['Revenue',fUSD(L[i].rev)],['ADR',fUSD(L[i].adr)],['Share of revenue',fPct(L[i].rev/K.revenue,1)]]});
+  mkTable($('#t-lead'),['Lead time','Reservations','Revenue','Share','ADR'],
+    L.map(r=>[r.b,fN(r.bookings),fUSD(r.rev),fPct(r.rev/K.revenue,1),fUSD(r.adr)]));
+
+  colChart($('#c-leadadr'),{h:230,cats:L.map(r=>r.b),rot:1,padB:56,
+    series:[{name:'ADR',v:L.map(r=>r.adr),color:S1()}],
+    fmt:fUSD,fmtAxis:v=>'$'+Math.round(v),
+    label:(v,i)=>(i===0||i===L.length-1)?fUSD(v):null,
+    extra:i=>[['Reservations',fN(L[i].bookings)],['Revenue',fUSD(L[i].rev)]]});
+  mkTable($('#t-leadadr'),['Lead time','ADR','Reservations','Revenue'],
+    L.map(r=>[r.b,fUSD(r.adr),fN(r.bookings),fUSD(r.rev)]));
+
+  const LS=D.los;
+  colChart($('#c-los'),{h:220,cats:LS.map(r=>r.n+(r.n==='1'?' night':' nights')),
+    series:[{name:'Reservations',v:LS.map(r=>r.bookings),color:S1()}],
+    fmt:fN,extra:i=>[['Revenue',fUSD(LS[i].rev)],['ADR',fUSD(LS[i].adr)],['Share of revenue',fPct(LS[i].rev/K.revenue,1)]]});
+  mkTable($('#t-los'),['Nights','Reservations','Revenue','Share','ADR'],
+    LS.map(r=>[r.n,fN(r.bookings),fUSD(r.rev),fPct(r.rev/K.revenue,1),fUSD(r.adr)]));
+
+  const P=D.party;
+  colChart($('#c-party'),{h:220,cats:P.map(r=>r.n),
+    series:[{name:'Reservations',v:P.map(r=>r.bookings),color:S1()}],
+    fmt:fN,extra:i=>[['Revenue',fUSD(P[i].rev)],['ADR',fUSD(P[i].adr)]]});
+  mkTable($('#t-party'),['Guests in party','Reservations','Revenue','ADR'],
+    P.map(r=>[r.n,fN(r.bookings),fUSD(r.rev),fUSD(r.adr)]));
+
+  const A=D.arrival_dow;
+  colChart($('#c-adow'),{h:220,cats:A.map(r=>r.d),
+    series:[{name:'Reservations',v:A.map(r=>r.bookings),color:S1()}],
+    fmt:fN,extra:i=>[['Revenue',fUSD(A[i].rev)],['Avg stay',fN1(A[i].los)+' nights']]});
+  mkTable($('#t-adow'),['Arrival day','Reservations','Revenue','Avg stay'],
+    A.map(r=>[r.d,fN(r.bookings),fUSD(r.rev),fN1(r.los)+' n']));
+
+  const PC=D.pace, lbl=PC.map(r=>{const [y,m]=r.m.split('-');return MON[+m-1]+(m==='01'||r===PC[0]?" '"+y.slice(2):'');});
+  colChart($('#c-pace'),{h:230,cats:lbl,rot:1,padB:52,
+    series:[{name:'Revenue booked',v:PC.map(r=>r.rev),color:S1()}],
+    fmt:fUSD,fmtAxis:v=>'$'+(v/1000)+'K',
+    extra:i=>[['Reservations',fN(PC[i].bookings)],['Cabin-nights',fN(PC[i].rn)],
+              ['Cumulative',fUSD(PC.slice(0,i+1).reduce((a,r)=>a+r.rev,0))]]});
+  mkTable($('#t-pace'),['Booked in','Revenue','Reservations','Cabin-nights','Cumulative'],
+    PC.map((r,i)=>[r.m,fUSD(r.rev),fN(r.bookings),fN(r.rn),fUSD(PC.slice(0,i+1).reduce((a,x)=>a+x.rev,0))]),
+    ['Total',fUSD(K.revenue),fN(K.bookings),fN(K.roomnights),'']);
+
+  /* scatter */
+  const cls=p=>p.cabin.includes('Sled')?2:(/Enchanted|Secret|Captain/.test(p.cabin)?1:0);
+  const cols=[S1(),S2(),S3()];
+  legend('l-sc',[{n:'Sleeps 4',c:cols[0]},{n:'Sleeps 6',c:cols[1]},{n:'Sleeps 8 / whole resort',c:cols[2]}]);
+  const LMAX=Math.ceil(Math.max(...D.scatter.map(p=>p.lead))/50)*50;
+  const pts=D.scatter.map(p=>({x:p.lead,y:Math.min(p.adr,900),
+    r:3.5+7*Math.sqrt(Math.min(p.rev,6000)/6000),color:cols[cls(p)],op:.6,
+    t:p.cabin+' · '+MON[p.m-1],
+    rows:[['Nightly rate',fUSD(p.adr)],['Booked ahead',p.lead+' days'],['Nights',p.nts],
+          ['Booking value',fUSD(p.rev)],['Channel',p.chan]]}));
+  const bins=[[0,7],[7,21],[21,45],[45,90],[90,180],[180,LMAX+1]];
+  const trend=bins.map(b=>{const s=D.scatter.filter(p=>p.lead>=b[0]&&p.lead<b[1]);
+    return [(b[0]+b[1])/2, s.length? s.reduce((a,p)=>a+p.adr,0)/s.length : 0];}).filter(t=>t[1]>0);
+  scatter($('#c-sc'),{h:330,pts,xmax:LMAX,ymax:900,xticks:Math.min(10,LMAX/50),trend,
+    xLabel:'Days booked in advance', fmtX:v=>v.toFixed(0), fmtY:v=>'$'+v.toFixed(0)});
+  mkTable($('#t-sc'),['Lead-time band','Reservations','Mean nightly rate','Total revenue'],
+    bins.map(b=>{const s=D.scatter.filter(p=>p.lead>=b[0]&&p.lead<b[1]);
+      return [b[0]+'-'+(b[1]>400?LMAX:b[1])+' days',fN(s.length),s.length?fUSD(s.reduce((a,p)=>a+p.adr,0)/s.length):'-',
+        fUSD(s.reduce((a,p)=>a+p.rev,0))];}));
+
+  const early=L.slice(-2).reduce((a,r)=>a+r.rev,0), late=L.slice(0,3).reduce((a,r)=>a+r.rev,0);
+  $('#bookCall').innerHTML=
+    `<b>Rate is a straight function of how early the guest commits.</b> Reservations made 90+ days out average `+
+    `${fUSD((L[7].rev+L[8].rev)/(L[7].rev/L[7].adr+L[8].rev/L[8].adr))} a night and carry ${fPct(early/K.revenue)} of all revenue; `+
+    `everything booked inside a week averages ${fUSD(late/(L[0].rev/L[0].adr+L[1].rev/L[1].adr+L[2].rev/L[2].adr))} and contributes `+
+    `${fPct(late/K.revenue,1)}. That is mostly seasonal mix - the far-out bookings are summer, the last-minute ones are winter - `+
+    `but it means the last-minute channel is currently a discount channel, and 2026's book was essentially finished by `+
+    `<b>${MON[+PC[PC.length-3].m.slice(5,7)-1]}</b>: ${fPct(PC.slice(0,-2).reduce((a,r)=>a+r.rev,0)/K.revenue)} of the year's revenue was on the books before July.`;
+}
+
+/* ---------- 5. channels ---------- */
+function renderChannels(){
+  const CH=D.channels;
+  barChart($('#c-chan'),{rowH:36,padL:132,padR:96,axis:1,fmt:fUSD,fmtAxis:v=>'$'+(v/1000)+'K',
+    rows:CH.map(c=>({label:c.name,sub:`${c.bookings} reservations`,segs:[{name:'Revenue',v:c.rev,color:S1()}],
+      value:fUSD(c.rev)+'  ·  '+fPct(c.share,1),
+      tip:[['Room revenue',fUSD(c.rev)],['Share of book',fPct(c.share,1)],['Reservations',fN(c.bookings)],
+           ['Cabin-nights',fN(c.rn)],['ADR',fUSD(c.adr)],['Median lead',Math.round(c.lead)+' days'],
+           ['Avg stay',fN1(c.los)+' nights'],['Repeat share',fPct(c.repeat)]]}))});
+  mkTable($('#t-chan'),['Channel','Revenue','Share','Reservations','Nights','ADR','Avg stay','Median lead','Repeat'],
+    CH.map(c=>[c.name,fUSD(c.rev),fPct(c.share,1),fN(c.bookings),fN(c.rn),fUSD(c.adr),fN1(c.los)+' n',
+      Math.round(c.lead)+' d',fPct(c.repeat)]),
+    ['Total',fUSD(K.revenue),'100%',fN(K.bookings),fN(K.roomnights),fUSD(K.adr),fN1(K.avg_los)+' n',
+      Math.round(K.median_lead)+' d',fPct(K.repeat_share)]);
+
+  barChart($('#c-chanadr'),{rowH:34,padL:132,padR:66,axis:1,fmt:fUSD,fmtAxis:v=>'$'+Math.round(v),
+    rows:[...CH].sort((a,b)=>b.adr-a.adr).map(c=>({label:c.name,sub:`${fN(c.rn)} nights`,
+      segs:[{name:'ADR',v:c.adr,color:S1()}],value:fUSD(c.adr),
+      tip:[['ADR',fUSD(c.adr)],['Room revenue',fUSD(c.rev)],['Nights',fN(c.rn)],
+           ['Non-room charges as % of gross',fPct(c.fee_load)],['Avg party',fN1(c.party)]]}))});
+  mkTable($('#t-chanadr'),['Channel','ADR','Nights','Avg party','Non-room charges (% of gross)'],
+    [...CH].sort((a,b)=>b.adr-a.adr).map(c=>[c.name,fUSD(c.adr),fN(c.rn),fN1(c.party),fPct(c.fee_load)]));
+
+  const R=D.submake;
+  barChart($('#c-route'),{rowH:36,padL:150,padR:96,axis:1,fmt:fUSD,fmtAxis:v=>'$'+(v/1000)+'K',
+    rows:R.map(r=>({label:r.name,sub:`${r.bookings} reservations`,segs:[{name:'Revenue',v:r.rev,color:S1()}],
+      value:fUSD(r.rev)+'  ·  '+fPct(r.share,1),
+      tip:[['Revenue',fUSD(r.rev)],['Share',fPct(r.share,1)],['Reservations',fN(r.bookings)],
+           ['ADR',fUSD(r.adr)],['Median lead',Math.round(r.lead)+' days'],['Avg stay',fN1(r.los)+' nights']]}))});
+  mkTable($('#t-route'),['Route','Revenue','Share','Reservations','ADR','Median lead','Avg stay'],
+    R.map(r=>[r.name,fUSD(r.rev),fPct(r.share,1),fN(r.bookings),fUSD(r.adr),Math.round(r.lead)+' d',fN1(r.los)+' n']));
+  $('#routeFoot').innerHTML=`Staff-booked reservations carry an ADR of <b>${fUSD(R[1].adr)}</b> against `+
+    `<b>${fUSD(R[0].adr)}</b> for self-serve, and book a median <b>${Math.round(R[1].lead)}</b> days ahead vs `+
+    `<b>${Math.round(R[0].lead)}</b> - they are the groups, the buyouts and the repeat regulars, not walk-up demand.`;
+
+  const RP=D.repeat;
+  barChart($('#c-rep'),{rowH:36,padL:104,padR:96,axis:1,fmt:fUSD,fmtAxis:v=>'$'+(v/1000)+'K',
+    rows:RP.map(r=>({label:r.k+' guests',sub:`${r.bookings} reservations`,segs:[{name:'Revenue',v:r.rev,color:S1()}],
+      value:fUSD(r.rev)+'  ·  '+fPct(r.rev/K.revenue,1),
+      tip:[['Revenue',fUSD(r.rev)],['Reservations',fN(r.bookings)],['ADR',fUSD(r.adr)],
+           ['Avg stay',fN1(r.los)+' nights'],['Median lead',Math.round(r.lead)+' days']]}))});
+  mkTable($('#t-rep'),['Segment','Reservations','Revenue','Share','ADR','Avg stay','Median lead'],
+    RP.map(r=>[r.k,fN(r.bookings),fUSD(r.rev),fPct(r.rev/K.revenue,1),fUSD(r.adr),fN1(r.los)+' n',Math.round(r.lead)+' d']));
+
+  const F=D.guest_freq;
+  colChart($('#c-freq'),{h:210,cats:F.map(r=>r.k+(r.k==='1'?' booking':' bookings')),
+    series:[{name:'Guest emails',v:F.map(r=>r.guests),color:S1()}],
+    fmt:fN,label:(v,i)=>fN(v)});
+  mkTable($('#t-freq'),['Bookings in 2026','Distinct guest emails'],F.map(r=>[r.k,fN(r.guests)]));
+  $('#freqFoot').innerHTML=`<b>${fN(D.guest_stats.unique)}</b> distinct guest emails. `+
+    `<b>${D.guest_stats.multi}</b> booked more than once for 2026 arrivals and account for `+
+    `<b>${fPct(D.guest_stats.multi_rev_share)}</b> of revenue.`;
+
+  const PT=D.pets;
+  barChart($('#c-pets'),{rowH:36,padL:150,padR:96,axis:1,fmt:fUSD,fmtAxis:v=>'$'+(v/1000)+'K',
+    rows:PT.map(r=>({label:r.k,sub:`${r.bookings} reservations`,segs:[{name:'Revenue',v:r.rev,color:S1()}],
+      value:fUSD(r.rev)+'  ·  '+fPct(r.rev/K.revenue,1),
+      tip:[['Revenue',fUSD(r.rev)],['Reservations',fN(r.bookings)],['ADR',fUSD(r.adr)],['Avg stay',fN1(r.los)+' nights']]}))});
+  mkTable($('#t-pets'),['Segment','Reservations','Share of bookings','Revenue','ADR','Avg stay'],
+    PT.map(r=>[r.k,fN(r.bookings),fPct(r.bookings/K.bookings),fUSD(r.rev),fUSD(r.adr),fN1(r.los)+' n']));
+
+  const dir=CH[0], ota=CH.slice(1).reduce((a,c)=>a+c.rev,0);
+  $('#chanCall').innerHTML=
+    `<b>${fPct(dir.share)} of room revenue comes through the direct channel</b>, at an ADR of ${fUSD(dir.adr)} - `+
+    `${fPct(dir.adr/CH[1].adr-1,0)} above VRBO and ${fPct(dir.adr/CH[2].adr-1,0)} above Airbnb. Airbnb and Booking.com together `+
+    `produced ${fUSD(CH[2].rev+CH[3].rev)} across 13 reservations, with non-room charges running over half of gross - `+
+    `they are barely worth the listing maintenance at this volume. Repeat guests are almost exclusively a direct-channel `+
+    `phenomenon (${fPct(dir.repeat)} of direct bookings vs ${fPct(CH[1].repeat,1)} on VRBO), which is the real argument for `+
+    `keeping the OTAs as acquisition rather than as a revenue line.`;
+}
+
+/* ---------- 6. concentration ---------- */
+function renderConc(){
+  const CO=D.concentration;
+  const step=Math.max(1,Math.floor(CO.length/60));
+  const pts=[{pct_bookings:0,pct_rev:0}].concat(CO.filter((_,i)=>i%step===0||i===CO.length-1));
+  lineChart($('#c-conc'),{h:250,padL:52,padR:20,
+    cats:(()=>{const seen=new Set();return pts.map(p=>{const v=Math.round(p.pct_bookings*100);
+      const t=[0,25,50,75,100].find(x=>Math.abs(v-x)<=1); if(t===undefined||seen.has(t))return ''; seen.add(t); return t+'%';});})(),
+    series:[{name:'Cumulative revenue',v:pts.map(p=>p.pct_rev*100),color:S1(),area:1}], nodots:1,
+    max:100,fmt:v=>v.toFixed(1)+'%',fmtAxis:v=>v.toFixed(0)+'%',
+    catLabel:(c,i)=>'Top '+fPct(pts[i].pct_bookings,1)+' of reservations',
+    extra:i=>[['Reservations',fN(Math.round(pts[i].pct_bookings*CO.length))]]});
+  const q=[0.05,0.1,0.2,0.5];
+  mkTable($('#t-conc'),['Top slice of reservations','Reservations','Share of revenue'],
+    q.map(x=>{const i=Math.max(0,Math.round(x*CO.length)-1);
+      return [fPct(x,0),fN(Math.round(x*CO.length)),fPct(CO[i].pct_rev,1)];}));
+
+  const B=D.buyouts;
+  barChart($('#c-byo'),{rowH:36,padL:104,padR:84,axis:1,fmt:fUSD,fmtAxis:v=>'$'+(v/1000)+'K',
+    rows:B.list.map(b=>({label:b.arrive,sub:`${b.party} guests · ${b.nts} nights`,
+      segs:[{name:'Revenue',v:b.rev,color:S1()}],value:fUSD(b.rev),
+      tip:[['Room revenue',fUSD(b.rev)],['Nights',b.nts],['Cabin-nights',b.nts*9],
+           ['Effective ADR',fUSD(b.rev/(b.nts*9))],['Party',b.party+' guests'],
+           ['Revenue per guest',fUSD(b.rev/b.party)]]}))});
+  mkTable($('#t-byo'),['Arrival','Nights','Guests','Room revenue','Effective ADR'],
+    B.list.map(b=>[b.arrive,b.nts,b.party,fUSD(b.rev),fUSD(b.rev/(b.nts*9))]),
+    ['4 buyouts',fN(B.nights),fN(B.list.reduce((a,b)=>a+b.party,0)),fUSD(B.rev),fUSD(B.adr)]);
+  $('#byoFoot').innerHTML=`Four bookings - <b>${fPct(4/K.bookings,1)}</b> of reservations - deliver `+
+    `<b>${fUSD(B.rev)}</b>, or <b>${fPct(B.rev/K.revenue,1)}</b> of the year, across `+
+    `<b>${fN(B.roomnights)}</b> cabin-nights (${fPct(B.roomnights/K.roomnights,1)} of all nights sold) at an effective `+
+    `ADR of ${fUSD(B.adr)} - near the property average, on nights that would otherwise need 9 separate sales.`;
+}
+
+/* ---------- 7. quality ---------- */
+function renderQuality(){
+  $('#defGross').textContent=fUSD(K.gross);
+  const an=Q.unassigned_anomaly[0];
+  $('#qualList').innerHTML=[
+    `<b>${Q.excluded_zero}</b> zero-revenue rows removed - office holds, owner stays and non-paying guests of owners. They carry cleaning charges only and would depress ADR without adding revenue.`,
+    `<b>${Q.excluded_test}</b> template/test rows removed.`,
+    `<b>${Q.no_contract}</b> reservations flagged <i>NO CONTRACT</i>, <b>${Q.cc_disabled}</b> with a disabled or expired card, <b>${Q.email_error}</b> with an email error.`,
+    `<b>${Q.bal_due_bookings}</b> reservations still show a balance due totalling ${fUSD(K.bal_due)}.`,
+    `Reservation <b>#${an.res}</b> (${an.arrive}, ${an.nts} nights, ${an.rev?fUSD(an.rev):''}) is filed against the whole-resort placeholder unit but lists only ${an.party} guests, and overlaps four individual cabin bookings on the same nights. It is counted here as a single cabin, not nine.`
+  ].map(x=>`<li>${x}</li>`).join('');
+  $('#qualCall').innerHTML=
+    `<b>Reconciliation.</b> This dashboard computes ${fUSD(K.revenue)} of room revenue over ${fN(K.roomnights)} cabin-nights. `+
+    `The pivot tables inside the source workbook show ${fUSD(Q.sheet_revenue)} over ${fN(Q.sheet_nights)} nights - a `+
+    `${fPct(Math.abs(K.revenue-Q.sheet_revenue)/Q.sheet_revenue,1)} gap. It resolves to two things: two reservations worth `+
+    `${fUSD(1607)} created after the workbook's pivots were last refreshed, and the 24 cabin-nights the workbook attributes to `+
+    `reservation #${an.res} above. Everything else ties out exactly.`;
+  $('#reconLine').innerHTML=`<b>Reconciliation</b> - workbook pivot: ${fUSD(Q.sheet_revenue)} / ${fN(Q.sheet_nights)} nights / ADR $${Q.sheet_adr}. `+
+    `This dashboard: ${fUSD(K.revenue)} / ${fN(K.roomnights)} nights / ADR ${fUSD(K.adr)}. Differences explained in section 07.`;
+}
+
+/* ---------- boot ---------- */
+function renderAll(){
+  renderHero(); renderSeason(); renderCabins(); renderOcc(); renderBooking(); renderChannels(); renderConc(); renderQuality();
+}
+renderAll();
+
+$('#themeBtn').addEventListener('click',()=>{
+  const d=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',d?'light':'dark');
+  $('#themeBtn').textContent=d?'Dark mode':'Light mode';
+  renderAll();
+});
+let rt; addEventListener('resize',()=>{ clearTimeout(rt); rt=setTimeout(renderAll,180); });
+let tablesOn=false;
+$('#allTablesBtn').addEventListener('click',()=>{
+  tablesOn=!tablesOn;
+  document.querySelectorAll('.tbl').forEach(t=>t.classList.toggle('on',tablesOn));
+  $('#allTablesBtn').textContent=tablesOn?'Hide all data tables':'Show all data tables';
+});
+
+</script>
+</body>
+</html>
