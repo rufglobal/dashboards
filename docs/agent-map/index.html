@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RUF Agent System Map</title>
+<style>
+  :root {
+    --ruf-red: #C0392B;
+    --ruf-dark: #1a1a2e;
+    --ruf-gray: #2d2d44;
+    --ruf-light: #f4f4f8;
+    --db-green: #1a7a4a;
+    --mdl-blue: #1a4a7a;
+    --personal-purple: #5a1a7a;
+    --ladybug-red: #7a1a3a;
+    --accent: #e74c3c;
+    --text: #1a1a2e;
+    --card-bg: #ffffff;
+    --border: #e0e0e8;
+    --shadow: 0 2px 12px rgba(0,0,0,0.10);
+    --tag-bg: #f0f0f8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--ruf-light);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%);
+    color: white;
+    padding: 32px 40px 24px;
+    border-bottom: 4px solid var(--ruf-red);
+  }
+  header h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; }
+  header p { color: #aaa; font-size: 0.9rem; margin-top: 6px; }
+  header .badge {
+    display: inline-block; background: var(--ruf-red); color: white;
+    font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 12px;
+    margin-left: 12px; vertical-align: middle; letter-spacing: 0.5px;
+  }
+
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    padding: 16px 40px; background: #fff; border-bottom: 1px solid var(--border);
+    align-items: center;
+  }
+  .legend-label { font-size: 0.78rem; font-weight: 600; color: #888; margin-right: 4px; }
+  .legend-item {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 0.78rem; background: var(--tag-bg);
+    border-radius: 8px; padding: 4px 10px; color: #555;
+  }
+  .legend-item .dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+
+  .resource-legend {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 12px 40px; background: #fafafa; border-bottom: 1px solid var(--border);
+    align-items: center;
+  }
+  .resource-legend-label { font-size: 0.75rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 4px; }
+  .rl-item { font-size: 0.75rem; color: #444; display: flex; align-items: center; gap: 4px; }
+
+  main { padding: 32px 40px; max-width: 1800px; margin: 0 auto; }
+
+  .section-title {
+    font-size: 1.15rem; font-weight: 700; margin: 24px 0 14px;
+    display: flex; align-items: center; gap: 10px;
+    padding-bottom: 8px; border-bottom: 2px solid;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border-radius: 14px;
+    border: 1.5px solid var(--border);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.13); }
+
+  .card-header {
+    padding: 14px 16px 12px;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .agent-emoji { font-size: 2rem; line-height: 1; flex-shrink: 0; }
+  .agent-info { flex: 1; min-width: 0; }
+  .agent-name { font-size: 1.05rem; font-weight: 700; }
+  .agent-id { font-size: 0.72rem; color: #888; font-family: monospace; margin-top: 1px; }
+  .agent-role { font-size: 0.78rem; color: #555; margin-top: 4px; font-style: italic; }
+
+  .level-badge {
+    font-size: 0.68rem; font-weight: 700; padding: 3px 8px;
+    border-radius: 8px; white-space: nowrap; flex-shrink: 0; align-self: flex-start;
+  }
+
+  .card-body { padding: 0 16px 14px; }
+
+  .responsibilities {
+    margin-bottom: 10px;
+  }
+  .responsibilities ul {
+    list-style: none; padding: 0;
+  }
+  .responsibilities li {
+    font-size: 0.78rem; color: #444; padding: 2px 0 2px 14px;
+    position: relative;
+  }
+  .responsibilities li::before {
+    content: '›'; position: absolute; left: 2px; color: #aaa; font-weight: 700;
+  }
+
+  .resources-label {
+    font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.6px; color: #999; margin: 8px 0 5px;
+  }
+  .resources { display: flex; flex-wrap: wrap; gap: 4px; }
+  .resource-tag {
+    font-size: 0.7rem; border-radius: 6px; padding: 3px 8px;
+    font-weight: 600; white-space: nowrap;
+    display: flex; align-items: center; gap: 3px;
+  }
+
+  /* Resource tag colors */
+  .rt-drive    { background: #e8f5e9; color: #2e7d32; }
+  .rt-vault    { background: #e3f2fd; color: #1565c0; }
+  .rt-openclaw { background: #fce4ec; color: #880e4f; }
+  .rt-slack    { background: #e8eaf6; color: #3949ab; }
+  .rt-telegram { background: #e0f7fa; color: #00695c; }
+  .rt-whatsapp { background: #e8f5e9; color: #1b5e20; }
+  .rt-nb       { background: #fff8e1; color: #f57f17; }
+  .rt-circle   { background: #f3e5f5; color: #6a1b9a; }
+  .rt-zoom     { background: #e3f2fd; color: #0d47a1; }
+  .rt-chrome   { background: #fff3e0; color: #e65100; }
+  .rt-brave    { background: #fbe9e7; color: #bf360c; }
+  .rt-git      { background: #f1f8e9; color: #33691e; }
+  .rt-github   { background: #f5f5f5; color: #212121; }
+  .rt-gmail    { background: #fce4ec; color: #c62828; }
+  .rt-exec     { background: #f3f3f3; color: #333; }
+  .rt-imsg     { background: #e8f5e9; color: #1b5e20; }
+  .rt-quip     { background: #fff8e1; color: #827717; }
+  .rt-bitly    { background: #fce4ec; color: #880e4f; }
+  .rt-brave-search { background: #e8eaf6; color: #283593; }
+  .rt-restricted { background: #ffebee; color: #b71c1c; }
+  .rt-none     { background: #f5f5f5; color: #9e9e9e; }
+
+  /* Company colors */
+  .company-ruf    { border-top: 4px solid #C0392B; }
+  .company-db     { border-top: 4px solid #1a7a4a; }
+  .company-mdl    { border-top: 4px solid #1a4a7a; }
+  .company-personal { border-top: 4px solid #5a1a7a; }
+  .company-ladybug  { border-top: 4px solid #7a1a3a; }
+
+  .section-ruf    { color: #C0392B; border-color: #C0392B; }
+  .section-db     { color: #1a7a4a; border-color: #1a7a4a; }
+  .section-mdl    { color: #1a4a7a; border-color: #1a4a7a; }
+  .section-personal { color: #5a1a7a; border-color: #5a1a7a; }
+  .section-ladybug  { color: #7a1a3a; border-color: #7a1a3a; }
+
+  .header-bg-ruf    { background: linear-gradient(90deg, #fdf2f2, #fff); }
+  .header-bg-db     { background: linear-gradient(90deg, #f2fdf6, #fff); }
+  .header-bg-mdl    { background: linear-gradient(90deg, #f2f6fd, #fff); }
+  .header-bg-personal { background: linear-gradient(90deg, #f6f2fd, #fff); }
+  .header-bg-ladybug  { background: linear-gradient(90deg, #fdf2f6, #fff); }
+
+  .level-l1 { background: #fce4ec; color: #880e4f; }
+  .level-l2 { background: #fff8e1; color: #e65100; }
+  .level-l3 { background: #e8f5e9; color: #2e7d32; }
+  .level-admin { background: #1a1a2e; color: #fff; }
+
+  .section-icon { font-size: 1.3rem; }
+
+  .knox-highlight { border: 2.5px solid #C0392B !important; }
+  .knox-badge {
+    display: inline-block; background: #C0392B; color: white;
+    font-size: 0.65rem; font-weight: 700; padding: 2px 7px; border-radius: 6px;
+    margin-left: 6px; vertical-align: middle;
+  }
+
+  .inter-agent-section {
+    background: white; border-radius: 14px; border: 1.5px solid var(--border);
+    box-shadow: var(--shadow); padding: 20px 24px; margin-top: 28px;
+  }
+  .inter-agent-section h3 { font-size: 1rem; font-weight: 700; margin-bottom: 14px; color: #333; }
+  .api-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+  .api-table th { text-align: left; padding: 7px 12px; background: #f0f0f8; color: #555; font-weight: 700; border-bottom: 2px solid var(--border); }
+  .api-table td { padding: 7px 12px; border-bottom: 1px solid #f0f0f8; }
+  .api-table tr:last-child td { border-bottom: none; }
+  .api-table code { background: #f5f5f5; padding: 1px 5px; border-radius: 4px; font-size: 0.72rem; }
+
+  footer {
+    text-align: center; padding: 20px; font-size: 0.75rem; color: #aaa;
+    border-top: 1px solid var(--border); margin-top: 32px;
+  }
+
+  @media (max-width: 768px) {
+    main { padding: 16px; }
+    header { padding: 20px; }
+    .legend, .resource-legend { padding: 12px 16px; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🔐 RUF Agentic System Map <span class="badge">KNOX CONTROLLED</span></h1>
+  <p>Canonical reference — all agents, responsibilities, and resource access. Last updated: 2026-07-15 · Maintained by Knox (rufdata)</p>
+</header>
+
+<div class="legend">
+  <span class="legend-label">COMPANY:</span>
+  <div class="legend-item"><span class="dot" style="background:#C0392B"></span> RUF</div>
+  <div class="legend-item"><span class="dot" style="background:#1a7a4a"></span> Dollybrook</div>
+  <div class="legend-item"><span class="dot" style="background:#1a4a7a"></span> MDL Investments</div>
+  <div class="legend-item"><span class="dot" style="background:#5a1a7a"></span> Personal</div>
+  <div class="legend-item"><span class="dot" style="background:#7a1a3a"></span> Ladybug</div>
+  &nbsp;&nbsp;
+  <span class="legend-label">ACCESS:</span>
+  <div class="legend-item"><span class="level-badge level-admin" style="padding:2px 7px;border-radius:6px;font-size:0.68rem">ADMIN</span> Knox only</div>
+  <div class="legend-item"><span class="level-badge level-l1" style="padding:2px 7px;border-radius:6px;font-size:0.68rem">L1</span> Full internal ops</div>
+  <div class="legend-item"><span class="level-badge level-l2" style="padding:2px 7px;border-radius:6px;font-size:0.68rem">L2</span> Business config</div>
+  <div class="legend-item"><span class="level-badge level-l3" style="padding:2px 7px;border-radius:6px;font-size:0.68rem">L3</span> Operational</div>
+</div>
+
+<div class="resource-legend">
+  <span class="resource-legend-label">Resource key:</span>
+  <span class="rl-item">🟢 Drive</span>
+  <span class="rl-item">🔵 Vault</span>
+  <span class="rl-item">🔴 .openclaw</span>
+  <span class="rl-item">💜 Slack</span>
+  <span class="rl-item">✈️ Telegram</span>
+  <span class="rl-item">📱 WhatsApp</span>
+  <span class="rl-item">🟡 NationBuilder</span>
+  <span class="rl-item">🔮 Circle/GR</span>
+  <span class="rl-item">🎥 Zoom</span>
+  <span class="rl-item">📧 Gmail</span>
+  <span class="rl-item">💬 iMessage</span>
+  <span class="rl-item">🐙 Git/GitHub</span>
+  <span class="rl-item">⚙️ Exec/Shell</span>
+</div>
+
+<main>
+
+<!-- ===== RUF ===== -->
+<div class="section-title section-ruf">
+  <span class="section-icon">🏢</span> RUF — Romanian United Foundation
+  <span style="font-size:0.85rem;font-weight:400;color:#888;margin-left:auto">14 agents</span>
+</div>
+
+<div class="grid">
+
+  <!-- KNOX -->
+  <div class="card company-ruf knox-highlight">
+    <div class="card-header header-bg-ruf">
+      <span class="agent-emoji">🔐</span>
+      <div class="agent-info">
+        <div class="agent-name">Knox <span class="knox-badge">SOLE ADMIN</span></div>
+        <div class="agent-id">rufdata</div>
+        <div class="agent-role">The Vault — Security &amp; Config Controller</div>
+      </div>
+      <span class="level-badge level-admin">ADMIN</span>
+    </div>
+    <div class="card-body">
+      <div class="responsibilities">
+        <ul>
+          <li>Sole editor of openclaw.json (all agent configs)</li>
+          <li>Read/write access to ALL agent workspaces</li>
+          <li>Security audits &amp; cross-agent oversight</li>
+          <li>Agent creation, skills management</li>
+          <li>Git commits all config changes</li>
+          <li>Deploys dashboards to GitHub Pages</li>
+          <li>Manages cron jobs &amp; heartbeats</li>
+          <li>Blocks bulk modifications (L2+ enforcement)</li>
+        </ul>
+      </div>
+      <div class="resources-label">Resource Access</div>
+      <div class="resources">
+        <span class="resource-tag rt-openclaw">🔴 .openclaw (FULL)</span>
+        <span class="resource-tag rt-vault">🔵 Vault (R+W)</span>
+        <span class="resource-tag rt-drive">🟢 Drive (own)</span>
+        <span class="resource-tag rt-git">🐙 Git (full)</span>
+        <span class="resource-tag rt-github">📦 GitHub Pages</span>
+        <span class="resource-tag rt-telegram">✈️ Telegram</span>
+        <span class="resource-tag rt-brave-search">🔍 Brave Search</span>
+        <span class="resource-tag rt-exec">⚙️ Exec (full)</span>
+        <span class="resource-tag rt-nb">🟡 NB (via Alice)</span>
+        <span class="resource-tag rt-restricted">🚫 WhatsApp (never)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALICE -->
+  <div class="card company-ruf">
+    <div class="card-header header-bg-ruf">
+      <span class="agent-emoji">💼</span>
+      <div class="agent-info">
+        <div class="agent-name">Alice</div>
+        <div class="agent-id">rufbot</div>
+        <div class="agent-role">Executive Assistant — Pepper Potts</div>
+      </div>
+      <span class="level-badge level-l1">L1–L4</span>
+    </div>
+    <div class="card-body">
+      <div class="responsibilities">
+        <ul>
+          <li>NationBuilder CRM (sole direct access)</li>
+          <li>GlobalRomania / Circle.so operations</li>
+          <li>GR invite intake &amp; member vetting</li>
+          <li>Zoom recordings + meeting summaries</li>
+          <li>Quip contact profiles &amp; docs</li>
+          <li>Email, Bitly, RUF website admin</li>
+          <li>WhatsApp staff group coordination</li>
+          <li>iMessage alerts to Mihai (outbound)</li>
+          <li>Drive uploads for all delegating agents</li>
+          <li>Social capital scoring</li>
+        </ul>
+      </div>
+      <div class="resources-label">Resource Access</div>
+      <div class="resources">
+        <span class="resource-tag rt-nb">🟡 NationBuilder (full)</span>
+        <span class="resource-tag rt-circle">🔮 Circle/GR (full)</span>
+        <span class="resource-tag rt-drive">🟢 Drive (full)</span>
+        <span class="resource-tag rt-zoom">🎥 Zoom API</span>
+        <span class="resource-tag rt-quip">📋 Quip</span>
+        <span class="resource-tag rt-gmail">📧 Gmail</span>
+        <span class="resource-tag rt-whatsapp">📱 WhatsApp</span>
+        <span class="resource-tag rt-imsg">💬 iMessage</span>
+        <span class="resource-tag rt-bitly">🔗 Bitly</span>
+        <span class="resource-tag rt-chrome">🌐 Chrome</span>
+        <span class="resource-tag rt-telegram">✈️ Telegram</span>
+        <span class="resource-tag rt-vault">🔵 Vault (read)</span>
+        <span class="resource-tag rt-brave-search">🔍 Brave Search</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLARA -->
+  <div class="card company-ruf">
+    <div class="card-header header-bg-ruf">
+      <span class="agent-emoji">🎯</span>
+      <div class="agent-info">
+        <div class="agent-name">Clara</div>
+        <div class="agent-id">clarabot</div>
+        <div class="agent-role">Chief of Staff — Orchestrator</div>
+      </div>
+      <span class="level-badge level-l1">L1–L2</span>
+    </div>
+    <div class="card-body">
+      <div class="responsibilities">
+        <ul>
+          <li>Strategic coordination across all agents</li>
+          <li>Priority management &amp; deliverable tracking</li>
+          <li>Read-only cross-agent workspace access</li>
+          <li>Skill editing (Knox+Clara only)</li>
+          <li>Cross-team follow-through &amp; escalation</li>
+          <li>Workflow optimization</li>
+        </ul>
+      </div>
+      <div class="resources-label">Resource Access</div>
+      <div class="resources">
+        <span class="resource-tag rt-vault">🔵 Vault (read all)</span>
+        <span class="resource-tag rt-drive">🟢 Drive (own)</span>
+        <span class="resource-tag rt-telegram">✈️ Telegram</span>
+        <span class="resource-tag rt-brave-search">🔍 Brave Search</span>
+        <span class="resource-tag rt-openclaw">🔴 .openclaw (read-only)</span>
+        <span class="resource-tag rt-none">📝 Skill editor (Knox-delegated)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMMA -->
+  <div class="card company-ruf">
+    <div class="card-header header-bg-ruf">
+      <span class="agent-emoji">🌸</span>
+      <div class="agent-info">
+        <div class="agent-name">Emma</div>
+        <div class="agent-id">dbbot</div>
+        <div class="agent-role">External Ambassador — Agent Carter</div>
+      </div>
+      <span class="level-badge level-l1">L1–L4</span>
+    </div>
+    <div class="card-body">
+      <div class="responsibilities">
+        <ul>
+          <li>External partner &amp; public comms</li>
+          <li>Customer service — outward-facing</li>
+          <li>Data via Alice API only (no direct NB)</li>
+          <li>External email coordination</li>
+          <li>Public representation of RUF</li>
+        </ul>
+      </div>
+      <div class="resources-label">Resource Access</div>
+      <div class="resources">
+        <span class="resource-tag rt-nb">🟡 NB (via Alice API)</span>
+        <span class="resource-tag rt-gmail">📧 Gmail</span>
+        <span class="resource-tag rt-drive">🟢 Drive (own)</span>
+        <span class="resource-tag rt-chrome">🌐 Chrome (limited)</span>
+        <span class="resource-tag rt-vault">🔵 Vault (read)</span>
+        <span class="resource-tag rt-brave-search">🔍 Brave Search</span>
+        <span class="resource-tag rt-telegram">✈️ Telegram</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADA -->
+  <div class="card company-ruf">
+    <div class="card-header header-bg-ruf">
+      <span class="agent-emoji">⚖️</span>
+      <div class="agent-info">
+        <div class="agent-name">Ada</div>
+        <div class="agent-id">adabot</div>
+        <div class="agent-role">Legal, Accounting &amp; Admin</div>
+      </div>
+      <span class="level-badge level-l2">L2–L3</span>
+    </div>
+    <div class="card-body">
+      <div class="responsibilities">
+        <ul>
+          <li>Legal &amp; compliance support</li>
+          <li>Financial tracking &amp; budget records</li>
+          <li>Contract support &amp; record-keeping</li>
+          <li>Administrative documentation</li>
+          <li>Reports to Dragos Iliescu (COO)</li>
+        </ul>
+      </div>
+      <div class="resources-label">Resource Access</div>
+      <div class="resources">
+        <span class="resource-tag rt-drive">🟢 Drive (own)</span>
+        <span class="resource-tag rt-vault">🔵 Vault (read)</span>
+        <span class="resource-tag rt-brave-search">🔍 Brave Search</span>
+        <span class="resource-tag rt-telegram">✈️ Telegram</span>
+        <span class="resource-tag rt-none">⚠️ No external tools yet</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANA -->
+  <div class="card company-ruf">
+    <div class="card-header header-bg-ruf">
+      <span class="agent-emoji">🤖</span>
+      <div class="agent-info">
+        <div class="agent-name">Ana</div>
+        <div class="agent-id">rufslackadmin</div>
+        <div class="agent-role">Slack Admin &amp; Meeting Minutes</div>
+      </div>
+      <span class="level-badge level-l2">L2 (Slack)</span>
+    </div>
+    <div class="card-body">
+      <div class="responsibilities">
+        <ul>
+          <li>Full Slack workspace management</li>
+          <li>Greet &amp; onboard new Slack members</li>
+          <li>Zoom recording fetch &amp; summarization</li>
+          <li>File meeting minutes (via Alice for Drive)</li>
+          <li>Calendar / vacation queries via Alice</li>
+          <li>⛔ NO exec, NO browser (by design)</li>
+        </ul>
+      </div>
+      <div class="resources-label">Resource Access</div>
+      <div class="resources">
+        <span class="resource-tag rt-slack">💜 Slack (full)</span>
+        <span class="resource-tag rt-zoom">🎥 Zoom API</span>
+        <span class="resource-tag rt-nb">🟡 NB (via Alice)</span>
+        <span class="resource-tag rt-drive">🟢 Drive (via Alice)</span>
+        <span class="resource-tag rt-vault">🔵 Vault (read)</span>
+        <span class="resource-tag rt-telegram">✈️ Telegram</span>
+        <span class="resource-tag rt-restricted">🚫 No exec/browser</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRACE -->
+  <div class="card company-ruf">
+    <div class="card-header header-bg-ruf">
+      <span class="agent-emoji">🌟</span>
+      <div class="agent-info">
+        <div class="agent-name">Grace</div>
+        <div class="agent-id">gracebot</div>
+        <div class="agent-role">HR &amp; Onboarding Specialist</div>
+      </div>
+      <span class="level-badge level-l3">L3</span>
+    </div>
+    <div class="card-body">
+      <div class="responsibilities">
+        <ul>
+          <li>HR support &amp; documentation</li>
+          <li>Staff &amp; volunteer onboarding</li>
+          <li>Works with Amalia Fret (HR Director)</li>
+          <li>Onboarding materials &amp; welcome flows</li>
+        </ul>
+      </div>
+      <div class="resources-label">Resource Access</div>
+      <div class="resources">
+        <span class="resource-tag rt-drive">🟢 Drive (own)</span>
+        <span class="resource-tag rt-nb">🟡 NB (via Alice)</span>
+        <span class="resource-tag rt-vault">🔵 Vault (read)</span>
+        <span class="resource-tag rt-brave-search">🔍 Brave Search</span>
+        <span class="resource-tag rt-telegram">✈️ Telegram</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAYA -->
+  <div class="card company-ruf">
+    <div class="card-header header-bg-ruf">
+      <span class="agent-emoji">📣</span>
+      <div class="agent-info">
+        <div class="agent-name">Maya</div>
+        <div class="agent-id">ruf_marketingbot</div>
+        <div class="agent-role">Marketing &amp; Advertising</div>
+      </div>
+      <span class="level-badge level-l3">L3</span>
+    </div>
+    <div class="card-body">
+      <div class="responsibilities">
+        <ul>
+          <li>Google Ads campaign management</li>
+          <li>Facebook/Meta Ads campaigns</li>
+          <li>Social media content creation</li>
+          <li>AI visual generation</li>
+          <li>Brand asset management</li>
+          <li>⚠️ No exec/process/gateway</li>
+        </ul>
+      </div>
+      <div class="resources-label">Resource Access</div>
+      <div class="resources">
+        <span class="resource-tag rt-drive">🟢 Drive (own)</span>
+        <span class="resource-tag rt-vault">🔵 Vault (read)</span>
+        <span class="resource-tag rt-brave-search">🔍 Brave Search</span>
+        <span class="resource-tag rt-telegram">✈️ Telegram</span>
+        <span class="resource-tag rt-none">🎨 image_generate</span>
+        <span class="resource-tag rt-none">📊 Google Ads (TBD)</span>
+        <span class="resource-tag rt-none">📘 Meta Ads (TBD)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MARCUS -->
+  <div class="card company-ruf">
+    <div class="card-header header-bg-ruf">
+      <span class="agent-emoji">🤝</span>
+      <div class="agent-info">
+        <div class="agent-name">Marcus</div>
+        <div class="agent-id">ruf_partnershipsbot</div>
+        <div class="agent-role">Partnerships &amp; Business Dev</div>
+      </div>
+      <span class="level-badge level-l3">L3–L4</span>
+    </div>
+    <div class="card-body">
+      <div class="responsibilities">
+        <ul>
+          <li>Strategic partnership development</li>
+          <li>External partner communications</li>
+          <li>Partnership proposals &amp; pipeline</li>
+          <li>Drive via Alice delegation only</li>
+          <li>Reports to Aldina Gheorghe (L1)</li>
+        </ul>
+      </div>
+      <div class="resources-label">Resource Access</div>
+      <div class="resources">
+        <span class="resource-tag rt-nb">🟡 NB (via Alice)</span>
+        <span class="resource-tag rt-drive">🟢 Drive (via Alice)</span>
+        <span class="resource-tag rt-gmail">📧 Gmail</span>
+        <span class="resource-tag rt-vault">🔵 Vault (read)</span>
+        <span class="resource-tag rt-brave-search">🔍 Brave Search</span>
+        <span class="resource-tag rt-telegram">✈️ Telegram</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCOUT -->
+  <div class="card company-ruf">
+    <div class="card-header header-bg-ruf">
+      <span class="agent-emoji">🔍</span>
+      <div class="agent-info">
+        <div class="agent-name">Scout</div>
+        <div class="agent-id">scoutbot</div>
+        <div class="agent-role">Grants &amp; Funding Research</div>
+      </div>
+      <span class="level-badge level-l3">L3</span>
+    </div>
+    <div class="card-body">
+      <div class="responsibilities">
+        <ul>
+          <li>Grant opportunity research</li>
+          <li>Grant application writing</li>
+          <li>Funder relationship tracking</li>
+          <li>EU funding programmes research</li>
+          <li>Pipeline management</li>
+        </ul>
+      </div>
+      <div class="resources-label">Resource Access</div>
+      <div class="resources">
+        <span class="resource-tag rt-drive">🟢 Drive (own)</span>
+        <span class="resource-tag rt-vault">🔵 Vault (read)</span>
+        <span class="resource-tag rt-brave-search">🔍 Brave Search (full)</span>
+        <span class="resource-tag rt-telegram">✈️ Telegram</span>
+        <span class="resource-tag rt-none">🌐 web_fetch (full)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ATLAS -->
+  <div class="card company-ruf">
+    <div class="card-header header-bg-ruf">
+      <span class="agent-emoji">🏗️</span>
+      <div class="agent-info">
+        <div class="agent-name">Atlas</div>
+        <div class="agent-id">atlas</div>
+        <div class="agent-role">Application Development</div>
+      </div>
+      <span class="level-badge level-l3">L3</span>
+    </div>
+    <div class="card-body">
+      <div class="responsibilities">
+        <ul>
+          <li>Full-stack application development</li>
+          <li>API development &amp; integrations</li>
+          <li>Cloud deployments (AWS/GCP/Azure)</li>
+          <li>GitHub CI/CD pipeline management</li>
+          <li>Technical architecture decisions</li>
+        </ul>
+      </div>
+      <div class="resources-label">Resource Access</div>
+      <div class="resources">
+        <span class="resource-tag rt-exec">⚙️ Exec (full)</span>
+        <span class="resource-tag rt-git">🐙 Git/GitHub (full)</span>
+        <span class="resource-tag rt-drive">🟢 Drive (own)</span>
+        <span class="resource-tag rt-vault">🔵 Vault (read)</span>
+        <span class="resource-tag rt-telegram">✈️ Telegram</span>
+        <span class="resource-tag rt-none">☁️ AWS/GCP/Azure</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRXController -->
+  <div class="card company-ruf">
+    <div class="card-header header-bg-ruf">
+      <span class="agent-emoji">⚙️</span>
+      <div class="agent-info">
+        <div class="agent-name">GRXController</div>
+        <div class="agent-id">grxcontroller</div>
+        <div class="agent-role">GlobalRomania Platform Operator</div>
+      </div>
+      <span class="level-badge level-l3">L3</span>
+    </div>
+    <div class="card-body">
+      <div class="responsibilities">
+        <ul>
+          <li>GRX operations &amp; management</li>
+          <li>GlobalRomania (Circle) platform ops</li>
+          <li>Community ID: 90788 management</li>
+        </ul>
+      </div>
+      <div class="resources-label">Resource Access</div>
+      <div class="resources">
+        <span class="resource-tag rt-circle">🔮 Circle/GR V1 (full)</span>
+        <span class="resource-tag rt-vault">🔵 Vault (read)</span>
+        <span class="resource-tag rt-telegram">✈️ Telegram</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- KONDO -->
+  <div class="card company-ruf">
+    <div class="card-header header-bg-ruf">
+      <span class="agent-emoji">📦</span>
+      <div class="agent-info">
+        <div class="agent-name">Kondo</div>
+        <div class="agent-id">kondobot</div>
+        <div class="agent-role">Organization &amp; Workflow Specialist</div>
+      </div>
+      <span class="level-badge level-l3">L3</span>
+    </div>
+    <div class="card-body">
+      <div class="responsibilities">
+        <ul>
+          <li>Process optimization</li>
+          <li>File management &amp; structure</li>
+          <li>Internal organization workflows</li>
+          <li>⚠️ Skills not yet fully built out</li>
+        </ul>
+      </div>
+      <div class="resources-label">Resource Access</div>
+      <div class="resources">
+        <span class="resource-tag rt-vault">🔵 Vault (read)</span>
+        <span class="resource-tag rt-drive">🟢 Drive (own)</span>
+        <span class="resource-tag rt-telegram">✈️ Telegram</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- NICKY -->
+  <div class="card company-ruf">
+    <div class="card-header header-bg-ruf">
+      <span class="agent-emoji">🎰</span>
+      <div class="agent-info">
+        <div class="agent-name">Nicky</div>
+        <div class="agent-id">nickybot</div>
+        <div class="agent-role">RUF Las Vegas — Social &amp; Content</div>
+      </div>
+      <span class="level-badge level-l3">L3</span>
+    </div>
+    <div class="card-body">
+      <div class="responsibilities">
+        <ul>
+          <li>Las Vegas chapter social media</li>
+          <li>Facebook + Instagram (Las Vegas only)</li>
+          <li>Social content creation</li>
+          <li>AI visual generation</li>
+          <li>Reports to Camelia Bratu (L2)</li>
+        </ul>
+      </div>
+      <div class="resources-label">Resource Access</div>
+      <div class="resources">
+        <span class="resource-tag rt-nb">🟡 NB (via Alice)</span>
+        <span class="resource-tag rt-drive">🟢 Drive (own)</span>
+        <span class="resource-tag rt-vault">🔵 Vault (read)</span>
+        <span class="resource-tag rt-brave-search">🔍 Brave Search</span>
+        <span class="resource-tag rt-none">🎨 image_generate</span>
+        <span class="resource-tag rt-none">📱 Social (TBD)</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== DOLLYBROOK ===== -->
+<div class="section-title section-db" style="margin-top:36px">
+  <span class="section-icon">🏡</span> Dollybrook Resort
+  <span style="font-size:0.85rem;font-weight:400;color:#888;margin-left:auto">4 agents · Brave Browser (18800)</span>
+</div>
+<div class="grid">
+
+  <div class="card company-db">
+    <div class="card-header header-bg-db">
+      <span class="agent-emoji">🏡</span>
+      <div class="agent-info">
+        <div class="agent-name">Sarah</div>
+        <div class="agent-id">sarahbot</div>
+        <div class="agent-role">Dollybrook Resort Operations</div>
+      </div>
+      <span class="level-badge level-l3">L3</span>
+    </div>
+    <div class="card-body">
+      <div class="responsibilities">
+        <ul>
+          <li>Photo processing &amp; interior design</li>
+          <li>Booking management via Streamline VRS</li>
+          <li>Cabin management &amp; inventory</li>
+          <li>Gemini API for image tasks</li>
+        </ul>
+      </div>
+      <div class="resources-label">Resource Access</div>
+      <div class="resources">
+        <span class="resource-tag rt-brave">🦁 Brave (18800)</span>
+        <span class="resource-tag rt-drive">🟢 Drive (own)</span>
+        <span class="resource-tag rt-vault">🔵 Vault (read)</span>
+        <span class="resource-tag rt-telegram">✈️ Telegram</span>
+        <span class="resource-tag rt-none">📸 Gemini API</span>
+        <span class="resource-tag rt-none">🏨 Streamline VRS</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card company-db">
+    <div class="card-header header-bg-db">
+      <span class="agent-emoji">🐦</span>
+      <div class="agent-info">
+        <div class="agent-name">Xavier</div>
+        <div class="agent-id">xavier</div>
+        <div class="agent-role">X (Twitter) Growth Specialist</div>
+      </div>
+      <span class="level-badge level-l3">L3</span>
+    </div>
+    <div class="card-body">
+      <div class="responsibilities">
+        <ul>
+          <li>X/Twitter aggressive growth strategy</li>
+          <li>Viral content creation</li>
+          <li>Traffic generation for Dollybrook</li>
+          <li>Social analytics &amp; growth tracking</li>
+        </ul>
+      </div>
+      <div class="resources-label">Resource Access</div>
+      <div class="resources">
+        <span class="resource-tag rt-brave">🦁 Brave (18800)</span>
+        <span class="resource-tag rt-drive">🟢 Drive (own)</span>
+        <span class="resource-tag rt-vault">🔵 Vault (read)</span>
+        <span class="resource-tag rt-brave-search">🔍 Brave Search</span>
+        <span class="resource-tag rt-telegram">✈️ Telegram</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card company-db">
+    <div class="card-header header-bg-db">
+      <span class="agent-emoji">📘</span>
+      <div class="agent-info">
+        <div class="agent-name">FbPost</div>
+        <div class="agent-id">fbpost</div>
+        <div class="agent-role">Facebook Content Distribution</div>
+      </div>
+      <span class="level-badge level-l3">L3</span>
+    </div>
+    <div class="card-body">
+      <div class="responsibilities">
+        <ul>
+          <li>Facebook posting for Dollybrook</li>
+          <li>Social media content distribution</li>
+          <li>⚠️ No gateway/cron/tts/nodes/subagents</li>
+        </ul>
+      </div>
+      <div class="resources-label">Resource Access</div>
+      <div class="resources">
+        <span class="resource-tag rt-brave">🦁 Brave (18800)</span>
+        <span class="resource-tag rt-vault">🔵 Vault (read)</span>
+        <span class="resource-tag rt-telegram">✈️ Telegram</span>
+        <span class="resource-tag rt-restricted">🚫 No cron/tts/subagents</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card company-db">
+    <div class="card-header header-bg-db">
+      <span class="agent-emoji">🎬</span>
+      <div class="agent-info">
+        <div class="agent-name">xDbCreator</div>
+        <div class="agent-id">xdbcreator</div>
+        <div class="agent-role">Dollybrook Content Pipeline</div>
+      </div>
+      <span class="level-badge level-l3">L3</span>
+    </div>
+    <div class="card-body">
+      <div class="responsibilities">
+        <ul>
+          <li>Content creation &amp; scheduling</li>
+          <li>Dollybrook content pipeline management</li>
+          <li>⚠️ No gateway/cron/nodes/WhatsApp</li>
+        </ul>
+      </div>
+      <div class="resources-label">Resource Access</div>
+      <div class="resources">
+        <span class="resource-tag rt-brave">🦁 Brave (18800)</span>
+        <span class="resource-tag rt-vault">🔵 Vault (read)</span>
+        <span class="resource-tag rt-telegram">✈️ Telegram</span>
+        <span class="resource-tag rt-restricted">🚫 No cron/WhatsApp</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== OTHER ===== -->
+<div class="section-title section-mdl" style="margin-top:36px">
+  <span class="section-icon">💼🧑‍💻🐞</span> MDL Investments · Personal · Ladybug
+  <span style="font-size:0.85rem;font-weight:400;color:#888;margin-left:auto">3 agents · Browser TBD</span>
+</div>
+<div class="grid">
+
+  <div class="card company-mdl">
+    <div class="card-header header-bg-mdl">
+      <span class="agent-emoji">💼</span>
+      <div class="agent-info">
+        <div class="agent-name">Eva</div>
+        <div class="agent-id">evabot</div>
+        <div class="agent-role">MDL Investments Operations</div>
+      </div>
+      <span class="level-badge level-l3">L3</span>
+    </div>
+    <div class="card-body">
+      <div class="responsibilities">
+        <ul>
+          <li>Deal flow tracking</li>
+          <li>Slingshot investment tracking</li>
+          <li>MDL Investments domain ops</li>
+        </ul>
+      </div>
+      <div class="resources-label">Resource Access</div>
+      <div class="resources">
+        <span class="resource-tag rt-drive">🟢 Drive (own)</span>
+        <span class="resource-tag rt-vault">🔵 Vault (read)</span>
+        <span class="resource-tag rt-none">⚠️ Browser TBD</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card company-personal">
+    <div class="card-header header-bg-personal">
+      <span class="agent-emoji">🧑‍💻</span>
+      <div class="agent-info">
+        <div class="agent-name">George</div>
+        <div class="agent-id">personalbot</div>
+        <div class="agent-role">Mihai's Personal Assistant</div>
+      </div>
+      <span class="level-badge level-l3">L3</span>
+    </div>
+    <div class="card-body">
+      <div class="responsibilities">
+        <ul>
+          <li>Personal tasks for Mihai</li>
+          <li>Fully separate from RUF ops</li>
+          <li>No RUF data access</li>
+        </ul>
+      </div>
+      <div class="resources-label">Resource Access</div>
+      <div class="resources">
+        <span class="resource-tag rt-drive">🟢 Drive (own)</span>
+        <span class="resource-tag rt-none">⚠️ Browser TBD</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card company-ladybug">
+    <div class="card-header header-bg-ladybug">
+      <span class="agent-emoji">🐞</span>
+      <div class="agent-info">
+        <div class="agent-name">Mia</div>
+        <div class="agent-id">miabot</div>
+        <div class="agent-role">Ladybug Agent (Role TBD)</div>
+      </div>
+      <span class="level-badge level-l3">L3</span>
+    </div>
+    <div class="card-body">
+      <div class="responsibilities">
+        <ul>
+          <li>Role not yet defined</li>
+          <li>Minimal access (no exec/process)</li>
+          <li>Browser TBD</li>
+        </ul>
+      </div>
+      <div class="resources-label">Resource Access</div>
+      <div class="resources">
+        <span class="resource-tag rt-vault">🔵 Vault (read)</span>
+        <span class="resource-tag rt-restricted">🚫 No exec/process</span>
+        <span class="resource-tag rt-none">⚠️ Browser TBD</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Inter-agent APIs -->
+<div class="inter-agent-section">
+  <h3>🔗 Inter-Agent Communication (Key APIs)</h3>
+  <table class="api-table">
+    <thead>
+      <tr><th>From</th><th>To</th><th>Format</th><th>Purpose</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Any agent</td><td><strong>Knox</strong></td><td><code>[SECURITY_ALERT]</code></td><td>Security escalation</td></tr>
+      <tr><td>Knox / Any</td><td><strong>Alice</strong></td><td><code>[NB_REQUEST]</code></td><td>NationBuilder operations (all agents route through Alice)</td></tr>
+      <tr><td>Emma</td><td><strong>Alice</strong></td><td><code>[SEARCH_PERSON]</code> <code>[GET_PERSON]</code> <code>[ADD_TAG]</code></td><td>CRM lookups for external comms</td></tr>
+      <tr><td>Ana</td><td><strong>Alice</strong></td><td><code>[ZOOM_GET_SUMMARY]</code> <code>[DRIVE_REQUEST]</code></td><td>Zoom summaries + Drive uploads</td></tr>
+      <tr><td>Marcus</td><td><strong>Alice</strong></td><td><code>[PARTNERSHIP_DATA_REQUEST]</code> <code>[DRIVE_REQUEST]</code></td><td>Partner data + Drive (append-only)</td></tr>
+      <tr><td>Nicky</td><td><strong>Alice</strong></td><td><code>[NB_REQUEST]</code></td><td>Las Vegas NB lookups</td></tr>
+      <tr><td>Alice</td><td><strong>Ana</strong></td><td><code>[POST_MEETING_MINUTES]</code> <code>[SLACK_ANNOUNCE]</code></td><td>Post content to Slack</td></tr>
+      <tr><td>Knox / Clara</td><td><strong>Any agent</strong></td><td><code>[SKILL_EDIT_REQUEST]</code></td><td>Skill file edits (Knox+Clara only)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</main>
+
+<footer>
+  🔐 RUF Agentic System Map · Romanian United Foundation · Knox (rufdata) · 2026-07-15 · Canonical source: <code>RUFVault/agentic-workspace/KB/agentic-framework/</code>
+</footer>
+
+
+<style>.api-table th { cursor: pointer; user-select: none; } .api-table th:hover { background: #3a3a55; }</style>
+<script>
+document.querySelectorAll('table').forEach(function(table) {
+  var headers = table.querySelectorAll('th');
+  headers.forEach(function(th, colIndex) {
+    var asc = true;
+    th.addEventListener('click', function() {
+      var tbody = table.querySelector('tbody');
+      if (!tbody) return;
+      var rows = Array.from(tbody.querySelectorAll('tr'));
+      rows.sort(function(a, b) {
+        var aT = (a.cells[colIndex] ? a.cells[colIndex].textContent.trim() : '');
+        var bT = (b.cells[colIndex] ? b.cells[colIndex].textContent.trim() : '');
+        var aN = parseFloat(aT.replace(/[^0-9.-]/g, ''));
+        var bN = parseFloat(bT.replace(/[^0-9.-]/g, ''));
+        if (!isNaN(aN) && !isNaN(bN)) return asc ? aN - bN : bN - aN;
+        return asc ? aT.localeCompare(bT) : bT.localeCompare(aT);
+      });
+      rows.forEach(function(r) { tbody.appendChild(r); });
+      headers.forEach(function(h) { h.textContent = h.textContent.replace(/ [▲▼]$/, ''); });
+      th.textContent += asc ? ' ▲' : ' ▼';
+      asc = !asc;
+    });
+  });
+});
+</script>
+
+</body>
+</html>
