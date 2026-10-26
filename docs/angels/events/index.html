@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="description" content="RUF event calendar — all NationBuilder events across RUF sites through end of 2026."/>
+  <meta name="robots" content="noindex"/>
+  <title>RUF Event Calendar 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ruf-blue:      #00ACF0;
+      --ruf-blue-soft: #E6F7FE;
+      --ruf-blue-tint: rgba(0, 172, 240, 0.18);
+      --ruf-dark:      #113268;
+      --ruf-orange:    #EF7D00;
+      --ruf-white:     #FFFFFF;
+      --ruf-ink:       #0d2240;
+      --ruf-mute:      #6b7c93;
+      --ruf-bg:        #FAFCFE;
+      --ruf-line:      #E5ECF3;
+      --ok:            #1E9E5A;
+      --ok-soft:       #E5F5EC;
+      --warn:          #EF7D00;
+      --warn-soft:     #FDF1E2;
+      --bad:           #C8392E;
+      --shadow:        0 1px 2px rgba(17,50,104,.06), 0 4px 16px rgba(17,50,104,.05);
+      --radius:        14px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--ruf-bg);
+      color: var(--ruf-ink);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 28px 24px 60px; }
+
+    /* ── BRAND HEADER ── */
+    header.brand {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 28px; background: var(--ruf-white);
+      border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 24px;
+    }
+    .brand-lockup { display: flex; align-items: center; gap: 14px; }
+    .brand-mark { width: 44px; height: 44px; flex-shrink: 0; }
+    .brand-words {
+      font-size: 13px; font-weight: 700; line-height: 1.2;
+      color: var(--ruf-dark); letter-spacing: .01em; text-transform: uppercase;
+    }
+    .brand-tag {
+      font-size: 11px; font-weight: 600; color: var(--ruf-blue);
+      margin-top: 3px; letter-spacing: .06em; text-transform: uppercase;
+    }
+    .header-meta { text-align: right; font-size: 13px; color: var(--ruf-mute); line-height: 1.6; }
+    .header-meta strong { color: var(--ruf-ink); }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--ruf-dark); color: var(--ruf-white);
+      border-radius: var(--radius); padding: 32px 36px 28px; margin-bottom: 24px;
+      box-shadow: var(--shadow);
+    }
+    .hero h1 { font-size: 22px; font-weight: 800; margin-bottom: 10px; letter-spacing: -.02em; }
+    .hero p { font-size: 13px; color: rgba(255,255,255,.72); max-width: 680px; line-height: 1.6; }
+    .hero-stats { display: flex; flex-wrap: wrap; gap: 28px; margin-top: 20px; }
+    .hero-stat .val { font-size: 30px; font-weight: 800; color: var(--ruf-blue); line-height: 1; }
+    .hero-stat .lbl { font-size: 11px; font-weight: 600; opacity: .7; text-transform: uppercase; letter-spacing: .07em; margin-top: 4px; }
+
+    /* ── CONTROLS ── */
+    .controls {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px; margin-bottom: 16px;
+    }
+    .filter-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip {
+      font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: 99px;
+      border: 1.5px solid var(--ruf-line); background: var(--ruf-white); color: var(--ruf-mute);
+      cursor: pointer; transition: all .15s; white-space: nowrap;
+    }
+    .chip:hover { border-color: var(--ruf-blue); color: var(--ruf-blue); }
+    .chip.active { background: var(--ruf-blue); border-color: var(--ruf-blue); color: var(--ruf-white); }
+    .chip .count {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      background: rgba(255,255,255,.22); border-radius: 99px; padding: 1px 6px; margin-left: 5px;
+    }
+    .chip:not(.active) .count { background: var(--ruf-bg); color: var(--ruf-mute); }
+
+    /* ── TABLE ── */
+    .table-wrap {
+      background: var(--ruf-white); border-radius: var(--radius);
+      box-shadow: var(--shadow); overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .05em; color: var(--ruf-mute); padding: 14px 18px;
+      border-bottom: 2px solid var(--ruf-line); cursor: pointer; user-select: none; white-space: nowrap;
+    }
+    thead th:hover { color: var(--ruf-blue); }
+    thead th.sort-asc::after  { content: ' ▲'; color: var(--ruf-blue); }
+    thead th.sort-desc::after { content: ' ▼'; color: var(--ruf-blue); }
+    tbody td { padding: 13px 18px; border-bottom: 1px solid var(--ruf-line); font-size: 13.5px; vertical-align: top; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: var(--ruf-blue-soft); }
+    tbody tr.is-past { opacity: .55; }
+    td.name a { color: var(--ruf-dark); font-weight: 600; text-decoration: none; }
+    td.name a:hover { color: var(--ruf-blue); text-decoration: underline; }
+    .badge-site {
+      font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 6px;
+      background: var(--ruf-blue-soft); color: #006fa8; border: 1px solid rgba(0,172,240,.25);
+      white-space: nowrap;
+    }
+    .badge-status {
+      font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 6px; white-space: nowrap;
+    }
+    .badge-status.published { background: var(--ok-soft); color: var(--ok); }
+    .badge-status.unlisted  { background: var(--warn-soft); color: var(--warn); }
+    .badge-status.expired   { background: var(--ruf-bg); color: var(--ruf-mute); border: 1px solid var(--ruf-line); }
+    .no-rows { padding: 40px; text-align: center; color: var(--ruf-mute); font-size: 14px; }
+
+    .foot {
+      margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--ruf-line);
+      font-size: 12px; color: var(--ruf-mute); line-height: 1.7;
+    }
+    .foot code { background: var(--ruf-bg); padding: 2px 6px; border-radius: 4px; }
+
+    .error-banner {
+      background: var(--warn-soft); border: 1px solid rgba(239,125,0,.4);
+      border-radius: var(--radius); padding: 20px 24px; margin-bottom: 20px;
+    }
+    .error-banner h2 { color: var(--warn); font-size: 15px; margin-bottom: 8px; }
+    .error-banner p { font-size: 13px; color: var(--ruf-ink); line-height: 1.6; }
+    .error-banner code {
+      display: block; margin: 8px 0; padding: 10px 14px; background: rgba(0,0,0,.06);
+      border-radius: 6px; font-size: 13px;
+    }
+
+    @media (max-width: 860px) {
+      header.brand { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .header-meta { text-align: left; }
+      .table-wrap { overflow-x: auto; }
+      table { min-width: 700px; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- BRAND HEADER -->
+  <header class="brand">
+    <div class="brand-lockup">
+      <svg class="brand-mark" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="9" y="19.5" width="26" height="5" rx="2.5" fill="#00ACF0" transform="rotate(45 22 22)"/>
+        <rect x="9" y="19.5" width="26" height="5" rx="2.5" fill="#00ACF0" transform="rotate(-45 22 22)"/>
+      </svg>
+      <div>
+        <div class="brand-words">Romanian<br/>United<br/>Foundation</div>
+        <div class="brand-tag">Event Calendar</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <strong>Last updated</strong><br/>
+      <span id="last-updated">—</span>
+    </div>
+  </header>
+
+  <!-- ERROR BANNER (hidden by default) -->
+  <div class="error-banner" id="error-banner" style="display:none">
+    <h2>⚠️ Could not load event data</h2>
+    <p>This page reads from <code>data/events.csv</code> and nothing is hardcoded. If you opened this file directly (<code>file://</code>), your browser is blocking the fetch.</p>
+    <p><strong>To preview locally:</strong></p>
+    <code>cd docs/angels/events/ && python3 -m http.server 8000</code>
+    <p>Then open <code>http://localhost:8000</code>.</p>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>RUF Event Calendar — 2026</h1>
+    <p>All NationBuilder events across RUF sites (RUF, ROCO, RO Summit, RUF Las Vegas, GlobalRomania, Give by RUF), pulled directly from the NationBuilder Events API.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="val" id="stat-total">—</div>
+        <div class="lbl">Total events</div>
+      </div>
+      <div class="hero-stat">
+        <div class="val" id="stat-upcoming">—</div>
+        <div class="lbl">Upcoming</div>
+      </div>
+      <div class="hero-stat">
+        <div class="val" id="stat-sites">—</div>
+        <div class="lbl">Sites</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="filter-chips" id="filter-chips"><!-- JS renders --></div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrap">
+    <table id="events-table">
+      <thead>
+        <tr>
+          <th data-sort="start" data-type="text">Date</th>
+          <th data-sort="name" data-type="text">Event</th>
+          <th data-sort="site" data-type="text">Site</th>
+          <th data-sort="nb_status" data-type="text">Status</th>
+        </tr>
+      </thead>
+      <tbody id="events-body"><!-- JS renders --></tbody>
+    </table>
+  </div>
+
+  <div class="foot">
+    <p>Data source: NationBuilder Events API (all sites). Generated by Alice (rufbot). Click any column header to sort. Click a site chip to filter.</p>
+  </div>
+
+</div>
+
+<script>
+const CSV_PATH = 'data/events.csv';
+
+function parseCSV(text) {
+  const lines = text.replace(/\r\n/g, '\n').split('\n');
+  const headers = splitRow(lines[0]);
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    if (!lines[i].trim()) continue;
+    const cols = splitRow(lines[i]);
+    const obj = {};
+    headers.forEach((h, idx) => { obj[h.trim()] = (cols[idx] || '').trim(); });
+    if (obj.id) rows.push(obj);
+  }
+  return rows;
+}
+
+function splitRow(line) {
+  const result = []; let cur = ''; let inQuote = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (inQuote) {
+      if (ch === '"') { if (line[i+1] === '"') { cur += '"'; i++; } else { inQuote = false; } }
+      else { cur += ch; }
+    } else {
+      if (ch === '"') inQuote = true;
+      else if (ch === ',') { result.push(cur); cur = ''; }
+      else cur += ch;
+    }
+  }
+  result.push(cur);
+  return result;
+}
+
+function escapeHTML(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function formatDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return iso;
+  return d.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+}
+
+let allEvents = [];
+let activeSite = 'All';
+let sortCol = 'start';
+let sortAsc = true;
+
+function render() {
+  const now = new Date();
+  const items = activeSite === 'All' ? allEvents : allEvents.filter(e => e.site === activeSite);
+
+  document.getElementById('stat-total').textContent = allEvents.length;
+  document.getElementById('stat-upcoming').textContent = allEvents.filter(e => new Date(e.start) >= now).length;
+  document.getElementById('stat-sites').textContent = new Set(allEvents.map(e => e.site)).size;
+
+  // Filter chips
+  const sites = ['All', ...new Set(allEvents.map(e => e.site))];
+  const counts = {};
+  sites.forEach(s => counts[s] = s === 'All' ? allEvents.length : allEvents.filter(e => e.site === s).length);
+  document.getElementById('filter-chips').innerHTML = sites.map(s =>
+    `<button class="chip${s === activeSite ? ' active' : ''}" data-site="${escapeHTML(s)}">${escapeHTML(s)}<span class="count">${counts[s]}</span></button>`
+  ).join('');
+
+  // Sort
+  const sorted = [...items].sort((a, b) => {
+    const av = (a[sortCol] || '').toLowerCase();
+    const bv = (b[sortCol] || '').toLowerCase();
+    const cmp = av < bv ? -1 : av > bv ? 1 : 0;
+    return sortAsc ? cmp : -cmp;
+  });
+
+  // Table rows
+  const body = document.getElementById('events-body');
+  if (!sorted.length) {
+    body.innerHTML = `<tr><td colspan="4" class="no-rows">No events in this view.</td></tr>`;
+  } else {
+    body.innerHTML = sorted.map(e => {
+      const isPast = new Date(e.start) < now || e.nb_status === 'expired';
+      const statusClass = e.nb_status === 'published' ? 'published' : e.nb_status === 'unlisted' ? 'unlisted' : 'expired';
+      const nameCell = e.link
+        ? `<a href="${escapeHTML(e.link)}" target="_blank" rel="noopener">${escapeHTML(e.name)}</a>`
+        : escapeHTML(e.name);
+      return `
+        <tr class="${isPast ? 'is-past' : ''}">
+          <td>${formatDate(e.start)}</td>
+          <td class="name">${nameCell}</td>
+          <td><span class="badge-site">${escapeHTML(e.site)}</span></td>
+          <td><span class="badge-status ${statusClass}">${escapeHTML(e.nb_status)}</span></td>
+        </tr>`;
+    }).join('');
+  }
+
+  // Sort indicator
+  document.querySelectorAll('thead th').forEach(th => {
+    th.classList.remove('sort-asc', 'sort-desc');
+    if (th.dataset.sort === sortCol) th.classList.add(sortAsc ? 'sort-asc' : 'sort-desc');
+  });
+}
+
+function bindEvents() {
+  document.getElementById('filter-chips').addEventListener('click', e => {
+    const chip = e.target.closest('.chip');
+    if (!chip) return;
+    activeSite = chip.dataset.site;
+    render();
+  });
+  document.querySelectorAll('thead th').forEach(th => {
+    th.addEventListener('click', () => {
+      const col = th.dataset.sort;
+      if (sortCol === col) sortAsc = !sortAsc; else { sortCol = col; sortAsc = true; }
+      render();
+    });
+  });
+}
+
+async function boot() {
+  document.getElementById('last-updated').textContent =
+    new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  bindEvents();
+  try {
+    const resp = await fetch(CSV_PATH);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const text = await resp.text();
+    allEvents = parseCSV(text);
+    render();
+  } catch (err) {
+    console.error(err);
+    document.getElementById('error-banner').style.display = 'block';
+  }
+}
+
+boot();
+</script>
+</body>
+</html>
